@@ -1,0 +1,51 @@
+{
+  "summary": "Iteration 7 backend-only verification of NEW behavior: listing_type Buy/Rent, rental seeds r-01..r-06, similar honouring listing_type, onboarding profession preservation, and GET /user/{uid}/activity aggregator. 10/12 new tests PASS. 2 tests FAIL and both point to the SAME backend bug in the new /user/{uid}/activity endpoint: it queries the wrong Mongo collections (`saved_properties`, `followed_localities`) and wrong field (`listed_by_user_id`), so `saved`, `follows`, and `my_listings` are always empty for real users.",
+  "backend_issues": {
+    "critical": [
+      {
+        "endpoint": "GET /api/user/{uid}/activity",
+        "issue": "Collection/field name mismatch with the write side. /saved/toggle writes to `db.saved`, /follows/toggle writes to `db.follows`, and POST /properties stores the creator in field `owner_user_id`. But server.py L729-731 reads from `db.saved_properties`, `db.followed_localities`, and filters `properties` by `listed_by_user_id`. Result: `saved`, `follows`, and `my_listings` are ALWAYS empty (0 items) even after the user has explicitly saved properties, followed localities and listed a property. quote_requests + agent_enquiries work correctly. Reference: /app/backend/server.py:729-731 vs 405-409, 419-425, 355-395.",
+        "priority": "CRITICAL"
+      }
+    ],
+    "minor": [
+      {
+        "endpoint": "POST /api/agents/{aid}/enquiries",
+        "issue": "AgentEnquiry Pydantic model requires `agent_id` in the JSON body even though it is already in the path. Callers must duplicate the id or receive 422. Consider removing `agent_id` from the model (path is source of truth). Reference: /app/backend/server.py:681-689."
+      }
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_rentals_and_activity.py",
+    "/app/test_reports/pytest/iter7_results.xml"
+  ],
+  "action_items": [
+    "Fix /api/user/{uid}/activity to read from the SAME collections/fields that the writers use: `db.saved` (not `saved_properties`), `db.follows` (not `followed_localities`), and filter properties by `owner_user_id` (not `listed_by_user_id`). After the fix, saved items will need to be enriched with the actual property doc (currently they only contain user_id/property_id/created_at); similarly follows only contain user_id/locality_id/created_at — decide whether to $lookup or inline-fetch the property/locality for the client.",
+    "Consider dropping `agent_id` from the AgentEnquiry request body since it duplicates the path param and causes 422 for callers that only pass user_id/name/mobile.",
+    "Optionally add a DELETE endpoint for TEST users to make test cleanup not depend on direct mongo access."
+  ],
+  "critical_code_review_comments": [
+    "server.py listing_type filter and similar-endpoint listing_type guard are implemented correctly; seed migration also backfills `listing_type='Buy'` on legacy records — good.",
+    "The activity endpoint is silently wrong (returns 200 with empty lists) — since there is no schema check, this is easy to miss in manual testing. Prefer either a $lookup pipeline or a single source-of-truth constant for collection names.",
+    "AgentEnquiry model with required agent_id + path aid is a footgun; the enquiry insert already uses `aid` from the path so the body field is dead weight.",
+    "TESTS ONLY: /agents/{aid}/enquiries currently accepts (and requires) agent_id in body. Tests updated to send it, but the frontend must be doing the same."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_rentals_and_activity.py (new)"
+  ],
+  "success_rate": {
+    "backend": "83% (10/12 new tests). Failures are 1 real bug reproduced twice.",
+    "frontend": "N/A"
+  },
+  "seed_data_creation": "During tests only: 2 temporary users (mobile 9998887779 and 9998887780) + their saves/follows/enquiries/quotes. All cleaned up in the module-scope fixture teardown via direct Mongo access.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "New tests live in /app/backend/tests/test_rentals_and_activity.py. After main agent fixes the activity endpoint (collection names + owner_user_id), rerun `pytest backend/tests/test_rentals_and_activity.py -v`. Cleanup fixture also purges both `saved`/`follows` and `saved_properties`/`followed_localities` so it will be safe either way. The 4 pre-existing test files (backend_test.py, test_enrichments.py, test_market.py, test_new_endpoints.py, test_onboard_profession_and_similar.py) were NOT rerun in this iteration per E1's instruction.",
+  "rca_of_issue": "RCA of activity-endpoint bug: The writers /saved/toggle and /follows/toggle use collections `db.saved` and `db.follows` (server.py:405-425). Property creation stores the creator user id in field `owner_user_id` (server.py:377). The newly-added GET /user/{uid}/activity (server.py:723-746) queries three different names: `db.saved_properties`, `db.followed_localities`, and filters properties by `listed_by_user_id`. Because these queries hit non-existent collections/fields, they always return empty lists and no error is raised. Reproduction: onboard a user → POST /saved/toggle → POST /follows/toggle → GET /user/{uid}/activity → saved=[], follows=[] even though DB has entries in `saved` and `follows`. Fix: change L729 to `db.saved`, L730 to `db.follows`, L731 filter to `owner_user_id`, and (recommended) $lookup or enrich saved items with their property doc so the client can render them."
+}

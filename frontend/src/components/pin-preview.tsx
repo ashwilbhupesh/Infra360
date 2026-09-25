@@ -155,19 +155,28 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
             <Text style={styles.simTitle}>Similar properties</Text>
             <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.md, paddingVertical: spacing.sm }}>
               {similar.map(s => (
-                <Pressable
+                <View
                   key={s.id}
                   testID={`similar-${s.id}`}
-                  onPress={() => router.push(`/property/${s.id}` as any)}
                   style={styles.simCard}
                 >
-                  <Image source={{ uri: s.images?.[0] }} style={styles.simImg} contentFit="cover" />
-                  <View style={{ padding: spacing.sm }}>
-                    <Text style={styles.simPrice}>{formatINR(s.price)}</Text>
-                    <Text style={styles.simMeta} numberOfLines={1}>{s.area} {s.area_unit} · {s.type}</Text>
-                    <Text style={styles.simAddr} numberOfLines={1}>{s.locality_name}</Text>
-                  </View>
-                </Pressable>
+                  <Pressable onPress={() => router.push(`/property/${s.id}` as any)}>
+                    <Image source={{ uri: s.images?.[0] }} style={styles.simImg} contentFit="cover" />
+                    <View style={{ padding: spacing.sm }}>
+                      <Text style={styles.simPrice}>{formatINR(s.price)}</Text>
+                      <Text style={styles.simMeta} numberOfLines={1}>{s.area} {s.area_unit} · {s.type}</Text>
+                      <Text style={styles.simAddr} numberOfLines={1}>{s.locality_name}</Text>
+                    </View>
+                  </Pressable>
+                  <Pressable
+                    testID={`similar-show-on-map-${s.id}`}
+                    onPress={() => { onClose?.(); router.setParams({ highlight: s.id } as any); }}
+                    style={styles.simMapBtn}
+                  >
+                    <Icon name="map-outline" size={11} color={colors.brand} />
+                    <Text style={styles.simMapText}>Show on map</Text>
+                  </Pressable>
+                </View>
               ))}
             </ScrollView>
           </View>
@@ -209,4 +218,6 @@ const styles = StyleSheet.create({
   simPrice: { fontSize: 14, fontWeight: "800", color: colors.onSurface },
   simMeta: { fontSize: 11, color: colors.muted, marginTop: 2 },
   simAddr: { fontSize: 10, color: colors.muted, marginTop: 2 },
+  simMapBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, marginHorizontal: spacing.sm, marginBottom: spacing.sm, paddingVertical: 6, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceSecondary },
+  simMapText: { fontSize: 10, fontWeight: "700", color: colors.brand },
 });

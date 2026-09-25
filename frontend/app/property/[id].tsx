@@ -9,6 +9,7 @@ import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 import { formatINR, indianComma, formatRange } from "@/src/utils/format";
 import { openWhatsApp, openTel } from "@/src/utils/contact";
+import { addHistory } from "@/src/utils/history";
 
 const W = Dimensions.get("window").width;
 
@@ -20,10 +21,19 @@ export default function PropertyDetail() {
   const [prop, setProp] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [similar, setSimilar] = useState<any[]>([]);
 
   useEffect(() => {
     (async () => {
-      try { setProp(await api.get(`/properties/${id}`)); } finally { setLoading(false); }
+      try {
+        const [p, sim] = await Promise.all([
+          api.get(`/properties/${id}`),
+          api.get<any[]>(`/properties/${id}/similar?limit=6`).catch(() => []),
+        ]);
+        setProp(p);
+        setSimilar(sim);
+        if (id) await addHistory(String(id));
+      } finally { setLoading(false); }
     })();
   }, [id]);
 
@@ -146,6 +156,35 @@ export default function PropertyDetail() {
               <Icon name="chevron-forward" size={20} color={colors.muted} />
             </Pressable>
           </Section>
+
+          {similar.length > 0 && (
+            <Section title="Similar properties">
+              <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: spacing.md, paddingRight: spacing.lg }}>
+                {similar.map((sp: any) => (
+                  <View key={sp.id} style={styles.simCard} testID={`similar-${sp.id}`}>
+                    <Pressable onPress={() => router.push(`/property/${sp.id}` as any)}>
+                      <Image source={{ uri: sp.images?.[0] }} style={styles.simImg} contentFit="cover" />
+                      <View style={{ padding: spacing.md, paddingBottom: 6 }}>
+                        <Text style={styles.simPrice}>{formatINR(sp.price)}</Text>
+                        <Text style={styles.simTitle} numberOfLines={1}>{sp.title}</Text>
+                        <Text style={styles.simAddr} numberOfLines={1}>{sp.address}</Text>
+                      </View>
+                    </Pressable>
+                    <View style={styles.simActions}>
+                      <Pressable
+                        testID={`similar-show-on-map-${sp.id}`}
+                        onPress={() => router.push({ pathname: "/(tabs)/explore", params: { highlight: sp.id, type: sp.type } } as any)}
+                        style={styles.simMapBtn}
+                      >
+                        <Icon name="map-outline" size={12} color={colors.brand} />
+                        <Text style={styles.simMapText}>Show on map</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                ))}
+              </ScrollView>
+            </Section>
+          )}
         </View>
       </ScrollView>
 
@@ -211,6 +250,14 @@ const styles = StyleSheet.create({
   cValueSm: { fontSize: 20, fontWeight: "700", color: colors.onSurface, marginTop: 4, letterSpacing: -0.3 },
   confidence: { fontSize: 11, color: colors.brandPrimary, marginTop: 2, fontWeight: "600" },
   disclaimer: { fontSize: 11, color: colors.muted, marginTop: spacing.md, lineHeight: 16 },
+  simCard: { width: 220, backgroundColor: colors.surface, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, overflow: "hidden" },
+  simImg: { width: "100%", height: 120, backgroundColor: colors.surfaceSecondary },
+  simPrice: { fontSize: 15, fontWeight: "800", color: colors.onSurface },
+  simTitle: { fontSize: 12, fontWeight: "600", color: colors.onSurface, marginTop: 2 },
+  simAddr: { fontSize: 10, color: colors.muted, marginTop: 2 },
+  simActions: { paddingHorizontal: spacing.md, paddingBottom: spacing.md },
+  simMapBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 4, paddingVertical: 6, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceSecondary },
+  simMapText: { fontSize: 11, fontWeight: "700", color: colors.brand },
   detailRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: spacing.sm + 2, borderBottomWidth: 1, borderBottomColor: colors.divider },
   detailLabel: { color: colors.muted, fontSize: 13 },
   detailValue: { color: colors.onSurface, fontSize: 13, fontWeight: "600" },

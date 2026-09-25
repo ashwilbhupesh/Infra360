@@ -110,6 +110,17 @@ async def seed_if_needed():
         await db.localities.insert_many([{**l} for l in LOCALITIES])
     if await db.properties.count_documents({}) == 0:
         await db.properties.insert_many([{**p} for p in PROPERTIES])
+    else:
+        # Backfill: ensure rental properties (r-*) exist and every property has a listing_type
+        seed_ids = {p["id"] for p in PROPERTIES}
+        existing_ids = set()
+        async for x in db.properties.find({"id": {"$in": list(seed_ids)}}, {"id": 1, "_id": 0}):
+            existing_ids.add(x["id"])
+        missing = [p for p in PROPERTIES if p["id"] not in existing_ids]
+        if missing:
+            await db.properties.insert_many([{**p} for p in missing])
+        # Any legacy record without listing_type is a Buy
+        await db.properties.update_many({"listing_type": {"$exists": False}}, {"$set": {"listing_type": "Buy"}})
     if await db.infrastructure.count_documents({}) == 0:
         await db.infrastructure.insert_many([{**i} for i in INFRASTRUCTURE])
     if await db.news.count_documents({}) == 0:
@@ -251,6 +262,7 @@ async def get_locality(loc_id: str):
 @api_router.get("/properties")
 async def list_properties(
     type: Optional[str] = None,
+    listing_type: Optional[str] = None,
     locality_id: Optional[str] = None,
     min_price: Optional[float] = None,
     max_price: Optional[float] = None,
@@ -262,6 +274,7 @@ async def list_properties(
 ):
     query = {}
     if type: query["type"] = type
+    if listing_type: query["listing_type"] = listing_type
     if locality_id: query["locality_id"] = locality_id
     if bedrooms is not None: query["bedrooms"] = bedrooms
     if verified_only: query["verified"] = True
@@ -320,6 +333,7 @@ async def similar_properties(pid: str, limit: int = 6):
     q = {
         "id": {"$ne": pid},
         "type": p["type"],
+        "listing_type": p.get("listing_type", "Buy"),
         "price": {"$gte": lo, "$lte": hi},
     }
     # Prefer same locality first
@@ -665,7 +679,7 @@ async def get_agent(aid: str):
     return with_tier(a)
 
 class AgentEnquiry(BaseModel):
-    agent_id: str
+    agent_id: Optional[str] = None
     user_id: Optional[str] = None
     name: str
     mobile: str
@@ -705,6 +719,41 @@ async def compare_properties(ids: str):
         except HTTPException:
             continue
     return results
+
+# ---------------- User activity (Orders / Enquiries / History) ----------------
+@api_router.get("/user/{uid}/activity")
+async def user_activity(uid: str):
+    u = await db.users.find_one({"id": uid}, NO_ID)
+    if not u:
+        raise HTTPException(404, "User not found")
+    # Saved properties -- enrich with property snapshot
+    saved_docs = await db.saved.find({"user_id": uid}, NO_ID).sort("created_at", -1).to_list(200)
+    saved = []
+    for s in saved_docs:
+        p = await db.properties.find_one({"id": s.get("property_id")}, {"_id": 0, "id": 1, "title": 1, "price": 1, "images": 1, "type": 1, "listing_type": 1, "address": 1})
+        saved.append({**s, "property": p})
+    # Follows -- enrich with locality snapshot
+    follow_docs = await db.follows.find({"user_id": uid}, NO_ID).sort("created_at", -1).to_list(200)
+    follows = []
+    for f in follow_docs:
+        l = await db.localities.find_one({"id": f.get("locality_id")}, {"_id": 0, "id": 1, "name": 1, "city": 1, "image": 1, "median_price_per_sq_yd": 1, "yoy_change_pct": 1})
+        follows.append({**f, "locality": l})
+    my_listings = await db.properties.find({"owner_user_id": uid}, NO_ID).sort("listed_at", -1).to_list(200)
+    quote_requests = await db.quote_requests.find({"user_id": uid}, NO_ID).sort("created_at", -1).to_list(200)
+    for qr in quote_requests:
+        sup = await db.suppliers.find_one({"id": qr.get("supplier_id")}, {"_id": 0, "name": 1, "image": 1, "category_id": 1})
+        qr["supplier"] = sup
+    agent_enquiries = await db.agent_enquiries.find({"user_id": uid}, NO_ID).sort("created_at", -1).to_list(200)
+    for ae in agent_enquiries:
+        a = await db.agents.find_one({"id": ae.get("agent_id")}, {"_id": 0, "name": 1, "image": 1, "firm": 1})
+        ae["agent"] = a
+    return {
+        "saved": saved,
+        "follows": follows,
+        "my_listings": my_listings,
+        "quote_requests": quote_requests,
+        "agent_enquiries": agent_enquiries,
+    }
 
 app.include_router(api_router)
 

@@ -28,7 +28,7 @@ export default function MapScreenWeb() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
-  const params = useLocalSearchParams<{ type?: string; q?: string }>();
+  const params = useLocalSearchParams<{ type?: string; q?: string; highlight?: string }>();
   const [items, setItems] = useState<Property[]>([]);
   const [filter, setFilter] = useState(params.type || "");
   const [q, setQ] = useState(params.q ? String(params.q) : "");
@@ -36,6 +36,7 @@ export default function MapScreenWeb() {
   const [selected, setSelected] = useState<string | null>(null);
   const [heat, setHeat] = useState(false);
   const [view, setView] = useState<"map" | "list">("map");
+  const [listingType, setListingType] = useState<"Buy" | "Rent">("Buy");
   const [heatPoints, setHeatPoints] = useState<HeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
 
@@ -43,13 +44,19 @@ export default function MapScreenWeb() {
     setLoading(true);
     try {
       const qs = new URLSearchParams();
+      qs.set("listing_type", listingType);
       if (filter) qs.set("type", filter);
       if (q) qs.set("q", q);
       const data = await api.get<Property[]>(`/properties?${qs.toString()}`);
       setItems(data);
     } finally { setLoading(false); }
   };
-  useEffect(() => { load(); }, [filter]);
+  useEffect(() => { load(); }, [filter, listingType]);
+
+  useEffect(() => {
+    const h = params.highlight ? String(params.highlight) : "";
+    if (h) { setSelected(h); setView("map"); }
+  }, [params.highlight]);
 
   useEffect(() => {
     (async () => {
@@ -69,10 +76,15 @@ export default function MapScreenWeb() {
       <View style={{ paddingHorizontal: spacing.lg, gap: spacing.sm }}>
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
           <Text style={styles.hi}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
-          <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
-            <Icon name="add" size={14} color={colors.onBrandPrimary} />
-            <Text style={styles.listBtnText}>List</Text>
-          </Pressable>
+          <View style={{ flexDirection: "row", gap: spacing.sm }}>
+            <Pressable testID="header-profile-btn" onPress={() => router.push("/profile")} style={styles.iconBtnWeb}>
+              <Icon name="menu-outline" size={18} color={colors.onSurface} />
+            </Pressable>
+            <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
+              <Icon name="add" size={14} color={colors.onBrandPrimary} />
+              <Text style={styles.listBtnText}>List</Text>
+            </Pressable>
+          </View>
         </View>
         <View style={styles.searchPill}>
           <Icon name="search-outline" size={16} color={colors.muted} />
@@ -86,6 +98,16 @@ export default function MapScreenWeb() {
             onSubmitEditing={load}
             returnKeyType="search"
           />
+        </View>
+        <View style={styles.segRowWeb}>
+          {(["Buy", "Rent"] as const).map(t => {
+            const active = listingType === t;
+            return (
+              <Pressable key={t} testID={`listing-type-${t.toLowerCase()}`} onPress={() => setListingType(t)} style={[styles.segBtnWeb, active && styles.segBtnActiveWeb]}>
+                <Text style={[styles.segTextWeb, active && styles.segTextActiveWeb]}>{t}</Text>
+              </Pressable>
+            );
+          })}
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow} style={{ flex: 1 }}>
@@ -187,8 +209,14 @@ export default function MapScreenWeb() {
 
 const styles = StyleSheet.create({
   hi: { fontSize: 15, fontWeight: "800", color: colors.onSurface },
+  iconBtnWeb: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.surfaceSecondary, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: colors.border },
   listBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 14, height: 34, borderRadius: radius.pill, backgroundColor: colors.brandPrimary },
   listBtnText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "700" },
+  segRowWeb: { flexDirection: "row", alignSelf: "flex-start", gap: 2, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border, borderRadius: radius.pill, padding: 3 },
+  segBtnWeb: { paddingHorizontal: 16, paddingVertical: 6, borderRadius: radius.pill },
+  segBtnActiveWeb: { backgroundColor: colors.brandPrimary },
+  segTextWeb: { fontSize: 12, fontWeight: "700", color: colors.onSurface, letterSpacing: 0.3 },
+  segTextActiveWeb: { color: colors.onBrandPrimary },
   stripTitle: { fontSize: 12, fontWeight: "800", color: colors.muted, letterSpacing: 0.8, marginBottom: spacing.sm, paddingHorizontal: spacing.lg, paddingTop: spacing.md },
   searchPill: { flexDirection: "row", alignItems: "center", gap: spacing.sm, height: 44, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border },
   searchTxt: { flex: 1, color: colors.onSurface, fontSize: 14 },

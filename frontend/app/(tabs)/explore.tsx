@@ -28,7 +28,7 @@ export default function MapScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
-  const params = useLocalSearchParams<{ type?: string; q?: string }>();
+  const params = useLocalSearchParams<{ type?: string; q?: string; highlight?: string }>();
   const [items, setItems] = useState<Property[]>([]);
   const [selected, setSelected] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>(params.type || "");
@@ -36,6 +36,7 @@ export default function MapScreen() {
   const [loading, setLoading] = useState(true);
   const [heat, setHeat] = useState(false);
   const [view, setView] = useState<"map" | "list">("map");
+  const [listingType, setListingType] = useState<"Buy" | "Rent">("Buy");
   const [heatPoints, setHeatPoints] = useState<Array<{ id: string; name: string; lat: number; lng: number; intensity: number; median_price_per_sq_yd: number }>>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const sheetRef = useRef<BottomSheet>(null);
@@ -57,6 +58,7 @@ export default function MapScreen() {
     setLoading(true);
     try {
       const qs = new URLSearchParams();
+      qs.set("listing_type", listingType);
       if (filter) qs.set("type", filter);
       if (q) qs.set("q", q);
       const data = await api.get<Property[]>(`/properties?${qs.toString()}`);
@@ -65,7 +67,17 @@ export default function MapScreen() {
     finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, [filter]);
+  useEffect(() => { load(); }, [filter, listingType]);
+
+  // Deep link: /(tabs)/explore?highlight=p-01 - open pin preview for that property
+  useEffect(() => {
+    const h = params.highlight ? String(params.highlight) : "";
+    if (h) {
+      setSelected(h);
+      setView("map");
+      setTimeout(() => sheetRef.current?.snapToIndex(2), 400);
+    }
+  }, [params.highlight]);
 
   const initialRegion = { latitude: 26.8891, longitude: 75.7500, latitudeDelta: 0.18, longitudeDelta: 0.18 };
 
@@ -107,10 +119,15 @@ export default function MapScreen() {
           <View style={styles.hiPill}>
             <Text style={styles.hi} numberOfLines={1}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
           </View>
-          <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
-            <Icon name="add" size={14} color={colors.onBrandPrimary} />
-            <Text style={styles.listBtnText}>List</Text>
-          </Pressable>
+          <View style={{ flexDirection: "row", gap: spacing.sm }}>
+            <Pressable testID="header-profile-btn" onPress={() => router.push("/profile")} style={styles.iconBtn}>
+              <Icon name="menu-outline" size={20} color={colors.onSurface} />
+            </Pressable>
+            <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
+              <Icon name="add" size={14} color={colors.onBrandPrimary} />
+              <Text style={styles.listBtnText}>List</Text>
+            </Pressable>
+          </View>
         </View>
         <View style={styles.searchPill}>
           <Icon name="search-outline" size={16} color={colors.muted} />
@@ -127,6 +144,16 @@ export default function MapScreen() {
           {q ? (
             <Pressable onPress={() => { setQ(""); }} hitSlop={10}><Icon name="close-circle" size={16} color={colors.muted} /></Pressable>
           ) : null}
+        </View>
+        <View style={styles.segRow}>
+          {(["Buy", "Rent"] as const).map(t => {
+            const active = listingType === t;
+            return (
+              <Pressable key={t} testID={`listing-type-${t.toLowerCase()}`} onPress={() => setListingType(t)} style={[styles.segBtn, active && styles.segBtnActive]}>
+                <Text style={[styles.segText, active && styles.segTextActive]}>{t}</Text>
+              </Pressable>
+            );
+          })}
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
           {FILTERS.map(f => {
@@ -145,7 +172,7 @@ export default function MapScreen() {
       </View>
 
       {heat && (
-        <View style={[styles.heatLegend, { top: insets.top + 195 }]}>
+        <View style={[styles.heatLegend, { top: insets.top + 245 }]}>
           <Text style={styles.legendTitle}>Price / sq yd</Text>
           <View style={styles.legendBar}>
             {[0, 0.25, 0.5, 0.75, 1].map(i => (
@@ -224,8 +251,14 @@ const styles = StyleSheet.create({
   headerRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   hiPill: { paddingHorizontal: spacing.md, height: 40, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, justifyContent: "center", ...shadow.card },
   hi: { fontSize: 13, fontWeight: "700", color: colors.onSurface, maxWidth: 200 },
+  iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, alignItems: "center", justifyContent: "center", ...shadow.card },
   listBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 14, height: 40, borderRadius: radius.pill, backgroundColor: colors.brandPrimary, ...shadow.card },
   listBtnText: { color: colors.onBrandPrimary, fontSize: 13, fontWeight: "700" },
+  segRow: { flexDirection: "row", backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, borderRadius: radius.pill, padding: 3, alignSelf: "flex-start", gap: 2, ...shadow.card },
+  segBtn: { paddingHorizontal: 16, paddingVertical: 6, borderRadius: radius.pill },
+  segBtnActive: { backgroundColor: colors.brandPrimary },
+  segText: { fontSize: 12, fontWeight: "700", color: colors.onSurface, letterSpacing: 0.3 },
+  segTextActive: { color: colors.onBrandPrimary },
   searchPill: { flexDirection: "row", alignItems: "center", gap: spacing.sm, height: 44, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, ...shadow.card },
   searchTxt: { flex: 1, color: colors.onSurface, fontSize: 14 },
   chipsRow: { gap: spacing.sm, paddingRight: spacing.md, paddingVertical: 2 },

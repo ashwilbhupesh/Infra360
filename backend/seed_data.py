@@ -61,14 +61,15 @@ LOCALITIES = [
      "summary": "Emerging western corridor with strong plot activity."},
 ]
 
-def _prop(pid, loc_id, ptype, price, area, unit, lat_offset, lng_offset, bedrooms=None, verified=True, source="Developer", img=None, title=None, facing="East", road_width=30):
+def _prop(pid, loc_id, ptype, price, area, unit, lat_offset, lng_offset, bedrooms=None, verified=True, source="Developer", img=None, title=None, facing="East", road_width=30, listing_type="Buy"):
     loc = next(l for l in LOCALITIES if l["id"] == loc_id)
     price_per_unit = round(price / area) if area else 0
     return {
         "id": pid, "locality_id": loc_id, "locality_name": loc["name"],
         "city": loc["city"], "state": loc["state"],
         "title": title or f"{ptype} in {loc['name']}",
-        "type": ptype, "price": price, "area": area, "area_unit": unit,
+        "type": ptype, "listing_type": listing_type,
+        "price": price, "area": area, "area_unit": unit,
         "price_per_unit": price_per_unit,
         "bedrooms": bedrooms, "facing": facing, "road_width_ft": road_width,
         "lat": loc["lat"] + lat_offset, "lng": loc["lng"] + lng_offset,
@@ -117,6 +118,13 @@ PROPERTIES = [
     _prop("p-28","loc-sirsi-road","Villa",11500000,2200,"sq ft",-0.004,-0.005,bedrooms=3,img=IMG_VILLA,title="3 BHK Villa Sirsi Road"),
     _prop("p-29","loc-sirsi-road","Residential Plot",6500000,720,"sq yd",0.005,0.003,img=IMG_PLOT,source="Broker",title="720 sq yd Corner Plot"),
     _prop("p-30","loc-sirsi-road","Agricultural Land",1800000,1,"bigha",-0.006,0.006,verified=False,img=IMG_PLOT,source="Owner",title="1 Bigha Farm Land"),
+    # ---- Rentals ----
+    _prop("r-01","loc-jagatpura","Apartment",32000,1650,"sq ft",0.004,-0.002,bedrooms=3,img=IMG_APT2,source="Owner",title="3 BHK for rent · Nirmal Aashiyana", listing_type="Rent"),
+    _prop("r-02","loc-vaishali-nagar","Apartment",45000,1450,"sq ft",-0.005,0.003,bedrooms=3,img=IMG_APT,source="Broker",title="3 BHK Fully Furnished · Vaishali", listing_type="Rent"),
+    _prop("r-03","loc-mansarovar","Villa",65000,2800,"sq ft",0.006,-0.003,bedrooms=4,img=IMG_VILLA,source="Owner",title="4 BHK Independent Villa on Rent", listing_type="Rent"),
+    _prop("r-04","loc-tonk-road","Commercial",120000,1200,"sq ft",-0.004,0.006,img=IMG_COMM,source="Broker",title="Retail Shop on Rent · Tonk Road", listing_type="Rent"),
+    _prop("r-05","loc-ajmer-road","Apartment",22000,1180,"sq ft",-0.007,0.004,bedrooms=2,img=IMG_APT,source="Owner",title="2 BHK on Rent · Skyline Residency", listing_type="Rent"),
+    _prop("r-06","loc-mansarovar","Apartment",25000,1200,"sq ft",-0.004,-0.005,bedrooms=2,img=IMG_APT2,source="Owner",title="2 BHK Family Rental", listing_type="Rent"),
 ]
 
 def _price_history(loc_id, base):

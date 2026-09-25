@@ -1,0 +1,35 @@
+{
+  "summary": "Iteration 8 retest of the two fixes flagged in iteration 7. All 10 targeted tests PASS. Activity endpoint now reads from the correct collections (db.saved / db.follows / owner_user_id) and enriches saved items with a `property` snapshot and follows with a `locality` snapshot. AgentEnquiry.agent_id is now Optional in the JSON body, so POST /api/agents/ag-01/enquiries with only {name, mobile, user_id, message} returns 200. No _id leaks anywhere in the activity payload.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_activity_followup.py",
+    "/app/test_reports/pytest/iter8_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py:730-749 fix looks correct - reads db.saved/db.follows and filters my_listings by owner_user_id, matching the writers at server.py:405-425 and 377.",
+    "Property snapshot exposes (id, title, price, images, type, listing_type, address); locality snapshot exposes (id, name, city, image, median_price_per_sq_yd, yoy_change_pct) - matches review request.",
+    "Enrichment does per-item find_one() in a loop; fine for demo data (~1-2 items) but consider $lookup or an $in fetch if a user saves hundreds of items.",
+    "AgentEnquiry model: agent_id is now Optional(None); path param `aid` is authoritative (server.py:696). Backwards-compatible - still accepts requests that include agent_id in body."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_activity_followup.py (new)"
+  ],
+  "success_rate": {
+    "backend": "100% (10/10 targeted tests pass)",
+    "frontend": "N/A"
+  },
+  "seed_data_creation": "One TEST user (mobile 9998887780, name 'TEST Activity') with 1 saved property (p-01), 1 follow (loc-jagatpura), 1 supplier quote (sup-01), and 3 agent enquiries to ag-01. All cleaned up in the module-scope fixture teardown via direct Mongo access (users, saved, follows, quote_requests, agent_enquiries collections).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "New targeted test file: /app/backend/tests/test_activity_followup.py (10 tests). Iteration 7 file /app/backend/tests/test_rentals_and_activity.py was NOT rerun per E1 instruction - its test_10/test_11 assumptions differ from the new API contract (they save 2 properties and expect 2 saved items without property snapshots; the new endpoint contract enriches with property snapshots so those tests would need to be updated if rerun). The pre-existing suites (backend_test.py, test_enrichments.py, test_market.py, test_new_endpoints.py, test_onboard_profession_and_similar.py) were not rerun either."
+}

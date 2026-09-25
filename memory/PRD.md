@@ -18,7 +18,18 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 
 ## Screens
 - **Onboarding** — name/mobile/city-town-village.
-- **Explore (tab)** — Zillow / Airbnb-style: sticky header (Hi user + List button + search + filter chips + Heat toggle) over map (native) or list (web). Bottom sheet has a **Map / List view toggle**. On Map view: tapping a pin opens a rich **Pin Preview** inside the sheet (photo, price, InfraValue vs Govt DLC, "Best deal below InfraValue" ribbon when applicable, Listed-by mini card with WhatsApp + Call buttons, Similar Properties horizontal slider, View full details CTA). On List view: curated Airbnb-style sections — Trending areas (with YoY, lifestyle, confidence pills), Best Deals, Verified spotlight, Under ₹50L, Plots under ₹80L, Ready to Move, and full listings.
+- **Explore (tab)** — Zillow / Airbnb-style: sticky header (Hi user + **menu icon → Profile** + List button + search + **Buy/Rent segmented control** + filter chips + Heat toggle) over map (native) or list (web). Bottom sheet with Map / List view toggle, Pin Preview (photo, price, InfraValue vs Govt DLC, Best-deal ribbon, Listed-by mini card with WhatsApp + Call, Similar Properties horizontal slider with **Show on map** button on each). Deep-linkable via `?highlight={id}` — used by "Show on map" buttons across the app.
+- **Property Detail** — hero, InfraValue vs Govt DLC, details, Listed-by agent card, **Similar properties** horizontal slider with per-item **Show on map** button, WhatsApp + Call bar. Every visit is stored to Recently Viewed.
+- **Profile** — user card with initials avatar, mobile, profession + city pills. Stats row (Saved / Following / Enquiries / Listings). Sections:
+   - **Account**: History (recently viewed) · Enquiries & orders · Subscriptions
+   - **Business**: Work with us / Become an agent · List with us
+   - **Help**: Contact us · About InfraLocal
+   - Sign out
+- **History** — Recently viewed properties from AsyncStorage.
+- **Enquiries & orders** — Agent enquiries + supplier quote requests, each linked to the agent/supplier.
+- **Subscriptions** — Free / Pro / Business tiers (payments coming soon).
+- **Work with us / Become an agent** — Structured application form (name, mobile, firm, role chips, area, RERA).
+- **Contact us / Help** — WhatsApp / Call / Email support + common help topics.
 - **Agents (tab)** — 7 role categories × 13 seeded agents with **Bronze / Silver / Gold** tier badges (computed from RERA + reviews + rating), search, top-agent list.
 - **News (tab)** — Inshorts-style locality news feed.
 - **Market (tab)** — Zomato-style construction ecosystem (Design → Move-In → Maintenance).
@@ -39,8 +50,10 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - `POST /api/auth/onboard`
 - `GET /api/localities`, `GET /api/localities/{id}` (includes price_history + infra + news)
 - `GET /api/properties?type=&locality_id=&q=&verified_only=`
+- `GET /api/properties?listing_type=Buy|Rent&type=&locality_id=&q=&verified_only=`
 - `GET /api/properties/{id}` (includes infravalue estimate + govt_value + **lister**)
-- `GET /api/properties/{id}/similar` — up to 6 similar properties (same type, price ±60%, same locality first)
+- `GET /api/properties/{id}/similar` — up to 6 similar (same type + listing_type, price ±60%, same locality first)
+- `GET /api/user/{uid}/activity` — saved (with property snapshot), follows (with locality snapshot), my_listings, quote_requests (with supplier), agent_enquiries (with agent)
 - `POST /api/properties`
 - `GET /api/compare?ids=a,b,c` — side-by-side compare payload
 - `GET /api/heatmap` — locality points + normalised intensity
