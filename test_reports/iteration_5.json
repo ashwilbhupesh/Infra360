@@ -1,0 +1,30 @@
+{
+  "summary": "Tested only NEW backend changes: profession field on POST /api/auth/onboard (upsert behaviour) and GET /api/properties/{pid}/similar. All 8 targeted tests passed (100%). No _id leakage, upsert only updates profession when provided, similar-properties enforces type match + 60%-160% price band + same-locality-first ordering + limit param + 404 on unknown property. Test users (TEST_MOBILE 9998887771 & 9998887772) cleaned up.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_onboard_profession_and_similar.py",
+    "/app/test_reports/pytest/onboard_similar_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "similar_properties correctly excludes p-06 itself and filters by base type + price band [0.6x, 1.6x]. Same-locality query is performed first, then remaining results are backfilled from other localities — matches spec.",
+    "onboard upsert: profession is only written when req.profession is not None, so subsequent calls without profession preserve the existing value. Good.",
+    "All responses use NO_ID projection, so mongo _id is never exposed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (8/8)", "frontend": "N/A"},
+  "seed_data_creation": "Created two TEST users during run (mobiles 9998887771, 9998887772); both deleted in fixture teardown and confirmed absent from DB post-run.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "New tests live in /app/backend/tests/test_onboard_profession_and_similar.py — reuse for regressions. Existing 73-test suite was intentionally NOT rerun per this iteration's request.",
+  "rca_of_issue": "N/A - no failures"
+}

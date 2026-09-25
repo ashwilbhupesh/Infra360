@@ -68,12 +68,14 @@ class OnboardRequest(BaseModel):
     name: str
     mobile: str
     area: Optional[str] = None
+    profession: Optional[str] = None
 
 class User(BaseModel):
     id: str
     name: str
     mobile: str
     area: Optional[str] = None
+    profession: Optional[str] = None
     created_at: str
 
 class PropertyIn(BaseModel):
@@ -197,13 +199,24 @@ async def onboard(req: OnboardRequest):
         raise HTTPException(400, "Invalid mobile")
     existing = await db.users.find_one({"mobile": mobile}, NO_ID)
     if existing:
-        # Update name/area if provided
-        await db.users.update_one({"mobile": mobile}, {"$set": {"name": req.name, "area": req.area}})
-        existing["name"] = req.name
-        existing["area"] = req.area
+        # Update mutable fields only if provided
+        update: Dict[str, Any] = {"name": req.name}
+        if req.area is not None:
+            update["area"] = req.area
+        if req.profession is not None:
+            update["profession"] = req.profession
+        await db.users.update_one({"mobile": mobile}, {"$set": update})
+        existing.update(update)
         return {"user": existing}
     uid = str(uuid.uuid4())
-    user = {"id": uid, "name": req.name.strip(), "mobile": mobile, "area": req.area, "created_at": now_iso()}
+    user = {
+        "id": uid,
+        "name": req.name.strip(),
+        "mobile": mobile,
+        "area": req.area,
+        "profession": req.profession,
+        "created_at": now_iso(),
+    }
     await db.users.insert_one({**user})
     return {"user": user}
 
@@ -296,6 +309,27 @@ async def get_property(pid: str):
     # Attach a "listed by" agent deterministically
     p["lister"] = await pick_lister(p)
     return p
+
+@api_router.get("/properties/{pid}/similar")
+async def similar_properties(pid: str, limit: int = 6):
+    p = await db.properties.find_one({"id": pid}, NO_ID)
+    if not p:
+        raise HTTPException(404, "Property not found")
+    price = p["price"]
+    lo, hi = price * 0.6, price * 1.6
+    q = {
+        "id": {"$ne": pid},
+        "type": p["type"],
+        "price": {"$gte": lo, "$lte": hi},
+    }
+    # Prefer same locality first
+    same = await db.properties.find({**q, "locality_id": p["locality_id"]}, NO_ID).limit(limit).to_list(limit)
+    if len(same) >= limit:
+        return same
+    remaining = limit - len(same)
+    seen_ids = {x["id"] for x in same}
+    others = await db.properties.find({**q, "id": {"$nin": list(seen_ids) + [pid]}}, NO_ID).limit(remaining).to_list(remaining)
+    return same + others
 
 @api_router.post("/properties")
 async def create_property(prop: PropertyIn):

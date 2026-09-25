@@ -6,6 +6,8 @@ import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 
+const PROFESSIONS = ["Buyer", "Investor", "Seller", "Broker", "Developer", "Architect", "Contractor", "Loan Advisor", "Lawyer", "Other"];
+
 export default function Onboarding() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -13,10 +15,11 @@ export default function Onboarding() {
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [area, setArea] = useState("");
+  const [profession, setProfession] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const canSubmit = name.trim().length >= 2 && mobile.trim().length >= 10 && area.trim().length >= 2;
+  const canSubmit = name.trim().length >= 2 && mobile.trim().length >= 10 && area.trim().length >= 2 && !!profession;
 
   const submit = async () => {
     setErr(null);
@@ -26,7 +29,7 @@ export default function Onboarding() {
     }
     setBusy(true);
     try {
-      const res = await api.post<{ user: any }>("/auth/onboard", { name: name.trim(), mobile: mobile.trim(), area: area.trim() });
+      const res = await api.post<{ user: any }>("/auth/onboard", { name: name.trim(), mobile: mobile.trim(), area: area.trim(), profession });
       await setUser(res.user);
       router.replace("/(tabs)/explore");
     } catch (e: any) {
@@ -84,6 +87,25 @@ export default function Onboarding() {
             placeholderTextColor={colors.muted}
             autoCapitalize="words"
           />
+        </View>
+
+        <View style={styles.field}>
+          <Text style={styles.label}>What best describes you?</Text>
+          <View style={styles.chipsWrap}>
+            {PROFESSIONS.map(p => {
+              const active = profession === p;
+              return (
+                <Pressable
+                  key={p}
+                  testID={`profession-chip-${p.toLowerCase().replace(/\s/g, "-")}`}
+                  onPress={() => setProfession(p)}
+                  style={[styles.chip, active && styles.chipActive]}
+                >
+                  <Text style={[styles.chipText, active && styles.chipTextActive]}>{p}</Text>
+                </Pressable>
+              );
+            })}
+          </View>
         </View>
 
         {err && <Text style={styles.err}>{err}</Text>}

@@ -14,11 +14,11 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - Design tokens: Ivory (#FFFFF0) surface, Deep Navy (#0A192F) brand, Terracotta (#C25934) accent.
 
 ## Onboarding
-- Simple name + mobile + **city / town / village** (free text). No OTP. User stored in AsyncStorage.
+- Name + mobile + **city / town / village** (free text) + **profession** (Buyer, Investor, Seller, Broker, Developer, Architect, Contractor, Loan Advisor, Lawyer, Other). No OTP.
 
 ## Screens
 - **Onboarding** — name/mobile/city-town-village.
-- **Explore (tab)** — Zillow-style: sticky header (Hi user + List button + search + filter chips + Heat toggle) over map (native) or list (web), bottom sheet with Trending Localities strip + full property list. Heatmap toggle colours the map by median price.
+- **Explore (tab)** — Zillow / Airbnb-style: sticky header (Hi user + List button + search + filter chips + Heat toggle) over map (native) or list (web). Bottom sheet has a **Map / List view toggle**. On Map view: tapping a pin opens a rich **Pin Preview** inside the sheet (photo, price, InfraValue vs Govt DLC, "Best deal below InfraValue" ribbon when applicable, Listed-by mini card with WhatsApp + Call buttons, Similar Properties horizontal slider, View full details CTA). On List view: curated Airbnb-style sections — Trending areas (with YoY, lifestyle, confidence pills), Best Deals, Verified spotlight, Under ₹50L, Plots under ₹80L, Ready to Move, and full listings.
 - **Agents (tab)** — 7 role categories × 13 seeded agents with **Bronze / Silver / Gold** tier badges (computed from RERA + reviews + rating), search, top-agent list.
 - **News (tab)** — Inshorts-style locality news feed.
 - **Market (tab)** — Zomato-style construction ecosystem (Design → Move-In → Maintenance).
@@ -40,6 +40,7 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - `GET /api/localities`, `GET /api/localities/{id}` (includes price_history + infra + news)
 - `GET /api/properties?type=&locality_id=&q=&verified_only=`
 - `GET /api/properties/{id}` (includes infravalue estimate + govt_value + **lister**)
+- `GET /api/properties/{id}/similar` — up to 6 similar properties (same type, price ±60%, same locality first)
 - `POST /api/properties`
 - `GET /api/compare?ids=a,b,c` — side-by-side compare payload
 - `GET /api/heatmap` — locality points + normalised intensity

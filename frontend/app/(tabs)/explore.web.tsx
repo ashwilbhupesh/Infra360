@@ -8,6 +8,8 @@ import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 import { PropertyCard, Property } from "@/src/components/property-card";
 import { LocalityCard, Locality } from "@/src/components/locality-card";
+import { PinPreview } from "@/src/components/pin-preview";
+import { ExploreListView } from "@/src/components/explore-list-view";
 import { formatINR, indianComma } from "@/src/utils/format";
 import { heatColor, heatLabel } from "@/src/utils/heat";
 
@@ -33,6 +35,7 @@ export default function MapScreenWeb() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<string | null>(null);
   const [heat, setHeat] = useState(false);
+  const [view, setView] = useState<"map" | "list">("map");
   const [heatPoints, setHeatPoints] = useState<HeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
 
@@ -143,18 +146,40 @@ export default function MapScreenWeb() {
       )}
 
       <View style={styles.sheet}>
-        {localities.length > 0 && (
-          <View style={{ marginBottom: spacing.sm }}>
-            <Text style={styles.stripTitle}>Trending localities</Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.lg, gap: spacing.md }}>
-              {localities.map(l => <LocalityCard key={l.id} locality={l} />)}
-            </ScrollView>
+        <View style={styles.sheetHeaderRow}>
+          <Text style={styles.sheetTitle}>{loading ? "Loading..." : `${items.length} properties`}</Text>
+          <View style={styles.viewToggle}>
+            <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
+              <Icon name="map-outline" size={13} color={view === "map" ? colors.onBrandPrimary : colors.onSurface} />
+              <Text style={[styles.viewToggleText, view === "map" && { color: colors.onBrandPrimary }]}>Map</Text>
+            </Pressable>
+            <Pressable testID="view-toggle-list" onPress={() => setView("list")} style={[styles.viewToggleBtn, view === "list" && styles.viewToggleActive]}>
+              <Icon name="list-outline" size={13} color={view === "list" ? colors.onBrandPrimary : colors.onSurface} />
+              <Text style={[styles.viewToggleText, view === "list" && { color: colors.onBrandPrimary }]}>List</Text>
+            </Pressable>
           </View>
+        </View>
+        {view === "list" ? (
+          <ExploreListView items={items} filter={filter} />
+        ) : selected ? (
+          <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
+            <PinPreview propertyId={selected} onClose={() => setSelected(null)} />
+          </ScrollView>
+        ) : (
+          <>
+            {localities.length > 0 && (
+              <View style={{ marginBottom: spacing.sm }}>
+                <Text style={styles.stripTitle}>Trending localities</Text>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.lg, gap: spacing.md }}>
+                  {localities.map(l => <LocalityCard key={l.id} locality={l} />)}
+                </ScrollView>
+              </View>
+            )}
+            <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 120 }}>
+              {items.map(p => <PropertyCard key={p.id} property={p} compact />)}
+            </ScrollView>
+          </>
         )}
-        <Text style={styles.sheetTitle}>{loading ? "Loading..." : `${items.length} properties`}</Text>
-        <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 120 }}>
-          {items.map(p => <PropertyCard key={p.id} property={p} compact />)}
-        </ScrollView>
       </View>
     </View>
   );
@@ -193,5 +218,10 @@ const styles = StyleSheet.create({
   legendBar: { flex: 1, flexDirection: "row", height: 8, borderRadius: 4, overflow: "hidden" },
   legendText: { fontSize: 10, fontWeight: "700", color: colors.muted, letterSpacing: 0.5 },
   sheet: { flex: 1, backgroundColor: colors.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20, borderWidth: 1, borderColor: colors.border, paddingTop: spacing.md },
-  sheetTitle: { fontSize: 16, fontWeight: "700", color: colors.onSurface, paddingHorizontal: spacing.lg },
+  sheetHeaderRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: spacing.lg, paddingBottom: spacing.sm },
+  sheetTitle: { fontSize: 16, fontWeight: "700", color: colors.onSurface },
+  viewToggle: { flexDirection: "row", backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, padding: 3, gap: 2 },
+  viewToggleBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 10, paddingVertical: 5, borderRadius: radius.pill },
+  viewToggleActive: { backgroundColor: colors.brand },
+  viewToggleText: { fontSize: 11, fontWeight: "700", color: colors.onSurface },
 });

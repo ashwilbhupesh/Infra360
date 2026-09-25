@@ -23,7 +23,7 @@ export const backendUrl = BASE;
 
 export const USER_KEY = "infralocal.user";
 
-export type CurrentUser = { id: string; name: string; mobile: string; area?: string };
+export type CurrentUser = { id: string; name: string; mobile: string; area?: string; profession?: string };
 
 export async function getUser(): Promise<CurrentUser | null> {
   const raw = await AsyncStorage.getItem(USER_KEY);
