@@ -8,12 +8,11 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.brandPrimary,
+        tabBarActiveTintColor: colors.brand,
         tabBarInactiveTintColor: colors.muted,
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.border,
-          borderTopWidth: 0.5,
           ...(Platform.OS === "web" ? { height: 64 } : {}),
         },
         tabBarItemStyle: { alignSelf: "center" },
@@ -35,10 +34,10 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="news"
+        name="market"
         options={{
-          title: "News",
-          tabBarIcon: ({ color, size }) => <Icon name="newspaper-outline" size={size} color={color} />,
+          title: "Market",
+          tabBarIcon: ({ color, size }) => <Icon name="storefront-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen

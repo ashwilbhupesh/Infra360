@@ -126,6 +126,15 @@ export default function Explore() {
           {featured.map((p) => <PropertyCard key={p.id} property={p} />)}
         </View>
 
+        <Pressable testID="news-cta" onPress={() => router.push("/news")} style={styles.newsCta}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.newsCtaKicker}>INFRALOCAL NEWS</Text>
+            <Text style={styles.newsCtaTitle}>Hyperlocal property intel — short and sharp</Text>
+            <Text style={styles.newsCtaSub}>Infrastructure, government moves, market shifts across Jaipur.</Text>
+          </View>
+          <Icon name="newspaper-outline" size={30} color={colors.brand} />
+        </Pressable>
+
         <View style={styles.infoBlock}>
           <Text style={styles.infoTitle}>How InfraValue™ Works</Text>
           <Text style={styles.infoBody}>
@@ -174,4 +183,19 @@ const styles = StyleSheet.create({
   infoTitle: { fontSize: 15, fontWeight: "700", color: colors.brand },
   infoBody: { fontSize: 13, color: colors.onSurfaceSecondary, marginTop: spacing.sm, lineHeight: 20 },
   footer: { textAlign: "center", color: colors.muted, fontSize: 11, marginTop: spacing.xxl },
+  newsCta: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: spacing.md,
+    marginHorizontal: spacing.xl,
+    marginTop: spacing.xl,
+    padding: spacing.lg,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radius.lg,
+  },
+  newsCtaKicker: { fontSize: 10, fontWeight: "700", color: colors.brandPrimary, letterSpacing: 1 },
+  newsCtaTitle: { fontSize: 15, fontWeight: "700", color: colors.onSurface, marginTop: 4 },
+  newsCtaSub: { fontSize: 12, color: colors.muted, marginTop: 4, lineHeight: 17 },
 });

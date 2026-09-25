@@ -18,13 +18,16 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 
 ## Screens
 - **Onboarding** — name/mobile/area chips.
-- **Explore (tab)** — hero, search, category chips, "Explore on Map" CTA, trending localities, featured properties, InfraValue explainer.
+- **Explore (tab)** — hero, search, category chips, "Explore on Map" CTA, trending localities, featured properties, InfraLocal News CTA, InfraValue explainer.
 - **Map (tab)** — native: react-native-maps + price pins + bottom sheet of swipeable cards; web fallback: filters + cluster + list.
-- **News (tab)** — Inshorts-style category feed.
+- **Market (tab)** — Zomato-style construction ecosystem directory: 6 lifecycle groups (Design → Build → Materials → Interiors → Move In → Maintenance), 24 categories, ~26 suppliers with rating, verified badge, offerings, starting price, quote request bottom sheet.
 - **Saved (tab)** — Saved properties + followed localities + sign-out.
+- **News** — Inshorts-style category feed (accessed via Explore CTA).
 - **Property Detail** — hero, price, InfraValue vs Govt DLC comparison, details, locality link.
-- **Locality Detail** — hero, metric cards, InfraValue range, price history chart (listing / est. range / govt), Govt vs Market compare, infrastructure timeline, news, listings.
-- **List Property** — 7-step wizard (Type → Location → Details → Price → Photos → Seller → Preview).
+- **Locality Detail** — hero, metric cards, InfraValue range, price history chart, Govt vs Market compare, infrastructure timeline, news, listings.
+- **List Property** — 7-step wizard with photo upload.
+- **Market Category** — sortable supplier list with rating / reviews / verified filters.
+- **Supplier Detail** — hero, rating, offerings, starting price, About; Call + Request Quote CTAs; quote submission bottom sheet.
 
 ## Data
 - Seeded 7 Jaipur localities, ~30 properties, 7 infrastructure projects, 7 news items — all clearly demo.
@@ -39,3 +42,8 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - `POST /api/saved/toggle`, `GET /api/saved`
 - `POST /api/follows/toggle`, `GET /api/follows`
 - `POST /api/upload`, `GET /api/files/{path}`
+- `GET /api/market/groups` (with categories + supplier counts)
+- `GET /api/market/categories?group_id=`
+- `GET /api/market/suppliers?category_id=&group_id=&q=&featured_only=&verified_only=&city=`
+- `GET /api/market/suppliers/{id}` (with attached category)
+- `POST /api/market/quote-requests`

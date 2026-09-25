@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, RefreshControl } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius } from "@/src/theme";
 import { api } from "@/src/api";
@@ -11,6 +12,7 @@ type NewsItem = { id: string; title: string; summary: string; category: string; 
 
 export default function News() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const [items, setItems] = useState<NewsItem[]>([]);
   const [cat, setCat] = useState("All");
   const [loading, setLoading] = useState(true);
@@ -28,7 +30,12 @@ export default function News() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <View style={{ paddingTop: insets.top + spacing.md, paddingHorizontal: spacing.xl, paddingBottom: spacing.sm, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <Text style={styles.title}>InfraLocal News</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, marginBottom: 6 }}>
+          <Pressable testID="news-back-btn" onPress={() => router.back()} hitSlop={12}>
+            <Icon name="chevron-back" size={26} color={colors.onSurface} />
+          </Pressable>
+          <Text style={styles.title}>InfraLocal News</Text>
+        </View>
         <Text style={styles.sub}>Hyperlocal property intelligence, short and sharp.</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
           {CATS.map(c => (

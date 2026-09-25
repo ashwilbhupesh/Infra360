@@ -3,13 +3,14 @@ from fastapi.concurrency import run_in_threadpool
 from dotenv import load_dotenv
 from starlette.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-import os, uuid, logging, requests
+import os, uuid, logging, requests, re
 from pathlib import Path
 from pydantic import BaseModel, Field
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from datetime import datetime, timezone
 
 from seed_data import LOCALITIES, PROPERTIES, PRICE_HISTORY, INFRASTRUCTURE, NEWS
+from market_seed import MARKET_GROUPS, MARKET_CATEGORIES, SUPPLIERS
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -112,6 +113,12 @@ async def seed_if_needed():
     if await db.price_history.count_documents({}) == 0:
         docs = [{"locality_id": lid, "series": series} for lid, series in PRICE_HISTORY.items()]
         await db.price_history.insert_many(docs)
+    if await db.market_groups.count_documents({}) == 0:
+        await db.market_groups.insert_many([{**g} for g in MARKET_GROUPS])
+    if await db.market_categories.count_documents({}) == 0:
+        await db.market_categories.insert_many([{**c} for c in MARKET_CATEGORIES])
+    if await db.suppliers.count_documents({}) == 0:
+        await db.suppliers.insert_many([{**s} for s in SUPPLIERS])
 
 @app.on_event("startup")
 async def on_startup():
@@ -345,6 +352,101 @@ async def get_file(path: str):
     except requests.HTTPError:
         raise HTTPException(404, "File not found")
     return Response(content=data, media_type=ctype)
+
+# ---------------- Market (construction ecosystem) ----------------
+@api_router.get("/market/groups")
+async def list_market_groups():
+    groups = await db.market_groups.find({}, NO_ID).to_list(50)
+    cats = await db.market_categories.find({}, NO_ID).to_list(200)
+    # attach categories to their group
+    by_group: Dict[str, List[dict]] = {}
+    for c in cats:
+        by_group.setdefault(c["group_id"], []).append(c)
+    # supplier counts per category
+    sup_counts: Dict[str, int] = {}
+    async for s in db.suppliers.find({}, {"category_id": 1, "_id": 0}):
+        cid = s.get("category_id")
+        if cid:
+            sup_counts[cid] = sup_counts.get(cid, 0) + 1
+    for c in cats:
+        c["suppliers_count"] = sup_counts.get(c["id"], 0)
+    for g in groups:
+        g["categories"] = by_group.get(g["id"], [])
+    return groups
+
+@api_router.get("/market/categories")
+async def list_market_categories(group_id: Optional[str] = None):
+    q: Dict[str, Any] = {}
+    if group_id:
+        q["group_id"] = group_id
+    cats = await db.market_categories.find(q, NO_ID).to_list(200)
+    return cats
+
+@api_router.get("/market/suppliers")
+async def list_suppliers(
+    category_id: Optional[str] = None,
+    group_id: Optional[str] = None,
+    q: Optional[str] = None,
+    featured_only: bool = False,
+    verified_only: bool = False,
+    city: Optional[str] = None,
+    limit: int = 100,
+):
+    query: Dict[str, Any] = {}
+    if category_id:
+        query["category_id"] = category_id
+    if group_id:
+        # expand to categories in this group
+        cat_ids = [c["id"] async for c in db.market_categories.find({"group_id": group_id}, {"id": 1, "_id": 0})]
+        query["category_id"] = {"$in": cat_ids}
+    if featured_only:
+        query["featured"] = True
+    if verified_only:
+        query["verified"] = True
+    if city:
+        query["city"] = city
+    if q:
+        pat = re.escape(q)
+        query["$or"] = [
+            {"name": {"$regex": pat, "$options": "i"}},
+            {"tagline": {"$regex": pat, "$options": "i"}},
+            {"offerings": {"$regex": pat, "$options": "i"}},
+        ]
+    suppliers = await db.suppliers.find(query, NO_ID).limit(limit).to_list(limit)
+    return suppliers
+
+@api_router.get("/market/suppliers/{sid}")
+async def get_supplier(sid: str):
+    s = await db.suppliers.find_one({"id": sid}, NO_ID)
+    if not s:
+        raise HTTPException(404, "Supplier not found")
+    cat = await db.market_categories.find_one({"id": s.get("category_id")}, NO_ID)
+    s["category"] = cat
+    return s
+
+class QuoteRequest(BaseModel):
+    supplier_id: str
+    user_id: Optional[str] = None
+    name: str
+    mobile: str
+    message: Optional[str] = None
+
+@api_router.post("/market/quote-requests")
+async def create_quote(req: QuoteRequest):
+    if not await db.suppliers.find_one({"id": req.supplier_id}, {"_id": 0, "id": 1}):
+        raise HTTPException(404, "Supplier not found")
+    doc = {
+        "id": f"qr-{uuid.uuid4().hex[:10]}",
+        "supplier_id": req.supplier_id,
+        "user_id": req.user_id,
+        "name": req.name,
+        "mobile": req.mobile,
+        "message": req.message,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "status": "New",
+    }
+    await db.quote_requests.insert_one(doc)
+    return {"id": doc["id"], "status": doc["status"]}
 
 app.include_router(api_router)
 
