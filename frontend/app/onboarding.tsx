@@ -6,19 +6,17 @@ import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 
-const AREAS = ["Ajmer Road", "Jagatpura", "Tonk Road", "Vaishali Nagar", "Mansarovar", "Sikar Road", "Sirsi Road"];
-
 export default function Onboarding() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { setUser } = useAuth();
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
-  const [area, setArea] = useState<string | null>(null);
+  const [area, setArea] = useState("");
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
 
-  const canSubmit = name.trim().length >= 2 && mobile.trim().length >= 10 && area;
+  const canSubmit = name.trim().length >= 2 && mobile.trim().length >= 10 && area.trim().length >= 2;
 
   const submit = async () => {
     setErr(null);
@@ -28,7 +26,7 @@ export default function Onboarding() {
     }
     setBusy(true);
     try {
-      const res = await api.post<{ user: any }>("/auth/onboard", { name: name.trim(), mobile: mobile.trim(), area });
+      const res = await api.post<{ user: any }>("/auth/onboard", { name: name.trim(), mobile: mobile.trim(), area: area.trim() });
       await setUser(res.user);
       router.replace("/(tabs)/explore");
     } catch (e: any) {
@@ -76,22 +74,16 @@ export default function Onboarding() {
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Area of interest</Text>
-          <View style={styles.chipsWrap}>
-            {AREAS.map((a) => {
-              const active = area === a;
-              return (
-                <Pressable
-                  key={a}
-                  testID={`area-chip-${a.toLowerCase().replace(/\s/g, "-")}`}
-                  onPress={() => setArea(a)}
-                  style={[styles.chip, active && styles.chipActive]}
-                >
-                  <Text style={[styles.chipText, active && styles.chipTextActive]}>{a}</Text>
-                </Pressable>
-              );
-            })}
-          </View>
+          <Text style={styles.label}>City, town or village</Text>
+          <TextInput
+            testID="onboard-location-input"
+            style={styles.input}
+            value={area}
+            onChangeText={setArea}
+            placeholder="e.g. Jaipur, Chomu, Bagru"
+            placeholderTextColor={colors.muted}
+            autoCapitalize="words"
+          />
         </View>
 
         {err && <Text style={styles.err}>{err}</Text>}

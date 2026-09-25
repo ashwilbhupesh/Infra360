@@ -1,207 +1,234 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, ScrollView, Pressable, StyleSheet, TextInput, ActivityIndicator, RefreshControl } from "react-native";
+import React, { useEffect, useMemo, useRef, useState } from "react";
+import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextInput } from "react-native";
+import MapView, { Marker, Circle, PROVIDER_DEFAULT } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
+import BottomSheet from "@gorhom/bottom-sheet";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
-import { LocalityCard, Locality } from "@/src/components/locality-card";
 import { PropertyCard, Property } from "@/src/components/property-card";
+import { LocalityCard, Locality } from "@/src/components/locality-card";
+import { formatINR } from "@/src/utils/format";
+import { heatColor } from "@/src/utils/heat";
 
-const CATEGORIES = [
-  { key: "Apartment", label: "Buy", icon: "home-outline" },
-  { key: "Rent", label: "Rent", icon: "key-outline" },
-  { key: "Residential Plot", label: "Plots", icon: "grid-outline" },
-  { key: "Agricultural Land", label: "Agri", icon: "leaf-outline" },
-  { key: "Commercial", label: "Commercial", icon: "business-outline" },
-  { key: "Villa", label: "Villa", icon: "diamond-outline" },
+const FILTERS = [
+  { key: "", label: "All" },
+  { key: "Apartment", label: "Apartments" },
+  { key: "Villa", label: "Villas" },
+  { key: "Residential Plot", label: "Plots" },
+  { key: "Agricultural Land", label: "Agri Land" },
+  { key: "Commercial", label: "Commercial" },
 ];
 
-export default function Explore() {
+export default function MapScreen() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { user } = useAuth();
-  const [localities, setLocalities] = useState<Locality[]>([]);
-  const [featured, setFeatured] = useState<Property[]>([]);
-  const [search, setSearch] = useState("");
+  const params = useLocalSearchParams<{ type?: string; q?: string }>();
+  const [items, setItems] = useState<Property[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [filter, setFilter] = useState<string>(params.type || "");
+  const [q, setQ] = useState<string>(params.q ? String(params.q) : "");
   const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [heat, setHeat] = useState(false);
+  const [heatPoints, setHeatPoints] = useState<Array<{ id: string; name: string; lat: number; lng: number; intensity: number; median_price_per_sq_yd: number }>>([]);
+  const [localities, setLocalities] = useState<Locality[]>([]);
+  const sheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const [h, locs] = await Promise.all([
+          api.get<{ points: any[] }>("/heatmap"),
+          api.get<Locality[]>("/localities"),
+        ]);
+        setHeatPoints(h.points || []);
+        setLocalities(locs);
+      } catch {}
+    })();
+  }, []);
 
   const load = async () => {
+    setLoading(true);
     try {
-      const [locs, props] = await Promise.all([
-        api.get<Locality[]>("/localities"),
-        api.get<Property[]>("/properties?verified_only=true&limit=6"),
-      ]);
-      setLocalities(locs);
-      setFeatured(props);
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setLoading(false);
-      setRefreshing(false);
-    }
+      const qs = new URLSearchParams();
+      if (filter) qs.set("type", filter);
+      if (q) qs.set("q", q);
+      const data = await api.get<Property[]>(`/properties?${qs.toString()}`);
+      setItems(data);
+    } catch (e) { console.error(e); }
+    finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [filter]);
 
-  const submitSearch = () => {
-    router.push({ pathname: "/(tabs)/map", params: { q: search } });
-  };
+  const initialRegion = { latitude: 26.8891, longitude: 75.7500, latitudeDelta: 0.18, longitudeDelta: 0.18 };
+  const focused = useMemo(() => selected ? items.find(i => i.id === selected) : null, [items, selected]);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
-      <ScrollView
-        contentContainerStyle={{ paddingTop: insets.top + spacing.md, paddingBottom: spacing.xxl }}
-        showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(); }} />}
+      <MapView
+        style={StyleSheet.absoluteFill}
+        provider={PROVIDER_DEFAULT}
+        initialRegion={initialRegion}
+        showsCompass={false}
       >
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.hi}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
-            <Text style={styles.brand}>InfraLocal</Text>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
-            <Pressable testID="header-saved-btn" onPress={() => router.push("/saved")} style={styles.iconBtn}>
-              <Icon name="heart-outline" size={20} color={colors.onSurface} />
-            </Pressable>
-            <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
-              <Icon name="add" size={16} color={colors.onBrandPrimary} />
-              <Text style={styles.listBtnText}>List</Text>
-            </Pressable>
-          </View>
-        </View>
+        {heat && heatPoints.map(pt => (
+          <Circle
+            key={`hc-${pt.id}`}
+            center={{ latitude: pt.lat, longitude: pt.lng }}
+            radius={1500}
+            fillColor={heatColor(pt.intensity, 0.45)}
+            strokeColor={heatColor(pt.intensity, 0.9)}
+            strokeWidth={1}
+          />
+        ))}
+        {!heat && items.map((p: any) => (
+          <Marker
+            key={p.id}
+            coordinate={{ latitude: p.lat, longitude: p.lng }}
+            onPress={() => { setSelected(p.id); sheetRef.current?.snapToIndex(1); }}
+            anchor={{ x: 0.5, y: 0.5 }}
+          >
+            <View style={[styles.pin, selected === p.id && styles.pinActive]}>
+              <Text style={[styles.pinText, selected === p.id && styles.pinTextActive]}>{formatINR(p.price)}</Text>
+            </View>
+          </Marker>
+        ))}
+      </MapView>
 
-        <View style={styles.heroBlock}>
-          <Text style={styles.hero}>Understand a locality{"\n"}before you invest in it.</Text>
-          <Text style={styles.heroSub}>Prices, DLC rates, infrastructure & hyperlocal market intelligence.</Text>
+      {/* Top chrome */}
+      <View style={[styles.topChrome, { top: insets.top + spacing.sm }]}>
+        <View style={styles.headerRow}>
+          <View style={styles.hiPill}>
+            <Text style={styles.hi} numberOfLines={1}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
+          </View>
+          <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
+            <Icon name="add" size={14} color={colors.onBrandPrimary} />
+            <Text style={styles.listBtnText}>List</Text>
+          </Pressable>
         </View>
-
-        <View style={styles.searchWrap}>
-          <Icon name="search-outline" size={18} color={colors.muted} />
+        <View style={styles.searchPill}>
+          <Icon name="search-outline" size={16} color={colors.muted} />
           <TextInput
-            testID="home-search-input"
-            style={styles.searchInput}
-            placeholder="Search Jaipur, Ajmer Road, Jagatpura..."
+            testID="explore-search-input"
+            style={styles.searchTxt}
+            placeholder="Search locality, project, road..."
             placeholderTextColor={colors.muted}
-            value={search}
-            onChangeText={setSearch}
-            onSubmitEditing={submitSearch}
+            value={q}
+            onChangeText={setQ}
+            onSubmitEditing={load}
             returnKeyType="search"
           />
+          {q ? (
+            <Pressable onPress={() => { setQ(""); }} hitSlop={10}><Icon name="close-circle" size={16} color={colors.muted} /></Pressable>
+          ) : null}
         </View>
-
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
-          {CATEGORIES.map((c) => (
-            <Pressable
-              key={c.key}
-              testID={`category-chip-${c.key.replace(/\s/g, "-").toLowerCase()}`}
-              onPress={() => router.push({ pathname: "/(tabs)/map", params: { type: c.key } })}
-              style={styles.chip}
-            >
-              <Icon name={c.icon as any} size={14} color={colors.brand} />
-              <Text style={styles.chipText}>{c.label}</Text>
-            </Pressable>
+          {FILTERS.map(f => {
+            const active = filter === f.key;
+            return (
+              <Pressable key={f.key || "all"} testID={`filter-${f.key || "all"}`} onPress={() => setFilter(f.key)} style={[styles.filterChip, active && styles.filterChipActive]}>
+                <Text style={[styles.filterText, active && styles.filterTextActive]}>{f.label}</Text>
+              </Pressable>
+            );
+          })}
+          <Pressable testID="heatmap-toggle" onPress={() => setHeat(v => !v)} style={[styles.filterChip, heat && styles.heatActive]}>
+            <Icon name="flame-outline" size={13} color={heat ? colors.onBrandPrimary : colors.onSurface} />
+            <Text style={[styles.filterText, heat && { color: colors.onBrandPrimary }]}>  Heat</Text>
+          </Pressable>
+        </ScrollView>
+      </View>
+
+      {heat && (
+        <View style={[styles.heatLegend, { top: insets.top + 195 }]}>
+          <Text style={styles.legendTitle}>Price / sq yd</Text>
+          <View style={styles.legendBar}>
+            {[0, 0.25, 0.5, 0.75, 1].map(i => (
+              <View key={i} style={{ flex: 1, height: 8, backgroundColor: heatColor(i, 1) }} />
+            ))}
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <Text style={styles.legendText}>Value</Text>
+            <Text style={styles.legendText}>Prime</Text>
+          </View>
+        </View>
+      )}
+
+      {loading && (
+        <View style={styles.loadingChip}>
+          <ActivityIndicator color={colors.brand} size="small" />
+          <Text style={styles.loadingTxt}>Loading properties...</Text>
+        </View>
+      )}
+
+      <BottomSheet
+        ref={sheetRef}
+        index={0}
+        snapPoints={["22%", "55%", "92%"]}
+        backgroundStyle={styles.sheetBg}
+        handleIndicatorStyle={{ backgroundColor: colors.borderStrong }}
+      >
+        <View style={styles.sheetHeader}>
+          <Text style={styles.sheetTitle}>{items.length} properties</Text>
+          <Text style={styles.sheetSub}>Tap a pin to view</Text>
+        </View>
+        {localities.length > 0 && (
+          <View style={{ marginBottom: spacing.sm }}>
+            <Text style={styles.stripTitle}>Trending localities</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.lg, gap: spacing.md }}>
+              {localities.map(l => <LocalityCard key={l.id} locality={l} />)}
+            </ScrollView>
+          </View>
+        )}
+        <ScrollView contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.xxxl }}>
+          <Text style={styles.stripTitle}>Listings</Text>
+          {focused && (
+            <View style={{ marginBottom: spacing.md }}>
+              <Text style={styles.selectedLabel}>SELECTED</Text>
+              <PropertyCard property={focused} />
+            </View>
+          )}
+          {items.filter(p => p.id !== focused?.id).map(p => (
+            <PropertyCard key={p.id} property={p} compact />
           ))}
         </ScrollView>
-
-        <Pressable testID="explore-map-cta" style={styles.mapCta} onPress={() => router.push("/(tabs)/map")}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.mapCtaTitle}>Explore on Map</Text>
-            <Text style={styles.mapCtaSub}>Zillow-style search with live property pins</Text>
-          </View>
-          <Icon name="arrow-forward" size={20} color={colors.onBrandPrimary} />
-        </Pressable>
-
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Trending Localities</Text>
-          <Text style={styles.sectionCount}>{localities.length}</Text>
-        </View>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.xl, gap: spacing.md }}>
-          {loading ? <ActivityIndicator style={{ marginVertical: spacing.xl }} color={colors.brand} /> :
-            localities.map((l) => <LocalityCard key={l.id} locality={l} />)}
-        </ScrollView>
-
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Featured Properties</Text>
-          <Pressable onPress={() => router.push("/(tabs)/map")}><Text style={styles.viewAll}>See all</Text></Pressable>
-        </View>
-        <View style={{ paddingHorizontal: spacing.xl }}>
-          {featured.map((p) => <PropertyCard key={p.id} property={p} />)}
-        </View>
-
-        <Pressable testID="news-cta" onPress={() => router.push("/news")} style={styles.newsCta}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.newsCtaKicker}>INFRALOCAL NEWS</Text>
-            <Text style={styles.newsCtaTitle}>Hyperlocal property intel — short and sharp</Text>
-            <Text style={styles.newsCtaSub}>Infrastructure, government moves, market shifts across Jaipur.</Text>
-          </View>
-          <Icon name="newspaper-outline" size={30} color={colors.brand} />
-        </Pressable>
-
-        <View style={styles.infoBlock}>
-          <Text style={styles.infoTitle}>How InfraValue™ Works</Text>
-          <Text style={styles.infoBody}>
-            InfraValue combines active listings, locality data, and government valuation to produce a market
-            range for any property. It is an estimate, never a formal valuation. Every locality page shows
-            confidence level and methodology.
-          </Text>
-        </View>
-
-        <Text style={styles.footer}>Demo data for Jaipur • Real datasets can be integrated later</Text>
-      </ScrollView>
+      </BottomSheet>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: spacing.xl, marginBottom: spacing.md },
-  hi: { color: colors.muted, fontSize: 12, letterSpacing: 0.5, textTransform: "uppercase", fontWeight: "600" },
-  brand: { color: colors.brand, fontSize: 22, fontWeight: "700", letterSpacing: -0.3 },
-  listBtn: { flexDirection: "row", alignItems: "center", gap: 4, backgroundColor: colors.brandPrimary, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: radius.pill },
-  listBtnText: { color: colors.onBrandPrimary, fontWeight: "700", fontSize: 12 },
-  heroBlock: { paddingHorizontal: spacing.xl, marginTop: spacing.md, marginBottom: spacing.lg },
-  hero: { fontSize: 26, fontWeight: "700", color: colors.brand, lineHeight: 32, letterSpacing: -0.5 },
-  heroSub: { color: colors.muted, marginTop: spacing.sm, fontSize: 14 },
-  searchWrap: {
-    flexDirection: "row", alignItems: "center", marginHorizontal: spacing.xl, paddingHorizontal: spacing.lg,
-    height: 48, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary,
-    borderWidth: 1, borderColor: colors.border, gap: spacing.sm,
-  },
-  searchInput: { flex: 1, fontSize: 15, color: colors.onSurface },
-  chipsRow: { paddingHorizontal: spacing.xl, gap: spacing.sm, paddingVertical: spacing.md },
-  chip: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, flexShrink: 0 },
-  chipText: { color: colors.onSurface, fontSize: 13, fontWeight: "500" },
-  mapCta: {
-    flexDirection: "row", alignItems: "center", marginHorizontal: spacing.xl, marginTop: spacing.sm,
-    padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.brand,
-    ...shadow.card,
-  },
-  mapCtaTitle: { color: colors.onBrand, fontSize: 16, fontWeight: "700" },
-  mapCtaSub: { color: "#B3BAC5", fontSize: 12, marginTop: 2 },
-  sectionHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: spacing.xl, marginTop: spacing.xxl, marginBottom: spacing.md },
-  sectionTitle: { fontSize: 18, fontWeight: "700", color: colors.onSurface, letterSpacing: -0.3 },
-  sectionCount: { color: colors.muted, fontSize: 12, fontWeight: "600" },
-  viewAll: { color: colors.brandPrimary, fontSize: 13, fontWeight: "600" },
-  infoBlock: { marginHorizontal: spacing.xl, marginTop: spacing.xxl, padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.brandTertiary },
-  infoTitle: { fontSize: 15, fontWeight: "700", color: colors.brand },
-  infoBody: { fontSize: 13, color: colors.onSurfaceSecondary, marginTop: spacing.sm, lineHeight: 20 },
-  footer: { textAlign: "center", color: colors.muted, fontSize: 11, marginTop: spacing.xxl },
-  newsCta: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: spacing.md,
-    marginHorizontal: spacing.xl,
-    marginTop: spacing.xl,
-    padding: spacing.lg,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: radius.lg,
-  },
-  newsCtaKicker: { fontSize: 10, fontWeight: "700", color: colors.brandPrimary, letterSpacing: 1 },
-  newsCtaTitle: { fontSize: 15, fontWeight: "700", color: colors.onSurface, marginTop: 4 },
-  newsCtaSub: { fontSize: 12, color: colors.muted, marginTop: 4, lineHeight: 17 },
-  iconBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center" },
+  topChrome: { position: "absolute", left: 0, right: 0, paddingHorizontal: spacing.lg, gap: spacing.sm },
+  headerRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  hiPill: { paddingHorizontal: spacing.md, height: 40, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, justifyContent: "center", ...shadow.card },
+  hi: { fontSize: 13, fontWeight: "700", color: colors.onSurface, maxWidth: 200 },
+  listBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 14, height: 40, borderRadius: radius.pill, backgroundColor: colors.brandPrimary, ...shadow.card },
+  listBtnText: { color: colors.onBrandPrimary, fontSize: 13, fontWeight: "700" },
+  searchPill: { flexDirection: "row", alignItems: "center", gap: spacing.sm, height: 44, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, ...shadow.card },
+  searchTxt: { flex: 1, color: colors.onSurface, fontSize: 14 },
+  chipsRow: { gap: spacing.sm, paddingRight: spacing.md, paddingVertical: 2 },
+  filterChip: { paddingHorizontal: spacing.md, height: 36, justifyContent: "center", borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, flexShrink: 0, ...shadow.card },
+  filterChipActive: { backgroundColor: colors.brand, borderColor: colors.brand },
+  heatActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary, flexDirection: "row", alignItems: "center" },
+  filterText: { color: colors.onSurface, fontSize: 12, fontWeight: "600" },
+  filterTextActive: { color: colors.onBrand },
+  heatLegend: { position: "absolute", left: spacing.lg, right: spacing.lg, backgroundColor: "rgba(255,255,240,0.96)", borderRadius: radius.md, padding: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.card },
+  legendTitle: { fontSize: 10, fontWeight: "800", color: colors.muted, letterSpacing: 0.6, marginBottom: 6 },
+  legendBar: { flexDirection: "row", height: 8, borderRadius: 4, overflow: "hidden", marginBottom: 4 },
+  legendText: { fontSize: 10, fontWeight: "700", color: colors.onSurface, letterSpacing: 0.5 },
+  pin: { paddingHorizontal: 10, paddingVertical: 5, backgroundColor: colors.surface, borderRadius: radius.pill, borderWidth: 1.5, borderColor: colors.brand, ...shadow.card },
+  pinActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary, transform: [{ scale: 1.1 }] },
+  pinText: { color: colors.brand, fontSize: 11, fontWeight: "700" },
+  pinTextActive: { color: colors.onBrandPrimary },
+  loadingChip: { position: "absolute", top: 180, alignSelf: "center", flexDirection: "row", alignItems: "center", gap: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.surface, ...shadow.card },
+  loadingTxt: { fontSize: 12, color: colors.onSurface, fontWeight: "500" },
+  sheetBg: { backgroundColor: colors.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20 },
+  sheetHeader: { paddingHorizontal: spacing.lg, paddingBottom: spacing.sm, flexDirection: "row", justifyContent: "space-between", alignItems: "baseline" },
+  sheetTitle: { fontSize: 16, fontWeight: "700", color: colors.onSurface },
+  sheetSub: { fontSize: 11, color: colors.muted },
+  stripTitle: { fontSize: 12, fontWeight: "800", color: colors.muted, letterSpacing: 0.8, marginBottom: spacing.sm, paddingHorizontal: spacing.lg },
+  selectedLabel: { fontSize: 10, fontWeight: "700", color: colors.brandPrimary, letterSpacing: 0.5, marginBottom: 6 },
 });

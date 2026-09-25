@@ -82,6 +82,29 @@ export default function LocalityDetail() {
             <Text style={styles.ivMeta}>Based on active listings, transaction indicators and government valuation.</Text>
           </View>
 
+          {/* Lifestyle score */}
+          {loc.lifestyle && (
+            <View style={styles.lsCard}>
+              <View style={styles.lsHeader}>
+                <View>
+                  <Text style={styles.lsKicker}>NEIGHBOURHOOD LIFESTYLE SCORE</Text>
+                  <Text style={styles.lsTitle}>How family-friendly is {loc.name}?</Text>
+                </View>
+                <View style={[styles.lsScorePill, { backgroundColor: scoreBg(loc.lifestyle.overall) }]}>
+                  <Text style={[styles.lsScoreText, { color: scoreFg(loc.lifestyle.overall) }]}>{loc.lifestyle.overall}</Text>
+                </View>
+              </View>
+              <View style={{ marginTop: spacing.md, gap: spacing.md }}>
+                <LSBar icon="walk-outline" label="Walkability" value={loc.lifestyle.walkability} />
+                <LSBar icon="school-outline" label="Schools" value={loc.lifestyle.schools} />
+                <LSBar icon="medkit-outline" label="Hospitals" value={loc.lifestyle.hospitals} />
+                <LSBar icon="bus-outline" label="Connectivity" value={loc.lifestyle.connectivity} />
+                <LSBar icon="shield-outline" label="Safety" value={loc.lifestyle.safety} />
+              </View>
+              {loc.lifestyle.notes ? <Text style={styles.lsNotes}>{loc.lifestyle.notes}</Text> : null}
+            </View>
+          )}
+
           {/* Price chart */}
           <Text style={styles.sectionTitle}>Price History</Text>
           <View style={styles.chartCard}>
@@ -167,6 +190,34 @@ function Metric({ label, value, unit, tone }: { label: string; value: string; un
   );
 }
 
+function LSBar({ icon, label, value }: { icon: string; label: string; value: number }) {
+  return (
+    <View>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 4 }}>
+        <Icon name={icon as any} size={13} color={colors.onSurfaceSecondary} />
+        <Text style={styles.lsLabel}>{label}</Text>
+        <Text style={styles.lsValue}>{value}/100</Text>
+      </View>
+      <View style={styles.lsTrack}>
+        <View style={[styles.lsFill, { width: `${value}%`, backgroundColor: scoreFg(value) }]} />
+      </View>
+    </View>
+  );
+}
+
+function scoreFg(v: number): string {
+  if (v >= 80) return "#2E6D4D";
+  if (v >= 65) return "#C9A227";
+  if (v >= 50) return "#C25934";
+  return "#8B0000";
+}
+function scoreBg(v: number): string {
+  if (v >= 80) return "rgba(46, 109, 77, 0.14)";
+  if (v >= 65) return "rgba(201, 162, 39, 0.14)";
+  if (v >= 50) return "rgba(194, 89, 52, 0.14)";
+  return "rgba(139, 0, 0, 0.10)";
+}
+
 const styles = StyleSheet.create({
   hero: { width: W, height: 260, backgroundColor: colors.surfaceTertiary },
   heroOverlay: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(10,25,47,0.5)", width: W, height: 260 },
@@ -211,4 +262,15 @@ const styles = StyleSheet.create({
   newsDate: { fontSize: 11, color: colors.muted, fontWeight: "600" },
   newsTitle: { fontSize: 14, fontWeight: "700", color: colors.onSurface },
   newsSummary: { fontSize: 12, color: colors.onSurfaceSecondary, marginTop: 4, lineHeight: 17 },
+  lsCard: { marginTop: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.border },
+  lsHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  lsKicker: { fontSize: 10, fontWeight: "800", color: colors.muted, letterSpacing: 0.8 },
+  lsTitle: { fontSize: 15, fontWeight: "700", color: colors.onSurface, marginTop: 4 },
+  lsScorePill: { width: 56, height: 56, borderRadius: 28, alignItems: "center", justifyContent: "center" },
+  lsScoreText: { fontSize: 22, fontWeight: "800" },
+  lsLabel: { fontSize: 12, fontWeight: "700", color: colors.onSurface, flex: 1 },
+  lsValue: { fontSize: 11, fontWeight: "800", color: colors.muted },
+  lsTrack: { height: 6, borderRadius: 3, backgroundColor: colors.surfaceSecondary, overflow: "hidden" },
+  lsFill: { height: 6, borderRadius: 3 },
+  lsNotes: { fontSize: 11, color: colors.muted, marginTop: spacing.md, lineHeight: 16 },
 });

@@ -12,6 +12,7 @@ from datetime import datetime, timezone
 from seed_data import LOCALITIES, PROPERTIES, PRICE_HISTORY, INFRASTRUCTURE, NEWS
 from market_seed import MARKET_GROUPS, MARKET_CATEGORIES, SUPPLIERS
 from agents_seed import AGENT_CATEGORIES, AGENTS
+from enrich import with_lifestyle, with_tier
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -217,7 +218,7 @@ async def me(user_id: str):
 @api_router.get("/localities")
 async def list_localities():
     docs = await db.localities.find({}, NO_ID).to_list(500)
-    return docs
+    return [with_lifestyle(d) for d in docs]
 
 @api_router.get("/localities/{loc_id}")
 async def get_locality(loc_id: str):
@@ -231,7 +232,7 @@ async def get_locality(loc_id: str):
     news = await db.news.find({"locality_id": loc_id}, NO_ID).sort("date", -1).to_list(20)
     l["news"] = news
     l["properties_count"] = await db.properties.count_documents({"locality_id": loc_id})
-    return l
+    return with_lifestyle(l)
 
 # Properties
 @api_router.get("/properties")
@@ -602,7 +603,7 @@ async def list_agents(
             ]
         })
     docs = await db.agents.find(query, NO_ID).limit(limit).to_list(limit)
-    return docs
+    return [with_tier(d) for d in docs]
 
 @api_router.get("/agents/{aid}")
 async def get_agent(aid: str):
@@ -627,7 +628,7 @@ async def get_agent(aid: str):
                 seen.add(p["id"])
                 uniq.append(p)
         a["recent_listings"] = uniq[:6]
-    return a
+    return with_tier(a)
 
 class AgentEnquiry(BaseModel):
     agent_id: str

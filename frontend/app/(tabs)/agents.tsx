@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
+import { tierColor, tierBgColor } from "@/src/utils/tier";
 
 type AgentCategory = { id: string; name: string; icon: string; description: string; agents_count: number };
 type Agent = {
@@ -13,6 +14,7 @@ type Agent = {
   rating: number; reviews: number; verified: boolean; featured: boolean;
   years_exp: number; languages: string[]; specialties: string[]; coverage: string[];
   rera_id?: string | null; phone: string; whatsapp?: string; image: string; about: string;
+  tier?: string;
 };
 
 export default function Agents() {
@@ -60,6 +62,12 @@ export default function Agents() {
         <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
           <Text style={styles.name} numberOfLines={1}>{a.name}</Text>
           {a.verified && <Icon name="shield-checkmark" size={14} color={colors.success} />}
+          {a.tier && a.tier !== "Unverified" && (
+            <View style={[styles.tierBadge, { backgroundColor: tierBgColor(a.tier) }]}>
+              <Icon name="ribbon" size={10} color={tierColor(a.tier)} />
+              <Text style={[styles.tierText, { color: tierColor(a.tier) }]}>{a.tier}</Text>
+            </View>
+          )}
         </View>
         {a.firm ? <Text style={styles.firm} numberOfLines={1}>{a.firm}</Text> : null}
         <View style={styles.metaRow}>
@@ -193,6 +201,8 @@ const styles = StyleSheet.create({
   pillsRow: { flexDirection: "row", gap: 4, marginTop: 8 },
   specPill: { backgroundColor: colors.surfaceSecondary, paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill },
   specText: { fontSize: 10, color: colors.onSurface, fontWeight: "600" },
+  tierBadge: { flexDirection: "row", alignItems: "center", gap: 3, paddingHorizontal: 6, paddingVertical: 2, borderRadius: radius.pill },
+  tierText: { fontSize: 10, fontWeight: "800", letterSpacing: 0.3 },
   empty: { textAlign: "center", color: colors.muted, marginTop: spacing.xxl, fontSize: 13 },
   infoBox: { flexDirection: "row", gap: spacing.sm, marginHorizontal: spacing.xl, marginTop: spacing.xxl, padding: spacing.md, borderRadius: radius.md, backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
   infoText: { flex: 1, fontSize: 12, color: colors.onSurfaceSecondary, lineHeight: 17 },

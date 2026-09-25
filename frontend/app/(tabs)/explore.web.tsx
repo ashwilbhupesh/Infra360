@@ -5,7 +5,9 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
+import { useAuth } from "@/src/auth-context";
 import { PropertyCard, Property } from "@/src/components/property-card";
+import { LocalityCard, Locality } from "@/src/components/locality-card";
 import { formatINR, indianComma } from "@/src/utils/format";
 import { heatColor, heatLabel } from "@/src/utils/heat";
 
@@ -23,6 +25,7 @@ type HeatPoint = { id: string; name: string; lat: number; lng: number; median_pr
 export default function MapScreenWeb() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
+  const { user } = useAuth();
   const params = useLocalSearchParams<{ type?: string; q?: string }>();
   const [items, setItems] = useState<Property[]>([]);
   const [filter, setFilter] = useState(params.type || "");
@@ -31,6 +34,7 @@ export default function MapScreenWeb() {
   const [selected, setSelected] = useState<string | null>(null);
   const [heat, setHeat] = useState(false);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[]>([]);
+  const [localities, setLocalities] = useState<Locality[]>([]);
 
   const load = async () => {
     setLoading(true);
@@ -47,8 +51,12 @@ export default function MapScreenWeb() {
   useEffect(() => {
     (async () => {
       try {
-        const h = await api.get<{ points: HeatPoint[] }>("/heatmap");
+        const [h, locs] = await Promise.all([
+          api.get<{ points: HeatPoint[] }>("/heatmap"),
+          api.get<Locality[]>("/localities"),
+        ]);
         setHeatPoints(h.points || []);
+        setLocalities(locs);
       } catch {}
     })();
   }, []);
@@ -56,10 +64,17 @@ export default function MapScreenWeb() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface, paddingTop: insets.top + spacing.sm }}>
       <View style={{ paddingHorizontal: spacing.lg, gap: spacing.sm }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
+          <Text style={styles.hi}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
+          <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
+            <Icon name="add" size={14} color={colors.onBrandPrimary} />
+            <Text style={styles.listBtnText}>List</Text>
+          </Pressable>
+        </View>
         <View style={styles.searchPill}>
           <Icon name="search-outline" size={16} color={colors.muted} />
           <TextInput
-            testID="map-search-input"
+            testID="explore-search-input"
             style={styles.searchTxt}
             placeholder="Search locality, project, road..."
             placeholderTextColor={colors.muted}
@@ -128,6 +143,14 @@ export default function MapScreenWeb() {
       )}
 
       <View style={styles.sheet}>
+        {localities.length > 0 && (
+          <View style={{ marginBottom: spacing.sm }}>
+            <Text style={styles.stripTitle}>Trending localities</Text>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.lg, gap: spacing.md }}>
+              {localities.map(l => <LocalityCard key={l.id} locality={l} />)}
+            </ScrollView>
+          </View>
+        )}
         <Text style={styles.sheetTitle}>{loading ? "Loading..." : `${items.length} properties`}</Text>
         <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 120 }}>
           {items.map(p => <PropertyCard key={p.id} property={p} compact />)}
@@ -138,6 +161,10 @@ export default function MapScreenWeb() {
 }
 
 const styles = StyleSheet.create({
+  hi: { fontSize: 15, fontWeight: "800", color: colors.onSurface },
+  listBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 14, height: 34, borderRadius: radius.pill, backgroundColor: colors.brandPrimary },
+  listBtnText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "700" },
+  stripTitle: { fontSize: 12, fontWeight: "800", color: colors.muted, letterSpacing: 0.8, marginBottom: spacing.sm, paddingHorizontal: spacing.lg, paddingTop: spacing.md },
   searchPill: { flexDirection: "row", alignItems: "center", gap: spacing.sm, height: 44, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border },
   searchTxt: { flex: 1, color: colors.onSurface, fontSize: 14 },
   chipsRow: { gap: spacing.sm, paddingRight: spacing.md, paddingVertical: 2 },

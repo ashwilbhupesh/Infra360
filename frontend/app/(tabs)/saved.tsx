@@ -54,9 +54,6 @@ export default function Saved() {
       <View style={{ paddingTop: insets.top + spacing.md, paddingHorizontal: spacing.xl, paddingBottom: spacing.md, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }}>
         <View style={styles.headerRow}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm, flex: 1 }}>
-            <Pressable testID="saved-back-btn" onPress={() => router.back()} hitSlop={12}>
-              <Icon name="chevron-back" size={26} color={colors.onSurface} />
-            </Pressable>
             <View>
               <Text style={styles.title}>Saved</Text>
               <Text style={styles.sub}>Your properties & followed localities</Text>

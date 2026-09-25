@@ -14,22 +14,23 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - Design tokens: Ivory (#FFFFF0) surface, Deep Navy (#0A192F) brand, Terracotta (#C25934) accent.
 
 ## Onboarding
-- Simple name + mobile + area of interest. No OTP. User stored in AsyncStorage.
+- Simple name + mobile + **city / town / village** (free text). No OTP. User stored in AsyncStorage.
 
 ## Screens
-- **Onboarding** — name/mobile/area chips.
-- **Explore (tab)** — hero, search, category chips, "Explore on Map" CTA, trending localities, featured properties, InfraLocal News CTA, InfraValue explainer. Header shows quick-access **Saved** heart icon.
-- **Map (tab)** — native: react-native-maps + price pins + bottom sheet of swipeable cards + **Price Heatmap toggle** (Circle overlays). Web fallback: filters + heat-cell grid legend + list.
-- **Agents (tab)** — Discovery of brokers, land aggregators, JDA / land-use liaison, registry agents, property lawyers, home-loan advisors, RERA consultants. Category grid + top-rated list + search.
-- **Market (tab)** — Zomato-style construction ecosystem directory (Design → Build → Materials → Interiors → Move In → Maintenance).
-- **Saved** — Saved properties + followed localities + **Compare mode** (select 2–4 properties → side-by-side table). Accessed from Explore header.
-- **News** — Inshorts-style category feed (accessed via Explore CTA).
-- **Property Detail** — hero, price, InfraValue vs Govt DLC comparison, details, **"Listed by" card** (agent name, firm, RERA, phone), locality link. Bottom bar: **WhatsApp + Call**.
-- **Agent Detail** — avatar, verified badge, RERA ID, rating/reviews/years, specialties, coverage, languages, recent listings; Bottom bar: **WhatsApp + Call + Send enquiry** sheet.
-- **Supplier Detail** — hero, rating, offerings, starting price, **Reviews section** (write + list), Call + Request Quote CTAs; Bottom bar: **WhatsApp + Call + Quote**.
-- **Compare** — side-by-side table for up to 4 properties (price, area, InfraValue, DLC, delta chip, verification).
-- **Locality Detail** — hero, metric cards, InfraValue range, price history chart, Govt vs Market compare, infrastructure timeline, news, listings.
-- **List Property** — 7-step wizard with photo upload.
+- **Onboarding** — name/mobile/city-town-village.
+- **Explore (tab)** — Zillow-style: sticky header (Hi user + List button + search + filter chips + Heat toggle) over map (native) or list (web), bottom sheet with Trending Localities strip + full property list. Heatmap toggle colours the map by median price.
+- **Agents (tab)** — 7 role categories × 13 seeded agents with **Bronze / Silver / Gold** tier badges (computed from RERA + reviews + rating), search, top-agent list.
+- **News (tab)** — Inshorts-style locality news feed.
+- **Market (tab)** — Zomato-style construction ecosystem (Design → Move-In → Maintenance).
+- **Saved (tab)** — Saved properties + followed localities + **Compare mode** (2–4 side-by-side).
+- **Property Detail** — hero, InfraValue vs Govt DLC, details, "Listed by" agent card, WhatsApp + Call bar.
+- **Locality Detail** — hero, metric cards, InfraValue range, **Neighbourhood Lifestyle Score card** (walkability, schools, hospitals, connectivity, safety, overall), price history chart, Govt vs Market, infrastructure timeline, news, listings.
+- **Agent Detail** — avatar, tier badge, RERA ID, rating/reviews/years, specialties, coverage, WhatsApp + Call + Send-enquiry.
+- **Agent Category** — list with tier badges and filters (top-rated / most experienced / verified).
+- **Supplier Detail** — reviews section + WhatsApp/Call/Quote.
+- **Compare** — side-by-side table (up to 4).
+- **Market Category** — supplier list with sort + verified filter.
+- **List Property** — 7-step wizard.
 
 ## Data
 - Seeded 7 Jaipur localities, ~30 properties, 7 infrastructure projects, 7 news items — all clearly demo.

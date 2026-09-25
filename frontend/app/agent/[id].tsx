@@ -9,12 +9,14 @@ import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 import { openWhatsApp, openTel } from "@/src/utils/contact";
 import { formatINR } from "@/src/utils/format";
+import { tierColor, tierBgColor } from "@/src/utils/tier";
 
 type Agent = {
   id: string; category_id: string; name: string; firm?: string; city: string; area: string;
   rating: number; reviews: number; verified: boolean; featured: boolean;
   years_exp: number; languages: string[]; specialties: string[]; coverage: string[];
   rera_id?: string | null; phone: string; whatsapp?: string; image: string; about: string;
+  tier?: string;
   category?: { name: string };
   recent_listings?: Array<{ id: string; title: string; price: number; area: number; area_unit: string; images: string[]; type: string }>;
 };
@@ -81,6 +83,12 @@ export default function AgentDetail() {
           {a.category?.name ? (
             <View style={styles.catBadge}><Text style={styles.catBadgeText}>{a.category.name}</Text></View>
           ) : null}
+          {a.tier && a.tier !== "Unverified" && (
+            <View style={[styles.tierBadgeBig, { backgroundColor: tierBgColor(a.tier), borderColor: tierColor(a.tier) }]}>
+              <Icon name="ribbon" size={14} color={tierColor(a.tier)} />
+              <Text style={[styles.tierBadgeText, { color: tierColor(a.tier) }]}>{a.tier} verified agent</Text>
+            </View>
+          )}
 
           <View style={styles.statsRow}>
             <View style={styles.statCol}>
@@ -222,6 +230,8 @@ const styles = StyleSheet.create({
   firm: { fontSize: 13, color: colors.muted, marginTop: 4 },
   catBadge: { marginTop: spacing.md, backgroundColor: colors.surfaceSecondary, paddingHorizontal: 10, paddingVertical: 5, borderRadius: radius.pill },
   catBadgeText: { fontSize: 11, fontWeight: "700", color: colors.onSurface, letterSpacing: 0.4 },
+  tierBadgeBig: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: spacing.sm, paddingHorizontal: 12, paddingVertical: 6, borderRadius: radius.pill, borderWidth: 1 },
+  tierBadgeText: { fontSize: 12, fontWeight: "800", letterSpacing: 0.3 },
   statsRow: { flexDirection: "row", alignItems: "center", marginTop: spacing.xl, backgroundColor: colors.surfaceSecondary, borderRadius: radius.lg, padding: spacing.md, alignSelf: "stretch" },
   statCol: { flex: 1, alignItems: "center" },
   statDivider: { width: 1, height: 30, backgroundColor: colors.border },

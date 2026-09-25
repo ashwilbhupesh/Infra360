@@ -6,10 +6,11 @@ import { useLocalSearchParams, useRouter, Stack } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius } from "@/src/theme";
 import { api } from "@/src/api";
+import { tierColor, tierBgColor } from "@/src/utils/tier";
 
 type Agent = {
   id: string; name: string; firm?: string; area: string; rating: number; reviews: number;
-  verified: boolean; years_exp: number; specialties: string[]; image: string;
+  verified: boolean; years_exp: number; specialties: string[]; image: string; tier?: string;
 };
 type Category = { id: string; name: string; description: string };
 
@@ -82,6 +83,12 @@ export default function AgentCategoryPage() {
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
                   <Text style={styles.name} numberOfLines={1}>{a.name}</Text>
                   {a.verified && <Icon name="shield-checkmark" size={14} color={colors.success} />}
+                  {a.tier && a.tier !== "Unverified" && (
+                    <View style={[styles.tierBadge, { backgroundColor: tierBgColor(a.tier) }]}>
+                      <Icon name="ribbon" size={10} color={tierColor(a.tier)} />
+                      <Text style={[styles.tierText, { color: tierColor(a.tier) }]}>{a.tier}</Text>
+                    </View>
+                  )}
                 </View>
                 {a.firm ? <Text style={styles.firm} numberOfLines={1}>{a.firm}</Text> : null}
                 <View style={styles.metaRow}>
@@ -126,5 +133,7 @@ const styles = StyleSheet.create({
   pillsRow: { flexDirection: "row", flexWrap: "wrap", gap: 4, marginTop: 8 },
   specPill: { backgroundColor: colors.surfaceSecondary, paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill },
   specText: { fontSize: 10, color: colors.onSurface, fontWeight: "600" },
+  tierBadge: { flexDirection: "row", alignItems: "center", gap: 3, paddingHorizontal: 6, paddingVertical: 2, borderRadius: radius.pill },
+  tierText: { fontSize: 10, fontWeight: "800", letterSpacing: 0.3 },
   empty: { textAlign: "center", color: colors.muted, marginTop: spacing.xxl, fontSize: 13 },
 });
