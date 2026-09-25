@@ -51,7 +51,7 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
   }
 
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: 140, paddingTop: spacing.md }} showsVerticalScrollIndicator={false}>
+    <View style={{ paddingBottom: 40, paddingTop: spacing.md }}>
       {/* Trending areas — with quick analysis */}
       <Section
         title="Trending areas in Jaipur"
@@ -126,7 +126,7 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
       <Section title={filter ? `All ${filter}s` : "All properties"} subtitle={`${items.length} listings`}>
         {items.slice(0, 20).map(p => <PropertyCard key={p.id} property={p} />)}
       </Section>
-    </ScrollView>
+    </View>
   );
 }
 

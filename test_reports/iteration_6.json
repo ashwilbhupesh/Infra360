@@ -1,0 +1,32 @@
+{
+  "summary": "Frontend-only regression for iOS BottomSheet fix (BottomSheetScrollView + enableDynamicSizing=false). Tested on web preview at 390x844 viewport. Onboarding, Explore Map/List toggle, List sections, pin tap → preview, close, and View full details all work end-to-end with no crashes or page errors. IMPORTANT CAVEAT: web preview uses /app/frontend/app/(tabs)/explore.web.tsx which does NOT use @gorhom/bottom-sheet at all (it renders a plain View 'sheet' area). The user's actual fix lives in the native file /app/frontend/app/(tabs)/explore.tsx. So this run validates JS component logic (PinPreview, ExploreListView, view toggle state, selection state, navigation) but cannot itself prove the gorhom v5 iOS rendering fix. Recommend a physical Expo Go smoke test on iPhone.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "Explore (web)", "issues": ["Pin preview content extends below the tab bar; on the 390x844 viewport, 'Similar properties' section renders but is below the fold and only reachable via inner scroll. Not a functional issue but worth noting for iOS review."]}
+    ],
+    "react_native_issues": [
+      {"component": "expo-image / shadow styles", "issue": "Console warnings: 'shadow*' style props are deprecated. Use \"boxShadow\". Not a blocker but should be cleaned up. Reference: multiple StyleSheet blocks using shadow.card"},
+      {"component": "textShadow styles", "issue": "Console warning: 'textShadow*' style props are deprecated. Use \"textShadow\". Reference: /app/frontend/app/(tabs)/explore.web.tsx:214 (heatCellName)"}
+    ]
+  },
+  "test_report_links": ["/app/test_reports/iteration_6.json"],
+  "action_items": [
+    "Run the same manual smoke on Expo Go / iPhone to confirm the gorhom BottomSheet v5 iOS fix (BottomSheetScrollView + enableDynamicSizing=false in explore.tsx) actually renders the sheet header and content. Web preview cannot validate this because it uses explore.web.tsx (plain View sheet).",
+    "Optional cleanup: migrate deprecated shadow*/textShadow* style props to boxShadow/textShadow to silence RN Web warnings.",
+    "Optional: add an explicit 'Listed by' label above the lister mini card in pin-preview.tsx to match spec wording (agent card is present with name+firm+WA+Call, but no 'Listed by' string)."
+  ],
+  "critical_code_review_comments": [
+    "explore.tsx correctly imports BottomSheetView + BottomSheetScrollView from @gorhom/bottom-sheet and sets enableDynamicSizing={false}. The sheet header is inside BottomSheetView and each view mode wraps children in BottomSheetScrollView — this matches the documented v5 iOS workaround.",
+    "explore.web.tsx uses a plain flex View as the 'sheet' — no bottom-sheet library involved on web. Tests here validate PinPreview/ExploreListView JS logic only, not the native sheet rendering."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "seed_data_creation": "None",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Onboarding via testIDs onboard-name-input/onboard-mobile-input/onboard-location-input/profession-chip-investor/onboard-continue-btn lands on /explore. Web preview shows a fallback pin cloud (₹72 L, ₹45 L, ₹1.85 Cr, ₹35 L, ₹85 L, etc.). Pin tap sets selection state → PinPreview renders inline within the 'sheet' area (not a real gorhom sheet on web). Note that /explore route may bounce to /onboarding on hard reload if AsyncStorage user record is missing.",
+  "rca_of_issue": "User reported iOS: bottom sheet header + pin preview not appearing. Root cause is a known @gorhom/bottom-sheet v5 behavior on iOS where nesting a plain ScrollView as a child of BottomSheet, combined with default enableDynamicSizing=true, causes the sheet content (including the handle/header) to fail to render/measure — the sheet collapses off-screen. Fix applied by main agent: wrap header in BottomSheetView, wrap scrollable children in BottomSheetScrollView, and explicitly set enableDynamicSizing={false} so the snapPoints are respected. Verified end-to-end JS logic for view toggle, pin selection, close, and navigation on web preview; the fix pattern matches the documented workaround, so it should resolve the iPhone issue. Final validation must be done on a native build / Expo Go on iOS."
+}

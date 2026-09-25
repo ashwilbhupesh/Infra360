@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextI
 import MapView, { Marker, Circle, PROVIDER_DEFAULT } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
@@ -68,7 +68,6 @@ export default function MapScreen() {
   useEffect(() => { load(); }, [filter]);
 
   const initialRegion = { latitude: 26.8891, longitude: 75.7500, latitudeDelta: 0.18, longitudeDelta: 0.18 };
-  const focused = useMemo(() => selected ? items.find(i => i.id === selected) : null, [items, selected]);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
@@ -171,10 +170,11 @@ export default function MapScreen() {
         ref={sheetRef}
         index={0}
         snapPoints={["22%", "55%", "92%"]}
+        enableDynamicSizing={false}
         backgroundStyle={styles.sheetBg}
         handleIndicatorStyle={{ backgroundColor: colors.borderStrong }}
       >
-        <View style={styles.sheetHeader}>
+        <BottomSheetView style={styles.sheetHeader}>
           <Text style={styles.sheetTitle}>{items.length} properties</Text>
           <View style={styles.viewToggle}>
             <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
@@ -186,16 +186,18 @@ export default function MapScreen() {
               <Text style={[styles.viewToggleText, view === "list" && { color: colors.onBrandPrimary }]}>List</Text>
             </Pressable>
           </View>
-        </View>
+        </BottomSheetView>
 
         {view === "list" ? (
-          <ExploreListView items={items} filter={filter} />
+          <BottomSheetScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
+            <ExploreListView items={items} filter={filter} />
+          </BottomSheetScrollView>
         ) : selected ? (
-          <ScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
+          <BottomSheetScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
             <PinPreview propertyId={selected} onClose={() => setSelected(null)} />
-          </ScrollView>
+          </BottomSheetScrollView>
         ) : (
-          <>
+          <BottomSheetScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
             {localities.length > 0 && (
               <View style={{ marginBottom: spacing.sm }}>
                 <Text style={styles.stripTitle}>Trending localities</Text>
@@ -204,13 +206,13 @@ export default function MapScreen() {
                 </ScrollView>
               </View>
             )}
-            <ScrollView contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.xxxl }}>
+            <View style={{ paddingHorizontal: spacing.lg }}>
               <Text style={styles.stripTitle}>Listings</Text>
               {items.map(p => (
                 <PropertyCard key={p.id} property={p} compact />
               ))}
-            </ScrollView>
-          </>
+            </View>
+          </BottomSheetScrollView>
         )}
       </BottomSheet>
     </View>
