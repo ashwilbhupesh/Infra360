@@ -1,0 +1,35 @@
+{
+  "summary": "Backend-only testing for InfraLocal FastAPI. All 25 pytest cases passed (100%) against the public EXPO_PUBLIC_BACKEND_URL. Covered health, localities (list + detail with price_history/infrastructure/news/properties_count), properties (list, filters by type/locality/verified/price range, detail with infravalue + govt_value), auth onboard (create + upsert same mobile + 400 for missing/short mobile), auth/me (found + 404), create property (id p-user-*, verified=false, verification_status='Verification Pending', persistence), saved & follows toggle+list, infrastructure (7 items + locality filter), news (sorted desc + category filter), and object storage upload+file fetch. MongoDB _id is correctly excluded on all responses.",
+  "backend_issues": {
+    "critical": [],
+    "minor": [
+      {"endpoint": "GET /api/localities/{loc_id}", "issue": "Returns 404 as expected for unknown ids, but detail endpoint always fetches price_history/infrastructure/news even when locality missing (short-circuits fine here). Not a bug — just noting for future N+1 concerns; consider aggregating via a single pipeline for performance."},
+      {"endpoint": "POST /api/auth/onboard", "issue": "Upsert path unconditionally overwrites name/area even when new payload sends None for area (would blank saved area). Consider only $set when provided."}
+    ]
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": ["/app/backend/tests/backend_test.py", "/app/test_reports/pytest/pytest_results.xml"],
+  "action_items": [
+    "Optional: guard onboard upsert to preserve existing name/area when the incoming field is None/empty.",
+    "Optional: use $ne None filter or projection helper as a utility to keep NO_ID DRY (already applied consistently)."
+  ],
+  "critical_code_review_comments": [
+    "server.py uses @app.on_event('startup')/'shutdown') which is deprecated in FastAPI; prefer lifespan context. Not blocking.",
+    "GET /api/properties returns owner-created (non-demo) properties too; response asserts explicitly count 30 demo — this is correct behavior.",
+    "get_property computes govt_value/infravalue only when locality exists; safe.",
+    "Upload endpoint depends on external object storage (Emergent integrations proxy). Working today; consider adding retry/backoff logging on 5xx.",
+    "CORS is wildcard ('*') which is fine for MVP but should be restricted before prod."
+  ],
+  "updated_files": ["/app/backend/tests/backend_test.py"],
+  "success_rate": {"backend": "100%", "frontend": "not tested (backend-only per request)"},
+  "seed_data_creation": "No new seed data created. Test-created user (mobile 9998887771) and one TEST_ property were cleaned up post-run.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend base URL = EXPO_PUBLIC_BACKEND_URL from /app/frontend/.env. Reusable test suite at /app/backend/tests/backend_test.py runs in ~4s via pytest-xdist. Seeded data (7 localities, 30 properties, 7 infrastructure, 7 news, 7 price_history) persists across restarts (seed_if_needed is idempotent by count).",
+  "rca_of_issue": "N/A — no failures encountered."
+}

@@ -1,0 +1,189 @@
+{
+  "app_name": "InfraLocal",
+  "personality": "1 iOS-Native Clean with 6 Glass / Luxe structure",
+  "personality_one_liner": "A premium, map-first PropTech platform combining data-driven market intelligence with generous whitespace and confident typography.",
+  "color": {
+    "surface": "#FFFFF0",
+    "onSurface": "#1A1C1E",
+    "surfaceSecondary": "#F8F8F2",
+    "onSurfaceSecondary": "#1A1C1E",
+    "surfaceTertiary": "#EBEBE6",
+    "onSurfaceTertiary": "#1A1C1E",
+    "surfaceInverse": "#1A1C1E",
+    "onSurfaceInverse": "#FFFFF0",
+    "brand": "#0A192F",
+    "onBrand": "#FFFFFF",
+    "brandPrimary": "#C25934",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#0A192F",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "#EAE3D9",
+    "onBrandTertiary": "#1A1C1E",
+    "success": "#2E6D4D",
+    "onSuccess": "#FFFFFF",
+    "warning": "#B8860B",
+    "onWarning": "#FFFFFF",
+    "error": "#8B0000",
+    "onError": "#FFFFFF",
+    "info": "#0A192F",
+    "onInfo": "#FFFFFF",
+    "border": "#EBEBE6",
+    "borderStrong": "#D6D6D0",
+    "divider": "#EBEBE6",
+    "muted": "#686E74",
+    "dark": {
+      "surface": "#1A1C1E",
+      "onSurface": "#FFFFF0",
+      "surfaceSecondary": "#25282B",
+      "onSurfaceSecondary": "#FFFFF0",
+      "surfaceTertiary": "#303438",
+      "onSurfaceTertiary": "#FFFFF0",
+      "surfaceInverse": "#FFFFF0",
+      "onSurfaceInverse": "#1A1C1E",
+      "brand": "#0A192F",
+      "onBrand": "#FFFFFF",
+      "brandPrimary": "#C25934",
+      "onBrandPrimary": "#FFFFFF",
+      "brandSecondary": "#EAE3D9",
+      "onBrandSecondary": "#1A1C1E",
+      "brandTertiary": "#2E3338",
+      "onBrandTertiary": "#F8F8F2",
+      "border": "#303438",
+      "borderStrong": "#464A4F",
+      "divider": "#303438",
+      "muted": "#9E9C99"
+    }
+  },
+  "typography": {
+    "displayFontFamily": "Space Grotesk",
+    "textFontFamily": "Plus Jakarta Sans",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Generous spacing. Pad map interfaces so elements float cleanly above tiles. Cards have inner md/lg padding.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "1",
+  "navigation": "bottom_tabs",
+  "icon_set": "Phosphor",
+  "glassmorphism": {
+    "enabled": "true",
+    "do's": [
+      "Use heavy blur (expo-blur) for the Map screen's top search bar and filter chips.",
+      "Use frosted glass overlay for floating property map pins (price indicators).",
+      "Use blur on the bottom tab bar specifically when Map content scrolls underneath it."
+    ],
+    "dont's": [
+      "Do not blur standard list rows in the Explore tab.",
+      "Do not use glass for text inputs or primary CTAs."
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "Map",
+      "purpose": "Primary discovery interface displaying react-native-maps with OpenStreetMap tiles, floating price pins, and swipeable bottom property cards.",
+      "states": {
+        "loading": "Map skeleton with subtle pulse, skeleton chips in header.",
+        "empty": "No properties found in this area. Prompt user to zoom out or reset filters.",
+        "error": "Failed to load map data. Show retry button floating over map tiles."
+      },
+      "layout": "Full-screen map. Top: Glassmorphism search bar & horizontal scrollable filter chips (Buy, Rent, Plots, Price). Bottom: @gorhom/bottom-sheet showing swipeable horizontal cards of properties in the viewport, hovering above the bottom tab bar."
+    },
+    {
+      "name": "Explore",
+      "purpose": "Curated feed of localities, trending properties, and market insights.",
+      "states": {
+        "loading": "Skeleton cards with surfaceTertiary background.",
+        "empty": "No recommendations yet.",
+        "error": "Unable to load market trends. Tap to retry."
+      },
+      "layout": "Standard vertical ScrollView. Header contains Profile avatar. Sections include 'Featured Localities' (horizontal cards with skyline imagery) and 'Market Intelligence' (list rows)."
+    },
+    {
+      "name": "Property Detail",
+      "purpose": "Deep dive into a specific listing, featuring the InfraValue vs DLC comparison and rich imagery.",
+      "states": {
+        "loading": "Skeleton gallery and text placeholders.",
+        "empty": "Property no longer available.",
+        "error": "Error fetching property details."
+      },
+      "layout": "Hero image gallery (expo-image pager) with gradient scrim at bottom. Big price number (Space Grotesk) and address. Below: Grid of stats (Beds, Baths, SqYd). A dedicated 'InfraValue vs Govt DLC' card showing estimated market range visually. Sticky primary CTA 'Contact Agent' / 'Compare' at the bottom."
+    },
+    {
+      "name": "Locality Intelligence",
+      "purpose": "Data-rich page for a specific Jaipur area (e.g., Jagatpura), showing price graphs and infrastructure news.",
+      "states": {
+        "loading": "Chart skeletons.",
+        "empty": "Insufficient data for this locality.",
+        "error": "Error fetching locality intelligence."
+      },
+      "layout": "Hero image of Locality skyline. Metric cards (Avg Price/Sq Yd, YoY Growth). Price history line chart. Vertical timeline for 'Infrastructure Projects' (e.g., Metro expansion, Ring Road). Small 'Hyperlocal News' feed section."
+    },
+    {
+      "name": "Onboarding",
+      "purpose": "Frictionless entry collecting mobile number, name, and target area without OTP.",
+      "states": {
+        "loading": "Button shows spinner during submission.",
+        "empty": "N/A",
+        "error": "Validation errors below input fields."
+      },
+      "layout": "Minimalist centered form on Ivory background. Big bold typography 'Welcome to InfraLocal'. Floating label text inputs for Name, Mobile Number, and Area dropdown. Sticky bottom CTA 'Start Exploring'."
+    }
+  ],
+  "images": {
+    "jaipur_skyline_hero": {
+      "url": "https://images.unsplash.com/photo-1599982133112-2723acedc13a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMzl8MHwxfHNlYXJjaHwxfHxqYWlwdXIlMjBza3lsaW5lfGVufDB8fHx8MTc5MDM2MjkyOHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Jaipur historical architecture skyline"
+    },
+    "modern_apartment": {
+      "url": "https://images.unsplash.com/photo-1779976955613-b74623824d1c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Njd8MHwxfHNlYXJjaHwyfHxtb2Rlcm4lMjBhcGFydG1lbnQlMjBidWlsZGluZyUyMGV4dGVyaW9yJTIwaW5kaWF8ZW58MHx8fHwxNzkwMzYyOTI4fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Modern residential apartment building exterior in India"
+    },
+    "luxury_villa": {
+      "url": "https://images.unsplash.com/photo-1723110994499-df46435aa4b3?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjB2aWxsYSUyMGV4dGVyaW9yJTIwaW5kaWF8ZW58MHx8fHwxNzkwMzYyOTI4fDA&ixlib=rb-4.1.0&q=85",
+      "alt": "Modern luxury villa exterior at dusk"
+    },
+    "empty_plot": {
+      "url": "https://images.unsplash.com/photo-1561352335-f8a297b7d29e?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzOTB8MHwxfHNlYXJjaHwxfHxlbXB0eSUyMHBsb3QlMjBvZiUyMGxhbmQlMjByZWFsJTIwZXN0YXRlfGVufDB8fHx8MTc5MDM2MjkyOHww&ixlib=rb-4.1.0&q=85",
+      "alt": "Empty plot of land surrounded by grass and distant buildings"
+    }
+  },
+  "instructions_to_main_agent": [
+    "Strictly follow the premium Ivory (#FFFFF0) base with Deep Navy (#0A192F) and Terracotta (#C25934) accents. The color scheme is the foundation of the 'premium minimal' ask.",
+    "Use react-native-maps with OpenStreetMap tiles. Implement custom marker views using glassmorphism for price pins.",
+    "For the bottom sheet property cards on the Map screen, use @gorhom/bottom-sheet. Ensure cards are horizontal and swipeable (Carousel or horizontal ScrollView).",
+    "Format all prices correctly using Indian numbering systems (e.g., ₹35 Lakh, ₹1.25 Cr) and use the Space Grotesk font for these large data points to emphasize the 'intelligence' aspect.",
+    "Maintain maximum 4 tabs (Map, Explore, News, Saved) as instructed by standard guidelines, placing the user Profile accessible via the header on the Explore tab.",
+    "Do not use gradients or gaudy graphic vectors. Stick to the curated real photos provided and use solid or subtle glassmorphism surfaces."
+  ]
+}
