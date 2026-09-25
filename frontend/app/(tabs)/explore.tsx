@@ -62,10 +62,15 @@ export default function Explore() {
             <Text style={styles.hi}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
             <Text style={styles.brand}>InfraLocal</Text>
           </View>
-          <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
-            <Icon name="add" size={16} color={colors.onBrandPrimary} />
-            <Text style={styles.listBtnText}>List</Text>
-          </Pressable>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: spacing.sm }}>
+            <Pressable testID="header-saved-btn" onPress={() => router.push("/saved")} style={styles.iconBtn}>
+              <Icon name="heart-outline" size={20} color={colors.onSurface} />
+            </Pressable>
+            <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
+              <Icon name="add" size={16} color={colors.onBrandPrimary} />
+              <Text style={styles.listBtnText}>List</Text>
+            </Pressable>
+          </View>
         </View>
 
         <View style={styles.heroBlock}>
@@ -198,4 +203,5 @@ const styles = StyleSheet.create({
   newsCtaKicker: { fontSize: 10, fontWeight: "700", color: colors.brandPrimary, letterSpacing: 1 },
   newsCtaTitle: { fontSize: 15, fontWeight: "700", color: colors.onSurface, marginTop: 4 },
   newsCtaSub: { fontSize: 12, color: colors.muted, marginTop: 4, lineHeight: 17 },
+  iconBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center" },
 });

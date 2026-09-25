@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, Dimensions } from "react-native";
-import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, { Marker, Circle, PROVIDER_DEFAULT } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams } from "expo-router";
 import BottomSheet from "@gorhom/bottom-sheet";
@@ -9,6 +9,7 @@ import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { PropertyCard, Property } from "@/src/components/property-card";
 import { formatINR } from "@/src/utils/format";
+import { heatColor, heatLabel } from "@/src/utils/heat";
 
 const FILTERS = [
   { key: "", label: "All" },
@@ -26,7 +27,18 @@ export default function MapScreen() {
   const [selected, setSelected] = useState<string | null>(null);
   const [filter, setFilter] = useState<string>(params.type || "");
   const [loading, setLoading] = useState(true);
+  const [heat, setHeat] = useState(false);
+  const [heatPoints, setHeatPoints] = useState<Array<{ id: string; name: string; lat: number; lng: number; intensity: number; median_price_per_sq_yd: number }>>([]);
   const sheetRef = useRef<BottomSheet>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const h = await api.get<{ points: any[] }>("/heatmap");
+        setHeatPoints(h.points || []);
+      } catch {}
+    })();
+  }, []);
 
   const load = async () => {
     setLoading(true);
@@ -53,7 +65,17 @@ export default function MapScreen() {
         initialRegion={initialRegion}
         showsCompass={false}
       >
-        {items.map((p: any) => (
+        {heat && heatPoints.map(pt => (
+          <Circle
+            key={`hc-${pt.id}`}
+            center={{ latitude: pt.lat, longitude: pt.lng }}
+            radius={1500}
+            fillColor={heatColor(pt.intensity, 0.45)}
+            strokeColor={heatColor(pt.intensity, 0.9)}
+            strokeWidth={1}
+          />
+        ))}
+        {!heat && items.map((p: any) => (
           <Marker
             key={p.id}
             coordinate={{ latitude: p.lat, longitude: p.lng }}
@@ -82,8 +104,27 @@ export default function MapScreen() {
               </Pressable>
             );
           })}
+          <Pressable testID="heatmap-toggle" onPress={() => setHeat(v => !v)} style={[styles.filterChip, heat && styles.heatActive]}>
+            <Icon name="flame-outline" size={13} color={heat ? colors.onBrandPrimary : colors.onSurface} />
+            <Text style={[styles.filterText, heat && { color: colors.onBrandPrimary }]}>  Heat</Text>
+          </Pressable>
         </ScrollView>
       </View>
+
+      {heat && (
+        <View style={[styles.heatLegend, { top: insets.top + 130 }]}>
+          <Text style={styles.legendTitle}>Price / sq yd</Text>
+          <View style={styles.legendBar}>
+            {[0, 0.25, 0.5, 0.75, 1].map(i => (
+              <View key={i} style={{ flex: 1, height: 8, backgroundColor: heatColor(i, 1) }} />
+            ))}
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+            <Text style={styles.legendText}>Value</Text>
+            <Text style={styles.legendText}>Prime</Text>
+          </View>
+        </View>
+      )}
 
       {loading && (
         <View style={styles.loadingChip}>
@@ -126,8 +167,13 @@ const styles = StyleSheet.create({
   chipsRow: { gap: spacing.sm, paddingRight: spacing.md, paddingVertical: 2 },
   filterChip: { paddingHorizontal: spacing.md, height: 36, justifyContent: "center", borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, flexShrink: 0, ...shadow.card },
   filterChipActive: { backgroundColor: colors.brand, borderColor: colors.brand },
+  heatActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary, flexDirection: "row", alignItems: "center" },
   filterText: { color: colors.onSurface, fontSize: 12, fontWeight: "600" },
   filterTextActive: { color: colors.onBrand },
+  heatLegend: { position: "absolute", left: spacing.lg, right: spacing.lg, backgroundColor: "rgba(255,255,240,0.96)", borderRadius: radius.md, padding: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.card },
+  legendTitle: { fontSize: 10, fontWeight: "800", color: colors.muted, letterSpacing: 0.6, marginBottom: 6 },
+  legendBar: { flexDirection: "row", height: 8, borderRadius: 4, overflow: "hidden", marginBottom: 4 },
+  legendText: { fontSize: 10, fontWeight: "700", color: colors.onSurface, letterSpacing: 0.5 },
   pin: { paddingHorizontal: 10, paddingVertical: 5, backgroundColor: colors.surface, borderRadius: radius.pill, borderWidth: 1.5, borderColor: colors.brand, ...shadow.card },
   pinActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary, transform: [{ scale: 1.1 }] },
   pinText: { color: colors.brand, fontSize: 11, fontWeight: "700" },

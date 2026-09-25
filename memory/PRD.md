@@ -18,16 +18,18 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 
 ## Screens
 - **Onboarding** — name/mobile/area chips.
-- **Explore (tab)** — hero, search, category chips, "Explore on Map" CTA, trending localities, featured properties, InfraLocal News CTA, InfraValue explainer.
-- **Map (tab)** — native: react-native-maps + price pins + bottom sheet of swipeable cards; web fallback: filters + cluster + list.
-- **Market (tab)** — Zomato-style construction ecosystem directory: 6 lifecycle groups (Design → Build → Materials → Interiors → Move In → Maintenance), 24 categories, ~26 suppliers with rating, verified badge, offerings, starting price, quote request bottom sheet.
-- **Saved (tab)** — Saved properties + followed localities + sign-out.
+- **Explore (tab)** — hero, search, category chips, "Explore on Map" CTA, trending localities, featured properties, InfraLocal News CTA, InfraValue explainer. Header shows quick-access **Saved** heart icon.
+- **Map (tab)** — native: react-native-maps + price pins + bottom sheet of swipeable cards + **Price Heatmap toggle** (Circle overlays). Web fallback: filters + heat-cell grid legend + list.
+- **Agents (tab)** — Discovery of brokers, land aggregators, JDA / land-use liaison, registry agents, property lawyers, home-loan advisors, RERA consultants. Category grid + top-rated list + search.
+- **Market (tab)** — Zomato-style construction ecosystem directory (Design → Build → Materials → Interiors → Move In → Maintenance).
+- **Saved** — Saved properties + followed localities + **Compare mode** (select 2–4 properties → side-by-side table). Accessed from Explore header.
 - **News** — Inshorts-style category feed (accessed via Explore CTA).
-- **Property Detail** — hero, price, InfraValue vs Govt DLC comparison, details, locality link.
+- **Property Detail** — hero, price, InfraValue vs Govt DLC comparison, details, **"Listed by" card** (agent name, firm, RERA, phone), locality link. Bottom bar: **WhatsApp + Call**.
+- **Agent Detail** — avatar, verified badge, RERA ID, rating/reviews/years, specialties, coverage, languages, recent listings; Bottom bar: **WhatsApp + Call + Send enquiry** sheet.
+- **Supplier Detail** — hero, rating, offerings, starting price, **Reviews section** (write + list), Call + Request Quote CTAs; Bottom bar: **WhatsApp + Call + Quote**.
+- **Compare** — side-by-side table for up to 4 properties (price, area, InfraValue, DLC, delta chip, verification).
 - **Locality Detail** — hero, metric cards, InfraValue range, price history chart, Govt vs Market compare, infrastructure timeline, news, listings.
 - **List Property** — 7-step wizard with photo upload.
-- **Market Category** — sortable supplier list with rating / reviews / verified filters.
-- **Supplier Detail** — hero, rating, offerings, starting price, About; Call + Request Quote CTAs; quote submission bottom sheet.
 
 ## Data
 - Seeded 7 Jaipur localities, ~30 properties, 7 infrastructure projects, 7 news items — all clearly demo.
@@ -36,8 +38,10 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - `POST /api/auth/onboard`
 - `GET /api/localities`, `GET /api/localities/{id}` (includes price_history + infra + news)
 - `GET /api/properties?type=&locality_id=&q=&verified_only=`
-- `GET /api/properties/{id}` (includes infravalue estimate + govt_value)
+- `GET /api/properties/{id}` (includes infravalue estimate + govt_value + **lister**)
 - `POST /api/properties`
+- `GET /api/compare?ids=a,b,c` — side-by-side compare payload
+- `GET /api/heatmap` — locality points + normalised intensity
 - `GET /api/infrastructure`, `GET /api/news`
 - `POST /api/saved/toggle`, `GET /api/saved`
 - `POST /api/follows/toggle`, `GET /api/follows`
@@ -47,3 +51,9 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - `GET /api/market/suppliers?category_id=&group_id=&q=&featured_only=&verified_only=&city=`
 - `GET /api/market/suppliers/{id}` (with attached category)
 - `POST /api/market/quote-requests`
+- `GET /api/market/suppliers/{id}/reviews`
+- `POST /api/market/suppliers/{id}/reviews`
+- `GET /api/agent-categories`
+- `GET /api/agents?category_id=&q=&verified_only=&featured_only=&area=`
+- `GET /api/agents/{id}` (with category + recent_listings for brokers)
+- `POST /api/agents/{id}/enquiries`

@@ -8,6 +8,7 @@ import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 import { formatINR, indianComma, formatRange } from "@/src/utils/format";
+import { openWhatsApp, openTel } from "@/src/utils/contact";
 
 const W = Dimensions.get("window").width;
 
@@ -100,6 +101,36 @@ export default function PropertyDetail() {
             <Detail label="Locality" value={prop.locality_name} />
           </Section>
 
+          <Section title="Listed by">
+            <Pressable
+              testID="lister-card"
+              onPress={() => prop.lister?.agent_id ? router.push(`/agent/${prop.lister.agent_id}` as any) : undefined}
+              style={styles.listerCard}
+            >
+              <View style={styles.listerAvatar}>
+                {prop.lister?.image ? (
+                  <Image source={{ uri: prop.lister.image }} style={{ width: 48, height: 48, borderRadius: 24 }} contentFit="cover" />
+                ) : (
+                  <Icon name={prop.lister?.type === "Owner" ? "person-outline" : "briefcase-outline"} size={22} color={colors.brand} />
+                )}
+              </View>
+              <View style={{ flex: 1 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                  <Text style={styles.listerName}>{prop.lister?.name || prop.source}</Text>
+                  {prop.lister?.verified && <Icon name="shield-checkmark" size={13} color={colors.success} />}
+                </View>
+                <Text style={styles.listerFirm}>
+                  {prop.lister?.firm || prop.lister?.type || prop.source}
+                  {prop.lister?.rera_id ? ` · RERA ${prop.lister.rera_id}` : ""}
+                </Text>
+                {prop.lister?.phone ? (
+                  <Text style={styles.listerPhone}>{prop.lister.phone}</Text>
+                ) : null}
+              </View>
+              {prop.lister?.agent_id ? <Icon name="chevron-forward" size={20} color={colors.muted} /> : null}
+            </Pressable>
+          </Section>
+
           <Section title="Locality">
             <Pressable
               testID="open-locality-btn"
@@ -119,9 +150,25 @@ export default function PropertyDetail() {
       </ScrollView>
 
       <View style={[styles.cta, { paddingBottom: insets.bottom + spacing.md }]}>
-        <Pressable testID="contact-btn" style={styles.ctaBtn} onPress={() => {}}>
+        <Pressable
+          testID="whatsapp-btn"
+          onPress={() => {
+            const phone = prop.lister?.whatsapp || prop.lister?.phone;
+            if (!phone) return;
+            const msg = `Hi, I saw your listing "${prop.title}" (${formatINR(prop.price)}) on InfraLocal. Is it still available?`;
+            openWhatsApp(phone, msg);
+          }}
+          style={[styles.iconCta, { backgroundColor: "#25D366" }]}
+        >
+          <Icon name="logo-whatsapp" size={22} color="#FFFFFF" />
+        </Pressable>
+        <Pressable
+          testID="contact-btn"
+          onPress={() => prop.lister?.phone && openTel(prop.lister.phone)}
+          style={styles.ctaBtn}
+        >
           <Icon name="call-outline" size={16} color={colors.onBrandPrimary} />
-          <Text style={styles.ctaText}>Contact {prop.source}</Text>
+          <Text style={styles.ctaText}>Call {prop.lister?.name?.split(" ")[0] || prop.source}</Text>
         </Pressable>
       </View>
     </View>
@@ -170,7 +217,13 @@ const styles = StyleSheet.create({
   localityRow: { flexDirection: "row", alignItems: "center", padding: spacing.lg, backgroundColor: colors.surfaceSecondary, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border },
   locName: { fontSize: 15, fontWeight: "700", color: colors.onSurface },
   locMeta: { fontSize: 12, color: colors.muted, marginTop: 2 },
-  cta: { position: "absolute", left: 0, right: 0, bottom: 0, padding: spacing.lg, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border },
-  ctaBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: spacing.sm, backgroundColor: colors.brandPrimary, paddingVertical: spacing.md + 2, borderRadius: radius.md, ...shadow.card },
+  cta: { position: "absolute", left: 0, right: 0, bottom: 0, padding: spacing.lg, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, flexDirection: "row", gap: spacing.sm },
+  ctaBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: spacing.sm, backgroundColor: colors.brandPrimary, paddingVertical: spacing.md + 2, borderRadius: radius.md, ...shadow.card },
   ctaText: { color: colors.onBrandPrimary, fontWeight: "700", fontSize: 15 },
+  iconCta: { width: 52, borderRadius: radius.md, alignItems: "center", justifyContent: "center" },
+  listerCard: { flexDirection: "row", alignItems: "center", gap: spacing.md, padding: spacing.md, backgroundColor: colors.surfaceSecondary, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border },
+  listerAvatar: { width: 48, height: 48, borderRadius: 24, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", overflow: "hidden" },
+  listerName: { fontSize: 14, fontWeight: "700", color: colors.onSurface },
+  listerFirm: { fontSize: 12, color: colors.muted, marginTop: 2 },
+  listerPhone: { fontSize: 12, color: colors.brandPrimary, marginTop: 4, fontWeight: "700" },
 });

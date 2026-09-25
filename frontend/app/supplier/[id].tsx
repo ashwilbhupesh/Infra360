@@ -7,6 +7,7 @@ import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
+import { openWhatsApp, openTel } from "@/src/utils/contact";
 
 type Supplier = {
   id: string; category_id: string; name: string; tagline: string; city: string; area: string;
@@ -28,15 +29,38 @@ export default function SupplierDetail() {
   const [qMsg, setQMsg] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [reviews, setReviews] = useState<Array<{ id: string; name: string; rating: number; text?: string | null; created_at: string }>>([]);
+  const [showReview, setShowReview] = useState(false);
+  const [rRating, setRRating] = useState(5);
+  const [rText, setRText] = useState("");
+  const [rSubmitting, setRSubmitting] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
-        const data = await api.get<Supplier>(`/market/suppliers/${id}`);
+        const [data, rev] = await Promise.all([
+          api.get<Supplier>(`/market/suppliers/${id}`),
+          api.get<any[]>(`/market/suppliers/${id}/reviews`).catch(() => []),
+        ]);
         setS(data);
+        setReviews(rev);
       } finally { setLoading(false); }
     })();
   }, [id]);
+
+  const submitReview = async () => {
+    if (!user || rRating < 1) return;
+    setRSubmitting(true);
+    try {
+      const created = await api.post<any>(`/market/suppliers/${id}/reviews`, {
+        user_id: user.id, name: user.name, rating: rRating, text: rText.trim() || undefined,
+      });
+      setReviews(prev => [created, ...prev]);
+      setShowReview(false);
+      setRText("");
+      setRRating(5);
+    } finally { setRSubmitting(false); }
+  };
 
   const submitQuote = async () => {
     if (!qName.trim() || qMobile.trim().length < 10) return;
@@ -48,7 +72,11 @@ export default function SupplierDetail() {
   };
 
   const callSupplier = () => {
-    if (s?.phone) Linking.openURL(`tel:${s.phone.replace(/\s/g, "")}`).catch(() => {});
+    if (s?.phone) openTel(s.phone);
+  };
+
+  const waSupplier = () => {
+    if (s?.phone) openWhatsApp(s.phone, `Hi ${s.name}, I found you on InfraLocal. I'd like to know more about ${s.category?.name || "your services"}.`);
   };
 
   if (loading || !s) {
@@ -117,6 +145,32 @@ export default function SupplierDetail() {
             ))}
           </View>
 
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: spacing.xl }}>
+            <Text style={styles.sectionTitle}>Reviews · {reviews.length}</Text>
+            <Pressable testID="write-review-btn" onPress={() => setShowReview(true)} style={styles.writeReviewBtn}>
+              <Icon name="star-outline" size={13} color={colors.brand} />
+              <Text style={styles.writeReviewText}>Write a review</Text>
+            </Pressable>
+          </View>
+          {reviews.length === 0 ? (
+            <Text style={{ color: colors.muted, fontSize: 12, marginTop: spacing.sm }}>Be the first to review {s.name}.</Text>
+          ) : (
+            reviews.slice(0, 6).map(r => (
+              <View key={r.id} style={styles.reviewCard}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                  <Text style={styles.reviewName}>{r.name}</Text>
+                  <View style={{ flexDirection: "row", gap: 2 }}>
+                    {[1, 2, 3, 4, 5].map(i => (
+                      <Icon key={i} name={i <= r.rating ? "star" : "star-outline"} size={12} color={colors.warning} />
+                    ))}
+                  </View>
+                </View>
+                {r.text ? <Text style={styles.reviewText}>{r.text}</Text> : null}
+                <Text style={styles.reviewDate}>{new Date(r.created_at).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" })}</Text>
+              </View>
+            ))
+          )}
+
           <Text style={styles.disclaimer}>
             Listings on the InfraLocal Market are demo entries. Verify credentials with the supplier directly before making any payment.
           </Text>
@@ -125,12 +179,15 @@ export default function SupplierDetail() {
 
       {/* Bottom action bar */}
       <View style={[styles.bottomBar, { paddingBottom: insets.bottom + spacing.sm }]}>
+        <Pressable testID="supplier-whatsapp-btn" onPress={waSupplier} style={[styles.iconBtn, { backgroundColor: "#25D366" }]}>
+          <Icon name="logo-whatsapp" size={22} color="#FFFFFF" />
+        </Pressable>
         <Pressable testID="call-supplier-btn" onPress={callSupplier} style={styles.secondaryBtn}>
           <Icon name="call-outline" size={18} color={colors.onSurface} />
           <Text style={styles.secondaryText}>Call</Text>
         </Pressable>
         <Pressable testID="quote-btn" onPress={() => setShowQuote(true)} style={styles.primaryBtn}>
-          <Text style={styles.primaryText}>Request Quote</Text>
+          <Text style={styles.primaryText}>Quote</Text>
         </Pressable>
       </View>
 
@@ -199,6 +256,45 @@ export default function SupplierDetail() {
           </View>
         </KeyboardAvoidingView>
       )}
+
+      {showReview && (
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={styles.sheetOverlay}>
+          <Pressable style={styles.sheetBackdrop} onPress={() => setShowReview(false)} />
+          <View style={[styles.sheet, { paddingBottom: insets.bottom + spacing.lg }]}>
+            <View style={{ padding: spacing.xl }}>
+              <View style={styles.sheetHandle} />
+              <Text style={styles.sheetTitle}>Rate {s.name}</Text>
+              <Text style={styles.sheetSub}>Help other buyers pick the right supplier.</Text>
+              <View style={{ flexDirection: "row", justifyContent: "center", gap: 8, marginTop: spacing.md }}>
+                {[1, 2, 3, 4, 5].map(i => (
+                  <Pressable key={i} testID={`rating-star-${i}`} onPress={() => setRRating(i)} hitSlop={8}>
+                    <Icon name={i <= rRating ? "star" : "star-outline"} size={34} color={colors.warning} />
+                  </Pressable>
+                ))}
+              </View>
+              <TextInput
+                testID="review-text-input"
+                placeholder="Share a short note (optional)"
+                placeholderTextColor={colors.muted}
+                value={rText}
+                onChangeText={setRText}
+                multiline
+                numberOfLines={3}
+                maxLength={400}
+                style={[styles.input, { minHeight: 80, textAlignVertical: "top" }]}
+              />
+              <Pressable
+                testID="review-submit-btn"
+                onPress={submitReview}
+                disabled={rSubmitting || !user}
+                style={[styles.primaryBtn, { marginTop: spacing.lg, opacity: (rSubmitting || !user) ? 0.5 : 1 }]}
+              >
+                {rSubmitting ? <ActivityIndicator color={colors.onBrandPrimary} /> : <Text style={styles.primaryText}>Post review</Text>}
+              </Pressable>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      )}
     </View>
   );
 }
@@ -228,7 +324,14 @@ const styles = StyleSheet.create({
   offerText: { fontSize: 12, color: colors.onSurface, fontWeight: "600" },
   disclaimer: { fontSize: 11, color: colors.muted, marginTop: spacing.xl, lineHeight: 16 },
   bottomBar: { flexDirection: "row", gap: spacing.md, paddingHorizontal: spacing.xl, paddingTop: spacing.md, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border, position: "absolute", left: 0, right: 0, bottom: 0 },
-  secondaryBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingHorizontal: 20, height: 52, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
+  iconBtn: { width: 52, height: 52, borderRadius: radius.md, alignItems: "center", justifyContent: "center" },
+  secondaryBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingHorizontal: 16, height: 52, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
+  writeReviewBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 10, height: 30, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
+  writeReviewText: { fontSize: 12, fontWeight: "700", color: colors.brand },
+  reviewCard: { marginTop: spacing.md, padding: spacing.md, backgroundColor: colors.surfaceSecondary, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border },
+  reviewName: { fontSize: 13, fontWeight: "700", color: colors.onSurface },
+  reviewText: { fontSize: 13, color: colors.onSurfaceSecondary, marginTop: 4, lineHeight: 18 },
+  reviewDate: { fontSize: 10, color: colors.muted, marginTop: 6, fontWeight: "600" },
   secondaryText: { color: colors.onSurface, fontWeight: "700", fontSize: 14 },
   primaryBtn: { flex: 1, height: 52, borderRadius: radius.md, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", ...shadow.card },
   primaryText: { color: colors.onBrandPrimary, fontWeight: "700", fontSize: 15 },

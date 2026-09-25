@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 
 from seed_data import LOCALITIES, PROPERTIES, PRICE_HISTORY, INFRASTRUCTURE, NEWS
 from market_seed import MARKET_GROUPS, MARKET_CATEGORIES, SUPPLIERS
+from agents_seed import AGENT_CATEGORIES, AGENTS
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
@@ -119,6 +120,10 @@ async def seed_if_needed():
         await db.market_categories.insert_many([{**c} for c in MARKET_CATEGORIES])
     if await db.suppliers.count_documents({}) == 0:
         await db.suppliers.insert_many([{**s} for s in SUPPLIERS])
+    if await db.agent_categories.count_documents({}) == 0:
+        await db.agent_categories.insert_many([{**c} for c in AGENT_CATEGORIES])
+    if await db.agents.count_documents({}) == 0:
+        await db.agents.insert_many([{**a} for a in AGENTS])
 
 @app.on_event("startup")
 async def on_startup():
@@ -133,6 +138,50 @@ async def on_startup():
 
 # ---------------- Helpers ----------------
 NO_ID = {"_id": 0}
+
+# Deterministic broker/lister picker: source -> agent category, hash by pid
+_SOURCE_TO_CAT = {
+    "Owner": None,       # Owners aren't agents; we'll fabricate a lister
+    "Broker": "acat-broker",
+    "Developer": "acat-broker",
+}
+
+async def pick_lister(prop: dict) -> dict:
+    """Return a deterministic 'listed by' contact for a property."""
+    pid = prop.get("id", "")
+    source = prop.get("source", "Owner")
+    if source == "Owner":
+        # Owner: synthesize a contact from property id (demo)
+        digits = "".join([c for c in pid if c.isdigit()]) or "00"
+        phone = f"+91 98290 44{int(digits[-2:]):02d}0"
+        return {
+            "type": "Owner",
+            "name": "Owner (Direct)",
+            "firm": None,
+            "phone": phone,
+            "whatsapp": phone,
+            "agent_id": None,
+            "rera_id": None,
+            "verified": False,
+            "image": None,
+        }
+    # Broker/Developer: pick one from acat-broker deterministically
+    brokers = [a for a in AGENTS if a["category_id"] == "acat-broker"]
+    if not brokers:
+        return {"type": source, "name": "Listed by broker", "phone": None, "whatsapp": None}
+    idx = sum(ord(c) for c in pid) % len(brokers)
+    a = brokers[idx]
+    return {
+        "type": source,
+        "name": a["name"],
+        "firm": a.get("firm"),
+        "phone": a["phone"],
+        "whatsapp": a.get("whatsapp") or a["phone"],
+        "agent_id": a["id"],
+        "rera_id": a.get("rera_id"),
+        "verified": a.get("verified", False),
+        "image": a.get("image"),
+    }
 
 # ---------------- Endpoints ----------------
 @api_router.get("/health")
@@ -243,6 +292,8 @@ async def get_property(pid: str):
             "confidence": loc["confidence"],
         }
         p["govt_value"] = int(govt)
+    # Attach a "listed by" agent deterministically
+    p["lister"] = await pick_lister(p)
     return p
 
 @api_router.post("/properties")
@@ -447,6 +498,178 @@ async def create_quote(req: QuoteRequest):
     }
     await db.quote_requests.insert_one(doc)
     return {"id": doc["id"], "status": doc["status"]}
+
+# ---------------- Supplier reviews ----------------
+class ReviewRequest(BaseModel):
+    user_id: Optional[str] = None
+    name: str
+    rating: int
+    text: Optional[str] = None
+
+@api_router.get("/market/suppliers/{sid}/reviews")
+async def list_reviews(sid: str):
+    if not await db.suppliers.find_one({"id": sid}, {"_id": 0, "id": 1}):
+        raise HTTPException(404, "Supplier not found")
+    revs = await db.supplier_reviews.find({"supplier_id": sid}, NO_ID).sort("created_at", -1).to_list(100)
+    return revs
+
+@api_router.post("/market/suppliers/{sid}/reviews")
+async def add_review(sid: str, req: ReviewRequest):
+    if not await db.suppliers.find_one({"id": sid}, {"_id": 0, "id": 1}):
+        raise HTTPException(404, "Supplier not found")
+    if req.rating < 1 or req.rating > 5:
+        raise HTTPException(400, "Rating must be 1-5")
+    if not req.name.strip():
+        raise HTTPException(400, "Name required")
+    doc = {
+        "id": f"rev-{uuid.uuid4().hex[:10]}",
+        "supplier_id": sid,
+        "user_id": req.user_id,
+        "name": req.name.strip()[:60],
+        "rating": req.rating,
+        "text": (req.text or "").strip()[:500] or None,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.supplier_reviews.insert_one(doc)
+    return {k: v for k, v in doc.items() if k != "_id"}
+
+# ---------------- Heatmap ----------------
+@api_router.get("/heatmap")
+async def heatmap():
+    """Return locality centres with normalised price intensity [0..1]."""
+    locs = await db.localities.find({}, NO_ID).to_list(200)
+    if not locs:
+        return []
+    prices = [l["median_price_per_sq_yd"] for l in locs]
+    lo, hi = min(prices), max(prices)
+    span = (hi - lo) or 1
+    out = []
+    for l in locs:
+        intensity = (l["median_price_per_sq_yd"] - lo) / span
+        out.append({
+            "id": l["id"],
+            "name": l["name"],
+            "lat": l["lat"],
+            "lng": l["lng"],
+            "median_price_per_sq_yd": l["median_price_per_sq_yd"],
+            "govt_dlc_per_sq_yd": l["govt_dlc_per_sq_yd"],
+            "intensity": round(intensity, 3),
+        })
+    return {"min": lo, "max": hi, "points": out}
+
+# ---------------- Agents ----------------
+@api_router.get("/agent-categories")
+async def list_agent_categories():
+    cats = await db.agent_categories.find({}, NO_ID).to_list(50)
+    counts: Dict[str, int] = {}
+    async for a in db.agents.find({}, {"category_id": 1, "_id": 0}):
+        cid = a.get("category_id")
+        if cid:
+            counts[cid] = counts.get(cid, 0) + 1
+    for c in cats:
+        c["agents_count"] = counts.get(c["id"], 0)
+    return cats
+
+@api_router.get("/agents")
+async def list_agents(
+    category_id: Optional[str] = None,
+    q: Optional[str] = None,
+    verified_only: bool = False,
+    featured_only: bool = False,
+    area: Optional[str] = None,
+    limit: int = 100,
+):
+    query: Dict[str, Any] = {}
+    if category_id:
+        query["category_id"] = category_id
+    if verified_only:
+        query["verified"] = True
+    if featured_only:
+        query["featured"] = True
+    if area:
+        query["$or"] = [
+            {"area": {"$regex": re.escape(area), "$options": "i"}},
+            {"coverage": {"$regex": re.escape(area), "$options": "i"}},
+        ]
+    if q:
+        pat = re.escape(q)
+        query.setdefault("$and", []).append({
+            "$or": [
+                {"name": {"$regex": pat, "$options": "i"}},
+                {"firm": {"$regex": pat, "$options": "i"}},
+                {"specialties": {"$regex": pat, "$options": "i"}},
+                {"coverage": {"$regex": pat, "$options": "i"}},
+            ]
+        })
+    docs = await db.agents.find(query, NO_ID).limit(limit).to_list(limit)
+    return docs
+
+@api_router.get("/agents/{aid}")
+async def get_agent(aid: str):
+    a = await db.agents.find_one({"id": aid}, NO_ID)
+    if not a:
+        raise HTTPException(404, "Agent not found")
+    cat = await db.agent_categories.find_one({"id": a.get("category_id")}, NO_ID)
+    a["category"] = cat
+    # attach recent listings for property brokers / land agents
+    if a.get("category_id") in ("acat-broker", "acat-land"):
+        listings: List[dict] = []
+        # Naive match: properties in agent's coverage areas
+        cov = a.get("coverage") or []
+        for area in cov[:3]:
+            docs = await db.properties.find({"address": {"$regex": re.escape(area), "$options": "i"}}, NO_ID).limit(3).to_list(3)
+            listings.extend(docs)
+        # dedupe
+        seen = set()
+        uniq = []
+        for p in listings:
+            if p["id"] not in seen:
+                seen.add(p["id"])
+                uniq.append(p)
+        a["recent_listings"] = uniq[:6]
+    return a
+
+class AgentEnquiry(BaseModel):
+    agent_id: str
+    user_id: Optional[str] = None
+    name: str
+    mobile: str
+    message: Optional[str] = None
+
+@api_router.post("/agents/{aid}/enquiries")
+async def create_agent_enquiry(aid: str, req: AgentEnquiry):
+    if not await db.agents.find_one({"id": aid}, {"_id": 0, "id": 1}):
+        raise HTTPException(404, "Agent not found")
+    if len(req.mobile.strip()) < 10:
+        raise HTTPException(400, "Invalid mobile")
+    doc = {
+        "id": f"aen-{uuid.uuid4().hex[:10]}",
+        "agent_id": aid,
+        "user_id": req.user_id,
+        "name": req.name.strip(),
+        "mobile": req.mobile.strip(),
+        "message": (req.message or "").strip() or None,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "status": "New",
+    }
+    await db.agent_enquiries.insert_one(doc)
+    return {"id": doc["id"], "status": doc["status"]}
+
+# ---------------- Compare ----------------
+@api_router.get("/compare")
+async def compare_properties(ids: str):
+    """Return full property payload (with infravalue + govt + lister) for up to 4 comma-separated ids."""
+    id_list = [x.strip() for x in ids.split(",") if x.strip()][:4]
+    if not id_list:
+        return []
+    results: List[dict] = []
+    for pid in id_list:
+        try:
+            r = await get_property(pid)  # reuse existing endpoint
+            results.append(r)
+        except HTTPException:
+            continue
+    return results
 
 app.include_router(api_router)
 

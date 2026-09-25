@@ -34,17 +34,17 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="agents"
+        options={{
+          title: "Agents",
+          tabBarIcon: ({ color, size }) => <Icon name="people-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="market"
         options={{
           title: "Market",
           tabBarIcon: ({ color, size }) => <Icon name="storefront-outline" size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
-        name="saved"
-        options={{
-          title: "Saved",
-          tabBarIcon: ({ color, size }) => <Icon name="heart-outline" size={size} color={color} />,
         }}
       />
     </Tabs>
