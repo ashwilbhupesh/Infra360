@@ -76,7 +76,7 @@ export default function SupplierDetail() {
   };
 
   const waSupplier = () => {
-    if (s?.phone) openWhatsApp(s.phone, `Hi ${s.name}, I found you on InfraLocal. I'd like to know more about ${s.category?.name || "your services"}.`);
+    if (s?.phone) openWhatsApp(s.phone, `Hi ${s.name}, I found you on InfraJagat. I'd like to know more about ${s.category?.name || "your services"}.`);
   };
 
   if (loading || !s) {
@@ -172,7 +172,7 @@ export default function SupplierDetail() {
           )}
 
           <Text style={styles.disclaimer}>
-            Listings on the InfraLocal Market are demo entries. Verify credentials with the supplier directly before making any payment.
+            Listings on the InfraJagat Market are demo entries. Verify credentials with the supplier directly before making any payment.
           </Text>
         </View>
       </ScrollView>

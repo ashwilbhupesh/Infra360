@@ -119,7 +119,7 @@ export default function LocalityDetail() {
               <Text style={styles.gvVal}>₹{indianComma(loc.govt_dlc_per_sq_yd)}</Text>
             </View>
             <View style={styles.gvRow}>
-              <Text style={styles.gvLabel}>InfraLocal Estimated</Text>
+              <Text style={styles.gvLabel}>InfraJagat Estimated</Text>
               <Text style={[styles.gvVal, { color: colors.brand }]}>₹{indianComma(loc.estimated_range_low)}–{indianComma(loc.estimated_range_high)}</Text>
             </View>
             <View style={styles.gvRow}>

@@ -202,17 +202,29 @@ export default function MapScreen() {
         handleIndicatorStyle={{ backgroundColor: colors.borderStrong }}
       >
         <BottomSheetView style={styles.sheetHeader}>
-          <Text style={styles.sheetTitle}>{items.length} properties</Text>
-          <View style={styles.viewToggle}>
-            <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
-              <Icon name="map-outline" size={13} color={view === "map" ? colors.onBrandPrimary : colors.onSurface} />
-              <Text style={[styles.viewToggleText, view === "map" && { color: colors.onBrandPrimary }]}>Map</Text>
-            </Pressable>
-            <Pressable testID="view-toggle-list" onPress={() => setView("list")} style={[styles.viewToggleBtn, view === "list" && styles.viewToggleActive]}>
-              <Icon name="list-outline" size={13} color={view === "list" ? colors.onBrandPrimary : colors.onSurface} />
-              <Text style={[styles.viewToggleText, view === "list" && { color: colors.onBrandPrimary }]}>List</Text>
-            </Pressable>
-          </View>
+          {selected && view === "map" ? (
+            <>
+              <Pressable testID="pin-preview-back" onPress={() => setSelected(null)} style={styles.backChip} hitSlop={8}>
+                <Icon name="chevron-back" size={18} color={colors.onSurface} />
+                <Text style={styles.backChipText}>Back to listings</Text>
+              </Pressable>
+              <Text style={styles.selectedKicker}>SELECTED</Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.sheetTitle}>{items.length} properties</Text>
+              <View style={styles.viewToggle}>
+                <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
+                  <Icon name="map-outline" size={13} color={view === "map" ? colors.onBrandPrimary : colors.onSurface} />
+                  <Text style={[styles.viewToggleText, view === "map" && { color: colors.onBrandPrimary }]}>Map</Text>
+                </Pressable>
+                <Pressable testID="view-toggle-list" onPress={() => setView("list")} style={[styles.viewToggleBtn, view === "list" && styles.viewToggleActive]}>
+                  <Icon name="list-outline" size={13} color={view === "list" ? colors.onBrandPrimary : colors.onSurface} />
+                  <Text style={[styles.viewToggleText, view === "list" && { color: colors.onBrandPrimary }]}>List</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
         </BottomSheetView>
 
         {view === "list" ? (
@@ -224,9 +236,9 @@ export default function MapScreen() {
             <PinPreview propertyId={selected} onClose={() => setSelected(null)} />
           </BottomSheetScrollView>
         ) : (
-          <BottomSheetScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
+          <BottomSheetScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl, paddingTop: spacing.sm }}>
             {localities.length > 0 && (
-              <View style={{ marginBottom: spacing.sm }}>
+              <View style={{ marginBottom: spacing.lg }}>
                 <Text style={styles.stripTitle}>Trending localities</Text>
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.lg, gap: spacing.md }}>
                   {localities.map(l => <LocalityCard key={l.id} locality={l} />)}
@@ -278,9 +290,12 @@ const styles = StyleSheet.create({
   loadingChip: { position: "absolute", top: 180, alignSelf: "center", flexDirection: "row", alignItems: "center", gap: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.surface, ...shadow.card },
   loadingTxt: { fontSize: 12, color: colors.onSurface, fontWeight: "500" },
   sheetBg: { backgroundColor: colors.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20 },
-  sheetHeader: { paddingHorizontal: spacing.lg, paddingBottom: spacing.sm, flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  sheetHeader: { paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.md, flexDirection: "row", justifyContent: "space-between", alignItems: "center", minHeight: 48 },
   sheetTitle: { fontSize: 16, fontWeight: "700", color: colors.onSurface },
   sheetSub: { fontSize: 11, color: colors.muted },
+  backChip: { flexDirection: "row", alignItems: "center", gap: 2, paddingRight: spacing.md },
+  backChipText: { fontSize: 13, fontWeight: "700", color: colors.onSurface },
+  selectedKicker: { fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 },
   viewToggle: { flexDirection: "row", backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, padding: 3, gap: 2 },
   viewToggleBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 10, paddingVertical: 5, borderRadius: radius.pill },
   viewToggleActive: { backgroundColor: colors.brand },

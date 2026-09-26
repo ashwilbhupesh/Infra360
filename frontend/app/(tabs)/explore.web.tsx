@@ -169,17 +169,29 @@ export default function MapScreenWeb() {
 
       <View style={styles.sheet}>
         <View style={styles.sheetHeaderRow}>
-          <Text style={styles.sheetTitle}>{loading ? "Loading..." : `${items.length} properties`}</Text>
-          <View style={styles.viewToggle}>
-            <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
-              <Icon name="map-outline" size={13} color={view === "map" ? colors.onBrandPrimary : colors.onSurface} />
-              <Text style={[styles.viewToggleText, view === "map" && { color: colors.onBrandPrimary }]}>Map</Text>
-            </Pressable>
-            <Pressable testID="view-toggle-list" onPress={() => setView("list")} style={[styles.viewToggleBtn, view === "list" && styles.viewToggleActive]}>
-              <Icon name="list-outline" size={13} color={view === "list" ? colors.onBrandPrimary : colors.onSurface} />
-              <Text style={[styles.viewToggleText, view === "list" && { color: colors.onBrandPrimary }]}>List</Text>
-            </Pressable>
-          </View>
+          {selected && view === "map" ? (
+            <>
+              <Pressable testID="pin-preview-back" onPress={() => setSelected(null)} style={{ flexDirection: "row", alignItems: "center", gap: 2 }} hitSlop={8}>
+                <Icon name="chevron-back" size={18} color={colors.onSurface} />
+                <Text style={{ fontSize: 13, fontWeight: "700", color: colors.onSurface }}>Back to listings</Text>
+              </Pressable>
+              <Text style={{ fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 }}>SELECTED</Text>
+            </>
+          ) : (
+            <>
+              <Text style={styles.sheetTitle}>{loading ? "Loading..." : `${items.length} properties`}</Text>
+              <View style={styles.viewToggle}>
+                <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
+                  <Icon name="map-outline" size={13} color={view === "map" ? colors.onBrandPrimary : colors.onSurface} />
+                  <Text style={[styles.viewToggleText, view === "map" && { color: colors.onBrandPrimary }]}>Map</Text>
+                </Pressable>
+                <Pressable testID="view-toggle-list" onPress={() => setView("list")} style={[styles.viewToggleBtn, view === "list" && styles.viewToggleActive]}>
+                  <Icon name="list-outline" size={13} color={view === "list" ? colors.onBrandPrimary : colors.onSurface} />
+                  <Text style={[styles.viewToggleText, view === "list" && { color: colors.onBrandPrimary }]}>List</Text>
+                </Pressable>
+              </View>
+            </>
+          )}
         </View>
         {view === "list" ? (
           <ExploreListView items={items} filter={filter} />

@@ -28,12 +28,12 @@ export default function Onboarding() {
       return;
     }
     setBusy(true);
+    // Push to OTP verification screen; actual onboard happens after OTP.
     try {
-      const res = await api.post<{ user: any }>("/auth/onboard", { name: name.trim(), mobile: mobile.trim(), area: area.trim(), profession });
-      await setUser(res.user);
-      router.replace("/(tabs)/explore");
-    } catch (e: any) {
-      setErr(e.message || "Failed to continue");
+      router.push({
+        pathname: "/otp",
+        params: { name: name.trim(), mobile: mobile.trim(), area: area.trim(), profession: profession || "" },
+      } as any);
     } finally {
       setBusy(false);
     }
@@ -44,11 +44,11 @@ export default function Onboarding() {
       <ScrollView contentContainerStyle={[styles.container, { paddingTop: insets.top + spacing.xxl, paddingBottom: insets.bottom + spacing.xl }]} showsVerticalScrollIndicator={false}>
         <View style={styles.logoRow}>
           <View style={styles.logoDot} />
-          <Text style={styles.logoText} testID="brand-text">InfraLocal</Text>
+          <Text style={styles.logoText} testID="brand-text">InfraJagat</Text>
         </View>
         <Text style={styles.tagline}>Know Before You Buy.</Text>
 
-        <Text style={styles.h1}>Welcome to InfraLocal</Text>
+        <Text style={styles.h1}>Welcome to InfraJagat</Text>
         <Text style={styles.sub}>Property, price, place & infrastructure intelligence for India.</Text>
 
         <View style={styles.field}>

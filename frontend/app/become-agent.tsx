@@ -49,7 +49,7 @@ export default function BecomeAgent() {
       <View style={[styles.header, { paddingTop: insets.top + spacing.md }]}>
         <Pressable testID="become-agent-back" onPress={() => router.back()} hitSlop={12}><Icon name="chevron-back" size={26} color={colors.onSurface} /></Pressable>
         <View style={{ flex: 1 }}>
-          <Text style={styles.title}>Work with InfraLocal</Text>
+          <Text style={styles.title}>Work with InfraJagat</Text>
           <Text style={styles.sub}>Become a verified agent, developer or supplier</Text>
         </View>
       </View>
@@ -64,7 +64,7 @@ export default function BecomeAgent() {
       ) : (
         <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 60 }}>
           <View style={styles.perkCard}>
-            <Text style={styles.perkTitle}>Why join InfraLocal?</Text>
+            <Text style={styles.perkTitle}>Why join InfraJagat?</Text>
             <View style={{ gap: 6, marginTop: 6 }}>
               {[
                 "Reach buyers actively searching in your locality",
@@ -105,7 +105,7 @@ export default function BecomeAgent() {
             {busy ? <ActivityIndicator color={colors.onBrandPrimary} /> : <Text style={styles.primaryText}>Submit application</Text>}
           </Pressable>
 
-          <Text style={styles.disclaimer}>By submitting you agree to InfraLocal contacting you via WhatsApp or phone to verify your details.</Text>
+          <Text style={styles.disclaimer}>By submitting you agree to InfraJagat contacting you via WhatsApp or phone to verify your details.</Text>
         </ScrollView>
       )}
     </KeyboardAvoidingView>

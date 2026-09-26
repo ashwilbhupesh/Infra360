@@ -89,13 +89,13 @@ export default function Profile() {
 
         <SectionTitle>Help</SectionTitle>
         <MenuRow icon="help-circle-outline" title="Contact us / Help" subtitle="WhatsApp, call or email" onPress={() => router.push("/contact-us")} testID="menu-contact" />
-        <MenuRow icon="information-circle-outline" title="About InfraLocal" subtitle="Know Before You Buy." onPress={() => {}} testID="menu-about" />
+        <MenuRow icon="information-circle-outline" title="About InfraJagat" subtitle="Know Before You Buy." onPress={() => {}} testID="menu-about" />
 
         <Pressable testID="signout-btn" onPress={signOut} style={styles.signOut}>
           <Icon name="log-out-outline" size={16} color={colors.error} />
           <Text style={styles.outText}>Sign out</Text>
         </Pressable>
-        <Text style={styles.footer}>InfraLocal · Know Before You Buy.</Text>
+        <Text style={styles.footer}>InfraJagat · Know Before You Buy.</Text>
       </ScrollView>
     </View>
   );

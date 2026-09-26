@@ -28,7 +28,7 @@ export default function ContactUs() {
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 60, gap: spacing.md }}>
         <Pressable
           testID="contact-whatsapp"
-          onPress={() => openWhatsApp(SUPPORT_WA, "Hi InfraLocal team, I need help with...")}
+          onPress={() => openWhatsApp(SUPPORT_WA, "Hi InfraJagat team, I need help with...")}
           style={[styles.row, { backgroundColor: "#25D366" }]}
         >
           <Icon name="logo-whatsapp" size={24} color="#FFFFFF" />

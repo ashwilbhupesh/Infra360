@@ -21,7 +21,7 @@ const PLANS = [
   },
   {
     id: "pro",
-    name: "InfraLocal Pro",
+    name: "InfraJagat Pro",
     price: "₹299",
     period: "per month",
     tag: "Most popular",

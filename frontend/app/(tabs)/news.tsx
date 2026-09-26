@@ -30,7 +30,7 @@ export default function News() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <View style={{ paddingTop: insets.top + spacing.md, paddingHorizontal: spacing.xl, paddingBottom: spacing.sm, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <Text style={styles.title}>InfraLocal News</Text>
+        <Text style={styles.title}>InfraJagat News</Text>
         <Text style={styles.sub}>Hyperlocal property intelligence, short and sharp.</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
           {CATS.map(c => (

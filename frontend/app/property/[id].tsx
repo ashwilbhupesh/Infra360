@@ -194,7 +194,7 @@ export default function PropertyDetail() {
           onPress={() => {
             const phone = prop.lister?.whatsapp || prop.lister?.phone;
             if (!phone) return;
-            const msg = `Hi, I saw your listing "${prop.title}" (${formatINR(prop.price)}) on InfraLocal. Is it still available?`;
+            const msg = `Hi, I saw your listing "${prop.title}" (${formatINR(prop.price)}) on InfraJagat. Is it still available?`;
             openWhatsApp(phone, msg);
           }}
           style={[styles.iconCta, { backgroundColor: "#25D366" }]}

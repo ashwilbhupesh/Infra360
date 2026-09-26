@@ -8,6 +8,7 @@ import { useRouter } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
+import { useAuth } from "@/src/auth-context";
 import { formatINR, indianComma } from "@/src/utils/format";
 import { openWhatsApp, openTel } from "@/src/utils/contact";
 
@@ -26,9 +27,11 @@ type Full = PropertyLite & {
 
 export function PinPreview({ propertyId, onClose }: { propertyId: string; onClose?: () => void }) {
   const router = useRouter();
+  const { user } = useAuth();
   const [prop, setProp] = useState<Full | null>(null);
   const [similar, setSimilar] = useState<PropertyLite[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saved, setSaved] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -40,9 +43,22 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
         ]);
         setProp(p);
         setSimilar(sim);
+        if (user) {
+          const list = await api.get<Array<{ property_id: string }>>(`/saved?user_id=${user.id}`).catch(() => []);
+          setSaved(list.some(x => x.property_id === propertyId));
+        }
       } finally { setLoading(false); }
     })();
-  }, [propertyId]);
+  }, [propertyId, user]);
+
+  const toggleSave = async () => {
+    if (!user) return;
+    const prev = saved;
+    setSaved(!prev);
+    try {
+      await api.post<{ saved: boolean }>("/saved/toggle", { user_id: user.id, property_id: propertyId });
+    } catch { setSaved(prev); }
+  };
 
   if (loading || !prop) {
     return (
@@ -59,12 +75,17 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
   return (
     <View style={{ paddingBottom: spacing.md }}>
       <View style={styles.header}>
-        <Text style={styles.kicker}>SELECTED PROPERTY</Text>
-        {onClose && (
-          <Pressable testID="pin-preview-close" onPress={onClose} hitSlop={10}>
-            <Icon name="close" size={20} color={colors.muted} />
-          </Pressable>
-        )}
+        <View style={{ flex: 1 }} />
+        <Pressable
+          testID="pin-preview-like"
+          onPress={toggleSave}
+          disabled={!user}
+          hitSlop={10}
+          style={[styles.likeBtn, !user && { opacity: 0.5 }]}
+          accessibilityLabel={saved ? "Remove from saved" : "Save property"}
+        >
+          <Icon name={saved ? "heart" : "heart-outline"} size={20} color={saved ? colors.error : colors.onSurface} />
+        </Pressable>
       </View>
 
       <View style={styles.heroWrap}>
@@ -130,7 +151,7 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
             </View>
             {prop.lister.phone ? (
               <View style={{ flexDirection: "row", gap: 6 }}>
-                <Pressable testID="pin-wa-btn" onPress={() => prop.lister?.phone && openWhatsApp(prop.lister.whatsapp || prop.lister.phone, `Hi, I'm interested in "${prop.title}" (${formatINR(prop.price)}) on InfraLocal.`)} style={[styles.miniBtn, { backgroundColor: "#25D366" }]}>
+                <Pressable testID="pin-wa-btn" onPress={() => prop.lister?.phone && openWhatsApp(prop.lister.whatsapp || prop.lister.phone, `Hi, I'm interested in "${prop.title}" (${formatINR(prop.price)}) on InfraJagat.`)} style={[styles.miniBtn, { backgroundColor: "#25D366" }]}>
                   <Icon name="logo-whatsapp" size={14} color="#FFFFFF" />
                 </Pressable>
                 <Pressable testID="pin-call-btn" onPress={() => prop.lister?.phone && openTel(prop.lister.phone)} style={[styles.miniBtn, { backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border }]}>
@@ -187,8 +208,9 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
 }
 
 const styles = StyleSheet.create({
-  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: spacing.lg, marginBottom: spacing.sm },
+  header: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", paddingHorizontal: spacing.lg, paddingBottom: 6 },
   kicker: { fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 },
+  likeBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border, alignItems: "center", justifyContent: "center" },
   heroWrap: { marginHorizontal: spacing.lg, borderRadius: radius.md, overflow: "hidden", backgroundColor: colors.surfaceSecondary },
   hero: { width: "100%", height: 160 },
   dealRibbon: { position: "absolute", left: 10, top: 10, flexDirection: "row", alignItems: "center", gap: 3, backgroundColor: colors.brandPrimary, paddingHorizontal: 8, paddingVertical: 4, borderRadius: radius.pill },

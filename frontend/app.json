@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "InfraLocal",
+    "name": "InfraJagat",
     "slug": "frontend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "infralocal",
+    "scheme": "infrajagat",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,

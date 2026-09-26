@@ -1,0 +1,29 @@
+{
+  "summary": "Verified all 4 user-reported bug fixes on InfraJagat web preview at 390x844: (1) app rename to InfraJagat, (2) no overlap between properties count and Trending localities, (3) heart/like on pin preview with save/unsave, (4) OTP verification flow. All fixes work as specified. Deprecated packages detected: none; SafeAreaView issues detected: none. Minor observation: on the very first heart tap immediately after fresh OTP login, the Saved tab briefly showed 0 (probable auth/context race). Subsequent taps toggle correctly and property appears/disappears in Saved.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {"flow": "First heart tap after fresh OTP login → Saved tab", "issue": "On the very first heart tap after fresh onboarding+OTP, navigating to Saved sometimes shows Properties · 0. A subsequent tap on the same pin correctly saves and shows in Saved. Likely a race between auth-context user propagation and toggleSave's early-return (`if (!user) return`). Consider awaiting user or persisting auth before enabling the heart button.", "affected_testIDs": ["pin-preview-like"]}
+    ],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Optional: harden PinPreview.toggleSave to await user hydration (e.g., disable the heart when !user, or store optimistic save and retry when user arrives). Current flow works on second attempt.",
+    "Address console deprecation warnings (non-blocking): 'shadow*' style props should migrate to boxShadow, 'textShadow*' to textShadow, and props.pointerEvents to style.pointerEvents. These originate from theme shadow helpers and vendored components."
+  ],
+  "critical_code_review_comments": [
+    "otp.tsx: verify() uses `useAuth().setUser` correctly and calls /api/auth/onboard only after correct OTP — matches spec.",
+    "explore.tsx sheetHeader: correctly conditional renders back-chip+SELECTED when a pin is selected in map view, hiding the Map/List toggle.",
+    "pin-preview.tsx no longer renders any pin-preview-close testID; heart button (pin-preview-like) sits top-right with hitSlop=10 and proper accessibility label."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "n/a", "frontend": "100%"},
+  "seed_data_creation": "None; used pre-seeded properties (₹72 L Bagru plot).",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Full E2E on web preview at 390x844 passed: onboarding → /otp (wrong 1234 shows otp-error, correct 0000 advances) → /explore with Hi, Rahul → tap ₹72 L pin → pin-preview-back + SELECTED visible, no toggle, no pin-preview-close, pin-preview-like visible → heart tap saves → Saved tab lists property → tap heart again toggles state. One minor race on the very first save attempt post-OTP; subsequent attempts consistent.",
+  "rca_of_issue": "N/A — all 4 fixes verified. The transient first-tap-shows-0-in-Saved observation is likely due to auth-context user not yet being propagated to PinPreview at the moment of the tap, causing toggleSave's `if (!user) return` early-exit. UI heart state still flips optimistically, producing the perceived inconsistency."
+}

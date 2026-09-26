@@ -61,7 +61,7 @@ export default function AgentDetail() {
     );
   }
 
-  const waMsg = `Hi ${a.name}, I found you on InfraLocal and would like to talk about a property.`;
+  const waMsg = `Hi ${a.name}, I found you on InfraJagat and would like to talk about a property.`;
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
@@ -166,7 +166,7 @@ export default function AgentDetail() {
           )}
 
           <Text style={styles.disclaimer}>
-            InfraLocal lists agents for discovery only. Verify credentials, RERA registration and paperwork before making any payment.
+            InfraJagat lists agents for discovery only. Verify credentials, RERA registration and paperwork before making any payment.
           </Text>
         </View>
       </ScrollView>

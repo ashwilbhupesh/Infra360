@@ -96,7 +96,7 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
 
       {/* Verified spotlight */}
       {verified.length > 0 && (
-        <Section title="Verified spotlight" subtitle="Listings screened by InfraLocal" carousel>
+        <Section title="Verified spotlight" subtitle="Listings screened by InfraJagat" carousel>
           {verified.map(p => <SmallCard key={p.id} property={p} />)}
         </Section>
       )}
