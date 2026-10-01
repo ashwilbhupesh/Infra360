@@ -36,7 +36,7 @@ export default function MapScreenWeb() {
   const [selected, setSelected] = useState<string | null>(null);
   const [heat, setHeat] = useState(false);
   const [view, setView] = useState<"map" | "list">("map");
-  const [listingType, setListingType] = useState<"Buy" | "Rent">("Buy");
+  const [listingType, setListingType] = useState<"Buy" | "Rent" | "Book">("Buy");
   const [heatPoints, setHeatPoints] = useState<HeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
 
@@ -100,7 +100,7 @@ export default function MapScreenWeb() {
           />
         </View>
         <View style={styles.segRowWeb}>
-          {(["Buy", "Rent"] as const).map(t => {
+          {(["Buy", "Rent", "Book"] as const).map(t => {
             const active = listingType === t;
             return (
               <Pressable key={t} testID={`listing-type-${t.toLowerCase()}`} onPress={() => setListingType(t)} style={[styles.segBtnWeb, active && styles.segBtnActiveWeb]}>

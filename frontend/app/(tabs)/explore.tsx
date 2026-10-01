@@ -36,7 +36,7 @@ export default function MapScreen() {
   const [loading, setLoading] = useState(true);
   const [heat, setHeat] = useState(false);
   const [view, setView] = useState<"map" | "list">("map");
-  const [listingType, setListingType] = useState<"Buy" | "Rent">("Buy");
+  const [listingType, setListingType] = useState<"Buy" | "Rent" | "Book">("Buy");
   const [heatPoints, setHeatPoints] = useState<Array<{ id: string; name: string; lat: number; lng: number; intensity: number; median_price_per_sq_yd: number }>>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const sheetRef = useRef<BottomSheet>(null);
@@ -146,7 +146,7 @@ export default function MapScreen() {
           ) : null}
         </View>
         <View style={styles.segRow}>
-          {(["Buy", "Rent"] as const).map(t => {
+          {(["Buy", "Rent", "Book"] as const).map(t => {
             const active = listingType === t;
             return (
               <Pressable key={t} testID={`listing-type-${t.toLowerCase()}`} onPress={() => setListingType(t)} style={[styles.segBtn, active && styles.segBtnActive]}>

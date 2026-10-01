@@ -1,0 +1,26 @@
+{
+  "summary": "Verified the newly added 'Book' option in the Explore segmented control. All 7 pytest cases (test_book_listing.py) PASS and the full E2E on web preview at 390x844 PASS. Backend: /api/properties?listing_type=Book returns exactly 6 items with ids b-01..b-06 and expected title tokens (Pre-Launch, Under Construction, Book @, New Launch, Plotted Township); &type=Villa returns exactly b-02 Mahima Elanza + b-06 Royal Palms Villas; listing_type=Buy still returns 30 items (no b-*/r-* leak); listing_type=Rent still returns 6 (r-01..r-06); /api/properties/b-01 returns full detail with infravalue, govt_value and lister (type=Developer); /api/properties/b-01/similar returns only Book + Apartment items and includes b-03. No _id leaked. Frontend: three segmented buttons visible with testIDs listing-type-buy/rent/book (Buy default-active); tapping Book updates sheet header to '6 properties' and surfaces Book titles; back to Buy returns to '30 properties'; Rent returns '6 properties'; Trending localities, Heat toggle (heatmap-toggle), and Map/List toggle still render below the sheet header with no overlap. Deprecated packages detected: none. SafeAreaView issues detected: none. Pre-existing non-blocking console warnings persist ('shadow*'/'textShadow*' style props deprecated) — already flagged in iteration_9.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_book_listing.py",
+    "/app/test_reports/pytest/book_listing_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "seed_data.py: b-01..b-06 added with listing_type='Book', source='Developer' (ensures lister.type=Developer on detail enrichment).",
+    "explore.tsx / explore.web.tsx: segmented control iterates ['Buy','Rent','Book'] with testID `listing-type-${t.toLowerCase()}` and drives qs.set('listing_type', listingType) — correct wiring, no regression on default Buy state."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (7/7)", "frontend": "100%"},
+  "seed_data_creation": "None — used pre-seeded b-01..b-06 Book properties.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Book feature fully verified end-to-end. New pytest file: /app/backend/tests/test_book_listing.py (7 cases, all passing). Reuse it as regression. Frontend E2E path: /onboarding → fill onboard-name-input / onboard-mobile-input / onboard-location-input, click profession-chip-buyer, click onboard-continue-btn → /otp (4 digit testIDs: otp-digit-0..3, type '0' into each) → /explore. Segmented control testIDs: listing-type-buy|rent|book. Sheet header shows '{count} properties'. heatmap-toggle still present. No overlap with Trending localities strip.",
+  "rca_of_issue": "N/A — feature works as specified."
+}

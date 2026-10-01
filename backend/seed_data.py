@@ -125,6 +125,13 @@ PROPERTIES = [
     _prop("r-04","loc-tonk-road","Commercial",120000,1200,"sq ft",-0.004,0.006,img=IMG_COMM,source="Broker",title="Retail Shop on Rent · Tonk Road", listing_type="Rent"),
     _prop("r-05","loc-ajmer-road","Apartment",22000,1180,"sq ft",-0.007,0.004,bedrooms=2,img=IMG_APT,source="Owner",title="2 BHK on Rent · Skyline Residency", listing_type="Rent"),
     _prop("r-06","loc-mansarovar","Apartment",25000,1200,"sq ft",-0.004,-0.005,bedrooms=2,img=IMG_APT2,source="Owner",title="2 BHK Family Rental", listing_type="Rent"),
+    # ---- Book (pre-launch / under-construction / token-booking) ----
+    _prop("b-01","loc-jagatpura","Apartment",9500000,1650,"sq ft",0.005,0.004,bedrooms=3,img=IMG_APT,source="Developer",title="Pre-Launch · Kalpataru Heights · Book @ ₹2L", listing_type="Book"),
+    _prop("b-02","loc-ajmer-road","Villa",17500000,2400,"sq ft",-0.006,-0.004,bedrooms=4,img=IMG_VILLA,source="Developer",title="Under Construction · Mahima Elanza · Dec 2026", listing_type="Book"),
+    _prop("b-03","loc-vaishali-nagar","Apartment",7800000,1250,"sq ft",0.004,-0.005,bedrooms=3,img=IMG_APT2,source="Developer",title="New Launch · Vaishali Sanctorium · Book @ ₹1.5L", listing_type="Book"),
+    _prop("b-04","loc-mansarovar","Residential Plot",6200000,500,"sq yd",-0.005,0.004,img=IMG_PLOT,source="Developer",title="Plotted Township · Ganpati Heights · Book Now", listing_type="Book"),
+    _prop("b-05","loc-tonk-road","Commercial",15200000,1400,"sq ft",0.006,-0.003,img=IMG_COMM,source="Developer",title="Pre-Launch · Signature Business Park · Shop Booking", listing_type="Book"),
+    _prop("b-06","loc-sikar-road","Villa",12800000,2200,"sq ft",-0.005,-0.004,bedrooms=4,img=IMG_VILLA,source="Developer",title="Under Construction · Royal Palms Villas · Jun 2027", listing_type="Book"),
 ]
 
 def _price_history(loc_id, base):
