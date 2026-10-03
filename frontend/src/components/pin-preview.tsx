@@ -90,12 +90,6 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
 
       <View style={styles.heroWrap}>
         <Image source={{ uri: prop.images?.[0] }} style={styles.hero} contentFit="cover" transition={200} />
-        {isDeal && (
-          <View style={styles.dealRibbon}>
-            <Icon name="flash" size={11} color={colors.onBrandPrimary} />
-            <Text style={styles.dealText}>Below InfraValue</Text>
-          </View>
-        )}
         {prop.verified && (
           <View style={styles.verifiedPill}>
             <Icon name="shield-checkmark" size={11} color={colors.onBrandPrimary} />
@@ -114,21 +108,6 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
         <View style={styles.addressRow}>
           <Icon name="location-outline" size={13} color={colors.muted} />
           <Text style={styles.address} numberOfLines={1}>{prop.address}</Text>
-        </View>
-
-        <View style={styles.compareRow}>
-          <View style={styles.compareCell}>
-            <Text style={styles.cLabel}>ASKING</Text>
-            <Text style={styles.cVal}>{formatINR(prop.price)}</Text>
-          </View>
-          <View style={styles.compareCell}>
-            <Text style={[styles.cLabel, { color: colors.brandPrimary }]}>INFRAVALUE™</Text>
-            <Text style={[styles.cVal, { color: colors.brandPrimary }]}>{iv ? `${formatINR(iv.low)}–${formatINR(iv.high)}` : "—"}</Text>
-          </View>
-          <View style={styles.compareCell}>
-            <Text style={styles.cLabel}>GOVT / DLC</Text>
-            <Text style={styles.cVal}>{prop.govt_value ? formatINR(prop.govt_value) : "—"}</Text>
-          </View>
         </View>
 
         {prop.lister ? (

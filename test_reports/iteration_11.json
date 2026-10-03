@@ -1,0 +1,28 @@
+{
+  "summary": "Verified UI removal of DLC rate and InfraValue range across all 5 requested surfaces. Property Detail (/property/p-06), Locality Detail (/locality/loc-jagatpura), Compare (/compare?ids=p-06,p-07), Pin Preview (tap ₹ price pill on Explore), and Explore List view all render with zero occurrences of 'InfraValue', 'DLC', 'Govt', 'Below InfraValue', 'Best deals', 'Est. range', 'Government vs Market', 'InfraValue™ Estimated Range', or 'vs InfraValue' in the user-visible body text (checked via case-insensitive substring + regex context dump on the rendered DOM at 390x844). Expected content retained on each surface was explicitly asserted. Backend payloads untouched: GET /api/properties still has price_per_unit/verified; GET /api/localities still returns govt_dlc_per_sq_yd / estimated_range_low / estimated_range_high / confidence; GET /api/localities/loc-jagatpura price_history still contains govt/est_low/est_high; GET /api/properties/p-06 still returns infravalue{low,high,confidence} and govt_value. 5/5 pytest regressions pass.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_dlc_infravalue_regression.py",
+    "/app/test_reports/pytest/dlc_removal_regression.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "pin-preview.tsx file-level comment still reads 'Displays hero image, price, quick details, InfraValue vs Govt DLC...' — stale documentation, not user-visible. Consider updating for future readers.",
+    "Unused imports/variables after removal: /app/frontend/app/property/[id].tsx imports `formatRange` and declares `const iv = prop.infravalue; const govt = prop.govt_value;` which are no longer referenced; /app/frontend/app/locality/[id].tsx imports `formatRange`; /app/frontend/src/components/pin-preview.tsx computes `iv`, `mid`, `isDeal` but never renders them. Dead-code cleanup opportunity.",
+    "Unused StyleSheet entries after removal in property/[id].tsx (compareGrid, compareCard, cLabel, cValueSm, confidence, disclaimer), locality/[id].tsx (ivCard, ivLabel, ivValue, ivUnit, ivMeta, gvCard, gvRow, gvLabel, gvVal, gvTip), pin-preview.tsx (kicker, dealRibbon, dealText, compareRow, compareCell, cLabel, cVal). Safe to delete.",
+    "price-chart.tsx `Point` type still declares `govt`, `est_low`, `est_high` fields and the unused `LegendDot` helper still accepts dashed/opacity props — fine as the data shape still comes from backend, but can be slimmed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100% (5/5)", "frontend": "100% (5/5 surfaces verified clean)"},
+  "seed_data_creation": "Used POST /api/auth/onboard with fresh mobiles (9999900000-02) to bypass onboarding and reach Explore. No persistent fixtures created.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend fields (infravalue, govt_value, govt_dlc_per_sq_yd, estimated_range_low/high, price_history.govt/est_low/est_high) are intentionally retained — do not flag their presence in API responses as a bug. UI must stay free of the strings 'InfraValue', 'DLC', 'Govt', 'Below InfraValue', 'Best deals', 'Est. range', 'vs InfraValue', 'Government vs Market'.",
+  "rca_of_issue": "N/A — verification task, no bugs found."
+}

@@ -29,10 +29,6 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
     })();
   }, []);
 
-  const bestDeals = useMemo(() =>
-    items.filter(p => (p as any).price_per_unit && (p as any).price_per_unit < 12000).slice(0, 6),
-    [items]
-  );
   const verified = useMemo(() => items.filter(p => p.verified).slice(0, 6), [items]);
   const under50 = useMemo(() => items.filter(p => p.price <= 5000000).slice(0, 6), [items]);
   const plotsUnder80 = useMemo(() => items.filter(p => p.type === "Residential Plot" && p.price <= 8000000).slice(0, 6), [items]);
@@ -67,7 +63,7 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
             <Image source={{ uri: l.image }} style={styles.trendImg} contentFit="cover" />
             <View style={{ flex: 1 }}>
               <Text style={styles.trendName}>{l.name}</Text>
-              <Text style={styles.trendMeta}>Median ₹{indianComma(l.median_price_per_sq_yd)}/sq yd · DLC ₹{indianComma(l.govt_dlc_per_sq_yd)}</Text>
+              <Text style={styles.trendMeta}>Median ₹{indianComma(l.median_price_per_sq_yd)}/sq yd</Text>
               <View style={styles.trendRow}>
                 <View style={[styles.yoyPill, { backgroundColor: l.yoy_change_pct >= 0 ? "rgba(46,109,77,0.14)" : "rgba(139,0,0,0.10)" }]}>
                   <Icon name={l.yoy_change_pct >= 0 ? "trending-up" : "trending-down"} size={11} color={l.yoy_change_pct >= 0 ? colors.success : colors.error} />
@@ -86,13 +82,6 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
           </Pressable>
         ))}
       </Section>
-
-      {/* Best deals below InfraValue */}
-      {bestDeals.length > 0 && (
-        <Section title="Best deals" subtitle="Under ₹12,000/sq yd or priced below the InfraValue midpoint" carousel>
-          {bestDeals.map(p => <SmallCard key={p.id} property={p} />)}
-        </Section>
-      )}
 
       {/* Verified spotlight */}
       {verified.length > 0 && (

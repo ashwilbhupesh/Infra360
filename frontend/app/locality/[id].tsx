@@ -69,17 +69,8 @@ export default function LocalityDetail() {
           {/* Metric cards */}
           <View style={styles.metricsGrid}>
             <Metric label="Median Asking" value={`₹${indianComma(loc.median_price_per_sq_yd)}`} unit="/sq yd" />
-            <Metric label="Govt / DLC" value={`₹${indianComma(loc.govt_dlc_per_sq_yd)}`} unit="/sq yd" />
             <Metric label="Properties" value={String(loc.properties_count || loc.listings_count)} unit="listed" />
             <Metric label="YoY Change" value={`${loc.yoy_change_pct > 0 ? "+" : ""}${loc.yoy_change_pct}%`} unit="1Y" tone={loc.yoy_change_pct > 0 ? "up" : "down"} />
-          </View>
-
-          {/* InfraValue */}
-          <View style={styles.ivCard}>
-            <Text style={styles.ivLabel}>InfraValue™ Estimated Range</Text>
-            <Text style={styles.ivValue}>₹{indianComma(loc.estimated_range_low)} – ₹{indianComma(loc.estimated_range_high)}</Text>
-            <Text style={styles.ivUnit}>per sq yd · Confidence: {loc.confidence}</Text>
-            <Text style={styles.ivMeta}>Based on active listings, transaction indicators and government valuation.</Text>
           </View>
 
           {/* Lifestyle score */}
@@ -109,24 +100,6 @@ export default function LocalityDetail() {
           <Text style={styles.sectionTitle}>Price History</Text>
           <View style={styles.chartCard}>
             <PriceChart data={loc.price_history || []} width={W - spacing.xl * 2 - 32} height={200} />
-          </View>
-
-          {/* Government vs Market */}
-          <Text style={styles.sectionTitle}>Government vs Market</Text>
-          <View style={styles.gvCard}>
-            <View style={styles.gvRow}>
-              <Text style={styles.gvLabel}>Government / DLC</Text>
-              <Text style={styles.gvVal}>₹{indianComma(loc.govt_dlc_per_sq_yd)}</Text>
-            </View>
-            <View style={styles.gvRow}>
-              <Text style={styles.gvLabel}>InfraJagat Estimated</Text>
-              <Text style={[styles.gvVal, { color: colors.brand }]}>₹{indianComma(loc.estimated_range_low)}–{indianComma(loc.estimated_range_high)}</Text>
-            </View>
-            <View style={styles.gvRow}>
-              <Text style={styles.gvLabel}>Median Listing</Text>
-              <Text style={styles.gvVal}>₹{indianComma(loc.median_price_per_sq_yd)}</Text>
-            </View>
-            <Text style={styles.gvTip}>Government rates may differ from prevailing asking or transaction prices.</Text>
           </View>
 
           {/* Infrastructure timeline */}

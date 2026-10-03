@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 
 from seed_data import LOCALITIES, PROPERTIES, PRICE_HISTORY, INFRASTRUCTURE, NEWS
 from market_seed import MARKET_GROUPS, MARKET_CATEGORIES, SUPPLIERS
+from materials_seed import MATERIALS_CATEGORIES, MATERIALS_STORES, MATERIALS_PRODUCTS
 from agents_seed import AGENT_CATEGORIES, AGENTS
 from enrich import with_lifestyle, with_tier
 
@@ -138,6 +139,13 @@ async def seed_if_needed():
         await db.agent_categories.insert_many([{**c} for c in AGENT_CATEGORIES])
     if await db.agents.count_documents({}) == 0:
         await db.agents.insert_many([{**a} for a in AGENTS])
+    # Materials shopping ecosystem (new) - re-sync on every startup so edits propagate
+    await db.materials_categories.delete_many({})
+    await db.materials_categories.insert_many([{**c} for c in MATERIALS_CATEGORIES])
+    await db.materials_stores.delete_many({})
+    await db.materials_stores.insert_many([{**s} for s in MATERIALS_STORES])
+    await db.materials_products.delete_many({})
+    await db.materials_products.insert_many([{**p} for p in MATERIALS_PRODUCTS])
 
 @app.on_event("startup")
 async def on_startup():
@@ -720,6 +728,143 @@ async def compare_properties(ids: str):
             continue
     return results
 
+# ---------------- Materials (shopping-style catalogue) ----------------
+@api_router.get("/materials/categories")
+async def list_materials_categories():
+    """10 shopping categories for the Materials section, with store counts."""
+    cats = await db.materials_categories.find({}, NO_ID).sort("order", 1).to_list(100)
+    # count stores per category
+    counts: Dict[str, int] = {}
+    async for s in db.materials_stores.find({}, {"category_ids": 1, "_id": 0}):
+        for cid in s.get("category_ids", []):
+            counts[cid] = counts.get(cid, 0) + 1
+    for c in cats:
+        c["stores_count"] = counts.get(c["id"], 0)
+    return cats
+
+
+@api_router.get("/materials/categories/{cid}/stores")
+async def list_materials_stores_in_category(cid: str):
+    """Return stores selling in this category, each with their product catalogue for this category."""
+    stores = await db.materials_stores.find({"category_ids": cid}, NO_ID).to_list(200)
+    out = []
+    for s in stores:
+        prods = await db.materials_products.find(
+            {"store_id": s["id"], "category_id": cid}, NO_ID
+        ).to_list(200)
+        out.append({**s, "products": prods, "products_count": len(prods)})
+    # Featured first, then by rating
+    out.sort(key=lambda x: (-int(x.get("featured", False)), -x.get("rating", 0)))
+    return out
+
+
+@api_router.get("/materials/stores/{sid}")
+async def get_materials_store(sid: str):
+    """Full store detail with ALL products grouped by category."""
+    s = await db.materials_stores.find_one({"id": sid}, NO_ID)
+    if not s:
+        raise HTTPException(404, "Store not found")
+    prods = await db.materials_products.find({"store_id": sid}, NO_ID).to_list(500)
+    # group by category
+    cat_map: Dict[str, List[dict]] = {}
+    for p in prods:
+        cat_map.setdefault(p["category_id"], []).append(p)
+    cats = await db.materials_categories.find(
+        {"id": {"$in": s.get("category_ids", [])}}, NO_ID
+    ).to_list(100)
+    s["catalogue"] = [{"category": c, "products": cat_map.get(c["id"], [])} for c in cats]
+    s["products_count"] = len(prods)
+    return s
+
+
+@api_router.get("/materials/products")
+async def search_materials_products(q: Optional[str] = None, category_id: Optional[str] = None, limit: int = 60):
+    query: Dict[str, Any] = {}
+    if category_id:
+        query["category_id"] = category_id
+    if q:
+        pat = re.escape(q)
+        query["$or"] = [
+            {"name": {"$regex": pat, "$options": "i"}},
+            {"brand": {"$regex": pat, "$options": "i"}},
+        ]
+    prods = await db.materials_products.find(query, NO_ID).limit(limit).to_list(limit)
+    # attach store info
+    sids = list({p["store_id"] for p in prods})
+    stores = await db.materials_stores.find(
+        {"id": {"$in": sids}}, {"_id": 0, "id": 1, "name": 1, "area": 1, "rating": 1, "verified": 1}
+    ).to_list(200)
+    smap = {s["id"]: s for s in stores}
+    for p in prods:
+        p["store"] = smap.get(p["store_id"])
+    return prods
+
+
+class MaterialsCartItem(BaseModel):
+    product_id: str
+    store_id: str
+    qty: int = 1
+
+
+class MaterialsCartEnquiry(BaseModel):
+    user_id: Optional[str] = None
+    name: str
+    mobile: str
+    address: Optional[str] = None
+    note: Optional[str] = None
+    items: List[MaterialsCartItem]
+
+
+@api_router.post("/materials/cart-enquiry")
+async def create_cart_enquiry(req: MaterialsCartEnquiry):
+    if not req.items:
+        raise HTTPException(400, "Cart is empty")
+    if len(req.mobile.strip()) < 10:
+        raise HTTPException(400, "Invalid mobile")
+    # Expand items with product + store info
+    product_ids = [i.product_id for i in req.items]
+    products = await db.materials_products.find({"id": {"$in": product_ids}}, NO_ID).to_list(500)
+    pmap = {p["id"]: p for p in products}
+    store_ids = list({i.store_id for i in req.items})
+    stores = await db.materials_stores.find({"id": {"$in": store_ids}}, NO_ID).to_list(200)
+    smap = {s["id"]: s for s in stores}
+    # per-store subtotal
+    per_store: Dict[str, Dict[str, Any]] = {}
+    total = 0
+    for it in req.items:
+        p = pmap.get(it.product_id)
+        if not p:
+            continue
+        subtotal = p["price"] * it.qty
+        total += subtotal
+        bucket = per_store.setdefault(it.store_id, {
+            "store": smap.get(it.store_id),
+            "items": [],
+            "subtotal": 0,
+        })
+        bucket["items"].append({
+            "product_id": p["id"], "name": p["name"], "brand": p.get("brand"),
+            "image": p.get("image"), "unit": p.get("unit"), "price": p["price"],
+            "qty": it.qty, "line_total": subtotal,
+        })
+        bucket["subtotal"] += subtotal
+    doc = {
+        "id": f"mce-{uuid.uuid4().hex[:10]}",
+        "user_id": req.user_id,
+        "name": req.name.strip(),
+        "mobile": req.mobile.strip(),
+        "address": (req.address or "").strip() or None,
+        "note": (req.note or "").strip() or None,
+        "items": [i.model_dump() for i in req.items],
+        "per_store": list(per_store.values()),
+        "total": total,
+        "status": "New",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.materials_cart_enquiries.insert_one({**doc})
+    return {k: v for k, v in doc.items() if k != "_id"}
+
+
 # ---------------- User activity (Orders / Enquiries / History) ----------------
 @api_router.get("/user/{uid}/activity")
 async def user_activity(uid: str):
@@ -747,12 +892,14 @@ async def user_activity(uid: str):
     for ae in agent_enquiries:
         a = await db.agents.find_one({"id": ae.get("agent_id")}, {"_id": 0, "name": 1, "image": 1, "firm": 1})
         ae["agent"] = a
+    materials_orders = await db.materials_cart_enquiries.find({"user_id": uid}, NO_ID).sort("created_at", -1).to_list(200)
     return {
         "saved": saved,
         "follows": follows,
         "my_listings": my_listings,
         "quote_requests": quote_requests,
         "agent_enquiries": agent_enquiries,
+        "materials_orders": materials_orders,
     }
 
 app.include_router(api_router)

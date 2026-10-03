@@ -80,27 +80,6 @@ export default function PropertyDetail() {
             <Text style={styles.address}>{prop.address}</Text>
           </View>
 
-          <Section title="InfraValue™ Estimate">
-            <View style={styles.compareGrid}>
-              <View style={[styles.compareCard, { backgroundColor: colors.surfaceSecondary }]}>
-                <Text style={styles.cLabel}>Asking Price</Text>
-                <Text style={styles.cValueSm}>{formatINR(prop.price)}</Text>
-              </View>
-              <View style={[styles.compareCard, { backgroundColor: colors.brandTertiary }]}>
-                <Text style={[styles.cLabel, { color: colors.brand }]}>InfraValue™ Range</Text>
-                <Text style={[styles.cValueSm, { color: colors.brand }]}>{iv ? formatRange(iv.low, iv.high) : "—"}</Text>
-                <Text style={styles.confidence}>Confidence: {iv?.confidence || "—"}</Text>
-              </View>
-              <View style={[styles.compareCard, { backgroundColor: colors.surfaceSecondary }]}>
-                <Text style={styles.cLabel}>Govt / DLC Value</Text>
-                <Text style={styles.cValueSm}>{govt ? formatINR(govt) : "—"}</Text>
-              </View>
-            </View>
-            <Text style={styles.disclaimer}>
-              InfraValue is an estimated market range based on available listings, locality data and transaction indicators. Not a formal valuation.
-            </Text>
-          </Section>
-
           <Section title="Property Details">
             <Detail label="Type" value={prop.type} />
             <Detail label="Area" value={`${prop.area} ${prop.area_unit}`} />

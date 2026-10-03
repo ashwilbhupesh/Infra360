@@ -72,3 +72,20 @@ A Zillow-style map-first real estate + intelligence platform for India (MVP focu
 - `GET /api/agents?category_id=&q=&verified_only=&featured_only=&area=`
 - `GET /api/agents/{id}` (with category + recent_listings for brokers)
 - `POST /api/agents/{id}/enquiries`
+
+## Materials shopping (Infra.Market-style)
+Within the Market tab, the **Materials** group is a shopping-style catalogue:
+- 10 category tiles in a 3-col grid matching the reference screenshot: Cement & steel, Electricals & lighting, Bathware, Tiling & adhesives, Paints & finishes, Electrical appliances, Water proofing, CPVC/PVC & GI fittings, Hardware & locks, Plywood & laminates.
+- Header: "Materials" + "Materials across **Jaipur**" + cart button with live badge.
+- Category screen: stores listed vertically, each with a horizontal catalogue of products (brand, name, image, MRP/price, unit, discount %, ADD → +/- qty).
+- Store screen: full catalogue grouped by category tabs, with in-catalogue search and WhatsApp enquiry CTA.
+- Cart: persisted via `zustand` + AsyncStorage (`infrajagat.materials.cart.v1`). Groups by store, per-store subtotals, "Send on WhatsApp" per store (deep-link with line items & subtotal), sticky "Request quotes" that posts to backend.
+- 24 demo stores + 85 products across 10 categories, seeded fresh on every backend restart.
+
+### New endpoints
+- `GET /api/materials/categories`
+- `GET /api/materials/categories/{id}/stores` (products embedded, per category)
+- `GET /api/materials/stores/{id}` (catalogue grouped by category)
+- `GET /api/materials/products?q=&category_id=`
+- `POST /api/materials/cart-enquiry` — rolls up `per_store` subtotals and total
+- `GET /api/user/{uid}/activity` now includes `materials_orders`

@@ -14,6 +14,7 @@ type Activity = {
   my_listings: any[];
   saved: any[];
   follows: any[];
+  materials_orders?: any[];
 };
 
 export default function Orders() {
@@ -46,7 +47,7 @@ export default function Orders() {
     );
   }
 
-  const totalEnq = act.agent_enquiries.length + act.quote_requests.length;
+  const totalEnq = act.agent_enquiries.length + act.quote_requests.length + (act.materials_orders?.length ?? 0);
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
@@ -59,6 +60,39 @@ export default function Orders() {
       </View>
 
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 60, gap: spacing.xl }}>
+        {act.materials_orders && act.materials_orders.length > 0 && (
+          <View>
+            <Text style={styles.section}>Material enquiries</Text>
+            {act.materials_orders.map(o => {
+              const stores = (o.per_store || []).map((s: any) => s.store?.name).filter(Boolean);
+              const firstStoreId = (o.per_store || [])[0]?.store?.id;
+              const itemCount = (o.items || []).reduce((n: number, i: any) => n + (i.qty || 0), 0);
+              return (
+                <Pressable
+                  key={o.id}
+                  testID={`mat-order-${o.id}`}
+                  onPress={() => firstStoreId && router.push(`/materials/store/${firstStoreId}` as any)}
+                  style={styles.row}
+                >
+                  <View style={styles.avatarPlaceholder}><Icon name="cart-outline" size={18} color={colors.brand} /></View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.rowTitle} numberOfLines={1}>
+                      {itemCount} item{itemCount > 1 ? "s" : ""} · ₹{(o.total ?? 0).toLocaleString("en-IN")}
+                    </Text>
+                    {stores.length ? (
+                      <Text style={styles.rowMeta} numberOfLines={1}>
+                        {stores.join(" · ")}
+                      </Text>
+                    ) : null}
+                    {o.note ? <Text style={styles.rowMsg} numberOfLines={2}>“{o.note}”</Text> : null}
+                  </View>
+                  <View style={styles.statusPill}><Text style={styles.statusText}>{o.status}</Text></View>
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
+
         {act.agent_enquiries.length > 0 && (
           <View>
             <Text style={styles.section}>Agent enquiries</Text>

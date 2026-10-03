@@ -45,32 +45,6 @@ export default function Compare() {
     { label: "Facing", render: (p) => <Text style={styles.val}>{p.facing || "—"}</Text> },
     { label: "Road width", render: (p) => <Text style={styles.val}>{p.road_width_ft ? `${p.road_width_ft} ft` : "—"}</Text> },
     { label: "Locality", render: (p) => <Text style={styles.val}>{p.locality_name}</Text> },
-    {
-      label: "InfraValue",
-      render: (p) => p.infravalue
-        ? <Text style={styles.val}>{`${formatINR(p.infravalue.low)} – ${formatINR(p.infravalue.high)}`}</Text>
-        : <Text style={styles.val}>—</Text>,
-    },
-    {
-      label: "Govt / DLC",
-      render: (p) => p.govt_value ? <Text style={styles.val}>{formatINR(p.govt_value)}</Text> : <Text style={styles.val}>—</Text>,
-    },
-    {
-      label: "vs InfraValue",
-      render: (p) => {
-        if (!p.infravalue) return <Text style={styles.val}>—</Text>;
-        const mid = (p.infravalue.low + p.infravalue.high) / 2;
-        const diff = ((p.price - mid) / mid) * 100;
-        const under = diff < 0;
-        return (
-          <View style={[styles.badge, under ? styles.badgeGreen : styles.badgeRed]}>
-            <Text style={[styles.badgeText, under ? { color: colors.success } : { color: colors.error }]}>
-              {under ? "▼" : "▲"} {Math.abs(diff).toFixed(1)}%
-            </Text>
-          </View>
-        );
-      },
-    },
     { label: "Source", render: (p) => <Text style={styles.val}>{p.source}</Text> },
     { label: "Verified", render: (p) => p.verified ? <Icon name="shield-checkmark" size={18} color={colors.success} /> : <Text style={styles.val}>—</Text> },
   ];

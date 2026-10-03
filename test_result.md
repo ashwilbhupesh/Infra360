@@ -101,3 +101,71 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: |
+  Redesign the Market "Materials" section to a shopping-app style like the reference screenshot:
+  10 category tiles (Cement & steel, Electricals & lighting, Bathware, Tiling & adhesives,
+  Paints & finishes, Electrical appliances, Water proofing, CPVC/PVC & GI fittings, Hardware & locks,
+  Plywood & laminates). Each category lists multiple stores, each store shows a product catalogue.
+  Tapping a product adds to a persisted cart, submit cart via Request Quotes + per-store WhatsApp.
+  Keep everything else in the app unchanged.
+
+backend:
+  - task: "Materials categories + stores + products seed and endpoints"
+    implemented: true
+    working: true
+    file: "/app/backend/materials_seed.py, /app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Added materials_seed.py with 10 shopping categories, 24 stores, and 85+ products. Added endpoints: GET /api/materials/categories, GET /api/materials/categories/{id}/stores (with per-store product catalogue), GET /api/materials/stores/{id} (full catalogue), GET /api/materials/products?q=, POST /api/materials/cart-enquiry. Collections re-seeded on every startup. User activity endpoint now includes materials_orders."
+      - working: true
+        agent: "testing"
+        comment: "All 14 backend pytest tests PASSED. Categories (10 ordered), category→stores drill-down, store→catalogue, product search, cart-enquiry with correct totals + per-store rollup, validation (400 on empty items / invalid mobile), user activity now includes materials_orders. Regression: /market/groups, /market/suppliers, /properties, /agents all pass."
+
+frontend:
+  - task: "Materials shopping UI: category grid, store+catalogue page, store page, cart"
+    implemented: true
+    working: true
+    file: "/app/frontend/app/(tabs)/market.tsx, /app/frontend/app/materials/category/[id].tsx, /app/frontend/app/materials/store/[id].tsx, /app/frontend/app/materials/cart.tsx, /app/frontend/src/stores/materials-cart.ts"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+        agent: "main"
+        comment: "Rewrote Market tab: when Materials group active, shows 'Materials across Jaipur' header + cart badge + search + 3-col category tile grid matching the reference. Category drill-down shows stores grouped vertically, each with horizontal catalogue of products with ADD/+/- quantity controls. Store page shows full catalogue with search, category tabs, 2-col product grid. Cart page shows items grouped by store with per-store WhatsApp enquiry and 'Request quotes' submit. Cart persisted via zustand + AsyncStorage (infrajagat.materials.cart.v1). Verified via screenshots: home grid, category page with products, cart page all render correctly."
+      - working: true
+        agent: "testing"
+        comment: "All critical paths validated at 390x844 mobile viewport. Materials home grid, category drill-down with store/product cards, add-to-cart with +/- quantity controls, cart badge increments, store-grouped cart with Send-on-WhatsApp per store, Request quotes submits to real backend (POST returns 200), decrement-to-remove, clear cart empty state, store detail with catalogue search. Regression on Design group chip + /supplier/sup-01 passes."
+
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 12
+  run_ui: false
+
+test_plan:
+  current_focus:
+    - "Materials categories + stores + products seed and endpoints"
+    - "Materials shopping UI: category grid, store+catalogue page, store page, cart"
+  stuck_tasks: []
+  test_all: false
+  test_priority: "high_first"
+
+agent_communication:
+  - agent: "main"
+    message: |
+      Shipped Materials shopping redesign. Please verify:
+      1. GET /api/materials/categories returns 10 ordered categories with stores_count
+      2. GET /api/materials/categories/mat-cement-steel/stores returns 3 stores, each with their products in that category
+      3. GET /api/materials/stores/mst-steelsynd returns catalogue array grouped by category
+      4. POST /api/materials/cart-enquiry creates a doc with per_store rollup and total
+      5. Frontend flow: open Market → Materials chip (default) → "Shop by category" grid → tap a tile → stores list with product cards → tap ADD → cart badge increments → open cart → see store-grouped items → fill name/mobile → "Request quotes" posts successfully
+      6. Store detail: tap store header or View All → see full catalogue, add items, verify qty persistence
+      7. Non-materials tabs (Design/Build/Interiors/etc) still work with existing supplier directory flow
+      8. User activity endpoint now returns materials_orders; orders.tsx shows them as a "Material enquiries" section
+      Known cosmetic: some Unsplash category tile images 404 — not functional, display empty tile with name; non-blocking.

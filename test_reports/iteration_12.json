@@ -1,0 +1,35 @@
+{
+  "summary": "Materials shopping redesign tested end-to-end. Backend: 14/14 pytest tests passed covering 10 ordered categories with stores_count, stores-in-category (3 stores · 10 products for mat-cement-steel, featured first), store detail catalogue grouped by category, product search embedding store info, cart-enquiry totals (₹10050 breakdown correct) and per-store rollup, 400 for empty items and invalid mobile, materials_orders in user activity, and regression on /market/groups, /market/suppliers, /properties, /agents. Frontend (mobile 390x844): /market shows 'Materials' title + 'Materials across Jaipur' subtitle + cart badge + 'Search for \"LED panel\"' placeholder + 6 group chips + 'Shop by category' heading with 10 tiles. Tapping mat-cat-mat-cement-steel navigates to category page showing '3 stores · 10 products' and sort chips (Featured, Top rated, Low price, Verified only). Adding p-mat-005 and p-mat-001 updates cart badge + 'View cart' bar; view-cart-bottom navigates to /materials/cart with 2 store groups, Send on WhatsApp per store, 'Your details' form, Est. total ₹447 (62+385). Submit with name/mobile fires POST /api/materials/cart-enquiry → 200. Decrement to 0 removes line (groups 2→1). Design group chip regression works (4 design categories visible). Supplier detail /supplier/sup-01 and Store detail /materials/store/mst-steelsynd both render correctly (rating pill, verified, catalogue search, WhatsApp/Support CTAs, product grid).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/market", "issues": ["'Move In' group chip sits beyond horizontal viewport at 390px width — requires scroll. Minor, since chips row is horizontally scrollable by design."]}
+    ],
+    "react_native_issues": [
+      {"component": "theme (shadow props)", "issue": "Console warning: '\"shadow*\" style props are deprecated. Use \"boxShadow\".' Reference: /app/frontend/src/theme/* — update shadow helper to use boxShadow for web."},
+      {"component": "theme (textShadow props)", "issue": "Console warning: '\"textShadow*\" style props are deprecated. Use \"textShadow\".' Reference: /app/frontend/src/theme/*"}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_materials.py",
+    "/app/test_reports/pytest/materials_results.xml"
+  ],
+  "action_items": [
+    "Optional: migrate deprecated shadow*/textShadow* style props to boxShadow/textShadow for react-native-web ≥0.19 to silence console warnings (purely web-side, mobile unaffected).",
+    "Optional: cart-clear uses Alert.alert which renders as a web modal; this works for users but Playwright page.on('dialog') does not catch it — if automated E2E clearing is needed, consider a non-Alert destructive confirmation on web."
+  ],
+  "critical_code_review_comments": [
+    "server.py `seed_if_needed` destructively re-seeds materials_* collections on every startup (lines 143-148). Intended per spec, but any user-generated materials cart enquiries persist (separate collection) — correct.",
+    "materials/cart-enquiry builds per_store buckets correctly; `total` and per-store `subtotal` validated via tests.",
+    "Frontend materials-cart (zustand) persists under AsyncStorage key 'infrajagat.materials.cart.v1' — hydration called in both market.tsx and cart.tsx.",
+    "All materials pages use proper testIDs for interactive elements."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "seed_data_creation": "No manual seed required; backend re-seeds MATERIALS_CATEGORIES/STORES/PRODUCTS on every startup. Test users TEST_Activity (9999900001) and TEST_Mat_Order (9999900002) created during activity tests.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Materials shopping flow (categories → stores → products → cart → enquiry) is fully operational. Backend tests at /app/backend/tests/test_materials.py cover all new endpoints + regression. Frontend testIDs verified: mat-cat-{id}, add-p-{pid}, view-cart-bottom, materials-cart-btn, cart-group-{sid}, store-wa-{sid}, cart-name, cart-mobile, cart-address, cart-note, cart-submit-all, cart-clear, cart-dec-{pid}, cart-inc-{pid}, remove-{pid}, browse-materials. Design group chip and existing supplier/property/agents regression confirmed."
+}
