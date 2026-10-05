@@ -134,6 +134,12 @@ async def seed_if_needed():
         await db.infrastructure.insert_many([{**i} for i in INFRASTRUCTURE])
     if await db.news.count_documents({}) == 0:
         await db.news.insert_many([{**n} for n in NEWS])
+    # Backfill status field on legacy news docs (so they still show up with status=published filter)
+    await db.news.update_many({"status": {"$exists": False}}, {"$set": {"status": "published"}})
+    # Backfill image on legacy docs that pre-date the image field — pull from the current seed by id
+    for n in NEWS:
+        if n.get("image"):
+            await db.news.update_one({"id": n["id"], "$or": [{"image": {"$exists": False}}, {"image": None}, {"image": ""}]}, {"$set": {"image": n["image"]}})
     if await db.price_history.count_documents({}) == 0:
         docs = [{"locality_id": lid, "series": series} for lid, series in PRICE_HISTORY.items()]
         await db.price_history.insert_many(docs)
@@ -443,11 +449,25 @@ async def list_infra(locality_id: Optional[str] = None):
 
 # News
 @api_router.get("/news")
-async def list_news(locality_id: Optional[str] = None, category: Optional[str] = None, limit: int = 50):
-    q = {}
-    if locality_id: q["locality_id"] = locality_id
-    if category: q["category"] = category
-    docs = await db.news.find(q, NO_ID).sort("date", -1).limit(limit).to_list(limit)
+async def list_news(
+    locality_id: Optional[str] = None,
+    category: Optional[str] = None,
+    q: Optional[str] = None,
+    status: str = "published",   # default: only published; use "pending"/"all" for admin review
+    limit: int = 50,
+):
+    query: Dict[str, Any] = {}
+    if status and status != "all":
+        query["status"] = status
+    if locality_id: query["locality_id"] = locality_id
+    if category: query["category"] = category
+    if q:
+        pat = re.escape(q)
+        query["$or"] = [
+            {"title":   {"$regex": pat, "$options": "i"}},
+            {"summary": {"$regex": pat, "$options": "i"}},
+        ]
+    docs = await db.news.find(query, NO_ID).sort("date", -1).limit(limit).to_list(limit)
     # Attach locality name for display
     if docs:
         loc_ids = list({d.get("locality_id") for d in docs if d.get("locality_id")})
@@ -457,6 +477,68 @@ async def list_news(locality_id: Optional[str] = None, category: Optional[str] =
             for d in docs:
                 d["locality_name"] = lmap.get(d.get("locality_id"))
     return docs
+
+
+class NewsSubmission(BaseModel):
+    title: str
+    summary: str
+    category: str
+    locality_id: Optional[str] = None
+    image: Optional[str] = None
+    source: Optional[str] = "Reader submission"
+    submitted_by: Optional[str] = None  # user_id
+
+
+@api_router.post("/news/submit")
+async def submit_news(req: NewsSubmission):
+    """Reader-submitted news. Goes to 'pending' until an admin approves it."""
+    title = req.title.strip()
+    summary = req.summary.strip()
+    if len(title) < 6:
+        raise HTTPException(400, "Title too short")
+    if len(summary) < 20:
+        raise HTTPException(400, "Summary too short — share more context")
+    doc = {
+        "id": f"n-sub-{uuid.uuid4().hex[:10]}",
+        "title": title,
+        "summary": summary,
+        "category": req.category or "Development",
+        "locality_id": req.locality_id,
+        "image": (req.image or "").strip() or None,
+        "source": (req.source or "Reader submission").strip(),
+        "date": now_iso().split("T")[0],
+        "status": "pending",
+        "submitted_by": req.submitted_by,
+        "submitted_at": now_iso(),
+    }
+    await db.news.insert_one({**doc})
+    return {k: v for k, v in doc.items() if k != "_id"}
+
+
+@api_router.get("/news/mine")
+async def list_my_submissions(user_id: str):
+    docs = await db.news.find({"submitted_by": user_id}, NO_ID).sort("submitted_at", -1).to_list(100)
+    return docs
+
+
+class ReviewDecision(BaseModel):
+    decision: str  # "approve" | "reject"
+    admin_token: Optional[str] = None
+
+
+@api_router.post("/news/{nid}/review")
+async def review_submission(nid: str, req: ReviewDecision):
+    """Admin reviews a pending submission. Simple shared-secret token guard for the MVP."""
+    expected = os.environ.get("ADMIN_TOKEN", "infrajagat-admin")
+    if (req.admin_token or "") != expected:
+        raise HTTPException(403, "Not authorised")
+    n = await db.news.find_one({"id": nid}, NO_ID)
+    if not n:
+        raise HTTPException(404, "Submission not found")
+    new_status = "published" if req.decision == "approve" else "rejected"
+    await db.news.update_one({"id": nid}, {"$set": {"status": new_status, "reviewed_at": now_iso()}})
+    n["status"] = new_status
+    return n
 
 # Saved / Follows
 @api_router.post("/saved/toggle")
@@ -766,7 +848,7 @@ async def create_agent_enquiry(aid: str, req: AgentEnquiry):
 # ---------------- Compare ----------------
 @api_router.get("/compare")
 async def compare_properties(ids: str):
-    """Return full property payload (with infravalue + govt + lister) for up to 4 comma-separated ids."""
+    """Return full property payload (with infravalue + govt + lister + locality lifestyle/YoY) for up to 4 comma-separated ids."""
     id_list = [x.strip() for x in ids.split(",") if x.strip()][:4]
     if not id_list:
         return []
@@ -774,6 +856,11 @@ async def compare_properties(ids: str):
     for pid in id_list:
         try:
             r = await get_property(pid)  # reuse existing endpoint
+            # Attach lifestyle & yoy from the property's locality for richer compare
+            loc = await db.localities.find_one({"id": r.get("locality_id")}, NO_ID)
+            if loc:
+                r["lifestyle"] = loc.get("lifestyle")
+                r["yoy_change_pct"] = loc.get("yoy_change_pct")
             results.append(r)
         except HTTPException:
             continue

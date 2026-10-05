@@ -90,6 +90,7 @@ export default function Profile() {
 
         <SectionTitle>Help</SectionTitle>
         <MenuRow icon="help-circle-outline" title="Contact us / Help" subtitle="WhatsApp, call or email" onPress={() => router.push("/contact-us")} testID="menu-contact" />
+        <MenuRow icon="shield-checkmark-outline" title="News admin" subtitle="Review reader submissions" onPress={() => router.push("/admin-news" as any)} testID="menu-admin-news" />
         <MenuRow icon="information-circle-outline" title="About InfraJagat" subtitle="Know Before You Buy." onPress={() => {}} testID="menu-about" />
 
         <Pressable testID="signout-btn" onPress={signOut} style={styles.signOut}>

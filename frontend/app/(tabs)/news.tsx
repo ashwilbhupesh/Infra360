@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, RefreshControl } from "react-native";
+import React, { useEffect, useMemo, useState } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, RefreshControl, TextInput } from "react-native";
+import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius } from "@/src/theme";
 import { api } from "@/src/api";
 
 const CATS = ["All", "Infrastructure", "Government", "Development", "Residential", "Industrial", "Commercial"];
 
-type NewsItem = { id: string; title: string; summary: string; category: string; locality_id: string; locality_name?: string; date: string; source: string };
+type NewsItem = {
+  id: string; title: string; summary: string; category: string;
+  locality_id?: string; locality_name?: string; date: string;
+  source: string; image?: string | null; status?: string;
+};
 type Locality = { id: string; name: string; city: string };
 
 export default function News() {
@@ -17,20 +22,29 @@ export default function News() {
   const [items, setItems] = useState<NewsItem[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const [cat, setCat] = useState("All");
-  const [locId, setLocId] = useState<string>(""); // "" = all areas
+  const [locId, setLocId] = useState<string>("");
+  const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+
+  // Debounce the search input
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQ(q.trim()), 350);
+    return () => clearTimeout(t);
+  }, [q]);
 
   const load = async () => {
     try {
       const qs = new URLSearchParams();
       if (cat !== "All") qs.set("category", cat);
       if (locId) qs.set("locality_id", locId);
+      if (debouncedQ) qs.set("q", debouncedQ);
       const data = await api.get<NewsItem[]>(`/news${qs.toString() ? `?${qs}` : ""}`);
       setItems(data);
     } finally { setLoading(false); setRefreshing(false); }
   };
-  useEffect(() => { setLoading(true); load(); }, [cat, locId]);
+  useEffect(() => { setLoading(true); load(); }, [cat, locId, debouncedQ]);
 
   useEffect(() => {
     (async () => {
@@ -41,7 +55,10 @@ export default function News() {
     })();
   }, []);
 
-  const selectedArea = locId ? (localities.find(l => l.id === locId)?.name || "Area") : "All of Jaipur";
+  const selectedArea = useMemo(
+    () => locId ? (localities.find(l => l.id === locId)?.name || "Area") : "All of Jaipur",
+    [locId, localities]
+  );
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
@@ -54,17 +71,46 @@ export default function News() {
               <Text style={styles.sub} numberOfLines={1}>{selectedArea}</Text>
             </View>
           </View>
-          <Pressable
-            testID="news-menu-btn"
-            onPress={() => router.push("/profile" as any)}
-            style={styles.menuBtn}
-            hitSlop={10}
-          >
-            <Icon name="menu-outline" size={22} color={colors.onSurface} />
-          </Pressable>
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            <Pressable
+              testID="news-publish-btn"
+              onPress={() => router.push("/publish-news" as any)}
+              style={styles.publishBtn}
+              hitSlop={8}
+            >
+              <Icon name="add" size={14} color={colors.onBrandPrimary} />
+              <Text style={styles.publishText}>Publish</Text>
+            </Pressable>
+            <Pressable
+              testID="news-menu-btn"
+              onPress={() => router.push("/profile" as any)}
+              style={styles.menuBtn}
+              hitSlop={10}
+            >
+              <Icon name="menu-outline" size={22} color={colors.onSurface} />
+            </Pressable>
+          </View>
         </View>
 
-        <Text style={styles.sectionLabel}>Area</Text>
+        <View style={styles.searchWrap}>
+          <Icon name="search" size={16} color={colors.muted} />
+          <TextInput
+            testID="news-search"
+            value={q}
+            onChangeText={setQ}
+            placeholder="Search news — metro, DLC, Vaishali Nagar..."
+            placeholderTextColor={colors.muted}
+            style={styles.searchInput}
+            returnKeyType="search"
+          />
+          {q ? (
+            <Pressable onPress={() => setQ("")} hitSlop={10}>
+              <Icon name="close-circle" size={16} color={colors.muted} />
+            </Pressable>
+          ) : null}
+        </View>
+
+        <Text style={styles.sectionLabel}>Sub-area</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
           <Pressable
             testID="news-loc-all"
@@ -96,13 +142,13 @@ export default function News() {
         </ScrollView>
       </View>
 
-      <ScrollView contentContainerStyle={{ padding: spacing.xl, paddingBottom: 110 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(); }} />}>
+      <ScrollView contentContainerStyle={{ padding: spacing.xl, paddingBottom: 40 }} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); load(); }} />}>
         {loading ? <ActivityIndicator color={colors.brand} style={{ marginTop: spacing.xxl }} /> :
           items.length === 0 ? (
             <View style={styles.empty}>
               <Icon name="newspaper-outline" size={32} color={colors.muted} />
               <Text style={styles.emptyTitle}>No news for this filter yet</Text>
-              <Text style={styles.emptySub}>Try switching the area or topic.</Text>
+              <Text style={styles.emptySub}>Try changing area, topic or search.</Text>
             </View>
           ) : (
           items.map(n => (
@@ -112,22 +158,27 @@ export default function News() {
               style={styles.card}
               onPress={() => n.locality_id && router.push(`/locality/${n.locality_id}` as any)}
             >
-              <View style={styles.cardTop}>
-                <View style={styles.badge}><Text style={styles.badgeText}>{n.category}</Text></View>
-                <Text style={styles.date}>{new Date(n.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</Text>
-              </View>
-              <Text style={styles.newsTitle}>{n.title}</Text>
-              <Text style={styles.newsSummary}>{n.summary}</Text>
-              <View style={styles.metaRow}>
-                <Icon name="newspaper-outline" size={12} color={colors.muted} />
-                <Text style={styles.source}>{n.source}</Text>
-                {n.locality_name ? (
-                  <>
-                    <Text style={styles.dot}>·</Text>
-                    <Icon name="location-outline" size={11} color={colors.muted} />
-                    <Text style={styles.source}>{n.locality_name}</Text>
-                  </>
-                ) : null}
+              {n.image ? (
+                <Image source={{ uri: n.image }} style={styles.cardImg} contentFit="cover" transition={200} />
+              ) : null}
+              <View style={{ padding: spacing.lg }}>
+                <View style={styles.cardTop}>
+                  <View style={styles.badge}><Text style={styles.badgeText}>{n.category}</Text></View>
+                  <Text style={styles.date}>{new Date(n.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</Text>
+                </View>
+                <Text style={styles.newsTitle}>{n.title}</Text>
+                <Text style={styles.newsSummary}>{n.summary}</Text>
+                <View style={styles.metaRow}>
+                  <Icon name="newspaper-outline" size={12} color={colors.muted} />
+                  <Text style={styles.source}>{n.source}</Text>
+                  {n.locality_name ? (
+                    <>
+                      <Text style={styles.dot}>·</Text>
+                      <Icon name="location-outline" size={11} color={colors.muted} />
+                      <Text style={styles.source}>{n.locality_name}</Text>
+                    </>
+                  ) : null}
+                </View>
               </View>
             </Pressable>
           )))
@@ -145,13 +196,28 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border,
     alignItems: "center", justifyContent: "center",
   },
+  publishBtn: {
+    flexDirection: "row", alignItems: "center", gap: 4,
+    paddingHorizontal: 12, height: 40, borderRadius: radius.pill,
+    backgroundColor: colors.brandPrimary,
+  },
+  publishText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "800" },
+  searchWrap: {
+    flexDirection: "row", alignItems: "center", gap: 8,
+    backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill,
+    paddingHorizontal: 14, height: 42, marginTop: spacing.md,
+    borderWidth: 1, borderColor: colors.border,
+  },
+  searchInput: { flex: 1, fontSize: 13, color: colors.onSurface, padding: 0 },
   sectionLabel: { fontSize: 10, fontWeight: "800", color: colors.muted, letterSpacing: 0.8, marginTop: spacing.md },
   chipsRow: { paddingTop: 6, gap: spacing.sm, paddingBottom: 2 },
   chip: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: spacing.md, height: 34, borderRadius: radius.pill, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border, flexShrink: 0 },
   chipActive: { backgroundColor: colors.brand, borderColor: colors.brand },
   chipText: { color: colors.onSurface, fontSize: 12, fontWeight: "600" },
   chipTextActive: { color: colors.onBrand },
-  card: { padding: spacing.lg, borderRadius: radius.lg, backgroundColor: colors.surfaceSecondary, marginBottom: spacing.md, borderWidth: 1, borderColor: colors.border },
+
+  card: { borderRadius: radius.lg, backgroundColor: colors.surfaceSecondary, marginBottom: spacing.md, borderWidth: 1, borderColor: colors.border, overflow: "hidden" },
+  cardImg: { width: "100%", height: 160, backgroundColor: colors.surfaceSecondary },
   cardTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: spacing.sm },
   badge: { backgroundColor: colors.brandTertiary, paddingHorizontal: spacing.md, paddingVertical: 3, borderRadius: radius.pill },
   badgeText: { fontSize: 10, fontWeight: "700", color: colors.brand, letterSpacing: 0.3 },
