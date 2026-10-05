@@ -38,6 +38,9 @@ export default function MapScreenWeb() {
   const [heat, setHeat] = useState(false);
   const [view, setView] = useState<"map" | "list">("map");
   const [listingType, setListingType] = useState<"Buy" | "Rent" | "Sell">("Buy");
+  const [bedrooms, setBedrooms] = useState<number | null>(null);
+  const [priceBucket, setPriceBucket] = useState<string | null>(null);
+  const [areaBucket, setAreaBucket] = useState<string | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const activeAddr = useLocationStore(s => s.getActive());
@@ -49,11 +52,27 @@ export default function MapScreenWeb() {
       qs.set("listing_type", listingType);
       if (filter) qs.set("type", filter);
       if (q) qs.set("q", q);
+      if (bedrooms !== null) qs.set("bedrooms", String(bedrooms));
+      if (priceBucket) {
+        const [lo, hi] = priceBucket.split("-");
+        if (lo && Number(lo) > 0) qs.set("min_price", lo);
+        if (hi && Number(hi) > 0) qs.set("max_price", hi);
+      }
       const data = await api.get<Property[]>(`/properties?${qs.toString()}`);
-      setItems(data);
+      let filtered = data;
+      if (areaBucket) {
+        const [lo, hi] = areaBucket.split("-").map(Number);
+        filtered = data.filter(p => {
+          if (!p.area) return true;
+          if (hi > 0) return p.area >= lo && p.area <= hi;
+          return p.area >= lo;
+        });
+      }
+      setItems(filtered);
     } finally { setLoading(false); }
   };
-  useEffect(() => { load(); }, [filter, listingType]);
+  useEffect(() => { load(); }, [filter, listingType, bedrooms, priceBucket, areaBucket]);
+  useEffect(() => { setBedrooms(null); setPriceBucket(null); setAreaBucket(null); }, [filter]);
 
   useEffect(() => {
     const h = params.highlight ? String(params.highlight) : "";
@@ -148,6 +167,61 @@ export default function MapScreenWeb() {
             <Text style={[styles.heatToggleText, heat && { color: colors.onBrandPrimary }]}>Heat</Text>
           </Pressable>
         </View>
+
+        {filter ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.subChipsRow}>
+            {["Apartment", "Villa"].includes(filter) && [1, 2, 3, 4].map(n => (
+              <Pressable
+                key={`bhk-${n}`}
+                testID={`subfilter-bhk-${n}`}
+                onPress={() => setBedrooms(bedrooms === n ? null : n)}
+                style={[styles.subChip, bedrooms === n && styles.subChipActive]}
+              >
+                <Text style={[styles.subChipText, bedrooms === n && styles.subChipTextActive]}>{n}+ BHK</Text>
+              </Pressable>
+            ))}
+            {["Residential Plot", "Agricultural Land", "Commercial"].includes(filter) && [
+              { k: "0-100", label: "<100 sq yd" },
+              { k: "100-500", label: "100–500" },
+              { k: "500-2000", label: "500–2 K" },
+              { k: "2000-0", label: "2 K+ sq yd" },
+            ].map(b => (
+              <Pressable
+                key={`area-${b.k}`}
+                testID={`subfilter-area-${b.k}`}
+                onPress={() => setAreaBucket(areaBucket === b.k ? null : b.k)}
+                style={[styles.subChip, areaBucket === b.k && styles.subChipActive]}
+              >
+                <Text style={[styles.subChipText, areaBucket === b.k && styles.subChipTextActive]}>{b.label}</Text>
+              </Pressable>
+            ))}
+            {[
+              { k: "0-5000000", label: "<₹50 L" },
+              { k: "5000000-10000000", label: "₹50 L–1 Cr" },
+              { k: "10000000-30000000", label: "₹1–3 Cr" },
+              { k: "30000000-0", label: "₹3 Cr+" },
+            ].map(b => (
+              <Pressable
+                key={`price-${b.k}`}
+                testID={`subfilter-price-${b.k}`}
+                onPress={() => setPriceBucket(priceBucket === b.k ? null : b.k)}
+                style={[styles.subChip, priceBucket === b.k && styles.subChipActive]}
+              >
+                <Text style={[styles.subChipText, priceBucket === b.k && styles.subChipTextActive]}>{b.label}</Text>
+              </Pressable>
+            ))}
+            {(bedrooms !== null || priceBucket || areaBucket) && (
+              <Pressable
+                testID="subfilter-clear"
+                onPress={() => { setBedrooms(null); setPriceBucket(null); setAreaBucket(null); }}
+                style={[styles.subChip, { backgroundColor: colors.surfaceSecondary, borderColor: colors.error }]}
+              >
+                <Icon name="close" size={11} color={colors.error} />
+                <Text style={[styles.subChipText, { color: colors.error }]}>Clear</Text>
+              </Pressable>
+            )}
+          </ScrollView>
+        ) : null}
       </View>
 
       {heat ? (
@@ -250,6 +324,11 @@ export default function MapScreenWeb() {
 const styles = StyleSheet.create({
   hi: { fontSize: 15, fontWeight: "800", color: colors.onSurface },
   locPill: { flex: 1, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: spacing.md, paddingVertical: 6, backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, marginRight: spacing.sm, maxWidth: "68%" },
+  subChipsRow: { gap: 6, paddingVertical: 4 },
+  subChip: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 10, height: 28, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, justifyContent: "center" },
+  subChipActive: { backgroundColor: colors.brand, borderColor: colors.brand },
+  subChipText: { fontSize: 11, fontWeight: "700", color: colors.onSurface },
+  subChipTextActive: { color: colors.onBrand },
   locKicker: { fontSize: 10, color: colors.muted, fontWeight: "700" },
   locTitle: { fontSize: 13, color: colors.onSurface, fontWeight: "800" },
   backPill: { flexDirection: "row", alignItems: "center", gap: 4, paddingVertical: 10, paddingHorizontal: spacing.sm, minHeight: 44, borderRadius: radius.pill, backgroundColor: colors.brandTertiary },

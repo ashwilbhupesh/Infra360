@@ -38,6 +38,10 @@ export default function MapScreen() {
   const [heat, setHeat] = useState(false);
   const [view, setView] = useState<"map" | "list">("map");
   const [listingType, setListingType] = useState<"Buy" | "Rent" | "Sell">("Buy");
+  const [bedrooms, setBedrooms] = useState<number | null>(null);
+  const [priceBucket, setPriceBucket] = useState<string | null>(null);  // e.g. "0-5000000"
+  const [areaBucket, setAreaBucket] = useState<string | null>(null);    // e.g. "0-100"
+  const [showMoreFilters, setShowMoreFilters] = useState(false);
   const [heatPoints, setHeatPoints] = useState<WebMapHeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const activeAddr = useLocationStore(s => s.getActive());
@@ -67,13 +71,32 @@ export default function MapScreen() {
       qs.set("listing_type", listingType);
       if (filter) qs.set("type", filter);
       if (q) qs.set("q", q);
+      if (bedrooms !== null) qs.set("bedrooms", String(bedrooms));
+      if (priceBucket) {
+        const [lo, hi] = priceBucket.split("-");
+        if (lo && Number(lo) > 0) qs.set("min_price", lo);
+        if (hi && Number(hi) > 0) qs.set("max_price", hi);
+      }
       const data = await api.get<Property[]>(`/properties?${qs.toString()}`);
-      setItems(data);
+      // client-side area filter if backend doesn't support it
+      let filtered = data;
+      if (areaBucket) {
+        const [lo, hi] = areaBucket.split("-").map(Number);
+        filtered = data.filter(p => {
+          if (!p.area) return true;
+          if (hi > 0) return p.area >= lo && p.area <= hi;
+          return p.area >= lo;
+        });
+      }
+      setItems(filtered);
     } catch (e) { console.error(e); }
     finally { setLoading(false); }
   };
 
-  useEffect(() => { load(); }, [filter, listingType]);
+  useEffect(() => { load(); }, [filter, listingType, bedrooms, priceBucket, areaBucket]);
+
+  // Reset sub-filters when the main category changes
+  useEffect(() => { setBedrooms(null); setPriceBucket(null); setAreaBucket(null); }, [filter]);
 
   // Deep link highlight ?highlight=p-01 — pan the map to it, DO NOT open the popup
   useEffect(() => {
@@ -103,7 +126,7 @@ export default function MapScreen() {
 
   const handleMarkerPress = (id: string) => {
     setSelected(id);
-    sheetRef.current?.snapToIndex(2);
+    sheetRef.current?.snapToIndex(0);
   };
 
   const openSell = () => router.push("/sell" as any);
@@ -207,6 +230,71 @@ export default function MapScreen() {
             <Text style={[styles.filterText, heat && { color: colors.onBrandPrimary }]}>  Heat</Text>
           </Pressable>
         </ScrollView>
+
+        {/* Category-specific sub-filters (BHK / area / price). Visible only when a category is picked. */}
+        {filter ? (
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.subChipsRow}>
+            {["Apartment", "Villa"].includes(filter) && (
+              <>
+                {[1, 2, 3, 4].map(n => (
+                  <Pressable
+                    key={`bhk-${n}`}
+                    testID={`subfilter-bhk-${n}`}
+                    onPress={() => setBedrooms(bedrooms === n ? null : n)}
+                    style={[styles.subChip, bedrooms === n && styles.subChipActive]}
+                  >
+                    <Text style={[styles.subChipText, bedrooms === n && styles.subChipTextActive]}>{n}+ BHK</Text>
+                  </Pressable>
+                ))}
+              </>
+            )}
+            {["Residential Plot", "Agricultural Land", "Commercial"].includes(filter) && (
+              <>
+                {[
+                  { k: "0-100", label: "<100 sq yd" },
+                  { k: "100-500", label: "100–500" },
+                  { k: "500-2000", label: "500–2 K" },
+                  { k: "2000-0", label: "2 K+ sq yd" },
+                ].map(b => (
+                  <Pressable
+                    key={`area-${b.k}`}
+                    testID={`subfilter-area-${b.k}`}
+                    onPress={() => setAreaBucket(areaBucket === b.k ? null : b.k)}
+                    style={[styles.subChip, areaBucket === b.k && styles.subChipActive]}
+                  >
+                    <Text style={[styles.subChipText, areaBucket === b.k && styles.subChipTextActive]}>{b.label}</Text>
+                  </Pressable>
+                ))}
+              </>
+            )}
+            {/* Price buckets (common for all) */}
+            {[
+              { k: "0-5000000", label: "<₹50 L" },
+              { k: "5000000-10000000", label: "₹50 L–1 Cr" },
+              { k: "10000000-30000000", label: "₹1–3 Cr" },
+              { k: "30000000-0", label: "₹3 Cr+" },
+            ].map(b => (
+              <Pressable
+                key={`price-${b.k}`}
+                testID={`subfilter-price-${b.k}`}
+                onPress={() => setPriceBucket(priceBucket === b.k ? null : b.k)}
+                style={[styles.subChip, priceBucket === b.k && styles.subChipActive]}
+              >
+                <Text style={[styles.subChipText, priceBucket === b.k && styles.subChipTextActive]}>{b.label}</Text>
+              </Pressable>
+            ))}
+            {(bedrooms !== null || priceBucket || areaBucket) && (
+              <Pressable
+                testID="subfilter-clear"
+                onPress={() => { setBedrooms(null); setPriceBucket(null); setAreaBucket(null); }}
+                style={[styles.subChip, { backgroundColor: colors.surfaceSecondary, borderColor: colors.error }]}
+              >
+                <Icon name="close" size={11} color={colors.error} />
+                <Text style={[styles.subChipText, { color: colors.error }]}>Clear</Text>
+              </Pressable>
+            )}
+          </ScrollView>
+        ) : null}
       </View>
 
       {heat && view === "map" && (
@@ -240,8 +328,10 @@ export default function MapScreen() {
         <BottomSheet
           ref={sheetRef}
           index={0}
-          snapPoints={["22%", "55%", "92%"]}
+          snapPoints={selected ? ["55%"] : ["22%", "55%"]}
+          topInset={insets.top + 220}
           enableDynamicSizing={false}
+          enableOverDrag={false}
           backgroundStyle={styles.sheetBg}
           handleIndicatorStyle={{ backgroundColor: colors.borderStrong }}
         >
@@ -335,6 +425,11 @@ const styles = StyleSheet.create({
   searchPill: { flexDirection: "row", alignItems: "center", gap: spacing.sm, height: 44, paddingHorizontal: spacing.lg, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, ...shadow.card },
   searchTxt: { flex: 1, color: colors.onSurface, fontSize: 14 },
   chipsRow: { gap: spacing.sm, paddingRight: spacing.md, paddingVertical: 2 },
+  subChipsRow: { gap: 6, paddingRight: spacing.md, paddingVertical: 4, paddingLeft: spacing.lg },
+  subChip: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 10, height: 28, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: "rgba(255,255,240,0.9)", justifyContent: "center" },
+  subChipActive: { backgroundColor: colors.brand, borderColor: colors.brand },
+  subChipText: { fontSize: 11, fontWeight: "700", color: colors.onSurface },
+  subChipTextActive: { color: colors.onBrand },
   filterChip: { paddingHorizontal: spacing.md, height: 36, justifyContent: "center", borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, flexShrink: 0, ...shadow.card },
   filterChipActive: { backgroundColor: colors.brand, borderColor: colors.brand },
   heatActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary, flexDirection: "row", alignItems: "center" },

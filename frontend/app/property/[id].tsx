@@ -113,6 +113,22 @@ export default function PropertyDetail() {
             <Text style={styles.address}>{prop.address}</Text>
           </View>
 
+          <Pressable
+            testID="view-on-map-btn"
+            onPress={() => router.push({ pathname: "/(tabs)/explore", params: { highlight: String(prop.id) } } as any)}
+            style={({ pressed }) => [styles.mapCta, pressed && { opacity: 0.75 }]}
+            hitSlop={6}
+          >
+            <View style={styles.mapCtaIcon}>
+              <Icon name="map" size={16} color={colors.onBrandPrimary} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.mapCtaTitle}>View on map</Text>
+              <Text style={styles.mapCtaSub} numberOfLines={1}>See location & nearby pins in {prop.locality_name}</Text>
+            </View>
+            <Icon name="chevron-forward" size={18} color={colors.brand} />
+          </Pressable>
+
           <Section title="Property Details">
             <Detail label="Type" value={prop.type} />
             <Detail label="Area" value={`${prop.area} ${prop.area_unit}`} />
@@ -433,6 +449,14 @@ const styles = StyleSheet.create({
   listerName: { fontSize: 14, fontWeight: "700", color: colors.onSurface },
   listerFirm: { fontSize: 12, color: colors.muted, marginTop: 2 },
   listerPhone: { fontSize: 12, color: colors.brandPrimary, marginTop: 4, fontWeight: "700" },
+  mapCta: {
+    marginTop: spacing.md, flexDirection: "row", alignItems: "center", gap: 10,
+    padding: spacing.md, borderRadius: radius.md,
+    backgroundColor: colors.brandTertiary, borderWidth: 1, borderColor: colors.brand,
+  },
+  mapCtaIcon: { width: 36, height: 36, borderRadius: 18, backgroundColor: colors.brand, alignItems: "center", justifyContent: "center" },
+  mapCtaTitle: { fontSize: 14, fontWeight: "800", color: colors.brand, letterSpacing: 0.2 },
+  mapCtaSub: { fontSize: 11, color: colors.onSurfaceSecondary, marginTop: 2 },
   // AI valuation
   aiCard: { padding: spacing.lg, borderRadius: radius.lg, borderWidth: 1, borderColor: "#C8DBF9", backgroundColor: "#F4F8FF" },
   aiBadge: { flexDirection: "row", alignItems: "center", gap: 3, paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill, backgroundColor: "#1E6FEB" },

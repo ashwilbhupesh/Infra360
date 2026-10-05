@@ -12,6 +12,7 @@
       "bundleIdentifier": "com.emergent.proptechindia.aobf9p",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Add photos to your property listing",
+        "NSCameraUsageDescription": "Scan material lists to build your cart",
         "NSLocationWhenInUseUsageDescription": "Show properties and news near your location"
       }
     },
@@ -23,7 +24,8 @@
       "package": "com.emergent.proptechindia.aobf9p",
       "permissions": [
         "android.permission.READ_MEDIA_IMAGES",
-        "android.permission.ACCESS_FINE_LOCATION"
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.CAMERA"
       ]
     },
     "web": {

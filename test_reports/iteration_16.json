@@ -1,0 +1,38 @@
+{
+  "summary": "Tested the four items in review (A pin-preview snap/not-cover + back button, B sub-filter chip row, C scan-parcha CTA + screen, D backend /materials/scan-parcha + products). Backend: both tests pass. Frontend web: pin-preview-back pill, top chrome, sub-filter chips for Apartment/Villa/Commercial, subfilter-clear, and category-switch reset all work correctly. scan-parcha CTA routes to /market/scan-parcha with the web camera-fallback + gallery-btn + scan-back-btn. ONE BUG FOUND: on BOTH explore.tsx and explore.web.tsx the FILTERS array uses keys 'Residential Plot' and 'Agricultural Land' but the sub-filter conditional checks for the short strings 'Plot' and 'Agri Land' (['Plot','Agri Land','Commercial'].includes(filter)), so tapping the 'Plots' or 'Agri Land' chip does NOT render the area sub-chips (subfilter-area-*) — only the price chips show. 'Commercial' works because its key matches.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {
+        "component": "explore.web.tsx & explore.tsx — sub-filter area chips",
+        "issue": "Area sub-chips (subfilter-area-0-100, 100-500, 500-2000, 2000-0) never render for the 'Plots' and 'Agri Land' categories because the conditional ['Plot','Agri Land','Commercial'].includes(filter) does not match the FILTERS keys which are 'Residential Plot' and 'Agricultural Land'. Only Commercial currently triggers the area chips. Verified live on web at /(tabs)/explore — all four area testIDs returned is_visible=False after clicking filter-'Residential Plot' and filter-'Agricultural Land'. Fix: change the conditional to [\"Residential Plot\",\"Agricultural Land\",\"Commercial\"].includes(filter) (both files). Reference: /app/frontend/app/(tabs)/explore.web.tsx:183 and /app/frontend/app/(tabs)/explore.tsx:251.",
+        "testID": "subfilter-area-*",
+        "priority": "HIGH"
+      }
+    ],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_scan_parcha.py",
+    "/app/test_reports/pytest/scan_parcha.xml"
+  ],
+  "action_items": [
+    "Fix the FILTERS/sub-filter key mismatch in BOTH /app/frontend/app/(tabs)/explore.web.tsx (line 183) and /app/frontend/app/(tabs)/explore.tsx (line 251): the conditional should use the actual FILTERS keys ('Residential Plot','Agricultural Land','Commercial') instead of ('Plot','Agri Land','Commercial'). Without this, the area sub-chips never render for Plots / Agri Land.",
+    "Optional: expose BHK conditional under 'House' too — current FILTERS does not include a 'House' key, so the ['Apartment','Villa','House'] check for House is unreachable. Either add a 'House' filter chip or drop 'House' from the conditional."
+  ],
+  "critical_code_review_comments": [
+    "Explore has a brittle string-equality coupling between the FILTERS array and the sub-filter conditional. Prefer a per-filter config object (e.g. { 'Residential Plot': { sub: 'area' }, 'Apartment': { sub: 'bhk' } }) so new category chips can't silently break sub-filters.",
+    "scan-parcha backend ingests the raw remote URL via requests.get before passing base64 to the LLM — a non-reachable URL returns 400 rather than falling back to an empty-items response. Not blocking, but could be made more resilient."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_scan_parcha.py (new — pytest for scan-parcha + materials catalog)"
+  ],
+  "success_rate": {"backend": "100% (2/2)", "frontend": "~90% — all tested testIDs pass except Plots/AgriLand area sub-chips due to the key-mismatch bug"},
+  "seed_data_creation": "None — used seeded properties and materials catalog.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "After the main agent fixes the explore conditional in both explore.tsx and explore.web.tsx, re-run the subfilter-area-* visibility checks for filter-'Residential Plot' and filter-'Agricultural Land' (expected visible=True for all four buckets 0-100, 100-500, 500-2000, 2000-0). Backend scan-parcha already verified with picsum image (shape returned correctly in ~2.5s; LLM may skip items for irrelevant images, no crash). On web, the /market/scan-parcha screen correctly renders the fallback card, gallery-btn, scan-back-btn — camera + capture flow should be re-tested on a native build only.",
+  "rca_of_issue": "Root cause of the area sub-chip bug: typo-level mismatch. FILTERS declares keys 'Residential Plot' and 'Agricultural Land' (long names used by the backend 'type' query param), but the subfilter JSX hard-codes a different label list ['Plot','Agri Land','Commercial'] for the .includes(filter) check. Only 'Commercial' happens to match in both arrays. Repro: open /(tabs)/explore at 375x667, click filter-'Residential Plot' → sub-chip row renders only price chips, no area chips. Mitigation: switch the conditional to the full FILTERS keys OR centralise the config as suggested in the code-review notes."
+}

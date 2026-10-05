@@ -140,6 +140,24 @@ export default function Market() {
   // --- Materials home: shopping-style layout ---
   const renderMaterialsHome = () => (
     <ScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
+      {/* Parcha scanner banner */}
+      <Pressable
+        testID="scan-parcha-cta"
+        onPress={() => router.push("/market/scan-parcha" as any)}
+        style={styles.parchaCta}
+      >
+        <View style={styles.parchaIcon}>
+          <Icon name="scan" size={22} color="#FFFFFF" />
+        </View>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.parchaTitle}>Scan a parcha</Text>
+          <Text style={styles.parchaSub}>Snap your material list — we match brands & find the cheapest vendor</Text>
+        </View>
+        <View style={styles.parchaArrow}>
+          <Icon name="camera" size={18} color="#FFFFFF" />
+        </View>
+      </Pressable>
+
       <Text style={styles.sectionHeading}>Shop by category</Text>
       <View style={styles.matGrid}>
         {matCats.map((c) => (
@@ -385,6 +403,13 @@ const styles = StyleSheet.create({
   catBody: { padding: spacing.md },
   catName: { fontSize: 14, fontWeight: "700", color: colors.onSurface },
   catCount: { fontSize: 11, color: colors.muted, marginTop: 2 },
+
+  // Parcha scanner CTA
+  parchaCta: { flexDirection: "row", alignItems: "center", gap: spacing.md, marginHorizontal: spacing.xl, marginTop: spacing.lg, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.brandPrimary, ...shadow.card },
+  parchaIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
+  parchaTitle: { fontSize: 15, fontWeight: "800", color: colors.onBrandPrimary, letterSpacing: 0.2 },
+  parchaSub: { fontSize: 11, color: "rgba(255,255,255,0.9)", marginTop: 2, lineHeight: 15 },
+  parchaArrow: { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
 
   // Materials shopping-style 3-col grid
   sectionHeading: {

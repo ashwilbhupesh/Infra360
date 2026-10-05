@@ -1868,6 +1868,157 @@ async def ai_valuation(pid: str, refresh: bool = False):
     return out
 
 
+# ---------------- Parcha scanner (camera → LLM vision → cheapest cart) ----------------
+class ParchaScanRequest(BaseModel):
+    user_id: Optional[str] = None
+    image_url: str                   # e.g. "/api/upload/returned/path.jpg" (relative or absolute)
+    note: Optional[str] = None
+
+
+def _abs_url(path_or_url: str) -> str:
+    if path_or_url.startswith("http://") or path_or_url.startswith("https://"):
+        return path_or_url
+    base = (os.environ.get("PUBLIC_BACKEND_URL") or "").rstrip("/")
+    if not base:
+        # local fallback
+        base = f"http://localhost:8001"
+    if not path_or_url.startswith("/"):
+        path_or_url = "/" + path_or_url
+    return base + path_or_url
+
+
+def _norm(s: str) -> str:
+    return re.sub(r"[^a-z0-9 ]+", "", (s or "").lower()).strip()
+
+
+@api_router.post("/materials/scan-parcha")
+async def scan_parcha(req: ParchaScanRequest):
+    """Reads a construction-materials parcha (handwritten/printed list), extracts items,
+    matches them against the live materials catalogue, and returns the CHEAPEST product
+    per item across vendors so the client can one-tap add everything to the cart."""
+    if not EMERGENT_KEY:
+        raise HTTPException(500, "LLM key not configured")
+    image_url = _abs_url(req.image_url)
+    # Step 1: ask the LLM-vision to extract structured items
+    system = (
+        "You are reading a hand-written Indian construction materials order list (a 'parcha'). "
+        "Extract every line item. Return STRICT JSON with key 'items' as an array of "
+        "{name, quantity, unit, brand, raw}. "
+        "name: canonical material name (English, lower snake case, e.g. 'cement', 'tmt_bars', 'red_bricks'). "
+        "quantity: number only (integer or float). unit: short unit like 'bag', 'kg', 'piece', 'ton', 'sq ft'. "
+        "brand: brand/company if visible else null. raw: the exact text as written. "
+        "If you cannot read the image or there are no items, return {\"items\": []}."
+    )
+    extracted: List[Dict[str, Any]] = []
+    try:
+        from emergentintegrations.llm.chat import LlmChat, UserMessage, ImageContent  # local import
+        import base64 as _b64, json as _json
+        # Download the image to base64 so the LLM can see it even on private URLs
+        try:
+            r = requests.get(image_url, timeout=15)
+            r.raise_for_status()
+            img_b64 = _b64.b64encode(r.content).decode("utf-8")
+        except Exception as e:
+            raise HTTPException(400, f"Could not read image: {e}")
+        chat = LlmChat(api_key=EMERGENT_KEY, session_id=f"parcha-{uuid.uuid4().hex[:8]}", system_message=system).with_model("openai", "gpt-4o")
+        msg = UserMessage(
+            text="Extract items from this parcha. Respond with JSON only.",
+            file_contents=[ImageContent(image_base64=img_b64)],
+        )
+        raw = await chat.send_message(msg)
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = cleaned.strip("`")
+            if cleaned.lower().startswith("json"):
+                cleaned = cleaned[4:]
+        m = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        parsed = _json.loads(m.group(0)) if m else {}
+        extracted = parsed.get("items") or []
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.exception("Parcha scan LLM failed: %s", e)
+        extracted = []
+
+    # Step 2: match each extracted item against the catalogue and pick cheapest vendor
+    all_products = await db.materials_products.find({}, NO_ID).to_list(2000)
+    all_stores = await db.materials_stores.find({}, NO_ID).to_list(500)
+    store_by_id = {s["id"]: s for s in all_stores}
+
+    def score(product: Dict[str, Any], query: Dict[str, Any]) -> int:
+        name_q = _norm(query.get("name", "")).replace("_", " ")
+        brand_q = _norm(query.get("brand") or "")
+        n = _norm(product.get("name", ""))
+        b = _norm(product.get("brand") or "")
+        pts = 0
+        # token overlap
+        q_tokens = set(name_q.split()) - {"", "the", "a"}
+        p_tokens = set(n.split())
+        pts += len(q_tokens & p_tokens) * 10
+        if name_q and name_q in n:
+            pts += 20
+        if brand_q and (brand_q in b or b in brand_q):
+            pts += 15
+        return pts
+
+    def pick_cheapest(query: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+        scored: List[tuple] = []
+        for p in all_products:
+            s = score(p, query)
+            if s > 0:
+                scored.append((s, p))
+        if not scored:
+            return None
+        # keep highest-scoring, then cheapest among the top band
+        scored.sort(key=lambda t: (-t[0], t[1].get("price", 1e9)))
+        top_score = scored[0][0]
+        best_band = [p for s, p in scored if s >= top_score - 5]
+        best_band.sort(key=lambda p: p.get("price", 1e9))
+        return best_band[0]
+
+    cart_items: List[Dict[str, Any]] = []
+    unmatched: List[Dict[str, Any]] = []
+    total_estimated = 0
+    for it in extracted:
+        q = max(1, int(float(it.get("quantity") or 1)))
+        match = pick_cheapest(it)
+        if not match:
+            unmatched.append({"query": it, "reason": "No catalogue match"})
+            continue
+        store = store_by_id.get(match.get("store_id", ""), {})
+        line = {
+            "product_id": match["id"],
+            "name": match.get("name"),
+            "brand": match.get("brand"),
+            "image": match.get("image"),
+            "unit": match.get("unit"),
+            "price": match.get("price"),
+            "mrp": match.get("mrp"),
+            "store_id": match.get("store_id"),
+            "store_name": store.get("name"),
+            "store_area": store.get("area"),
+            "qty": q,
+            "subtotal": q * (match.get("price") or 0),
+            "query": {"name": it.get("name"), "brand": it.get("brand"), "raw": it.get("raw"), "quantity": q, "unit": it.get("unit")},
+        }
+        cart_items.append(line)
+        total_estimated += line["subtotal"]
+
+    scan_doc = {
+        "id": f"parcha-{uuid.uuid4().hex[:10]}",
+        "user_id": req.user_id,
+        "image_url": req.image_url,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "note": (req.note or "").strip() or None,
+        "extracted": extracted,
+        "items": cart_items,
+        "unmatched": unmatched,
+        "total_estimated": total_estimated,
+    }
+    await db.parcha_scans.insert_one({**scan_doc})
+    return {k: v for k, v in scan_doc.items() if k != "_id"}
+
+
 app.include_router(api_router)
 
 app.add_middleware(

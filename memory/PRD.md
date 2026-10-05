@@ -152,4 +152,27 @@ Seven features that take InfraJagat from map browser to full real-estate operati
 - **News sharing** — each news card now has a Share button → modal with **WhatsApp**, **Instagram** and **More** (native share sheet) options.
 - **Offline news reads** (`/offline-news`): tap "Save offline" on any news card to persist it locally via AsyncStorage; `menu-offline-news` entry in Profile opens the list; remove individually or clear all.
 
+## Phase 4 — Explore polish + Parcha scanner (Oct 2026) ✅ Shipped
+
+### Explore map
+- **Pin-preview snap**: bottom sheet is now capped at a single ~55% snap when a property is selected, with `topInset` so the top chrome (location pill, search, Buy/Rent/Sell, chip row) is always visible. Tapping a pin auto-snaps to this middle position.
+- **"Back to listings"** pill remains a prominent brandTertiary chip with large hitSlop; no longer overlapped.
+- **"View on map"** CTA added at the top of each property's description.
+
+### Category sub-filters
+- A secondary chip row appears below the main category chips when a category is selected:
+  - **Apartment / Villa** → BHK quick-pills (1+, 2+, 3+, 4+)
+  - **Residential Plot / Agricultural Land / Commercial** → area buckets (<100, 100–500, 500–2 K, 2 K+ sq yd)
+  - Shared **price buckets** (<₹50 L, ₹50 L–1 Cr, ₹1–3 Cr, ₹3 Cr+)
+  - Row is hidden when 'All' is selected; `subfilter-clear` resets everything; switching categories auto-resets sub-filters.
+
+### Parcha scanner (Market)
+- **`scan-parcha-cta`** banner on the Market materials home opens `/market/scan-parcha`.
+- Camera view (via `expo-camera`) with capture framing guide and gallery fallback.
+- Image uploads to object storage, then **`POST /api/materials/scan-parcha`** sends it to Emergent LLM (gpt-4o vision) which extracts `{name, quantity, unit, brand, raw}` items.
+- Backend matches each extracted item against the materials catalogue and **picks the cheapest vendor** per line; unmatched items are shown separately.
+- One-tap **"Add all to cart"** pushes everything into the existing Zustand materials cart. Scan history is stored in `parcha_scans` collection.
+- Added iOS `NSCameraUsageDescription` + Android `android.permission.CAMERA` to `app.json`.
+
+
 
