@@ -94,7 +94,7 @@ export default function Agents() {
         <View style={{ paddingHorizontal: spacing.xl }}>
           <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
             <View style={{ flex: 1 }}>
-              <Text style={styles.title}>Agents</Text>
+              <Text style={styles.title}>Experts</Text>
               <Text style={styles.sub}>Brokers, JDA liaison, lawyers & loan advisors — verified.</Text>
             </View>
             <Pressable

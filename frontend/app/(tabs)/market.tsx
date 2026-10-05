@@ -1,12 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, FlatList, Dimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, FlatList, Dimensions, Alert } from "react-native";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useRouter, useFocusEffect } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
+import { useAuth } from "@/src/auth-context";
 import { useMaterialsCart } from "@/src/stores/materials-cart";
+import { VoiceSheet } from "@/src/components/voice-sheet";
 
 type Category = { id: string; group_id: string; name: string; image: string; suppliers_count?: number };
 type Group = { id: string; name: string; subtitle: string; icon: string; categories: Category[] };
@@ -36,6 +38,10 @@ export default function Market() {
   const [loading, setLoading] = useState(true);
   const [activeGroup, setActiveGroup] = useState<string>(MATERIALS_GROUP_ID);
   const [matCats, setMatCats] = useState<MaterialsCategory[]>([]);
+  const [voiceOpen, setVoiceOpen] = useState(false);
+
+  const { user } = useAuth();
+  const addToCart = useMaterialsCart((s) => s.add);
 
   const hydrate = useMaterialsCart((s) => s.hydrate);
   const totalItems = useMaterialsCart((s) => s.totalItems());
@@ -82,6 +88,24 @@ export default function Market() {
     const g = groups.find(x => x.id === activeGroup);
     return g?.categories ?? [];
   }, [groups, activeGroup]);
+
+  const handleVoiceCart = (res: any) => {
+    const items = res?.items || [];
+    if (items.length === 0) {
+      Alert.alert("No items matched", res?.translation ? `Heard: “${res.translation}”` : "Try narrating item names and brands more clearly.");
+      return;
+    }
+    for (const l of items) {
+      addToCart({
+        id: l.product_id, store_id: l.store_id, store_name: l.store_name || "",
+        name: l.name, brand: l.brand, image: l.image, unit: l.unit, price: l.price,
+      }, l.qty);
+    }
+    Alert.alert("Added to cart ✅", `${items.length} item${items.length === 1 ? "" : "s"} added at the cheapest live price.`, [
+      { text: "View cart", onPress: () => router.push("/materials/cart" as any) },
+      { text: "OK" },
+    ]);
+  };
 
   const isMaterials = activeGroup === MATERIALS_GROUP_ID;
 
@@ -141,21 +165,36 @@ export default function Market() {
   const renderMaterialsHome = () => (
     <ScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
       {/* Parcha scanner banner */}
+      <View style={{ flexDirection: "row", gap: 8, marginHorizontal: spacing.xl, marginTop: spacing.lg }}>
+        <Pressable
+          testID="scan-parcha-cta"
+          onPress={() => router.push("/market/scan-parcha" as any)}
+          style={styles.parchaCta}
+        >
+          <View style={styles.parchaIcon}>
+            <Icon name="scan" size={22} color="#FFFFFF" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.parchaTitle}>Scan a parcha</Text>
+            <Text style={styles.parchaSub}>Snap your material list — AI picks the cheapest vendor</Text>
+          </View>
+        </Pressable>
+        <Pressable
+          testID="voice-cart-cta"
+          onPress={() => setVoiceOpen(true)}
+          style={styles.parchaVoice}
+        >
+          <Icon name="mic" size={22} color="#FFFFFF" />
+        </Pressable>
+      </View>
       <Pressable
-        testID="scan-parcha-cta"
-        onPress={() => router.push("/market/scan-parcha" as any)}
-        style={styles.parchaCta}
+        testID="parcha-history-cta"
+        onPress={() => router.push("/market/parcha-history" as any)}
+        style={styles.parchaHistory}
       >
-        <View style={styles.parchaIcon}>
-          <Icon name="scan" size={22} color="#FFFFFF" />
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.parchaTitle}>Scan a parcha</Text>
-          <Text style={styles.parchaSub}>Snap your material list — we match brands & find the cheapest vendor</Text>
-        </View>
-        <View style={styles.parchaArrow}>
-          <Icon name="camera" size={18} color="#FFFFFF" />
-        </View>
+        <Icon name="time-outline" size={14} color={colors.brand} />
+        <Text style={styles.parchaHistoryTxt}>Parcha history — re-order past lists in one tap</Text>
+        <Icon name="chevron-forward" size={14} color={colors.muted} />
       </Pressable>
 
       <Text style={styles.sectionHeading}>Shop by category</Text>
@@ -351,6 +390,17 @@ export default function Market() {
           <Text style={styles.footer}>Demo directory · Real suppliers can be onboarded later</Text>
         </ScrollView>
       )}
+
+      <VoiceSheet
+        visible={voiceOpen}
+        endpoint="/api/materials/voice-cart"
+        title="Narrate your materials list"
+        subtitle="Speak in any language — Hindi, English, Marwari, Gujarati..."
+        hint='Try: "20 bag cement, 500 kg sariya, 1 ton reti"'
+        extraForm={user?.id ? { user_id: user.id } : undefined}
+        onClose={() => setVoiceOpen(false)}
+        onResult={handleVoiceCart}
+      />
     </View>
   );
 }
@@ -405,11 +455,14 @@ const styles = StyleSheet.create({
   catCount: { fontSize: 11, color: colors.muted, marginTop: 2 },
 
   // Parcha scanner CTA
-  parchaCta: { flexDirection: "row", alignItems: "center", gap: spacing.md, marginHorizontal: spacing.xl, marginTop: spacing.lg, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.brandPrimary, ...shadow.card },
+  parchaCta: { flex: 1, flexDirection: "row", alignItems: "center", gap: spacing.md, padding: spacing.md, borderRadius: radius.lg, backgroundColor: colors.brandPrimary, ...shadow.card },
   parchaIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
   parchaTitle: { fontSize: 15, fontWeight: "800", color: colors.onBrandPrimary, letterSpacing: 0.2 },
   parchaSub: { fontSize: 11, color: "rgba(255,255,255,0.9)", marginTop: 2, lineHeight: 15 },
   parchaArrow: { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
+  parchaVoice: { width: 68, borderRadius: radius.lg, backgroundColor: colors.brand, alignItems: "center", justifyContent: "center", ...shadow.card },
+  parchaHistory: { flexDirection: "row", alignItems: "center", gap: 8, marginHorizontal: spacing.xl, marginTop: 10, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border },
+  parchaHistoryTxt: { flex: 1, fontSize: 12, fontWeight: "700", color: colors.onSurface },
 
   // Materials shopping-style 3-col grid
   sectionHeading: {

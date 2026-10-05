@@ -13,6 +13,7 @@ import { LocalityCard, Locality } from "@/src/components/locality-card";
 import { PinPreview } from "@/src/components/pin-preview";
 import { ExploreListView } from "@/src/components/explore-list-view";
 import { WebMap, WebMapMarker, WebMapHeatPoint } from "@/src/components/web-map";
+import { VoiceSheet } from "@/src/components/voice-sheet";
 import { formatINR } from "@/src/utils/format";
 import { heatColor } from "@/src/utils/heat";
 
@@ -42,6 +43,8 @@ export default function MapScreen() {
   const [priceBucket, setPriceBucket] = useState<string | null>(null);  // e.g. "0-5000000"
   const [areaBucket, setAreaBucket] = useState<string | null>(null);    // e.g. "0-100"
   const [showMoreFilters, setShowMoreFilters] = useState(false);
+  const [voiceOpen, setVoiceOpen] = useState(false);
+  const [voiceSummary, setVoiceSummary] = useState<string | null>(null);
   const [heatPoints, setHeatPoints] = useState<WebMapHeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const activeAddr = useLocationStore(s => s.getActive());
@@ -130,6 +133,27 @@ export default function MapScreen() {
   };
 
   const openSell = () => router.push("/sell" as any);
+
+  const applyVoiceFilters = (res: any) => {
+    const f = res?.filters || {};
+    if (f.listing_type && ["Buy", "Rent"].includes(f.listing_type)) setListingType(f.listing_type);
+    setFilter(f.type || "");
+    setBedrooms(typeof f.bedrooms === "number" ? f.bedrooms : null);
+    // Convert min_price / max_price into our bucket format or just set a custom bucket
+    if (f.max_price || f.min_price) {
+      const lo = f.min_price || 0;
+      const hi = f.max_price || 0;
+      setPriceBucket(`${lo}-${hi}`);
+    } else {
+      setPriceBucket(null);
+    }
+    setAreaBucket(null);
+    if (f.q) setQ(f.q);
+    if (f.locality_id) {
+      router.push(`/locality/${f.locality_id}` as any);
+    }
+    setVoiceSummary(res?.summary || res?.translation || res?.transcript || null);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
@@ -319,6 +343,33 @@ export default function MapScreen() {
         </View>
       )}
 
+      {/* AI voice mic — floating above tab bar */}
+      {view === "map" ? (
+        <Pressable testID="explore-voice-mic" onPress={() => setVoiceOpen(true)} style={[styles.voiceFab, { bottom: insets.bottom + 110 }]} hitSlop={10}>
+          <Icon name="mic" size={20} color="#FFFFFF" />
+        </Pressable>
+      ) : null}
+
+      {voiceSummary ? (
+        <View style={[styles.voiceSummary, { top: insets.top + (filter ? 232 : 198) }]}>
+          <Icon name="mic" size={11} color={colors.brand} />
+          <Text style={styles.voiceSummaryTxt} numberOfLines={2}>“{voiceSummary}”</Text>
+          <Pressable onPress={() => setVoiceSummary(null)} hitSlop={10}>
+            <Icon name="close" size={13} color={colors.muted} />
+          </Pressable>
+        </View>
+      ) : null}
+
+      <VoiceSheet
+        visible={voiceOpen}
+        endpoint="/api/explore/voice-search"
+        title="Narrate your search"
+        subtitle="Speak in any language — Hindi, English, Marwari, Gujarati..."
+        hint='Try: "Show me a 2 BHK flat in Vaishali Nagar under 50 lakhs"'
+        onClose={() => setVoiceOpen(false)}
+        onResult={applyVoiceFilters}
+      />
+
       {/* List view: full-screen content ABOVE the map container */}
       {view === "list" ? (
         <View style={[styles.listOverlay, { paddingTop: insets.top + 240 }]}>
@@ -441,6 +492,9 @@ const styles = StyleSheet.create({
   legendText: { fontSize: 10, fontWeight: "700", color: colors.onSurface, letterSpacing: 0.5 },
   loadingChip: { position: "absolute", top: 240, alignSelf: "center", flexDirection: "row", alignItems: "center", gap: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.surface, ...shadow.card, zIndex: 10 },
   loadingTxt: { fontSize: 12, color: colors.onSurface, fontWeight: "500" },
+  voiceFab: { position: "absolute", right: 16, width: 52, height: 52, borderRadius: 26, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", ...shadow.floating, zIndex: 20 },
+  voiceSummary: { position: "absolute", left: spacing.lg, right: 72, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.98)", borderWidth: 1, borderColor: colors.brand, zIndex: 15, ...shadow.card },
+  voiceSummaryTxt: { flex: 1, fontSize: 11, color: colors.onSurface, fontWeight: "700" },
   listOverlay: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.surface, zIndex: 5 },
   sheetBg: { backgroundColor: colors.surface, borderTopLeftRadius: 20, borderTopRightRadius: 20 },
   sheetHeader: { paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.md, flexDirection: "row", justifyContent: "space-between", alignItems: "center", minHeight: 48 },

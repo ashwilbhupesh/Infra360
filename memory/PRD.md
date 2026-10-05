@@ -174,5 +174,31 @@ Seven features that take InfraJagat from map browser to full real-estate operati
 - One-tap **"Add all to cart"** pushes everything into the existing Zustand materials cart. Scan history is stored in `parcha_scans` collection.
 - Added iOS `NSCameraUsageDescription` + Android `android.permission.CAMERA` to `app.json`.
 
+## Phase 5 — Experts rename + Voice intelligence (Oct 2026) ✅ Shipped
+
+### Experts (previously Agents)
+- **Rename**: 'Agents' tab, header, and persistent tab bar label now read **Experts** everywhere.
+- **New category**: **Sales & Marketing Agencies** (`acat-sales-marketing`) with 3 seeded agencies — Pulse Realty Marketing, StoreyBoard Studio, GroundUp Channel Partners.
+
+### Voice-to-cart (Market)
+- New **mic chip** `voice-cart-cta` next to the Scan Parcha banner.
+- A reusable `<VoiceSheet>` modal with pulsing listening animation records up to 25 s and uploads to the backend.
+- `POST /api/materials/voice-cart` uses Emergent `gpt-4o-mini-transcribe` for STT, then LLM translation + item extraction, matches against the materials catalogue and returns the cheapest-vendor cart just like `scan-parcha`.
+- Works in Hindi, Marwari, Gujarati, Marathi, Punjabi, Bengali, Tamil, Telugu or English — language is auto-detected and the translated transcript is shown.
+
+### AI voice search (Explore)
+- Floating `explore-voice-mic` FAB on the map opens the same VoiceSheet; backend `POST /api/explore/voice-search` returns `{transcript, translation, summary, filters}`.
+- Filters are applied live: `type`, `bedrooms`, `min_price`/`max_price`, `listing_type`, `locality_id`, or free-text `q`. Example parsing: _"show me a 2 BHK flat in Vaishali Nagar under 50 lakhs"_ → `{type: 'Apartment', bedrooms: 2, max_price: 5000000, locality_id: 'loc-vaishali-nagar'}`.
+- A dismissible chip at the top of the map echoes what the AI heard.
+
+### Parcha history
+- `GET /api/materials/parcha-scans?user_id=` + `GET /api/materials/parcha-scans/{sid}` back a new `/market/parcha-history` screen.
+- Each row shows source (📷 Camera / 🎤 Voice), timestamp, matched/missed counts and total — plus a one-tap **Re-order to cart** button that re-adds every matched product.
+
+### Audio stack
+- `expo-audio` on native, `MediaRecorder` on web (reusable hook `useVoiceRecorder`).
+- Added `NSMicrophoneUsageDescription` + Android `RECORD_AUDIO` permission.
+
+
 
 

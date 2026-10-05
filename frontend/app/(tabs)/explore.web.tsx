@@ -11,6 +11,7 @@ import { PropertyCard, Property } from "@/src/components/property-card";
 import { LocalityCard, Locality } from "@/src/components/locality-card";
 import { PinPreview } from "@/src/components/pin-preview";
 import { ExploreListView } from "@/src/components/explore-list-view";
+import { VoiceSheet } from "@/src/components/voice-sheet";
 import { formatINR, indianComma } from "@/src/utils/format";
 import { heatColor, heatLabel } from "@/src/utils/heat";
 
@@ -41,6 +42,8 @@ export default function MapScreenWeb() {
   const [bedrooms, setBedrooms] = useState<number | null>(null);
   const [priceBucket, setPriceBucket] = useState<string | null>(null);
   const [areaBucket, setAreaBucket] = useState<string | null>(null);
+  const [voiceOpen, setVoiceOpen] = useState(false);
+  const [voiceSummary, setVoiceSummary] = useState<string | null>(null);
   const [heatPoints, setHeatPoints] = useState<HeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const activeAddr = useLocationStore(s => s.getActive());
@@ -317,12 +320,50 @@ export default function MapScreenWeb() {
           </>
         )}
       </View>
+
+      <Pressable testID="explore-voice-mic" onPress={() => setVoiceOpen(true)} style={styles.voiceFab}>
+        <Icon name="mic" size={20} color="#FFFFFF" />
+      </Pressable>
+
+      {voiceSummary ? (
+        <View style={styles.voiceSummary}>
+          <Icon name="mic" size={11} color={colors.brand} />
+          <Text style={styles.voiceSummaryTxt} numberOfLines={2}>“{voiceSummary}”</Text>
+          <Pressable onPress={() => setVoiceSummary(null)} hitSlop={10}>
+            <Icon name="close" size={13} color={colors.muted} />
+          </Pressable>
+        </View>
+      ) : null}
+
+      <VoiceSheet
+        visible={voiceOpen}
+        endpoint="/api/explore/voice-search"
+        title="Narrate your search"
+        subtitle="Speak in any language — Hindi, English, Marwari, Gujarati..."
+        hint='Try: "Show me a 2 BHK flat in Vaishali Nagar under 50 lakhs"'
+        onClose={() => setVoiceOpen(false)}
+        onResult={(res: any) => {
+          const f = res?.filters || {};
+          if (f.listing_type && ["Buy", "Rent"].includes(f.listing_type)) setListingType(f.listing_type);
+          setFilter(f.type || "");
+          setBedrooms(typeof f.bedrooms === "number" ? f.bedrooms : null);
+          if (f.max_price || f.min_price) setPriceBucket(`${f.min_price || 0}-${f.max_price || 0}`);
+          else setPriceBucket(null);
+          setAreaBucket(null);
+          if (f.q) setQ(f.q);
+          if (f.locality_id) router.push(`/locality/${f.locality_id}` as any);
+          setVoiceSummary(res?.summary || res?.translation || res?.transcript || null);
+        }}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   hi: { fontSize: 15, fontWeight: "800", color: colors.onSurface },
+  voiceFab: { position: "absolute", right: 16, bottom: 110, width: 52, height: 52, borderRadius: 26, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", zIndex: 20 },
+  voiceSummary: { position: "absolute", left: spacing.lg, right: 76, top: 220, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.98)", borderWidth: 1, borderColor: colors.brand, zIndex: 15 },
+  voiceSummaryTxt: { flex: 1, fontSize: 11, color: colors.onSurface, fontWeight: "700" },
   locPill: { flex: 1, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: spacing.md, paddingVertical: 6, backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, marginRight: spacing.sm, maxWidth: "68%" },
   subChipsRow: { gap: 6, paddingVertical: 4 },
   subChip: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 10, height: 28, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, justifyContent: "center" },

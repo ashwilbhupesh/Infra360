@@ -2019,6 +2019,225 @@ async def scan_parcha(req: ParchaScanRequest):
     return {k: v for k, v in scan_doc.items() if k != "_id"}
 
 
+# ---------------- Parcha scan history ----------------
+@api_router.get("/materials/parcha-scans")
+async def list_parcha_scans(user_id: Optional[str] = None, limit: int = 30):
+    q: Dict[str, Any] = {}
+    if user_id:
+        q["user_id"] = user_id
+    docs = await db.parcha_scans.find(q, NO_ID).sort("created_at", -1).limit(limit).to_list(limit)
+    # Trim payload: strip the large extracted/raw fields for list view
+    for d in docs:
+        d["items_count"] = len(d.get("items", []))
+        d["unmatched_count"] = len(d.get("unmatched", []))
+        d.pop("extracted", None)
+    return docs
+
+
+@api_router.get("/materials/parcha-scans/{sid}")
+async def get_parcha_scan(sid: str):
+    d = await db.parcha_scans.find_one({"id": sid}, NO_ID)
+    if not d:
+        raise HTTPException(404, "Scan not found")
+    return d
+
+
+# ---------------- Voice → cart (narrated materials list) ----------------
+@api_router.post("/materials/voice-cart")
+async def voice_cart(file: UploadFile = File(...), user_id: Optional[str] = None):
+    """Accepts a short audio clip of someone narrating a materials list in ANY Indian
+    language. Transcribes, translates to English via chat, extracts items, matches against
+    the catalogue and returns the cheapest-vendor cart (same shape as /scan-parcha)."""
+    if not EMERGENT_KEY:
+        raise HTTPException(500, "LLM key not configured")
+    data = await file.read()
+    if len(data) < 2048:
+        raise HTTPException(400, "Recording too short — please speak the list again")
+    # Persist the raw audio for debugging/history
+    import tempfile, json as _json
+    suffix = ".m4a"
+    name = (file.filename or "").lower()
+    for ext in [".webm", ".mp3", ".wav", ".mp4", ".mpeg", ".mpga", ".m4a"]:
+        if name.endswith(ext):
+            suffix = ext; break
+    tmp = tempfile.NamedTemporaryFile(suffix=suffix, delete=False)
+    tmp.write(data); tmp.close()
+    try:
+        from emergentintegrations.llm.openai import OpenAISpeechToText
+        stt = OpenAISpeechToText(api_key=EMERGENT_KEY)
+        with open(tmp.name, "rb") as fh:
+            tr = await stt.transcribe(file=fh, model="gpt-4o-mini-transcribe", response_format="json")
+        transcript_native = (getattr(tr, "text", "") or "").strip()
+        if not transcript_native:
+            return {"transcript": "", "translation": "", "items": [], "unmatched": [], "total_estimated": 0, "reason": "no_speech"}
+        # Step 2: ask LLM to translate (if not English) + extract structured items
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        sys_msg = (
+            "You are reading a transcribed voice note from an Indian construction contractor. "
+            "The speaker may be using Hindi, Marwari, Gujarati, Marathi, Punjabi, Bengali, Tamil, Telugu or English. "
+            "First translate the FULL note to clear English. Then extract each material-order line item. "
+            "Return STRICT JSON with keys: translation (string), items (array of {name, quantity, unit, brand, raw}). "
+            "name = canonical lower snake_case material (e.g. cement, tmt_bars, red_bricks, river_sand). "
+            "quantity = numeric; unit = short unit (bag, kg, piece, ton, sq ft). brand = null if not stated. "
+            "raw = the exact English phrase for that line. If no items are detected return {\"translation\": \"...\", \"items\": []}."
+        )
+        chat = LlmChat(api_key=EMERGENT_KEY, session_id=f"voicecart-{uuid.uuid4().hex[:8]}", system_message=sys_msg).with_model("openai", "gpt-4o-mini")
+        prompt = f"Transcript (as spoken):\n{transcript_native}\n\nReturn JSON only."
+        raw = await chat.send_message(UserMessage(text=prompt))
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = cleaned.strip("`")
+            if cleaned.lower().startswith("json"):
+                cleaned = cleaned[4:]
+        m = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        parsed = _json.loads(m.group(0)) if m else {}
+        translation = (parsed.get("translation") or transcript_native).strip()
+        extracted = parsed.get("items") or []
+    except HTTPException:
+        raise
+    except Exception as e:
+        logging.exception("voice-cart STT/LLM failed: %s", e)
+        return {"transcript": "", "translation": "", "items": [], "unmatched": [], "total_estimated": 0, "reason": str(e)}
+    finally:
+        try: os.unlink(tmp.name)
+        except Exception: pass
+
+    # Match against catalogue — reuse same cheapest logic as /scan-parcha
+    all_products = await db.materials_products.find({}, NO_ID).to_list(2000)
+    all_stores = await db.materials_stores.find({}, NO_ID).to_list(500)
+    store_by_id = {s["id"]: s for s in all_stores}
+
+    def score(product, query):
+        name_q = _norm(query.get("name", "")).replace("_", " ")
+        brand_q = _norm(query.get("brand") or "")
+        n = _norm(product.get("name", "")); b = _norm(product.get("brand") or "")
+        pts = 0
+        q_tokens = set(name_q.split()) - {"", "the", "a"}
+        p_tokens = set(n.split())
+        pts += len(q_tokens & p_tokens) * 10
+        if name_q and name_q in n: pts += 20
+        if brand_q and (brand_q in b or b in brand_q): pts += 15
+        return pts
+
+    def pick_cheapest(query):
+        scored = [(score(p, query), p) for p in all_products]
+        scored = [t for t in scored if t[0] > 0]
+        if not scored: return None
+        scored.sort(key=lambda t: (-t[0], t[1].get("price", 1e9)))
+        top = scored[0][0]
+        band = [p for s, p in scored if s >= top - 5]
+        band.sort(key=lambda p: p.get("price", 1e9))
+        return band[0]
+
+    cart_items, unmatched, total = [], [], 0
+    for it in extracted:
+        q = max(1, int(float(it.get("quantity") or 1)))
+        match = pick_cheapest(it)
+        if not match:
+            unmatched.append({"query": it, "reason": "No catalogue match"}); continue
+        store = store_by_id.get(match.get("store_id", ""), {})
+        line = {
+            "product_id": match["id"], "name": match.get("name"), "brand": match.get("brand"),
+            "image": match.get("image"), "unit": match.get("unit"),
+            "price": match.get("price"), "mrp": match.get("mrp"),
+            "store_id": match.get("store_id"), "store_name": store.get("name"), "store_area": store.get("area"),
+            "qty": q, "subtotal": q * (match.get("price") or 0),
+            "query": {"name": it.get("name"), "brand": it.get("brand"), "raw": it.get("raw"), "quantity": q, "unit": it.get("unit")},
+        }
+        cart_items.append(line); total += line["subtotal"]
+    scan_doc = {
+        "id": f"voice-{uuid.uuid4().hex[:10]}",
+        "user_id": user_id,
+        "source": "voice",
+        "transcript": transcript_native,
+        "translation": translation,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "extracted": extracted,
+        "items": cart_items,
+        "unmatched": unmatched,
+        "total_estimated": total,
+    }
+    await db.parcha_scans.insert_one({**scan_doc})
+    return {k: v for k, v in scan_doc.items() if k != "_id"}
+
+
+# ---------------- Voice → explore filters ----------------
+@api_router.post("/explore/voice-search")
+async def voice_search(file: UploadFile = File(...)):
+    """Accepts an audio clip ('show me a 2 BHK flat in Vaishali Nagar under 50 lakh'),
+    returns structured filters compatible with the /properties endpoint, plus a short
+    plain-English summary."""
+    if not EMERGENT_KEY:
+        raise HTTPException(500, "LLM key not configured")
+    data = await file.read()
+    if len(data) < 2048:
+        raise HTTPException(400, "Recording too short — please speak again")
+    import tempfile, json as _json
+    suffix = ".m4a"
+    name = (file.filename or "").lower()
+    for ext in [".webm", ".mp3", ".wav", ".mp4", ".mpeg", ".mpga", ".m4a"]:
+        if name.endswith(ext):
+            suffix = ext; break
+    tmp = tempfile.NamedTemporaryFile(suffix=suffix, delete=False)
+    tmp.write(data); tmp.close()
+    try:
+        from emergentintegrations.llm.openai import OpenAISpeechToText
+        from emergentintegrations.llm.chat import LlmChat, UserMessage
+        stt = OpenAISpeechToText(api_key=EMERGENT_KEY)
+        with open(tmp.name, "rb") as fh:
+            tr = await stt.transcribe(file=fh, model="gpt-4o-mini-transcribe", response_format="json")
+        transcript = (getattr(tr, "text", "") or "").strip()
+        if not transcript:
+            return {"transcript": "", "filters": {}, "summary": "I couldn't hear anything. Please speak again."}
+        # Load the live localities so we can match natural-language locality names.
+        locs = await db.localities.find({}, {"_id": 0, "id": 1, "name": 1, "city": 1}).to_list(200)
+        loc_hint = ", ".join(f"{l['name']}" for l in locs[:40])
+        sys_msg = (
+            "You are a filter parser for an Indian real-estate app. "
+            "The user may speak Hindi / English / Marwari / Gujarati etc. "
+            "Translate to English, then extract search filters for an Indian property feed. "
+            "Return STRICT JSON only with keys: translation (string), summary (<=12 words plain English), filters. "
+            "filters shape: {type?: one of 'Apartment','Villa','Residential Plot','Agricultural Land','Commercial'; "
+            "listing_type?: one of 'Buy','Rent'; bedrooms?: integer; min_price?: INR integer; max_price?: INR integer; "
+            "locality_name?: string from the hint list if any; q?: free-text search}. "
+            f"Known localities: {loc_hint}. "
+            "Convert 'lakh'/'lakhs' as 100000, 'crore'/'cr' as 10000000. "
+            "If the user says 'under 50 lakhs', set max_price=5000000. '2 BHK' → bedrooms=2. "
+            "If none of the known localities match, leave locality_name null but set q with the mentioned place."
+        )
+        chat = LlmChat(api_key=EMERGENT_KEY, session_id=f"voicesearch-{uuid.uuid4().hex[:8]}", system_message=sys_msg).with_model("openai", "gpt-4o-mini")
+        raw = await chat.send_message(UserMessage(text=f"Transcript: {transcript}\nReturn JSON only."))
+        cleaned = raw.strip()
+        if cleaned.startswith("```"):
+            cleaned = cleaned.strip("`")
+            if cleaned.lower().startswith("json"):
+                cleaned = cleaned[4:]
+        m = re.search(r"\{.*\}", cleaned, re.DOTALL)
+        parsed = _json.loads(m.group(0)) if m else {}
+        filters = parsed.get("filters") or {}
+        # Resolve locality_name to locality_id if we can
+        lname = (filters.get("locality_name") or "").strip().lower()
+        locality_id = None
+        if lname:
+            for l in locs:
+                if l["name"].lower() == lname or lname in l["name"].lower():
+                    locality_id = l["id"]; break
+        if locality_id:
+            filters["locality_id"] = locality_id
+        return {
+            "transcript": transcript,
+            "translation": parsed.get("translation") or transcript,
+            "summary": parsed.get("summary") or "",
+            "filters": filters,
+        }
+    except Exception as e:
+        logging.exception("voice-search failed: %s", e)
+        return {"transcript": "", "filters": {}, "summary": "Could not parse your request. Try again."}
+    finally:
+        try: os.unlink(tmp.name)
+        except Exception: pass
+
+
 app.include_router(api_router)
 
 app.add_middleware(

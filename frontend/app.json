@@ -13,6 +13,7 @@
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Add photos to your property listing",
         "NSCameraUsageDescription": "Scan material lists to build your cart",
+        "NSMicrophoneUsageDescription": "Narrate your material list or search by voice",
         "NSLocationWhenInUseUsageDescription": "Show properties and news near your location"
       }
     },
@@ -25,7 +26,8 @@
       "permissions": [
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.ACCESS_FINE_LOCATION",
-        "android.permission.CAMERA"
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
       ]
     },
     "web": {
@@ -57,7 +59,8 @@
         }
       ],
       "@react-native-community/datetimepicker",
-      "expo-sharing"
+      "expo-sharing",
+      "expo-audio"
     ],
     "experiments": {
       "typedRoutes": true

@@ -16,7 +16,7 @@ type Tab = { key: string; label: string; icon: any; path: any };
 
 const TABS: Tab[] = [
   { key: "explore", label: "Explore", icon: "map-outline", path: "/(tabs)/explore" },
-  { key: "agents",  label: "Agents",  icon: "people-outline", path: "/(tabs)/agents" },
+  { key: "agents",  label: "Experts",  icon: "people-outline", path: "/(tabs)/agents" },
   { key: "news",    label: "News",    icon: "newspaper-outline", path: "/(tabs)/news" },
   { key: "market",  label: "Market",  icon: "storefront-outline", path: "/(tabs)/market" },
   { key: "saved",   label: "Saved",   icon: "heart-outline", path: "/(tabs)/saved" },

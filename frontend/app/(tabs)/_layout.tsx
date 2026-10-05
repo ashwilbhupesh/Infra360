@@ -29,7 +29,7 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="agents"
         options={{
-          title: "Agents",
+          title: "Experts",
           tabBarIcon: ({ color, size }) => <Icon name="people-outline" size={size} color={color} />,
         }}
       />
