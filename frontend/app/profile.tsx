@@ -81,8 +81,9 @@ export default function Profile() {
         <SectionTitle>Account</SectionTitle>
         <MenuRow icon="time-outline" title="History" subtitle="Recently viewed properties" onPress={() => router.push("/history")} testID="menu-history" />
         <MenuRow icon="receipt-outline" title="Enquiries & orders" subtitle="Your agent & supplier requests" onPress={() => router.push("/orders")} testID="menu-orders" />
+        <MenuRow icon="notifications-outline" title="Saved searches & alerts" subtitle="Get pinged when new matches appear" onPress={() => router.push("/saved-searches" as any)} testID="menu-saved-searches" />
         <MenuRow icon="gift-outline" title="Important dates" subtitle="Birthdate, spouse birthdate, anniversary" onPress={() => router.push("/personal-dates" as any)} testID="menu-personal-dates" />
-        <MenuRow icon="card-outline" title="Subscriptions" subtitle="Free · Upgrade to Pro" onPress={() => router.push("/subscriptions")} testID="menu-subscriptions" />
+        <MenuRow icon="card-outline" title="Subscriptions" subtitle="Free · Pro · Agent tiers" onPress={() => router.push("/subscriptions")} testID="menu-subscriptions" />
 
         <SectionTitle>Business</SectionTitle>
         <MenuRow icon="briefcase-outline" title="Work with us / Become an agent" subtitle="Broker, developer, lawyer, loan advisor..." onPress={() => router.push("/become-agent")} testID="menu-become-agent" />
@@ -91,6 +92,7 @@ export default function Profile() {
         <SectionTitle>Help</SectionTitle>
         <MenuRow icon="help-circle-outline" title="Contact us / Help" subtitle="WhatsApp, call or email" onPress={() => router.push("/contact-us")} testID="menu-contact" />
         <MenuRow icon="shield-checkmark-outline" title="News admin" subtitle="Review reader submissions" onPress={() => router.push("/admin-news" as any)} testID="menu-admin-news" />
+        <MenuRow icon="file-tray-full-outline" title="Verification admin" subtitle="Approve listing document proofs" onPress={() => router.push("/admin-verification" as any)} testID="menu-admin-verification" />
         <MenuRow icon="information-circle-outline" title="About InfraJagat" subtitle="Know Before You Buy." onPress={() => {}} testID="menu-about" />
 
         <Pressable testID="signout-btn" onPress={signOut} style={styles.signOut}>

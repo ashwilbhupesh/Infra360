@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextInput, Platform } from "react-native";
+import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextInput, Platform, Alert } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
@@ -106,6 +106,32 @@ export default function MapScreen() {
 
   const openSell = () => router.push("/sell" as any);
 
+  const saveSearch = async () => {
+    if (!user) {
+      Alert.alert("Login required", "Please sign in to save alerts.");
+      return;
+    }
+    const name = [
+      filter || "All",
+      listingType,
+      q ? `"${q}"` : null,
+    ].filter(Boolean).join(" · ");
+    try {
+      await api.post("/saved-searches", {
+        user_id: user.id,
+        name,
+        params: { type: filter || undefined, listing_type: listingType, q: q || undefined },
+        notify: true,
+      });
+      Alert.alert("Alert saved 🔔", `We'll ping you when new ${filter || "properties"} match "${name}".`, [
+        { text: "View my alerts", onPress: () => router.push("/saved-searches" as any) },
+        { text: "OK" },
+      ]);
+    } catch (e: any) {
+      Alert.alert("Could not save", e?.message || "Try again");
+    }
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       {view === "map" ? (
@@ -181,6 +207,10 @@ export default function MapScreen() {
           </View>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
+          <Pressable testID="save-search-btn" onPress={saveSearch} style={[styles.filterChip, { flexDirection: "row", alignItems: "center", backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary }]}>
+            <Icon name="notifications-outline" size={13} color={colors.onBrandPrimary} />
+            <Text style={[styles.filterText, { color: colors.onBrandPrimary }]}>  Save & alert me</Text>
+          </Pressable>
           {FILTERS.map(f => {
             const active = filter === f.key;
             return (
@@ -260,7 +290,7 @@ export default function MapScreen() {
             <BottomSheetScrollView
               contentContainerStyle={{ paddingBottom: spacing.xxxl, paddingTop: spacing.sm }}
             >
-              {localities.length > 0 && (
+              {localities.length > 0 && !filter && (
                 <View style={{ marginBottom: spacing.lg }}>
                   <Text style={styles.stripTitle}>Trending localities</Text>
                   <ScrollView
@@ -281,7 +311,7 @@ export default function MapScreen() {
                 </View>
               )}
               <View style={{ paddingHorizontal: spacing.lg }}>
-                <Text style={styles.stripTitle}>Listings</Text>
+                <Text style={styles.stripTitle}>{filter ? `${filter} listings` : "Listings"} ({items.length})</Text>
                 {items.map(p => (
                   <PropertyCard key={p.id} property={p} compact />
                 ))}

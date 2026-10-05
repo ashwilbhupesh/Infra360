@@ -266,17 +266,29 @@ export default function MaterialsCartPage() {
         <View style={{ flex: 1 }}>
           <Text style={styles.footerLabel}>Est. total</Text>
           <Text style={styles.footerAmount}>₹{totalAmount.toLocaleString("en-IN")}</Text>
-          <Text style={styles.footerSub}>Final rates confirmed on enquiry</Text>
+          <Text style={styles.footerSub}>Delivery charges calculated at checkout</Text>
         </View>
-        <Pressable
-          testID="cart-submit-all"
-          disabled={submitting}
-          onPress={submitAll}
-          style={[styles.submitBtn, submitting && { opacity: 0.6 }]}
-        >
-          <Text style={styles.submitText}>{submitting ? "Sending…" : "Request quotes"}</Text>
-          <Icon name="paper-plane" size={14} color={colors.onBrandPrimary} />
-        </Pressable>
+        <View style={{ flexDirection: "row", gap: 8 }}>
+          <Pressable
+            testID="cart-submit-all"
+            disabled={submitting}
+            onPress={submitAll}
+            style={[styles.quoteBtn, submitting && { opacity: 0.6 }]}
+            hitSlop={6}
+          >
+            <Icon name="paper-plane-outline" size={13} color={colors.onSurface} />
+            <Text style={styles.quoteText}>{submitting ? "Sending…" : "Quote"}</Text>
+          </Pressable>
+          <Pressable
+            testID="cart-checkout"
+            onPress={() => router.push("/materials/checkout" as any)}
+            style={styles.submitBtn}
+            hitSlop={6}
+          >
+            <Icon name="bag-check-outline" size={14} color={colors.onBrandPrimary} />
+            <Text style={styles.submitText}>Checkout</Text>
+          </Pressable>
+        </View>
       </View>
     </View>
   );
@@ -368,9 +380,11 @@ const styles = StyleSheet.create({
   footerAmount: { fontSize: 20, fontWeight: "800", color: colors.onSurface, letterSpacing: -0.3 },
   footerSub: { fontSize: 10, color: colors.muted, marginTop: 1 },
   submitBtn: {
-    flexDirection: "row", alignItems: "center", gap: 8,
-    backgroundColor: colors.brandPrimary, paddingHorizontal: 20, paddingVertical: 14,
+    flexDirection: "row", alignItems: "center", gap: 6,
+    backgroundColor: colors.brandPrimary, paddingHorizontal: 16, paddingVertical: 12,
     borderRadius: radius.pill,
   },
-  submitText: { color: colors.onBrandPrimary, fontSize: 14, fontWeight: "800" },
+  submitText: { color: colors.onBrandPrimary, fontSize: 13, fontWeight: "800" },
+  quoteBtn: { flexDirection: "row", alignItems: "center", gap: 6, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border, paddingHorizontal: 14, paddingVertical: 12, borderRadius: radius.pill },
+  quoteText: { color: colors.onSurface, fontSize: 13, fontWeight: "700" },
 });

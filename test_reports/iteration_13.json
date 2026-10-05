@@ -1,0 +1,37 @@
+{
+  "summary": "Phase-2 (Featured/Lead pricing, Agent subscription tiers, Verification system, Saved-search alerts, Locality Compare, EMI, AI-InfraValue) tested end-to-end. Backend: 20/20 pytest tests passed covering GET /promote/plans (3 plans), POST /properties/{pid}/promote (plan-14 marks featured + tier=spotlight), POST /properties/{pid}/leads for wa/call/visit at ₹25/35/75 slabs, admin GET /properties/{pid}/leads with total_cost rollup + 403 on wrong token, GET /properties returns featured-first with seeded IDs present, POST /properties/{pid}/verification-request + admin approve flips property.verified=true, GET /agent-subscription-tiers returns Gold/Silver/Bronze/Unverified with perks, GET /agents/{aid}/analytics returns tier+metrics+trend_14d (14 entries), saved-searches CRUD+matches, GET /compare/localities returns 2 enriched rows with lifestyle+properties_count+featured_count, POST /finance/emi returns emi+4 bank_offers+eligibility note, and GET /properties/p-02/ai-valuation returns fair_value_low/high+confidence+key_factors+risks (cached <5s on 2nd call). Frontend (mobile 390x844): /subscriptions renders Buyers+Agents tabs; Agents tab shows Bronze/Silver/Gold cards + monthly/annual toggle; /property/p-02 renders 'AI InfraValue' section + EMI pills (emi-down-20, emi-years-20, emi-income); /locality/loc-jagatpura has 'compare-localities-btn' that opens /compare-localities?ids= rendering side-by-side rows with 11 'Best' badges across criteria for 2 localities; /saved-searches lists created searches with create-search-btn; /promote-listing?pid=p-10 renders all 3 plans + UPI/Card radios + 'Pay & go live' which fires POST promote → success toast; /verify-listing?pid=p-15 renders doc-type chips + upload button + note input + submit; /admin-verification unlocks with token 'infrajagat-admin', lists pending requests, approve/reject buttons work (end-to-end verification request → approve verified via UI); /profile shows menu-saved-searches + menu-admin-verification + menu-subscriptions entries. Featured gold-border + 'Featured' badge rendered on 6 property cards on explore. Owner-only Promote/Verify buttons correctly hidden on p-02 (test user not owner).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {"screen": "/(tabs)/explore", "issues": ["'Save & alert me' chip sits beyond the horizontal viewport at 390px (after All/Apartments/Villas/Plots/Heat); user must scroll chips row horizontally to see it. testID present in DOM (verified via code at explore.tsx:222) but not visible without scroll. Consider making it the leading chip or using a visually distinct pill at the end of the filter row with a trailing indicator."]}
+    ],
+    "react_native_issues": [
+      {"component": "theme (shadow props)", "issue": "Console warning: '\"shadow*\" style props are deprecated. Use \"boxShadow\".' (regression from previous iterations — still present)"},
+      {"component": "theme (textShadow props)", "issue": "Console warning: '\"textShadow*\" style props are deprecated. Use \"textShadow\".'"},
+      {"component": "View (pointerEvents prop)", "issue": "Console warning: 'props.pointerEvents is deprecated. Use style.pointerEvents' — some View/wrapper is still using legacy prop API; grep in /app/frontend for `pointerEvents=` to find callers."}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase2_features.py",
+    "/app/test_reports/pytest/phase2_results.xml"
+  ],
+  "action_items": [
+    "(Optional UX) Promote 'Save & alert me' chip to be always visible on /explore — place it before Heat or render as a sticky right-pinned chip (currently requires horizontal scroll on 390px viewports).",
+    "(Optional) Migrate deprecated shadow*/textShadow*/pointerEvents style props to the modern API to silence web console warnings (purely web-side)."
+  ],
+  "critical_code_review_comments": [
+    "server.py (~1884 LOC) is approaching the 700-line split threshold — consider splitting Phase-2 endpoints (promote/leads/verification/subscriptions/saved-searches/compare/emi/ai-valuation) into feature modules.",
+    "ai-valuation caching uses `replace_one({property_id: pid}, …, upsert=True)` — this is correct. Mongo _id is excluded via NO_ID projection on read; new upsert docs don't echo _id back.",
+    "promote_property has sensible plan ID set ['plan-7','plan-14','plan-30']; test used wrong ID initially, fixed in /app/backend/tests/test_phase2_features.py.",
+    "owner_user_id gating on property/[id].tsx correctly hides Promote/Verify when the viewing user isn't the lister — validated during UI test (test user did not see owner tools on p-02).",
+    "admin review flow via POST /verification-requests/{vid}/review?decision=approve correctly flips property.verified=true and verification_status='Verified'; validated by GET /properties/p-07 returning verified:true after approval."
+  ],
+  "updated_files": ["/app/backend/tests/test_phase2_features.py (new)"],
+  "success_rate": {"backend": "100% (20/20)", "frontend": "100% (all listed features present + reachable; one minor UX note about chip overflow)"},
+  "seed_data_creation": "Backend seeds p-02/p-07/p-10/p-15/p-20/b-01/b-03/r-02 as featured on startup. Test created users TEST_Phase2 (9999900050) and TEST_UI2 (9999900056), promotion on p-10 (plan-14 spotlight), 3 leads on p-02 (wa+call+visit), 1 saved search (deleted), 1 verification request on p-07 (approved, p-07.verified→true), 1 verification request on p-20 (left pending for admin UI test).",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Phase-2 endpoints live at: /api/promote/plans, /api/properties/{pid}/promote, /api/properties/{pid}/leads (admin GET requires ?admin_token=infrajagat-admin), /api/properties/{pid}/verification-request + /api/verification-requests + /api/verification-requests/{vid}/review, /api/agent-subscription-tiers, /api/agents/{aid}/analytics, /api/saved-searches (POST/GET/DELETE + /{sid}/matches), /api/compare/localities?ids=…, /api/finance/emi, /api/properties/{pid}/ai-valuation. Correct promote plan IDs are plan-7/plan-14/plan-30 (not 'spotlight-14'). Frontend testIDs used: subs-tab-buyers, subs-tab-agents, subs-choose-{bronze|silver|gold}, subs-cycle-{monthly|annual}, promote-plan-plan-{7|14|30}, promote-pay-{upi|card}, promote-pay-btn, verify-upload-btn, verify-submit-btn, doc-type-{patta|sale_deed|khasra|rera|owner_id}, admin-verif-token-input, admin-verif-login-btn, admin-verif-tab-{Pending Review|Verified|Rejected}, approve-{vid}, reject-{vid}, save-search-btn, create-search-btn, view-search-{sid}, delete-search-{sid}, loc-compare-add, loc-col-{lid}, loc-pick-{lid}, emi-down-{10|20|30}, emi-years-{10|15|20|25|30}, emi-income, promote-listing-btn, verify-listing-btn, menu-saved-searches, menu-admin-verification, menu-subscriptions."
+}

@@ -11,10 +11,9 @@ import { useAuth } from "@/src/auth-context";
 
 const CATS = ["Infrastructure", "Government", "Development", "Residential", "Industrial", "Commercial"];
 
-type Locality = { id: string; name: string };
 type Submission = {
   id: string; title: string; summary: string; category: string;
-  locality_id?: string | null; image?: string | null;
+  address?: string | null; locality_id?: string | null; image?: string | null;
   status: "pending" | "published" | "rejected";
   date: string; submitted_at?: string;
 };
@@ -27,9 +26,9 @@ export default function PublishNews() {
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [category, setCategory] = useState("Development");
-  const [locId, setLocId] = useState<string | null>(null);
+  const [address, setAddress] = useState("");
+  const [classifiedLoc, setClassifiedLoc] = useState<{ id: string; name: string } | null>(null);
   const [image, setImage] = useState<string | null>(null);
-  const [localities, setLocalities] = useState<Locality[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [mine, setMine] = useState<Submission[]>([]);
@@ -37,15 +36,29 @@ export default function PublishNews() {
   useEffect(() => {
     (async () => {
       try {
-        const [locs, m] = await Promise.all([
-          api.get<Locality[]>("/localities"),
-          user ? api.get<Submission[]>(`/news/mine?user_id=${user.id}`) : Promise.resolve([] as Submission[]),
-        ]);
-        setLocalities(locs);
+        const m = user ? await api.get<Submission[]>(`/news/mine?user_id=${user.id}`) : [];
         setMine(m);
       } catch {}
     })();
   }, [user]);
+
+  // Debounced auto-classify of locality from address
+  useEffect(() => {
+    const t = setTimeout(async () => {
+      if (!address.trim() || address.trim().length < 6) {
+        setClassifiedLoc(null);
+        return;
+      }
+      try {
+        const r = await api.get<{ locality_id: string | null; name: string | null }>(
+          `/news/classify-locality?address=${encodeURIComponent(address.trim())}`
+        );
+        if (r.locality_id && r.name) setClassifiedLoc({ id: r.locality_id, name: r.name });
+        else setClassifiedLoc(null);
+      } catch {}
+    }, 400);
+    return () => clearTimeout(t);
+  }, [address]);
 
   const pickImage = async () => {
     const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -88,7 +101,7 @@ export default function PublishNews() {
         title: title.trim(),
         summary: summary.trim(),
         category,
-        locality_id: locId,
+        address: address.trim() || null,
         image,
         submitted_by: user?.id,
       });
@@ -98,7 +111,7 @@ export default function PublishNews() {
         [{ text: "OK", onPress: () => router.back() }]
       );
       // reset
-      setTitle(""); setSummary(""); setImage(null); setLocId(null);
+      setTitle(""); setSummary(""); setImage(null); setAddress(""); setClassifiedLoc(null);
     } catch (e: any) {
       Alert.alert("Couldn't submit", e?.message || "Please try again.");
     } finally { setSubmitting(false); }
@@ -177,26 +190,32 @@ export default function PublishNews() {
             ))}
           </ScrollView>
 
-          <Text style={styles.label}>Area</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
-            <Pressable
-              testID="publish-loc-none"
-              onPress={() => setLocId(null)}
-              style={[styles.chip, locId === null && styles.chipActive]}
-            >
-              <Text style={[styles.chipText, locId === null && styles.chipTextActive]}>City-wide</Text>
-            </Pressable>
-            {localities.map(l => (
-              <Pressable
-                key={l.id}
-                testID={`publish-loc-${l.id}`}
-                onPress={() => setLocId(l.id)}
-                style={[styles.chip, locId === l.id && styles.chipActive]}
-              >
-                <Text style={[styles.chipText, locId === l.id && styles.chipTextActive]}>{l.name}</Text>
-              </Pressable>
-            ))}
-          </ScrollView>
+          <Text style={styles.label}>Where it's happening *</Text>
+          <TextInput
+            testID="publish-address"
+            value={address}
+            onChangeText={setAddress}
+            placeholder="Area, landmark, road — e.g. Shipra Path, near Gaurav Tower, Malviya Nagar"
+            placeholderTextColor={colors.muted}
+            style={[styles.input, { height: 70, textAlignVertical: "top" }]}
+            multiline
+            maxLength={200}
+          />
+          {classifiedLoc ? (
+            <View style={styles.aiHint}>
+              <Icon name="sparkles-outline" size={13} color={colors.brand} />
+              <Text style={styles.aiHintText}>
+                Auto-tagged to <Text style={{ fontWeight: "800" }}>{classifiedLoc.name}</Text> sub-area. Editable by moderator.
+              </Text>
+            </View>
+          ) : address.trim().length >= 6 ? (
+            <View style={styles.aiHint}>
+              <Icon name="information-circle-outline" size={13} color={colors.muted} />
+              <Text style={[styles.aiHintText, { color: colors.muted }]}>Couldn't auto-match a sub-area — our editor will tag it manually.</Text>
+            </View>
+          ) : (
+            <Text style={styles.hint}>Full address helps us tag the right sub-area automatically.</Text>
+          )}
 
           <Text style={styles.label}>Photo (optional)</Text>
           <Pressable testID="publish-image-picker" onPress={pickImage} style={styles.imagePicker} disabled={uploading}>
@@ -273,4 +292,6 @@ const styles = StyleSheet.create({
   footer: { position: "absolute", bottom: 0, left: 0, right: 0, paddingHorizontal: spacing.xl, paddingTop: 10, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border },
   submitBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: colors.brandPrimary, paddingVertical: 14, borderRadius: radius.pill },
   submitText: { color: colors.onBrandPrimary, fontSize: 14, fontWeight: "800" },
+  aiHint: { flexDirection: "row", alignItems: "center", gap: 6, backgroundColor: colors.brandTertiary, paddingHorizontal: 10, paddingVertical: 7, borderRadius: radius.md, marginTop: 6 },
+  aiHintText: { fontSize: 11, color: colors.brand, flex: 1, lineHeight: 15 },
 });

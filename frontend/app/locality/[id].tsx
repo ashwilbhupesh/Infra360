@@ -73,6 +73,16 @@ export default function LocalityDetail() {
             <Metric label="YoY Change" value={`${loc.yoy_change_pct > 0 ? "+" : ""}${loc.yoy_change_pct}%`} unit="1Y" tone={loc.yoy_change_pct > 0 ? "up" : "down"} />
           </View>
 
+          <Pressable
+            testID="compare-localities-btn"
+            onPress={() => router.push(`/compare-localities?ids=${id}` as any)}
+            style={styles.compareLocCta}
+          >
+            <Icon name="git-compare-outline" size={16} color={colors.brand} />
+            <Text style={styles.compareLocTxt}>Compare {loc.name} with other localities</Text>
+            <Icon name="chevron-forward" size={16} color={colors.muted} />
+          </Pressable>
+
           {/* Lifestyle score */}
           {loc.lifestyle && (
             <View style={styles.lsCard}>
@@ -246,4 +256,6 @@ const styles = StyleSheet.create({
   lsTrack: { height: 6, borderRadius: 3, backgroundColor: colors.surfaceSecondary, overflow: "hidden" },
   lsFill: { height: 6, borderRadius: 3 },
   lsNotes: { fontSize: 11, color: colors.muted, marginTop: spacing.md, lineHeight: 16 },
+  compareLocCta: { marginTop: spacing.md, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: spacing.md, paddingVertical: 12, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border },
+  compareLocTxt: { flex: 1, fontSize: 13, fontWeight: "700", color: colors.onSurface },
 });

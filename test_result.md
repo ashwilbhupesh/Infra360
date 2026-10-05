@@ -171,27 +171,27 @@ agent_communication:
       Known cosmetic: some Unsplash category tile images 404 — not functional, display empty tile with name; non-blocking.
   - agent: "main"
     message: |
-      Shipped the user-reported 7 issues + a new feature (publish news with admin moderation):
+      Shipped 3 new asks in one batch:
 
-      1. **Android map (re-fix)** — Replaced `react-native-maps` with a pure WebView + Leaflet (OpenStreetMap) implementation in `src/components/web-map.tsx`. No Google Maps API key needed. Pins/heatmap/zoom all re-implemented via injected JS. Works identically on Android, iOS and web.
-      2. **"Show on map"** — explore.tsx highlight effect no longer auto-opens the pin preview sheet; it only highlights + centres the pin. Tapping the pin opens the preview.
-      3. **List/Map toggle** — simplified: the toggle is now PINNED inline with the Buy/Rent/Sell segment control at the top so it's always reachable. In list mode, a full-screen overlay replaces the sheet; in map mode, the BottomSheet pattern is restored.
-      4. **Sell option** — added to Buy/Rent segment. Tapping navigates to new `/sell` screen (How-it-works + Why-InfraJagat + testimonial + CTA to /list-property). Available in both explore.tsx and explore.web.tsx.
-      5. **Popular localities horizontal scroll on Android** — set `nestedScrollEnabled`, `directionalLockEnabled`, `overScrollMode="never"` on the inner `ScrollView` inside BottomSheet to stop the sheet from eating horizontal drags.
-      6. **News search + sub-areas** — news.tsx: added debounced search input (hits `/api/news?q=`), "Sub-area" chip row above "Topic". Backend `/api/news` now supports `q` (regex over title+summary) and `status` filter.
-      7. **Publish news with admin moderation** — new `/publish-news` screen (title, 2-3 line summary, Topic + Area chips, image picker via expo-image-picker → /api/upload, "Your submissions" list). Backend: `POST /api/news/submit` (status=pending), `GET /api/news/mine`, `POST /api/news/{id}/review` (admin). New `/admin-news` screen with token login (default `infrajagat-admin`, overridable via `ADMIN_TOKEN` env). Linked from Profile → Help.
-      8. **Compare criteria** — compare.tsx: 20 rows across Price / Property / Location / Listing groups with togglable group chips + "Only differences" toggle + "Best" trophy badges on winning cells. Backend `/api/compare` enriches with locality lifestyle + YoY.
-      9. **News with pictures** — seed_data.py NEWS now has `image` URLs (Unsplash) + `status: "published"`. News cards render a 16:9 hero image above the title. Backfill on startup updates legacy docs.
+      1. **Publish news → detailed address + auto-classify** — Removed the sub-area chip row from publish-news.tsx and added a free-text "Where it's happening" field. On the backend, `GET /api/news/classify-locality?address=` scans the text for any locality name/alias and returns the best match. The publish form shows a live "Auto-tagged to <locality>" chip as the user types; moderator can override during review. `POST /api/news/submit` now accepts `address` and auto-fills `locality_id` server-side when not provided.
+      2. **Explore filter strictness** — `ExploreListView` short-circuits to a single flat list (`${filter} properties`) when a type filter is active, hiding all curated sub-sections (Verified spotlight / Under 50L / Plots under 80L / Ready to move). The main explore sheet also hides the Trending Localities strip when a filter is active and renames the Listings label to `${filter} listings`.
+      3. **Materials delivery, payment & live tracking** —
+         • New `/materials/checkout.tsx`: contact + delivery address + Payment (UPI VPA / Card / COD) + order summary with per-store subtotals and free-delivery over ₹2500. Mock payment — no real money moves, UI mirrors UPI collect-request / card entry.
+         • Backend `POST /api/materials/orders` creates one order per store (keeps shipments independent), computes 9 waypoints between store coords and a Jaipur drop centre, stores `eta_mins` (based on `delivery_mins` of the store), initial status `picked_up`.
+         • Live tracking: `GET /api/materials/orders/{id}` computes `pct`, `driver_pos`, `mins_left` and advances status (picked_up → en_route → nearby → delivered) from elapsed time (1 real min ≈ 10 virtual mins for a demo-friendly experience).
+         • `/materials/tracking/[id].tsx`: WebMap with 3 markers (store, driver 🛵, destination 📍), status timeline (Picked up → On the way → Nearly there → Delivered), ETA chip, "Call store" button, items + billing + paid-via-UPI chip, polls every 4s.
+         • `/materials/cart.tsx` now has a primary "Checkout" button alongside the legacy "Quote" (WhatsApp) option.
+         • `orders.tsx` now shows a "Material deliveries" section with live ETA and status, tapping routes to the tracking page.
 
       Backend verified via curl:
-       - `/news?q=metro` returns matching items with images and status
-       - `/news/submit` creates pending doc; `/news/{id}/review` with token flips to published; wrong token → 403; missing admin → 403
-       - `/compare?ids=p-01,p-02` returns yoy_change_pct and lifestyle fields
+       - classify-locality: `Jagatpura` matches "Mahal Road near Jagatpura" ✓, nonsense returns null ✓.
+       - submit with address → `locality_id` auto-filled; moderator still sees it in /admin-news.
+       - orders POST → returns group_id + N orders (one per store), subtotal/delivery/total computed correctly, driver_pos at pickup initially.
+       - GET order → status advances, pct increases over time, mins_left decreases.
 
-      Frontend verified via screenshots: Explore map (web fallback since native requires device), News with images + Publish + Search + Sub-areas, Publish-news form, Compare with group chips + Best badges, Floating 5-tab bar visible on all detail screens.
+      Frontend verified via screenshots: Checkout (contact, address, UPI selected, pay totals + sticky payment), Publish news (headline, story, topic chips, address with Auto-tagged hint). Floating 5-tab bar persistent on both.
 
       Needs retest focus:
-       - WebMap on actual Android device (confirms the Google-Maps-free fix)
-       - Publish → wait for admin approval → see in /news feed flow (end-to-end)
-       - Sell button navigates away from Buy/Rent (stays unselected)
-       - Compare "Only differences" filters rows correctly across 2–4 picks
+       - End-to-end order flow (add → cart → checkout → pay → tracking map updates)
+       - Explore filter: Apartment selected shouldn't show Plots in the ExploreListView
+       - Publish news → admin approves (admin-news) → appears in /news feed with correct sub-area tag

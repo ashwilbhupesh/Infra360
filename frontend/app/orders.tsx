@@ -62,31 +62,32 @@ export default function Orders() {
       <ScrollView contentContainerStyle={{ padding: spacing.lg, paddingBottom: 60, gap: spacing.xl }}>
         {act.materials_orders && act.materials_orders.length > 0 && (
           <View>
-            <Text style={styles.section}>Material enquiries</Text>
-            {act.materials_orders.map(o => {
-              const stores = (o.per_store || []).map((s: any) => s.store?.name).filter(Boolean);
-              const firstStoreId = (o.per_store || [])[0]?.store?.id;
-              const itemCount = (o.items || []).reduce((n: number, i: any) => n + (i.qty || 0), 0);
+            <Text style={styles.section}>Material deliveries</Text>
+            {act.materials_orders.map((o: any) => {
+              const statusLabel: Record<string, string> = {
+                picked_up: "Picked up", en_route: "On the way",
+                nearby: "Nearby", delivered: "Delivered", placed: "Placed",
+              };
               return (
                 <Pressable
                   key={o.id}
                   testID={`mat-order-${o.id}`}
-                  onPress={() => firstStoreId && router.push(`/materials/store/${firstStoreId}` as any)}
+                  onPress={() => router.push({ pathname: "/materials/tracking/[id]", params: { id: o.id } } as any)}
                   style={styles.row}
                 >
-                  <View style={styles.avatarPlaceholder}><Icon name="cart-outline" size={18} color={colors.brand} /></View>
+                  <View style={styles.avatarPlaceholder}><Icon name="bicycle-outline" size={18} color={colors.brand} /></View>
                   <View style={{ flex: 1 }}>
                     <Text style={styles.rowTitle} numberOfLines={1}>
-                      {itemCount} item{itemCount > 1 ? "s" : ""} · ₹{(o.total ?? 0).toLocaleString("en-IN")}
+                      {o.store?.name || "Store"} · ₹{(o.total ?? 0).toLocaleString("en-IN")}
                     </Text>
-                    {stores.length ? (
-                      <Text style={styles.rowMeta} numberOfLines={1}>
-                        {stores.join(" · ")}
-                      </Text>
-                    ) : null}
-                    {o.note ? <Text style={styles.rowMsg} numberOfLines={2}>“{o.note}”</Text> : null}
+                    <Text style={styles.rowMeta} numberOfLines={1}>
+                      {(o.items || []).length} item{(o.items || []).length === 1 ? "" : "s"}
+                      {o.mins_left != null && o.status !== "delivered" ? ` · ETA ${o.mins_left} min` : ""}
+                    </Text>
                   </View>
-                  <View style={styles.statusPill}><Text style={styles.statusText}>{o.status}</Text></View>
+                  <View style={styles.statusPill}>
+                    <Text style={styles.statusText}>{statusLabel[o.status] || o.status}</Text>
+                  </View>
                 </Pressable>
               );
             })}

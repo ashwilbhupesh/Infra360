@@ -46,6 +46,22 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
     return <ActivityIndicator color={colors.brand} style={{ marginTop: spacing.xxl }} />;
   }
 
+  // When a specific property-type filter is active, show a strict single-section list
+  // so no curated sub-sections (Verified spotlight / Under 50L / etc.) can show items of other types.
+  if (filter) {
+    return (
+      <View style={{ paddingBottom: 40, paddingTop: spacing.md }}>
+        <Section title={`${filter} properties`} subtitle={`${items.length} listing${items.length === 1 ? "" : "s"} match this filter`}>
+          {items.length === 0 ? (
+            <Text style={styles.empty}>No {filter} properties match. Try removing the filter.</Text>
+          ) : (
+            items.map(p => <PropertyCard key={p.id} property={p} />)
+          )}
+        </Section>
+      </View>
+    );
+  }
+
   return (
     <View style={{ paddingBottom: 40, paddingTop: spacing.md }}>
       {/* Trending areas — with quick analysis */}
@@ -182,4 +198,5 @@ const styles = StyleSheet.create({
   smallPrice: { fontSize: 15, fontWeight: "800", color: colors.onSurface, letterSpacing: -0.2 },
   smallTitle: { fontSize: 12, fontWeight: "700", color: colors.onSurface, marginTop: 2 },
   smallMeta: { fontSize: 10, color: colors.muted, marginTop: 2 },
+  empty: { textAlign: "center", color: colors.muted, fontSize: 13, paddingVertical: spacing.xxl },
 });

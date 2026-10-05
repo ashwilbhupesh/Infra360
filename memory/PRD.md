@@ -89,3 +89,47 @@ Within the Market tab, the **Materials** group is a shopping-style catalogue:
 - `GET /api/materials/products?q=&category_id=`
 - `POST /api/materials/cart-enquiry` — rolls up `per_store` subtotals and total
 - `GET /api/user/{uid}/activity` now includes `materials_orders`
+
+## Phase 2 — Monetisation & Intelligence (Oct 2026) ✅ Shipped
+Seven features that take InfraJagat from map browser to full real-estate operating system:
+
+### a. Featured Listings & Lead-Based Pricing
+- Any owner can **promote** a listing for 7/14/30 days (₹499/₹899/₹1499). Mock UPI/Card payment.
+- `/promote-listing?property_id=` flow. Boosted listings pin above the type-filtered list (sort: `featured desc, listed_at desc`) and show a gold "Featured" ribbon on the card.
+- Every WhatsApp/Call tap on a property detail logs a lead with per-channel cost (₹25 / ₹35 / ₹75).
+- Endpoints: `GET /api/promote/plans`, `POST /api/properties/{pid}/promote`, `POST /api/properties/{pid}/leads`, `GET /api/properties/{pid}/leads?admin_token=`.
+
+### b. Agent / Developer Subscription Tiers
+- Four tiers **Gold / Silver / Bronze / Unverified** with distinct listing-caps, lead-caps, perks and badge colour.
+- `/subscriptions` now has **Buyers** and **Agents & Developers** tabs with Monthly / Annual (save 17%) toggle.
+- Agent detail page renders a **Live performance** block: 30-day views/leads/conversion/city-rank + a 14-day sparkline + current perks + "Upgrade tier" CTA.
+- Endpoints: `GET /api/agent-subscription-tiers`, `GET /api/agents/{aid}/analytics`.
+
+### c. Document-Verified Badge Workflow
+- Owners submit `/verify-listing?property_id=` with up to N doc photos (Patta / Sale Deed / Khasra / RERA / Owner-ID) via `expo-image-picker` + Emergent object-storage.
+- Admin reviews pending requests from `/admin-verification` (shared-secret token `infrajagat-admin`), approve/reject toggles `property.verified` and status.
+- Endpoints: `POST /api/properties/{pid}/verification-request`, `GET /api/verification-requests?status=&admin_token=`, `POST /api/verification-requests/{vid}/review`.
+
+### d. Saved-Search Alerts
+- Explore chip **"Save & alert me"** stores current search (type / listing-type / q / price / bedrooms) under the user.
+- `/saved-searches` screen lists all alerts with live match counts, delete, and jump-to-explore.
+- Endpoints: `POST /api/saved-searches`, `GET /api/saved-searches?user_id=`, `GET /api/saved-searches/{sid}/matches`, `DELETE /api/saved-searches/{sid}?user_id=`.
+
+### e. Locality Compare
+- "Compare this locality" CTA on `/locality/[id]` opens `/compare-localities?ids=`.
+- Side-by-side matrix across 14 criteria grouped into price / lifestyle / activity with per-row **Best** badges. Supports adding up to 4 localities via modal picker.
+- Endpoint: `GET /api/compare/localities?ids=`.
+
+### f. Home-Loan Instant Quote
+- Property detail renders an **EMI card** with pill-controls for down-payment %, tenure, monthly income input.
+- Server returns EMI, total interest, total payable, eligibility note, and 4 illustrative bank offers.
+- Endpoint: `POST /api/finance/emi`.
+
+### g. AI-Backed InfraValue
+- Property detail shows **AI InfraValue** section: fair-value range + verdict (under / within / above fair) + 3-4 key factors + 2-3 risks.
+- Backend calls Emergent LLM (gpt-4o-mini) with locality snapshot, lifestyle scores, and infrastructure context; falls back to deterministic heuristic if LLM fails. Result cached in `ai_valuations` collection.
+- Endpoint: `GET /api/properties/{pid}/ai-valuation?refresh=`.
+
+### Admin token
+- `infrajagat-admin` (stored in `/app/backend/.env` as `ADMIN_TOKEN`). Used for news review, verification review, and admin lead inspection.
+

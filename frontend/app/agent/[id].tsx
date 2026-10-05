@@ -27,6 +27,8 @@ export default function AgentDetail() {
   const router = useRouter();
   const { user } = useAuth();
   const [a, setA] = useState<Agent | null>(null);
+  const [analytics, setAnalytics] = useState<any>(null);
+  const [showAnalytics, setShowAnalytics] = useState(false);
   const [loading, setLoading] = useState(true);
   const [showEnquiry, setShowEnquiry] = useState(false);
   const [name, setName] = useState(user?.name ?? "");
@@ -40,6 +42,8 @@ export default function AgentDetail() {
       try {
         const data = await api.get<Agent>(`/agents/${id}`);
         setA(data);
+        // Prefetch analytics (tier-gated)
+        api.get<any>(`/agents/${id}/analytics`).then(setAnalytics).catch(() => {});
       } finally { setLoading(false); }
     })();
   }, [id]);
@@ -142,6 +146,50 @@ export default function AgentDetail() {
               <Text style={styles.about}>{a.languages.join(" · ")}</Text>
             </>
           ) : null}
+
+          {analytics && (
+            <>
+              <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", marginTop: spacing.xxl }}>
+                <Text style={[styles.sectionTitle, { marginTop: 0 }]}>Live performance</Text>
+                <Pressable testID="analytics-toggle" onPress={() => setShowAnalytics(v => !v)} hitSlop={10}>
+                  <Icon name={showAnalytics ? "chevron-up" : "chevron-down"} size={18} color={colors.muted} />
+                </Pressable>
+              </View>
+              <View style={styles.analyticsSummary}>
+                <View style={styles.anaStat}><Text style={styles.anaValue}>{analytics.metrics?.views_30d ?? 0}</Text><Text style={styles.anaLabel}>Views · 30d</Text></View>
+                <View style={styles.anaStat}><Text style={styles.anaValue}>{analytics.metrics?.leads_30d ?? 0}</Text><Text style={styles.anaLabel}>Leads · 30d</Text></View>
+                <View style={styles.anaStat}><Text style={styles.anaValue}>{analytics.metrics?.conversion_pct ?? 0}%</Text><Text style={styles.anaLabel}>Conversion</Text></View>
+                <View style={styles.anaStat}><Text style={styles.anaValue}>#{analytics.metrics?.profile_rank_city ?? "–"}</Text><Text style={styles.anaLabel}>City rank</Text></View>
+              </View>
+              {showAnalytics && (
+                <View style={styles.chartCard}>
+                  <Text style={styles.anaTitle}>Last 14 days · views & leads</Text>
+                  <View style={styles.chartRow}>
+                    {(analytics.trend_14d || []).map((d: any, i: number) => {
+                      const max = Math.max(1, ...analytics.trend_14d.map((x: any) => x.views));
+                      const h = Math.max(4, Math.round((d.views / max) * 72));
+                      return (
+                        <View key={i} style={styles.chartCol}>
+                          <View style={{ flex: 1, justifyContent: "flex-end" }}>
+                            <View style={[styles.chartBar, { height: h }]} />
+                          </View>
+                        </View>
+                      );
+                    })}
+                  </View>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", marginTop: 6 }}>
+                    <Text style={styles.chartLabel}>{new Date(analytics.trend_14d?.[0]?.date).toLocaleDateString("en-IN", { day: "2-digit", month: "short" })}</Text>
+                    <Text style={styles.chartLabel}>Today</Text>
+                  </View>
+                  <Text style={styles.anaCaption}>Perks: {analytics.perks?.perks?.slice(0, 2).join(" · ") || "—"}</Text>
+                  <Pressable testID="upgrade-tier-btn" onPress={() => router.push("/subscriptions" as any)} style={styles.upgradeBtn}>
+                    <Icon name="rocket-outline" size={14} color={colors.onBrandPrimary} />
+                    <Text style={styles.upgradeTxt}>Upgrade tier</Text>
+                  </Pressable>
+                </View>
+              )}
+            </>
+          )}
 
           {a.recent_listings && a.recent_listings.length > 0 && (
             <>
@@ -263,4 +311,18 @@ const styles = StyleSheet.create({
   sheetSub: { fontSize: 13, color: colors.muted, marginTop: 6, marginBottom: spacing.lg, textAlign: "center" },
   input: { borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, borderRadius: radius.md, paddingHorizontal: spacing.md, height: 48, color: colors.onSurface, fontSize: 14, marginTop: spacing.sm },
   successIcon: { width: 56, height: 56, borderRadius: 28, backgroundColor: colors.success, alignItems: "center", justifyContent: "center", marginBottom: spacing.md },
+  // Analytics
+  analyticsSummary: { flexDirection: "row", gap: 6, marginTop: spacing.sm },
+  anaStat: { flex: 1, padding: 10, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border, alignItems: "center" },
+  anaValue: { fontSize: 16, fontWeight: "800", color: colors.onSurface },
+  anaLabel: { fontSize: 10, color: colors.muted, fontWeight: "700", marginTop: 2, textAlign: "center" },
+  chartCard: { marginTop: spacing.md, padding: spacing.md, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
+  anaTitle: { fontSize: 11, fontWeight: "800", color: colors.muted, letterSpacing: 0.6, textTransform: "uppercase", marginBottom: 10 },
+  chartRow: { flexDirection: "row", alignItems: "flex-end", gap: 4, height: 80 },
+  chartCol: { flex: 1 },
+  chartBar: { backgroundColor: colors.brandPrimary, borderRadius: 2 },
+  chartLabel: { fontSize: 10, color: colors.muted, fontWeight: "700" },
+  anaCaption: { fontSize: 11, color: colors.muted, marginTop: 10, lineHeight: 15 },
+  upgradeBtn: { marginTop: 10, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingVertical: 10, borderRadius: radius.md, backgroundColor: colors.brand },
+  upgradeTxt: { color: colors.onBrand, fontWeight: "800", fontSize: 13 },
 });

@@ -17,6 +17,8 @@ export type Property = {
   address: string;
   images: string[];
   verified: boolean;
+  featured?: boolean;
+  featured_tier?: string;
   source: string;
   bedrooms?: number | null;
   locality_name?: string;
@@ -26,10 +28,16 @@ export function PropertyCard({ property, compact = false, onPress }: { property:
   const router = useRouter();
   const go = onPress || (() => router.push(`/property/${property.id}`));
   return (
-    <Pressable testID={`property-card-${property.id}`} onPress={go} style={[styles.card, compact && styles.cardCompact]}>
+    <Pressable testID={`property-card-${property.id}`} onPress={go} style={[styles.card, compact && styles.cardCompact, property.featured && styles.cardFeatured]}>
       <Image source={{ uri: property.images?.[0] }} style={compact ? styles.imgCompact : styles.img} contentFit="cover" transition={200} />
+      {property.featured && (
+        <View style={styles.featuredBadge}>
+          <Icon name="star" size={11} color="#FFFFFF" />
+          <Text style={styles.featuredText}>Featured</Text>
+        </View>
+      )}
       {property.verified && (
-        <View style={styles.verifiedBadge}>
+        <View style={[styles.verifiedBadge, property.featured ? { top: compact ? 6 : spacing.md + 28, left: spacing.md } : null]}>
           <Icon name="checkmark-circle" size={12} color={colors.onSuccess} />
           <Text style={styles.verifiedText}>Verified</Text>
         </View>
@@ -57,8 +65,15 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md, borderWidth: 1, borderColor: colors.border,
   },
   cardCompact: { flexDirection: "row", height: 110, marginBottom: spacing.sm },
+  cardFeatured: { borderColor: "#D4A72C", borderWidth: 2 },
   img: { width: "100%", height: 180, backgroundColor: colors.surfaceTertiary },
   imgCompact: { width: 130, height: "100%", backgroundColor: colors.surfaceTertiary },
+  featuredBadge: {
+    position: "absolute", top: spacing.sm, left: spacing.sm, flexDirection: "row",
+    alignItems: "center", gap: 3, backgroundColor: "#D4A72C",
+    paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill,
+  },
+  featuredText: { color: "#FFFFFF", fontSize: 10, fontWeight: "800", letterSpacing: 0.3 },
   verifiedBadge: {
     position: "absolute", top: spacing.md, left: spacing.md, flexDirection: "row",
     alignItems: "center", gap: 4, backgroundColor: colors.success,

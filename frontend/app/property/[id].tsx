@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Pressable, Dimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, ActivityIndicator, Pressable, Dimensions, TextInput } from "react-native";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -22,12 +22,16 @@ export default function PropertyDetail() {
   const [loading, setLoading] = useState(true);
   const [saved, setSaved] = useState(false);
   const [similar, setSimilar] = useState<any[]>([]);
+  const [emi, setEmi] = useState<any>(null);
+  const [emiCfg, setEmiCfg] = useState({ down: 20, rate: 8.75, years: 20, income: "" });
+  const [aiVal, setAiVal] = useState<any>(null);
+  const [aiLoading, setAiLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
       try {
         const [p, sim] = await Promise.all([
-          api.get(`/properties/${id}`),
+          api.get<any>(`/properties/${id}`),
           api.get<any[]>(`/properties/${id}/similar?limit=6`).catch(() => []),
         ]);
         setProp(p);
@@ -36,6 +40,35 @@ export default function PropertyDetail() {
       } finally { setLoading(false); }
     })();
   }, [id]);
+
+  // Fetch EMI quote reactively
+  useEffect(() => {
+    if (!prop) return;
+    (async () => {
+      try {
+        const inc = parseFloat(emiCfg.income) || null;
+        const res = await api.post<any>("/finance/emi", {
+          price: prop.price,
+          down_payment_pct: emiCfg.down,
+          annual_rate_pct: emiCfg.rate,
+          tenure_years: emiCfg.years,
+          monthly_income: inc,
+        });
+        setEmi(res);
+      } catch {}
+    })();
+  }, [prop, emiCfg]);
+
+  const loadAI = async () => {
+    if (!prop) return;
+    setAiLoading(true);
+    try {
+      const res = await api.get<any>(`/properties/${prop.id}/ai-valuation`);
+      setAiVal(res);
+    } finally { setAiLoading(false); }
+  };
+
+  useEffect(() => { if (prop) loadAI(); /* eslint-disable-next-line */ }, [prop?.id]);
 
   const toggleSave = async () => {
     if (!user) return;
@@ -120,6 +153,148 @@ export default function PropertyDetail() {
             </Pressable>
           </Section>
 
+          {/* AI InfraValue */}
+          <Section title="AI InfraValue">
+            {aiLoading && !aiVal ? <ActivityIndicator color={colors.brand} /> : aiVal ? (
+              <View style={styles.aiCard}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+                  <View style={styles.aiBadge}><Icon name="sparkles" size={11} color="#FFFFFF" /><Text style={styles.aiBadgeTxt}>AI</Text></View>
+                  <Text style={styles.aiTitle}>Fair-value range</Text>
+                  <View style={{ flex: 1 }} />
+                  <View style={[styles.aiVerdict, aiVal.price_vs_fair === "under" && { backgroundColor: colors.success }, aiVal.price_vs_fair === "above" && { backgroundColor: colors.error }, aiVal.price_vs_fair === "within_range" && { backgroundColor: colors.brand }]}>
+                    <Text style={styles.aiVerdictTxt}>
+                      {aiVal.price_vs_fair === "under" ? "Below fair" : aiVal.price_vs_fair === "above" ? "Above fair" : "Within fair"}
+                    </Text>
+                  </View>
+                </View>
+                <Text style={styles.aiRange}>
+                  {formatINR(aiVal.fair_value_low)}–{formatINR(aiVal.fair_value_high)}
+                </Text>
+                <Text style={styles.aiMeta}>Confidence: {aiVal.confidence} · Model: {aiVal.model}</Text>
+                {!!(aiVal.key_factors?.length) && (
+                  <View style={{ marginTop: spacing.md, gap: 6 }}>
+                    <Text style={styles.aiHead}>Why this value</Text>
+                    {aiVal.key_factors.map((f: string, i: number) => (
+                      <View key={i} style={styles.aiRow}>
+                        <Icon name="checkmark-circle" size={12} color={colors.success} />
+                        <Text style={styles.aiTxt}>{f}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
+                {!!(aiVal.risks?.length) && (
+                  <View style={{ marginTop: spacing.md, gap: 6 }}>
+                    <Text style={styles.aiHead}>Risks to consider</Text>
+                    {aiVal.risks.map((r: string, i: number) => (
+                      <View key={i} style={styles.aiRow}>
+                        <Icon name="alert-circle" size={12} color={colors.error} />
+                        <Text style={styles.aiTxt}>{r}</Text>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+            ) : <Text style={{ color: colors.muted }}>Could not generate valuation.</Text>}
+          </Section>
+
+          {/* EMI Instant Quote */}
+          <Section title="Home-loan EMI (instant quote)">
+            <View style={styles.emiCard}>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "flex-end" }}>
+                <View>
+                  <Text style={styles.emiLabel}>MONTHLY EMI</Text>
+                  <Text style={styles.emiValue}>₹{indianComma(emi?.emi || 0)}</Text>
+                </View>
+                <View style={{ alignItems: "flex-end" }}>
+                  <Text style={styles.emiLabel}>DOWN PAYMENT</Text>
+                  <Text style={styles.emiSmall}>₹{indianComma(emi?.down_payment || 0)}</Text>
+                </View>
+              </View>
+              <View style={styles.emiCfgRow}>
+                <View style={styles.emiCfgCol}>
+                  <Text style={styles.emiCfgLabel}>Down %</Text>
+                  <View style={styles.emiPills}>
+                    {[10, 20, 30, 40].map(v => (
+                      <Pressable key={v} testID={`emi-down-${v}`} onPress={() => setEmiCfg(c => ({ ...c, down: v }))} style={[styles.emiPill, emiCfg.down === v && styles.emiPillActive]}>
+                        <Text style={[styles.emiPillTxt, emiCfg.down === v && { color: colors.onBrandPrimary }]}>{v}%</Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                </View>
+              </View>
+              <View style={styles.emiCfgRow}>
+                <View style={styles.emiCfgCol}>
+                  <Text style={styles.emiCfgLabel}>Tenure</Text>
+                  <View style={styles.emiPills}>
+                    {[10, 15, 20, 25].map(v => (
+                      <Pressable key={v} testID={`emi-years-${v}`} onPress={() => setEmiCfg(c => ({ ...c, years: v }))} style={[styles.emiPill, emiCfg.years === v && styles.emiPillActive]}>
+                        <Text style={[styles.emiPillTxt, emiCfg.years === v && { color: colors.onBrandPrimary }]}>{v}y</Text>
+                      </Pressable>
+                    ))}
+                  </View>
+                </View>
+              </View>
+              <View style={styles.emiInline}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.emiCfgLabel}>Monthly income (optional)</Text>
+                  <TextInput
+                    testID="emi-income"
+                    value={emiCfg.income}
+                    onChangeText={v => setEmiCfg(c => ({ ...c, income: v.replace(/[^0-9]/g, "") }))}
+                    placeholder="₹"
+                    placeholderTextColor={colors.muted}
+                    keyboardType="numeric"
+                    style={styles.emiInput}
+                  />
+                </View>
+              </View>
+              {emi?.eligibility?.note ? (
+                <Text style={[styles.emiNote, emi.eligibility.ok === false && { color: colors.error }, emi.eligibility.ok === true && { color: colors.success }]}>{emi.eligibility.note}</Text>
+              ) : null}
+              {Array.isArray(emi?.bank_offers) && emi.bank_offers.length > 0 && (
+                <View style={{ marginTop: spacing.md }}>
+                  <Text style={styles.emiCfgLabel}>Illustrative bank offers</Text>
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8, paddingTop: 6 }}>
+                    {emi.bank_offers.map((b: any) => (
+                      <View key={b.bank} style={styles.bankCard}>
+                        <Text style={styles.bankName}>{b.bank}</Text>
+                        <Text style={styles.bankRate}>{b.rate.toFixed(2)}% p.a.</Text>
+                        <Text style={styles.bankEmi}>₹{indianComma(b.emi)} / mo</Text>
+                      </View>
+                    ))}
+                  </ScrollView>
+                </View>
+              )}
+            </View>
+          </Section>
+
+          {/* Owner tools: Promote / Verify */}
+          {(prop.owner_user_id && prop.owner_user_id === user?.id) ? (
+            <Section title="Your listing tools">
+              <View style={{ flexDirection: "row", gap: 8 }}>
+                <Pressable
+                  testID="promote-listing-btn"
+                  onPress={() => router.push(`/promote-listing?property_id=${prop.id}` as any)}
+                  style={[styles.toolBtn, { backgroundColor: "#D4A72C" }]}
+                >
+                  <Icon name="rocket-outline" size={16} color="#FFFFFF" />
+                  <Text style={[styles.toolTxt, { color: "#FFFFFF" }]}>Promote</Text>
+                </Pressable>
+                <Pressable
+                  testID="verify-listing-btn"
+                  onPress={() => router.push(`/verify-listing?property_id=${prop.id}` as any)}
+                  style={[styles.toolBtn, { backgroundColor: colors.success }]}
+                >
+                  <Icon name="shield-checkmark-outline" size={16} color="#FFFFFF" />
+                  <Text style={[styles.toolTxt, { color: "#FFFFFF" }]}>
+                    {prop.verified ? "Verified" : prop.verification_status === "Pending Review" ? "Under review" : "Verify"}
+                  </Text>
+                </Pressable>
+              </View>
+            </Section>
+          ) : null}
+
+
           <Section title="Locality">
             <Pressable
               testID="open-locality-btn"
@@ -170,9 +345,11 @@ export default function PropertyDetail() {
       <View style={[styles.cta, { paddingBottom: insets.bottom + spacing.md }]}>
         <Pressable
           testID="whatsapp-btn"
-          onPress={() => {
+          onPress={async () => {
             const phone = prop.lister?.whatsapp || prop.lister?.phone;
             if (!phone) return;
+            // Track lead (fire-and-forget)
+            api.post(`/properties/${prop.id}/leads`, { user_id: user?.id, name: user?.name, mobile: user?.mobile, channel: "whatsapp" }).catch(() => {});
             const msg = `Hi, I saw your listing "${prop.title}" (${formatINR(prop.price)}) on InfraJagat. Is it still available?`;
             openWhatsApp(phone, msg);
           }}
@@ -182,7 +359,11 @@ export default function PropertyDetail() {
         </Pressable>
         <Pressable
           testID="contact-btn"
-          onPress={() => prop.lister?.phone && openTel(prop.lister.phone)}
+          onPress={() => {
+            if (!prop.lister?.phone) return;
+            api.post(`/properties/${prop.id}/leads`, { user_id: user?.id, name: user?.name, mobile: user?.mobile, channel: "call" }).catch(() => {});
+            openTel(prop.lister.phone);
+          }}
           style={styles.ctaBtn}
         >
           <Icon name="call-outline" size={16} color={colors.onBrandPrimary} />
@@ -252,4 +433,38 @@ const styles = StyleSheet.create({
   listerName: { fontSize: 14, fontWeight: "700", color: colors.onSurface },
   listerFirm: { fontSize: 12, color: colors.muted, marginTop: 2 },
   listerPhone: { fontSize: 12, color: colors.brandPrimary, marginTop: 4, fontWeight: "700" },
+  // AI valuation
+  aiCard: { padding: spacing.lg, borderRadius: radius.lg, borderWidth: 1, borderColor: "#C8DBF9", backgroundColor: "#F4F8FF" },
+  aiBadge: { flexDirection: "row", alignItems: "center", gap: 3, paddingHorizontal: 8, paddingVertical: 3, borderRadius: radius.pill, backgroundColor: "#1E6FEB" },
+  aiBadgeTxt: { color: "#FFFFFF", fontSize: 10, fontWeight: "800", letterSpacing: 0.3 },
+  aiTitle: { fontSize: 13, fontWeight: "800", color: colors.onSurface },
+  aiVerdict: { paddingHorizontal: 8, paddingVertical: 4, borderRadius: radius.pill },
+  aiVerdictTxt: { color: "#FFFFFF", fontSize: 10, fontWeight: "800", letterSpacing: 0.3 },
+  aiRange: { fontSize: 20, fontWeight: "800", color: colors.brand, marginTop: 8, letterSpacing: -0.3 },
+  aiMeta: { fontSize: 11, color: colors.muted, marginTop: 4 },
+  aiHead: { fontSize: 11, fontWeight: "800", color: colors.muted, letterSpacing: 0.6, textTransform: "uppercase" },
+  aiRow: { flexDirection: "row", alignItems: "flex-start", gap: 6 },
+  aiTxt: { flex: 1, fontSize: 12, color: colors.onSurface, lineHeight: 17 },
+  // EMI card
+  emiCard: { padding: spacing.lg, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surfaceSecondary, gap: 10 },
+  emiLabel: { fontSize: 10, fontWeight: "800", color: colors.muted, letterSpacing: 0.6 },
+  emiValue: { fontSize: 26, fontWeight: "800", color: colors.brandPrimary, marginTop: 4, letterSpacing: -0.5 },
+  emiSmall: { fontSize: 16, fontWeight: "800", color: colors.onSurface, marginTop: 4 },
+  emiCfgRow: { marginTop: 6 },
+  emiCfgCol: {},
+  emiCfgLabel: { fontSize: 11, fontWeight: "700", color: colors.muted, marginBottom: 4 },
+  emiPills: { flexDirection: "row", gap: 6 },
+  emiPill: { paddingHorizontal: 12, height: 32, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center" },
+  emiPillActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary },
+  emiPillTxt: { fontSize: 12, fontWeight: "700", color: colors.onSurface },
+  emiInline: { flexDirection: "row", gap: 10 },
+  emiInput: { height: 40, borderRadius: radius.md, backgroundColor: colors.surface, paddingHorizontal: spacing.md, borderWidth: 1, borderColor: colors.border, fontSize: 13, color: colors.onSurface },
+  emiNote: { fontSize: 11, fontWeight: "700", marginTop: 2 },
+  bankCard: { padding: 10, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface, minWidth: 110 },
+  bankName: { fontSize: 12, fontWeight: "800", color: colors.onSurface },
+  bankRate: { fontSize: 11, color: colors.muted, marginTop: 2 },
+  bankEmi: { fontSize: 13, fontWeight: "700", color: colors.brandPrimary, marginTop: 4 },
+  // Tools
+  toolBtn: { flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, paddingVertical: 12, borderRadius: radius.md },
+  toolTxt: { fontSize: 13, fontWeight: "800" },
 });
