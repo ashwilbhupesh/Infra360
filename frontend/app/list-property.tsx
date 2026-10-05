@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TextInput, Pressable, ActivityIndicator, KeyboardAvoidingView, Platform, Alert, Linking } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Icon from "@react-native-vector-icons/ionicons";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 import { Image } from "expo-image";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api, backendUrl } from "@/src/api";
@@ -28,6 +29,7 @@ type Form = {
   area: string; area_unit: string; price: string;
   bedrooms: string; facing: string; road_width_ft: string;
   source: string; description: string; images: string[];
+  lat: string; lng: string; street_address: string;
 };
 
 const empty: Form = {
@@ -35,6 +37,7 @@ const empty: Form = {
   area: "", area_unit: "sq yd", price: "",
   bedrooms: "", facing: "East", road_width_ft: "",
   source: "Owner", description: "", images: [],
+  lat: "", lng: "", street_address: "",
 };
 
 export default function ListProperty() {
@@ -45,10 +48,51 @@ export default function ListProperty() {
   const [form, setForm] = useState<Form>(empty);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+  const [locBusy, setLocBusy] = useState(false);
 
   const STEPS = ["Type", "Location", "Details", "Price", "Photos", "Seller", "Preview"];
   const total = STEPS.length;
   const set = (k: keyof Form, v: any) => setForm(s => ({ ...s, [k]: v }));
+
+  const useCurrentLocation = async () => {
+    setErr(null);
+    setLocBusy(true);
+    try {
+      let perm = await Location.getForegroundPermissionsAsync();
+      if (!perm.granted) {
+        if (!perm.canAskAgain) {
+          Alert.alert(
+            "Location permission needed",
+            "To pin your listing on the map, allow InfraJagat to use your location from Settings.",
+            [
+              { text: "Cancel", style: "cancel" },
+              { text: "Open Settings", onPress: () => Linking.openSettings() },
+            ]
+          );
+          return;
+        }
+        perm = await Location.requestForegroundPermissionsAsync();
+      }
+      if (!perm.granted) return;
+      const pos = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced });
+      const lat = pos.coords.latitude.toFixed(6);
+      const lng = pos.coords.longitude.toFixed(6);
+      setForm(s => ({ ...s, lat, lng }));
+      // Best-effort reverse geocode for a readable address
+      try {
+        const places = await Location.reverseGeocodeAsync({ latitude: pos.coords.latitude, longitude: pos.coords.longitude });
+        const p = places?.[0];
+        if (p) {
+          const line = [p.name, p.street, p.district, p.city, p.region].filter(Boolean).join(", ");
+          if (line) setForm(s => ({ ...s, street_address: s.street_address || line }));
+        }
+      } catch { /* reverse geocode optional */ }
+    } catch (e: any) {
+      setErr(e?.message || "Could not fetch location");
+    } finally {
+      setLocBusy(false);
+    }
+  };
 
   const canNext = () => {
     if (step === 0) return !!form.type;
@@ -101,15 +145,23 @@ export default function ListProperty() {
         "loc-sirsi-road": { lat: 26.9316, lng: 75.6980 },
       };
       const c = coords[form.locality_id] || { lat: 26.9, lng: 75.8 };
+      const userLat = parseFloat(form.lat);
+      const userLng = parseFloat(form.lng);
+      const hasUserCoords = Number.isFinite(userLat) && Number.isFinite(userLng)
+        && userLat >= -90 && userLat <= 90 && userLng >= -180 && userLng <= 180;
+      const finalLat = hasUserCoords ? userLat : c.lat;
+      const finalLng = hasUserCoords ? userLng : c.lng;
+      const fallbackAddress = `${loc?.name || ""}, Jaipur`;
+      const finalAddress = form.street_address.trim() ? form.street_address.trim() : fallbackAddress;
       const body = {
         title: form.title,
         type: form.type,
         price: parseFloat(form.price),
         area: parseFloat(form.area),
         area_unit: form.area_unit,
-        lat: c.lat, lng: c.lng,
+        lat: finalLat, lng: finalLng,
         locality_id: form.locality_id,
-        address: `${loc?.name || ""}, Jaipur`,
+        address: finalAddress,
         bedrooms: form.bedrooms ? parseInt(form.bedrooms) : null,
         facing: form.facing || null,
         road_width_ft: form.road_width_ft ? parseInt(form.road_width_ft) : null,
@@ -170,6 +222,7 @@ export default function ListProperty() {
             <Text style={styles.q}>Property details</Text>
             <Text style={styles.label}>Area</Text>
             <TextInput testID="area-input" style={styles.input} placeholder="600" placeholderTextColor={colors.muted} keyboardType="numeric" value={form.area} onChangeText={t => set("area", t)} />
+            <Text style={styles.hintSmall}>Enter the number only — pick the unit below.</Text>
             <Text style={styles.label}>Unit</Text>
             <View style={styles.chipsWrap}>
               {UNITS.map(u => (
@@ -178,6 +231,61 @@ export default function ListProperty() {
                 </Pressable>
               ))}
             </View>
+
+            <Text style={styles.sectionTitle}>Pin on map</Text>
+            <Text style={styles.hintSmall}>Drop a precise pin so buyers can find your property on the map (works on iOS & Android).</Text>
+            <Pressable testID="use-current-location-btn" onPress={useCurrentLocation} disabled={locBusy} style={[styles.gpsBtn, locBusy && { opacity: 0.6 }]}>
+              {locBusy
+                ? <ActivityIndicator color={colors.brand} />
+                : <Icon name="locate" size={18} color={colors.brand} />}
+              <Text style={styles.gpsBtnText}>{locBusy ? "Fetching…" : "Use my current location"}</Text>
+            </Pressable>
+
+            <View style={styles.rowGap}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.label}>Latitude</Text>
+                <TextInput
+                  testID="lat-input"
+                  style={styles.input}
+                  placeholder="26.9124"
+                  placeholderTextColor={colors.muted}
+                  keyboardType="numbers-and-punctuation"
+                  value={form.lat}
+                  onChangeText={t => set("lat", t)}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.label}>Longitude</Text>
+                <TextInput
+                  testID="lng-input"
+                  style={styles.input}
+                  placeholder="75.7873"
+                  placeholderTextColor={colors.muted}
+                  keyboardType="numbers-and-punctuation"
+                  value={form.lng}
+                  onChangeText={t => set("lng", t)}
+                />
+              </View>
+            </View>
+            {(form.lat && form.lng) ? (
+              <View style={styles.coordPreview}>
+                <Icon name="pin" size={14} color={colors.brand} />
+                <Text style={styles.coordPreviewText} numberOfLines={1}>{form.lat}, {form.lng}</Text>
+              </View>
+            ) : (
+              <Text style={styles.hintSmall}>If left empty, we{"\u2019"}ll place the pin at the selected locality center.</Text>
+            )}
+
+            <Text style={styles.label}>Street / Landmark (optional)</Text>
+            <TextInput
+              testID="street-input"
+              style={styles.input}
+              placeholder="e.g. Near D-Mart, Sector 7, Ajmer Road"
+              placeholderTextColor={colors.muted}
+              value={form.street_address}
+              onChangeText={t => set("street_address", t)}
+            />
+
             {(form.type === "Apartment" || form.type === "Villa") && (
               <>
                 <Text style={styles.label}>Bedrooms</Text>
@@ -209,7 +317,7 @@ export default function ListProperty() {
                 </>}
               </Pressable>
             </View>
-            <Text style={styles.hint}>Optional. We'll use a placeholder if none added.</Text>
+            <Text style={styles.hint}>Optional. We{"\u2019"}ll use a placeholder if none added.</Text>
           </>
         )}
         {step === 5 && (
@@ -232,7 +340,15 @@ export default function ListProperty() {
                 <Text style={styles.previewPrice}>{formatINR(parseFloat(form.price) || 0)}</Text>
                 <Text style={styles.previewTitle}>{form.title || "—"}</Text>
                 <Text style={styles.previewMeta}>{form.area} {form.area_unit} · {form.type}</Text>
-                <Text style={styles.previewMeta}>{LOCALITIES.find(l => l.id === form.locality_id)?.name || "—"}, Jaipur</Text>
+                <Text style={styles.previewMeta}>{form.street_address || `${LOCALITIES.find(l => l.id === form.locality_id)?.name || "—"}, Jaipur`}</Text>
+                {(form.lat && form.lng) ? (
+                  <View style={styles.pinRow}>
+                    <Icon name="pin" size={12} color={colors.brand} />
+                    <Text style={styles.pinRowText}>Pinned at {form.lat}, {form.lng}</Text>
+                  </View>
+                ) : (
+                  <Text style={styles.previewMeta}>Pin: locality center (no exact pin added)</Text>
+                )}
                 <View style={styles.pendingPill}><Text style={styles.pendingText}>Verification Pending</Text></View>
               </View>
             </View>
@@ -288,6 +404,13 @@ const styles = StyleSheet.create({
   addPhoto: { width: 100, height: 100, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.borderStrong, borderStyle: "dashed", alignItems: "center", justifyContent: "center" },
   addPhotoText: { fontSize: 11, color: colors.brand, fontWeight: "600", marginTop: 4 },
   hint: { fontSize: 11, color: colors.muted, marginTop: spacing.md },
+  hintSmall: { fontSize: 11, color: colors.muted, marginTop: 4, marginBottom: spacing.sm, lineHeight: 15 },
+  sectionTitle: { fontSize: 14, fontWeight: "800", color: colors.onSurface, marginTop: spacing.lg, marginBottom: 2, letterSpacing: 0.2 },
+  gpsBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: spacing.sm, paddingVertical: spacing.md, borderRadius: radius.md, backgroundColor: colors.brandTertiary, borderWidth: 1, borderColor: colors.brand, marginBottom: spacing.md },
+  gpsBtnText: { fontSize: 14, fontWeight: "700", color: colors.brand },
+  rowGap: { flexDirection: "row", gap: spacing.sm },
+  coordPreview: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: spacing.sm, paddingVertical: 8, paddingHorizontal: spacing.md, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border },
+  coordPreviewText: { fontSize: 12, fontWeight: "700", color: colors.onSurface, flex: 1 },
   preview: { borderRadius: radius.lg, backgroundColor: colors.surfaceSecondary, overflow: "hidden", borderWidth: 1, borderColor: colors.border },
   previewImg: { width: "100%", height: 180 },
   previewPrice: { fontSize: 24, fontWeight: "700", color: colors.brand },
@@ -295,6 +418,8 @@ const styles = StyleSheet.create({
   previewMeta: { fontSize: 12, color: colors.muted, marginTop: 2 },
   pendingPill: { alignSelf: "flex-start", marginTop: spacing.md, backgroundColor: colors.warning, paddingHorizontal: spacing.md, paddingVertical: 4, borderRadius: radius.pill },
   pendingText: { fontSize: 10, color: colors.onWarning, fontWeight: "700", letterSpacing: 0.3 },
+  pinRow: { flexDirection: "row", alignItems: "center", gap: 4, marginTop: 6 },
+  pinRowText: { fontSize: 11, color: colors.brand, fontWeight: "700" },
   err: { color: colors.error, marginTop: spacing.md },
   footer: { position: "absolute", left: 0, right: 0, bottom: 0, flexDirection: "row", gap: spacing.md, padding: spacing.lg, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border },
   primaryBtn: { flex: 1, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", paddingVertical: spacing.md + 2, borderRadius: radius.md, ...shadow.card },
