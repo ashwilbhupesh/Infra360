@@ -1,0 +1,40 @@
+{
+  "summary": "Phase-3 FIX+FEATURE verification (web preview @ 390x844). Backend: 11/11 pytest tests passed — GET /api/agent-categories includes 'acat-finance' (name 'Finance & Investment Advisors', count=3), GET /api/agents?category_id=acat-finance returns 3 agents (CA Nikhil Mehta ag-14, Riya Khandelwal ag-15, Suresh Kabra ag-16) with no _id leakage, GET /api/localities finds 'Vaishali', and all core endpoints 200. Frontend verified: (1) 'Save & alert me' chip FULLY REMOVED from Explore (not in DOM). (2) Settings-outline icon correctly replaces menu-outline across all 5 tab headers (Explore, Agents, News, Market, Saved — grep confirmed). (3) ExploreListView vertical scroll works end-to-end; after view-toggle-list the page scrolls to reveal 'Verified spotlight', 'Under ₹50 L', 'Plots under ₹80 L', 'Ready to move', and 'All properties' sections. (4) /agents tab renders Finance & Investment Advisors tile (testID agent-cat-acat-finance); tapping navigates to /agent-category/acat-finance and shows all 3 seeded agents with specializations. (5) /offline-news screen renders saved article (after news-save tap) with WhatsApp + Remove buttons. (6) Profile menu has menu-addresses + menu-offline-news; the legacy menu-saved-searches is REMOVED. (7) /addresses renders default Jaipur (ACTIVE, not removable); addr-create-cta opens editor; filling 'Home' + 'Jagatpura, Jaipur' + '302017' + Save creates a new row (count went from 1→2). (8) News tab has 8 news-share-{id} + 8 news-save-{id} buttons; share modal exposes share-whatsapp / share-instagram / share-more testIDs; save button text correctly flips 'Save offline' → 'Saved offline'. (9) /property/[id] back-btn correctly uses router.canGoBack() with /explore fallback (code audit). CRITICAL BUG: explore.web.tsx (the file actually served in web preview) does NOT contain header-location-pill or the brandTertiary highlighted pin-preview-back pill — these fixes were only applied to the native explore.tsx. On web the location pill is entirely absent and the pin-preview back is still a plain chevron-back text, not a large tappable pill. Users on the web/preview will NOT see tasks (2) and (6) of this phase.",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [
+      {"component": "explore.web.tsx (header)", "issue": "header-location-pill is MISSING on web preview. Only explore.tsx (native) got the Zomato-style location pill. Users opening the preview URL see 'Hi, there' + gear + '+ List' with NO location switcher. Reference: /app/frontend/app/(tabs)/explore.web.tsx:77-88.", "testID": "header-location-pill", "priority": "HIGH"},
+      {"component": "explore.web.tsx (pin preview)", "issue": "pin-preview-back is still a plain 'chevron-back + Back to listings' inline Pressable, not the highlighted brandTertiary pill with a large touch target promised in the task. The native explore.tsx has the pill (line 252), the .web version does not. Reference: /app/frontend/app/(tabs)/explore.web.tsx:182-185.", "testID": "pin-preview-back", "priority": "HIGH"}
+    ],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "theme (shadow props)", "issue": "Console warning still present: '\"shadow*\" style props are deprecated. Use \"boxShadow\".' (regression carried over from iteration_13)"},
+      {"component": "theme (textShadow props)", "issue": "Console warning: '\"textShadow*\" style props are deprecated. Use \"textShadow\".'"}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_phase3_features.py",
+    "/app/test_reports/pytest/phase3_results.xml"
+  ],
+  "action_items": [
+    "Port the Zomato-style header-location-pill (testID='header-location-pill') from app/(tabs)/explore.tsx into app/(tabs)/explore.web.tsx — place it in the header row (between the greeting and the gear/List buttons) so web users can also tap to open /location-picker.",
+    "Port the highlighted brandTertiary 'Back to listings' pill (testID='pin-preview-back', large touch target with pillBg) from app/(tabs)/explore.tsx:252 into app/(tabs)/explore.web.tsx:182 so the web pin-preview back feels tappable/consistent.",
+    "(Optional carryover) Migrate deprecated shadow*/textShadow* StyleSheet props to the modern boxShadow / textShadow API to silence recurring web console warnings."
+  ],
+  "critical_code_review_comments": [
+    "Two explore files exist: /app/frontend/app/(tabs)/explore.tsx (native) and /app/frontend/app/(tabs)/explore.web.tsx (web). Expo Metro picks the .web.tsx on web — ALL web-visible fixes must be mirrored. The current PR missed this for header-location-pill and pin-preview-back pill.",
+    "property/[id].tsx back-btn correctly uses router.canGoBack() with router.replace('/(tabs)/explore') fallback — robust.",
+    "/location-picker correctly reads addresses from useLocationStore (Zustand+AsyncStorage); default 'addr-default-jaipur' is non-removable both in picker (line 158) and addresses screen (line 90). ",
+    "news-share.ts shareOnWhatsApp/shareOnInstagram should gracefully fall back to Linking on web — Share API is gated at caller via Platform (code audit OK)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_phase3_features.py (new, 11 tests)"
+  ],
+  "success_rate": {"backend": "100% (11/11)", "frontend": "85% (11/13 features fully verified on web; 2 fixes missing in explore.web.tsx: location-pill, pin-preview-back pill)"},
+  "seed_data_creation": "Backend already seeds acat-finance with 3 agents (ag-14 CA Nikhil Mehta, ag-15 Riya Khandelwal, ag-16 Suresh Kabra) on startup. Frontend AsyncStorage default: addr-default-jaipur (city-wide, active). During UI test created user 9876543210 and added 1 saved address + 1 offline-news item.",
+  "retest_needed": true,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "After E1 ports the two missing bits into explore.web.tsx, re-verify: (a) `[data-testid='header-location-pill']` visible on web explore, tap opens /location-picker; (b) tapping a map pin shows `[data-testid='pin-preview-back']` as a brandTertiary pill. Backend tests at /app/backend/tests/test_phase3_features.py cover the finance category + locality search; rerun with `pytest /app/backend/tests/test_phase3_features.py -v`. Previously verified Phase-2 state remains green. TestIDs used in this run: header-location-pill, loc-picker-close, loc-search-input, use-current-location, city-Jaipur, saved-addr-addr-default-jaipur, search-pick-*, addr-add-btn, addr-create-cta, addr-row-*, addr-label-input, addr-area-input, addr-pin-input, addr-save, addr-edit-*, addr-del-*, menu-addresses, menu-offline-news, offline-row-*, offline-share-*, offline-remove-*, offline-clear, news-share-*, news-save-*, share-whatsapp, share-instagram, share-more, share-cancel, agent-cat-acat-finance, view-toggle-list, view-toggle-map, pin-preview-back.",
+  "rca_of_issue": "Expo Metro bundler picks `*.web.tsx` over `*.tsx` on the web platform. The developer updated only `explore.tsx` with (1) the Zomato-style header-location-pill and (2) the highlighted brandTertiary pin-preview-back pill, but left `explore.web.tsx` untouched. Since the user is testing in the web preview, both features appear missing. Mitigation: copy the matching JSX/Styles from explore.tsx into explore.web.tsx (header row + pin-preview sheet header). No code changes required outside those two files."
+}

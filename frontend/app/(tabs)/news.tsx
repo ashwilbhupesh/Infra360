@@ -1,11 +1,12 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, RefreshControl, TextInput } from "react-native";
+import React, { useEffect, useMemo, useState, useCallback } from "react";
+import { View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, RefreshControl, TextInput, Modal, Alert } from "react-native";
 import { Image } from "expo-image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useFocusEffect, useRouter } from "expo-router";
 import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius } from "@/src/theme";
 import { api } from "@/src/api";
+import { getOfflineNews, saveOffline, removeOffline, shareNewsNative, shareOnWhatsApp, shareOnInstagram } from "@/src/utils/news-share";
 
 const CATS = ["All", "Infrastructure", "Government", "Development", "Residential", "Industrial", "Commercial"];
 
@@ -27,6 +28,41 @@ export default function News() {
   const [debouncedQ, setDebouncedQ] = useState("");
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
+  const [shareFor, setShareFor] = useState<NewsItem | null>(null);
+
+  const refreshSaved = useCallback(async () => {
+    const list = await getOfflineNews();
+    setSavedIds(new Set(list.map(n => n.id)));
+  }, []);
+  useEffect(() => { refreshSaved(); }, [refreshSaved]);
+  useFocusEffect(useCallback(() => { refreshSaved(); }, [refreshSaved]));
+
+  const toggleSave = async (n: NewsItem) => {
+    if (savedIds.has(n.id)) {
+      await removeOffline(n.id);
+    } else {
+      await saveOffline({
+        id: n.id, title: n.title, summary: n.summary, category: n.category,
+        source: n.source, date: n.date, image: n.image, locality_name: n.locality_name,
+      });
+    }
+    refreshSaved();
+  };
+
+  const openShare = (n: NewsItem) => setShareFor(n);
+  const closeShare = () => setShareFor(null);
+  const doShare = async (channel: "whatsapp" | "instagram" | "more") => {
+    if (!shareFor) return;
+    const input = { title: shareFor.title, summary: shareFor.summary, source: shareFor.source, locality_name: shareFor.locality_name };
+    try {
+      if (channel === "whatsapp") await shareOnWhatsApp(input);
+      else if (channel === "instagram") await shareOnInstagram(input);
+      else await shareNewsNative(input);
+    } catch (e: any) {
+      Alert.alert("Share failed", e?.message || "Try again");
+    } finally { closeShare(); }
+  };
 
   // Debounce the search input
   useEffect(() => {
@@ -87,7 +123,7 @@ export default function News() {
               style={styles.menuBtn}
               hitSlop={10}
             >
-              <Icon name="menu-outline" size={22} color={colors.onSurface} />
+              <Icon name="settings-outline" size={22} color={colors.onSurface} />
             </Pressable>
           </View>
         </View>
@@ -179,11 +215,64 @@ export default function News() {
                     </>
                   ) : null}
                 </View>
+                <View style={styles.actionsRow}>
+                  <Pressable
+                    testID={`news-share-${n.id}`}
+                    onPress={() => openShare(n)}
+                    style={styles.actionChip}
+                    hitSlop={8}
+                  >
+                    <Icon name="share-social-outline" size={14} color={colors.brand} />
+                    <Text style={styles.actionTxt}>Share</Text>
+                  </Pressable>
+                  <Pressable
+                    testID={`news-save-${n.id}`}
+                    onPress={() => toggleSave(n)}
+                    style={[styles.actionChip, savedIds.has(n.id) && styles.actionChipActive]}
+                    hitSlop={8}
+                  >
+                    <Icon
+                      name={savedIds.has(n.id) ? "bookmark" : "bookmark-outline"}
+                      size={14}
+                      color={savedIds.has(n.id) ? colors.onBrandPrimary : colors.brand}
+                    />
+                    <Text style={[styles.actionTxt, savedIds.has(n.id) && { color: colors.onBrandPrimary }]}>
+                      {savedIds.has(n.id) ? "Saved offline" : "Save offline"}
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </Pressable>
           )))
         }
       </ScrollView>
+
+      <Modal visible={!!shareFor} transparent animationType="fade" onRequestClose={closeShare}>
+        <Pressable style={styles.shareBackdrop} onPress={closeShare}>
+          <Pressable style={styles.shareSheet} onPress={() => {}}>
+            <View style={styles.shareHandle} />
+            <Text style={styles.shareTitle} numberOfLines={2}>{shareFor?.title}</Text>
+            <Text style={styles.shareSub}>Share this story with your network</Text>
+            <View style={styles.shareRow}>
+              <Pressable testID="share-whatsapp" onPress={() => doShare("whatsapp")} style={[styles.shareBtn, { backgroundColor: "#25D366" }]}>
+                <Icon name="logo-whatsapp" size={22} color="#FFFFFF" />
+                <Text style={styles.shareBtnTxt}>WhatsApp</Text>
+              </Pressable>
+              <Pressable testID="share-instagram" onPress={() => doShare("instagram")} style={[styles.shareBtn, { backgroundColor: "#E1306C" }]}>
+                <Icon name="logo-instagram" size={22} color="#FFFFFF" />
+                <Text style={styles.shareBtnTxt}>Instagram</Text>
+              </Pressable>
+              <Pressable testID="share-more" onPress={() => doShare("more")} style={[styles.shareBtn, { backgroundColor: colors.brand }]}>
+                <Icon name="ellipsis-horizontal" size={22} color={colors.onBrand} />
+                <Text style={styles.shareBtnTxt}>More</Text>
+              </Pressable>
+            </View>
+            <Pressable testID="share-cancel" onPress={closeShare} style={styles.shareCancel}>
+              <Text style={styles.shareCancelTxt}>Cancel</Text>
+            </Pressable>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -229,5 +318,19 @@ const styles = StyleSheet.create({
   dot: { fontSize: 11, color: colors.muted, marginHorizontal: 2 },
   empty: { alignItems: "center", paddingVertical: spacing.xxxl, gap: 8 },
   emptyTitle: { fontSize: 14, fontWeight: "700", color: colors.onSurface },
+  actionsRow: { flexDirection: "row", gap: 8, marginTop: spacing.md },
+  actionChip: { flexDirection: "row", alignItems: "center", gap: 6, paddingHorizontal: 12, height: 32, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.brand, backgroundColor: colors.surface },
+  actionChipActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary },
+  actionTxt: { fontSize: 11, fontWeight: "800", color: colors.brand },
+  shareBackdrop: { flex: 1, backgroundColor: "rgba(0,0,0,0.5)", justifyContent: "flex-end" },
+  shareSheet: { backgroundColor: colors.surface, borderTopLeftRadius: 24, borderTopRightRadius: 24, padding: spacing.lg, paddingBottom: spacing.xxl, gap: spacing.md },
+  shareHandle: { alignSelf: "center", width: 40, height: 4, borderRadius: 2, backgroundColor: colors.borderStrong },
+  shareTitle: { fontSize: 15, fontWeight: "800", color: colors.onSurface, lineHeight: 20 },
+  shareSub: { fontSize: 12, color: colors.muted },
+  shareRow: { flexDirection: "row", gap: 10, marginTop: 6 },
+  shareBtn: { flex: 1, alignItems: "center", justifyContent: "center", gap: 6, paddingVertical: 14, borderRadius: radius.md },
+  shareBtnTxt: { fontSize: 12, fontWeight: "800", color: "#FFFFFF" },
+  shareCancel: { paddingVertical: 12, alignItems: "center", borderRadius: radius.md, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border, marginTop: 4 },
+  shareCancelTxt: { fontSize: 13, fontWeight: "700", color: colors.onSurface },
   emptySub: { fontSize: 12, color: colors.muted },
 });

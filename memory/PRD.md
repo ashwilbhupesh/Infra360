@@ -133,3 +133,23 @@ Seven features that take InfraJagat from map browser to full real-estate operati
 ### Admin token
 - `infrajagat-admin` (stored in `/app/backend/.env` as `ADMIN_TOKEN`). Used for news review, verification review, and admin lead inspection.
 
+## Phase 3 — Fixes & Convenience (Oct 2026) ✅ Shipped
+
+### Removed
+- **"Save & alert me" chip** on Explore and the Profile → "Saved searches & alerts" menu entry (backend endpoints retained but unused).
+
+### Fixed
+- **Vertical scroll** in Explore's list view: trending areas, verified spotlight, under-₹50 L, plots under ₹80 L, ready-to-move and all-properties now scroll inside a proper ScrollView container.
+- **"Back to listings"** pill on the Explore map pin-preview is now a highlighted brandTertiary pill (large hitSlop) on both native and web variants.
+- **Property-detail back button** now falls back to `/(tabs)/explore` when `router.canGoBack()` is false (handles deep links).
+- **Hamburger (`menu-outline`) icon** replaced with gear (`settings-outline`) across all 5 tab headers (Explore, Agents, News, Market, Saved).
+
+### New
+- **Finance & Investment Advisors** agent category (`acat-finance`) with 3 seeded agents (CA Nikhil Mehta, Riya Khandelwal, Suresh Kabra). Agent categories are now re-synced on every backend startup so seed edits propagate.
+- **Zomato-style location picker** (`/location-picker`): current-location detection via `expo-location`, locality search, popular cities grid (Jaipur / Jodhpur / Udaipur / Ajmer / Kota / Bikaner), saved places list.
+- **Saved addresses** (`/addresses`): add/edit/remove multiple addresses with Home / Work / Other tags, pincode support; one is marked ACTIVE and surfaces in the Explore header's new `header-location-pill`.
+- Location is persisted via Zustand + AsyncStorage under `infrajagat.location.v1`.
+- **News sharing** — each news card now has a Share button → modal with **WhatsApp**, **Instagram** and **More** (native share sheet) options.
+- **Offline news reads** (`/offline-news`): tap "Save offline" on any news card to persist it locally via AsyncStorage; `menu-offline-news` entry in Profile opens the list; remove individually or clear all.
+
+

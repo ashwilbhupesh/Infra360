@@ -156,10 +156,11 @@ async def seed_if_needed():
         await db.market_categories.insert_many([{**c} for c in MARKET_CATEGORIES])
     if await db.suppliers.count_documents({}) == 0:
         await db.suppliers.insert_many([{**s} for s in SUPPLIERS])
-    if await db.agent_categories.count_documents({}) == 0:
-        await db.agent_categories.insert_many([{**c} for c in AGENT_CATEGORIES])
-    if await db.agents.count_documents({}) == 0:
-        await db.agents.insert_many([{**a} for a in AGENTS])
+    # Agent categories/agents — re-sync on every startup so seed edits propagate (new finance category etc.)
+    await db.agent_categories.delete_many({})
+    await db.agent_categories.insert_many([{**c} for c in AGENT_CATEGORIES])
+    await db.agents.delete_many({})
+    await db.agents.insert_many([{**a} for a in AGENTS])
     # Materials shopping ecosystem (new) - re-sync on every startup so edits propagate
     await db.materials_categories.delete_many({})
     await db.materials_categories.insert_many([{**c} for c in MATERIALS_CATEGORIES])

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextInput, Platform, Alert } from "react-native";
+import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextInput, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
@@ -7,6 +7,7 @@ import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
+import { useLocationStore } from "@/src/stores/location";
 import { PropertyCard, Property } from "@/src/components/property-card";
 import { LocalityCard, Locality } from "@/src/components/locality-card";
 import { PinPreview } from "@/src/components/pin-preview";
@@ -39,6 +40,7 @@ export default function MapScreen() {
   const [listingType, setListingType] = useState<"Buy" | "Rent" | "Sell">("Buy");
   const [heatPoints, setHeatPoints] = useState<WebMapHeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
+  const activeAddr = useLocationStore(s => s.getActive());
   const sheetRef = useRef<BottomSheet>(null);
 
   useEffect(() => {
@@ -106,32 +108,6 @@ export default function MapScreen() {
 
   const openSell = () => router.push("/sell" as any);
 
-  const saveSearch = async () => {
-    if (!user) {
-      Alert.alert("Login required", "Please sign in to save alerts.");
-      return;
-    }
-    const name = [
-      filter || "All",
-      listingType,
-      q ? `"${q}"` : null,
-    ].filter(Boolean).join(" · ");
-    try {
-      await api.post("/saved-searches", {
-        user_id: user.id,
-        name,
-        params: { type: filter || undefined, listing_type: listingType, q: q || undefined },
-        notify: true,
-      });
-      Alert.alert("Alert saved 🔔", `We'll ping you when new ${filter || "properties"} match "${name}".`, [
-        { text: "View my alerts", onPress: () => router.push("/saved-searches" as any) },
-        { text: "OK" },
-      ]);
-    } catch (e: any) {
-      Alert.alert("Could not save", e?.message || "Try again");
-    }
-  };
-
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       {view === "map" ? (
@@ -153,12 +129,23 @@ export default function MapScreen() {
       {/* Top chrome */}
       <View style={[styles.topChrome, { top: insets.top + spacing.sm }]}>
         <View style={styles.headerRow}>
-          <View style={styles.hiPill}>
-            <Text style={styles.hi} numberOfLines={1}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
-          </View>
+          <Pressable
+            testID="header-location-pill"
+            onPress={() => router.push("/location-picker" as any)}
+            style={styles.locPill}
+            hitSlop={6}
+          >
+            <Icon name="location-outline" size={14} color={colors.brand} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.locKicker} numberOfLines={1}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
+              <Text style={styles.locTitle} numberOfLines={1}>
+                {activeAddr?.label || "Jaipur"} <Icon name="chevron-down" size={11} color={colors.onSurface} />
+              </Text>
+            </View>
+          </Pressable>
           <View style={{ flexDirection: "row", gap: spacing.sm }}>
             <Pressable testID="header-profile-btn" onPress={() => router.push("/profile")} style={styles.iconBtn}>
-              <Icon name="menu-outline" size={20} color={colors.onSurface} />
+              <Icon name="settings-outline" size={20} color={colors.onSurface} />
             </Pressable>
             <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
               <Icon name="add" size={14} color={colors.onBrandPrimary} />
@@ -207,10 +194,6 @@ export default function MapScreen() {
           </View>
         </View>
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
-          <Pressable testID="save-search-btn" onPress={saveSearch} style={[styles.filterChip, { flexDirection: "row", alignItems: "center", backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary }]}>
-            <Icon name="notifications-outline" size={13} color={colors.onBrandPrimary} />
-            <Text style={[styles.filterText, { color: colors.onBrandPrimary }]}>  Save & alert me</Text>
-          </Pressable>
           {FILTERS.map(f => {
             const active = filter === f.key;
             return (
@@ -268,11 +251,11 @@ export default function MapScreen() {
                 <Pressable
                   testID="pin-preview-back"
                   onPress={() => setSelected(null)}
-                  style={styles.backChip}
-                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  style={({ pressed }) => [styles.backChip, pressed && { opacity: 0.6 }]}
+                  hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
                   android_ripple={{ color: colors.border, borderless: true }}
                 >
-                  <Icon name="chevron-back" size={20} color={colors.onSurface} />
+                  <Icon name="chevron-back" size={20} color={colors.brand} />
                   <Text style={styles.backChipText}>Back to listings</Text>
                 </Pressable>
                 <Text style={styles.selectedKicker}>SELECTED</Text>
@@ -328,6 +311,9 @@ const styles = StyleSheet.create({
   topChrome: { position: "absolute", left: 0, right: 0, paddingHorizontal: spacing.lg, gap: spacing.sm, zIndex: 20 },
   headerRow: { flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
   hiPill: { paddingHorizontal: spacing.md, height: 40, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, justifyContent: "center", ...shadow.card },
+  locPill: { flex: 1, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: spacing.md, paddingVertical: 6, backgroundColor: "rgba(255,255,240,0.96)", borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, marginRight: spacing.sm, ...shadow.card },
+  locKicker: { fontSize: 10, color: colors.muted, fontWeight: "700" },
+  locTitle: { fontSize: 13, color: colors.onSurface, fontWeight: "800" },
   hi: { fontSize: 13, fontWeight: "700", color: colors.onSurface, maxWidth: 200 },
   iconBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: "rgba(255,255,240,0.96)", borderWidth: 1, borderColor: colors.border, alignItems: "center", justifyContent: "center", ...shadow.card },
   listBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 14, height: 40, borderRadius: radius.pill, backgroundColor: colors.brandPrimary, ...shadow.card },
@@ -365,10 +351,11 @@ const styles = StyleSheet.create({
   sheetHeader: { paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.md, flexDirection: "row", justifyContent: "space-between", alignItems: "center", minHeight: 48 },
   sheetTitle: { fontSize: 16, fontWeight: "700", color: colors.onSurface },
   backChip: {
-    flexDirection: "row", alignItems: "center", gap: 2,
-    paddingVertical: 8, paddingRight: spacing.md, minHeight: 44,
+    flexDirection: "row", alignItems: "center", gap: 4,
+    paddingVertical: 10, paddingHorizontal: spacing.sm, minHeight: 44,
+    borderRadius: radius.pill, backgroundColor: colors.brandTertiary,
   },
-  backChipText: { fontSize: 13, fontWeight: "700", color: colors.onSurface },
+  backChipText: { fontSize: 13, fontWeight: "800", color: colors.brand },
   selectedKicker: { fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 },
   stripTitle: { fontSize: 12, fontWeight: "800", color: colors.muted, letterSpacing: 0.8, marginBottom: spacing.sm, paddingHorizontal: spacing.lg },
 });

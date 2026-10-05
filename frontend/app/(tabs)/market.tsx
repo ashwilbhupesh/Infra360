@@ -219,7 +219,7 @@ export default function Market() {
                   style={styles.cartBtn}
                   hitSlop={10}
                 >
-                  <Icon name="menu-outline" size={22} color={colors.onSurface} />
+                  <Icon name="settings-outline" size={22} color={colors.onSurface} />
                 </Pressable>
               </View>
             )}
@@ -230,7 +230,7 @@ export default function Market() {
                 style={styles.cartBtn}
                 hitSlop={10}
               >
-                <Icon name="menu-outline" size={22} color={colors.onSurface} />
+                <Icon name="settings-outline" size={22} color={colors.onSurface} />
               </Pressable>
             )}
           </View>

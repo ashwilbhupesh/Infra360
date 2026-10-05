@@ -88,8 +88,8 @@ export default function PropertyDetail() {
       <ScrollView contentContainerStyle={{ paddingBottom: 100 }} showsVerticalScrollIndicator={false}>
         <View>
           <Image source={{ uri: prop.images?.[0] }} style={styles.hero} contentFit="cover" />
-          <Pressable testID="back-btn" onPress={() => router.back()} style={[styles.iconBtn, { top: insets.top + spacing.sm, left: spacing.lg }]}>
-            <Icon name="chevron-back" size={20} color={colors.onSurface} />
+          <Pressable testID="back-btn" onPress={() => { if (router.canGoBack()) router.back(); else router.replace("/(tabs)/explore" as any); }} style={[styles.iconBtn, { top: insets.top + spacing.sm, left: spacing.lg }]} hitSlop={12}>
+            <Icon name="chevron-back" size={22} color={colors.onSurface} />
           </Pressable>
           <Pressable testID="save-btn" onPress={toggleSave} style={[styles.iconBtn, { top: insets.top + spacing.sm, right: spacing.lg }]}>
             <Icon name={saved ? "heart" : "heart-outline"} size={20} color={saved ? colors.brandPrimary : colors.onSurface} />

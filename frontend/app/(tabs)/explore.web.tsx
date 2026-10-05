@@ -6,6 +6,7 @@ import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
+import { useLocationStore } from "@/src/stores/location";
 import { PropertyCard, Property } from "@/src/components/property-card";
 import { LocalityCard, Locality } from "@/src/components/locality-card";
 import { PinPreview } from "@/src/components/pin-preview";
@@ -39,6 +40,7 @@ export default function MapScreenWeb() {
   const [listingType, setListingType] = useState<"Buy" | "Rent" | "Sell">("Buy");
   const [heatPoints, setHeatPoints] = useState<HeatPoint[]>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
+  const activeAddr = useLocationStore(s => s.getActive());
 
   const load = async () => {
     setLoading(true);
@@ -75,10 +77,23 @@ export default function MapScreenWeb() {
     <View style={{ flex: 1, backgroundColor: colors.surface, paddingTop: insets.top + spacing.sm }}>
       <View style={{ paddingHorizontal: spacing.lg, gap: spacing.sm }}>
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
-          <Text style={styles.hi}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
+          <Pressable
+            testID="header-location-pill"
+            onPress={() => router.push("/location-picker" as any)}
+            style={styles.locPill}
+            hitSlop={6}
+          >
+            <Icon name="location-outline" size={14} color={colors.brand} />
+            <View style={{ flex: 1 }}>
+              <Text style={styles.locKicker} numberOfLines={1}>Hi, {user?.name?.split(" ")[0] || "there"}</Text>
+              <Text style={styles.locTitle} numberOfLines={1}>
+                {activeAddr?.label || "Jaipur"} <Icon name="chevron-down" size={11} color={colors.onSurface} />
+              </Text>
+            </View>
+          </Pressable>
           <View style={{ flexDirection: "row", gap: spacing.sm }}>
             <Pressable testID="header-profile-btn" onPress={() => router.push("/profile")} style={styles.iconBtnWeb}>
-              <Icon name="menu-outline" size={18} color={colors.onSurface} />
+              <Icon name="settings-outline" size={18} color={colors.onSurface} />
             </Pressable>
             <Pressable testID="header-list-property-btn" onPress={() => router.push("/list-property")} style={styles.listBtn}>
               <Icon name="add" size={14} color={colors.onBrandPrimary} />
@@ -179,9 +194,14 @@ export default function MapScreenWeb() {
         <View style={styles.sheetHeaderRow}>
           {selected && view === "map" ? (
             <>
-              <Pressable testID="pin-preview-back" onPress={() => setSelected(null)} style={{ flexDirection: "row", alignItems: "center", gap: 2 }} hitSlop={8}>
-                <Icon name="chevron-back" size={18} color={colors.onSurface} />
-                <Text style={{ fontSize: 13, fontWeight: "700", color: colors.onSurface }}>Back to listings</Text>
+              <Pressable
+                testID="pin-preview-back"
+                onPress={() => setSelected(null)}
+                style={({ pressed }) => [styles.backPill, pressed && { opacity: 0.6 }]}
+                hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
+              >
+                <Icon name="chevron-back" size={20} color={colors.brand} />
+                <Text style={styles.backPillText}>Back to listings</Text>
               </Pressable>
               <Text style={{ fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 }}>SELECTED</Text>
             </>
@@ -229,6 +249,11 @@ export default function MapScreenWeb() {
 
 const styles = StyleSheet.create({
   hi: { fontSize: 15, fontWeight: "800", color: colors.onSurface },
+  locPill: { flex: 1, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: spacing.md, paddingVertical: 6, backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, marginRight: spacing.sm, maxWidth: "68%" },
+  locKicker: { fontSize: 10, color: colors.muted, fontWeight: "700" },
+  locTitle: { fontSize: 13, color: colors.onSurface, fontWeight: "800" },
+  backPill: { flexDirection: "row", alignItems: "center", gap: 4, paddingVertical: 10, paddingHorizontal: spacing.sm, minHeight: 44, borderRadius: radius.pill, backgroundColor: colors.brandTertiary },
+  backPillText: { fontSize: 13, fontWeight: "800", color: colors.brand },
   iconBtnWeb: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.surfaceSecondary, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: colors.border },
   listBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 14, height: 34, borderRadius: radius.pill, backgroundColor: colors.brandPrimary },
   listBtnText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "700" },

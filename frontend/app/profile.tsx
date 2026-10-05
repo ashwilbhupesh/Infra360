@@ -79,9 +79,10 @@ export default function Profile() {
         )}
 
         <SectionTitle>Account</SectionTitle>
+        <MenuRow icon="location-outline" title="My addresses" subtitle="Save multiple home / work addresses" onPress={() => router.push("/addresses" as any)} testID="menu-addresses" />
         <MenuRow icon="time-outline" title="History" subtitle="Recently viewed properties" onPress={() => router.push("/history")} testID="menu-history" />
+        <MenuRow icon="bookmark-outline" title="Offline reads" subtitle="News articles you saved" onPress={() => router.push("/offline-news" as any)} testID="menu-offline-news" />
         <MenuRow icon="receipt-outline" title="Enquiries & orders" subtitle="Your agent & supplier requests" onPress={() => router.push("/orders")} testID="menu-orders" />
-        <MenuRow icon="notifications-outline" title="Saved searches & alerts" subtitle="Get pinged when new matches appear" onPress={() => router.push("/saved-searches" as any)} testID="menu-saved-searches" />
         <MenuRow icon="gift-outline" title="Important dates" subtitle="Birthdate, spouse birthdate, anniversary" onPress={() => router.push("/personal-dates" as any)} testID="menu-personal-dates" />
         <MenuRow icon="card-outline" title="Subscriptions" subtitle="Free · Pro · Agent tiers" onPress={() => router.push("/subscriptions")} testID="menu-subscriptions" />
 

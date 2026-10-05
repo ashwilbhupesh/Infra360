@@ -50,7 +50,11 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
   // so no curated sub-sections (Verified spotlight / Under 50L / etc.) can show items of other types.
   if (filter) {
     return (
-      <View style={{ paddingBottom: 40, paddingTop: spacing.md }}>
+      <ScrollView
+        style={{ flex: 1 }}
+        contentContainerStyle={{ paddingBottom: 120, paddingTop: spacing.md }}
+        showsVerticalScrollIndicator={false}
+      >
         <Section title={`${filter} properties`} subtitle={`${items.length} listing${items.length === 1 ? "" : "s"} match this filter`}>
           {items.length === 0 ? (
             <Text style={styles.empty}>No {filter} properties match. Try removing the filter.</Text>
@@ -58,12 +62,16 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
             items.map(p => <PropertyCard key={p.id} property={p} />)
           )}
         </Section>
-      </View>
+      </ScrollView>
     );
   }
 
   return (
-    <View style={{ paddingBottom: 40, paddingTop: spacing.md }}>
+    <ScrollView
+      style={{ flex: 1 }}
+      contentContainerStyle={{ paddingBottom: 120, paddingTop: spacing.md }}
+      showsVerticalScrollIndicator={false}
+    >
       {/* Trending areas — with quick analysis */}
       <Section
         title="Trending areas in Jaipur"
@@ -131,7 +139,7 @@ export function ExploreListView({ items, filter }: { items: Property[]; filter: 
       <Section title={filter ? `All ${filter}s` : "All properties"} subtitle={`${items.length} listings`}>
         {items.slice(0, 20).map(p => <PropertyCard key={p.id} property={p} />)}
       </Section>
-    </View>
+    </ScrollView>
   );
 }
 

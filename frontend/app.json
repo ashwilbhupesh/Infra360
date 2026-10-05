@@ -54,7 +54,8 @@
           "photosPermission": "Add photos to your property listing"
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true
