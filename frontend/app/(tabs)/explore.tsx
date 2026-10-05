@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextInput } from "react-native";
-import MapView, { Marker, Circle, PROVIDER_DEFAULT } from "react-native-maps";
+import { View, Text, StyleSheet, Pressable, ScrollView, ActivityIndicator, TextInput, Platform } from "react-native";
+import MapView, { Marker, Circle, UrlTile, PROVIDER_DEFAULT } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import BottomSheet, { BottomSheetScrollView, BottomSheetView } from "@gorhom/bottom-sheet";
@@ -86,9 +86,16 @@ export default function MapScreen() {
       <MapView
         style={StyleSheet.absoluteFill}
         provider={PROVIDER_DEFAULT}
+        mapType={Platform.OS === "android" ? "none" : "standard"}
         initialRegion={initialRegion}
         showsCompass={false}
       >
+        {/* OpenStreetMap tiles — no API key required, renders on Android without Google Maps setup */}
+        <UrlTile
+          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maximumZ={19}
+          flipY={false}
+        />
         {heat && heatPoints.map(pt => (
           <Circle
             key={`hc-${pt.id}`}
@@ -204,8 +211,14 @@ export default function MapScreen() {
         <BottomSheetView style={styles.sheetHeader}>
           {selected && view === "map" ? (
             <>
-              <Pressable testID="pin-preview-back" onPress={() => setSelected(null)} style={styles.backChip} hitSlop={8}>
-                <Icon name="chevron-back" size={18} color={colors.onSurface} />
+              <Pressable
+                testID="pin-preview-back"
+                onPress={() => setSelected(null)}
+                style={styles.backChip}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                android_ripple={{ color: colors.border, borderless: true }}
+              >
+                <Icon name="chevron-back" size={20} color={colors.onSurface} />
                 <Text style={styles.backChipText}>Back to listings</Text>
               </Pressable>
               <Text style={styles.selectedKicker}>SELECTED</Text>
@@ -293,7 +306,14 @@ const styles = StyleSheet.create({
   sheetHeader: { paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.md, flexDirection: "row", justifyContent: "space-between", alignItems: "center", minHeight: 48 },
   sheetTitle: { fontSize: 16, fontWeight: "700", color: colors.onSurface },
   sheetSub: { fontSize: 11, color: colors.muted },
-  backChip: { flexDirection: "row", alignItems: "center", gap: 2, paddingRight: spacing.md },
+  backChip: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 2,
+    paddingVertical: 8,
+    paddingRight: spacing.md,
+    minHeight: 44,
+  },
   backChipText: { fontSize: 13, fontWeight: "700", color: colors.onSurface },
   selectedKicker: { fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 },
   viewToggle: { flexDirection: "row", backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, padding: 3, gap: 2 },

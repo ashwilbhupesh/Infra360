@@ -169,3 +169,12 @@ agent_communication:
       7. Non-materials tabs (Design/Build/Interiors/etc) still work with existing supplier directory flow
       8. User activity endpoint now returns materials_orders; orders.tsx shows them as a "Material enquiries" section
       Known cosmetic: some Unsplash category tile images 404 — not functional, display empty tile with name; non-blocking.
+  - agent: "main"
+    message: |
+      User reported: "Map view and other features aren't working on Android" + "Back to listing button isn't working".
+      Root cause: `PROVIDER_DEFAULT` in react-native-maps on Android requires a Google Maps API key — without one the map renders blank, which broke the whole explore screen (including the "Back to listings" button inside the BottomSheet pin preview).
+      Fix (frontend/app/(tabs)/explore.tsx):
+        1. Added <UrlTile> with OpenStreetMap tiles ("https://tile.openstreetmap.org/{z}/{x}/{y}.png") so no API key is needed.
+        2. On Android, set `mapType="none"` to disable the blank Google Maps base layer so OSM tiles are the only visible map. iOS keeps `mapType="standard"` (Apple Maps works fine out of the box).
+        3. Enlarged the "Back to listings" Pressable: `minHeight: 44`, `paddingVertical: 8`, `hitSlop: {top:12,bottom:12,left:12,right:12}`, added `android_ripple` for tactile feedback. This fixes the touch target on Android.
+      Needs testing on a real Android device (Expo Go or dev build) since the web preview uses explore.web.tsx fallback and can't simulate the native MapView.
