@@ -10,6 +10,7 @@ import { useAuth } from "@/src/auth-context";
 import { useMaterialsCart } from "@/src/stores/materials-cart";
 import { useVoiceDraft } from "@/src/stores/voice-draft";
 import { VoiceSheet } from "@/src/components/voice-sheet";
+import { HeaderLocationPill } from "@/src/components/header-location-pill";
 
 type Category = { id: string; group_id: string; name: string; image: string; suppliers_count?: number };
 type Group = { id: string; name: string; subtitle: string; icon: string; categories: Category[] };
@@ -246,6 +247,43 @@ export default function Market() {
       {/* Sticky header + search + group chips */}
       <View style={{ paddingTop: insets.top + spacing.md, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }}>
         <View style={{ paddingHorizontal: spacing.xl }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: spacing.sm, marginBottom: spacing.sm }}>
+            <HeaderLocationPill testID="market-location-pill" compact />
+            <View style={{ flexDirection: "row", gap: 6 }}>
+              <Pressable
+                testID="market-list-business-btn"
+                onPress={() => router.push({ pathname: "/register", params: { type: "business" } } as any)}
+                style={styles.registerBtn}
+                hitSlop={6}
+              >
+                <Icon name="storefront-outline" size={13} color={colors.onBrandPrimary} />
+                <Text style={styles.registerBtnText}>List yourself</Text>
+              </Pressable>
+              {isMaterials && (
+                <Pressable
+                  testID="materials-cart-btn"
+                  onPress={() => router.push("/materials/cart" as any)}
+                  style={styles.cartBtnSmall}
+                  hitSlop={10}
+                >
+                  <Icon name="cart-outline" size={20} color={colors.onSurface} />
+                  {totalItems > 0 && (
+                    <View style={styles.cartBadge}>
+                      <Text style={styles.cartBadgeText}>{totalItems > 99 ? "99+" : totalItems}</Text>
+                    </View>
+                  )}
+                </Pressable>
+              )}
+              <Pressable
+                testID="market-menu-btn"
+                onPress={() => router.push("/profile" as any)}
+                style={styles.cartBtnSmall}
+                hitSlop={10}
+              >
+                <Icon name="settings-outline" size={20} color={colors.onSurface} />
+              </Pressable>
+            </View>
+          </View>
           <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
             <View style={{ flex: 1 }}>
               {isMaterials ? (
@@ -263,41 +301,6 @@ export default function Market() {
                 </>
               )}
             </View>
-            {isMaterials && (
-              <View style={{ flexDirection: "row", gap: 8 }}>
-                <Pressable
-                  testID="materials-cart-btn"
-                  onPress={() => router.push("/materials/cart" as any)}
-                  style={styles.cartBtn}
-                  hitSlop={10}
-                >
-                  <Icon name="cart-outline" size={22} color={colors.onSurface} />
-                  {totalItems > 0 && (
-                    <View style={styles.cartBadge}>
-                      <Text style={styles.cartBadgeText}>{totalItems > 99 ? "99+" : totalItems}</Text>
-                    </View>
-                  )}
-                </Pressable>
-                <Pressable
-                  testID="market-menu-btn"
-                  onPress={() => router.push("/profile" as any)}
-                  style={styles.cartBtn}
-                  hitSlop={10}
-                >
-                  <Icon name="settings-outline" size={22} color={colors.onSurface} />
-                </Pressable>
-              </View>
-            )}
-            {!isMaterials && (
-              <Pressable
-                testID="market-menu-btn"
-                onPress={() => router.push("/profile" as any)}
-                style={styles.cartBtn}
-                hitSlop={10}
-              >
-                <Icon name="settings-outline" size={22} color={colors.onSurface} />
-              </Pressable>
-            )}
           </View>
 
           <View style={styles.searchWrap}>
@@ -423,6 +426,17 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border,
     alignItems: "center", justifyContent: "center",
   },
+  cartBtnSmall: {
+    width: 36, height: 36, borderRadius: 18,
+    backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border,
+    alignItems: "center", justifyContent: "center",
+  },
+  registerBtn: {
+    flexDirection: "row", alignItems: "center", gap: 4,
+    paddingHorizontal: spacing.sm + 2, height: 36, borderRadius: radius.pill,
+    backgroundColor: colors.brandPrimary,
+  },
+  registerBtnText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "800" },
   cartBadge: {
     position: "absolute", top: -4, right: -4,
     minWidth: 20, height: 20, borderRadius: 10, paddingHorizontal: 4,

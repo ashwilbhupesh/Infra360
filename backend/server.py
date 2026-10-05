@@ -2238,6 +2238,60 @@ async def voice_search(file: UploadFile = File(...)):
         except Exception: pass
 
 
+# -----------------------------------------------------------------------------
+# Registrations (expert / market business) — simple intake form endpoint
+# -----------------------------------------------------------------------------
+class RegistrationRequest(BaseModel):
+    type: str  # "expert" or "business"
+    name: str
+    phone: str
+    role: Optional[str] = None  # e.g. Broker, Lawyer, Cement Supplier, Interior Designer
+    city: Optional[str] = None
+    area: Optional[str] = None
+    services: Optional[str] = None
+    email: Optional[str] = None
+
+
+@api_router.post("/registrations")
+async def submit_registration(payload: RegistrationRequest):
+    rtype = (payload.type or "").strip().lower()
+    if rtype not in ("expert", "business"):
+        raise HTTPException(status_code=400, detail="type must be 'expert' or 'business'")
+    name = payload.name.strip()
+    phone = re.sub(r"\D", "", payload.phone or "")
+    if not name or len(phone) < 10:
+        raise HTTPException(status_code=400, detail="Please provide a name and a valid 10-digit mobile number")
+    doc = {
+        "id": str(uuid.uuid4()),
+        "type": rtype,
+        "name": name,
+        "phone": phone,
+        "role": (payload.role or "").strip() or None,
+        "city": (payload.city or "").strip() or None,
+        "area": (payload.area or "").strip() or None,
+        "services": (payload.services or "").strip() or None,
+        "email": (payload.email or "").strip() or None,
+        "status": "new",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    await db.registrations.insert_one(doc)
+    return {"ok": True, "id": doc["id"], "message": "Thanks! Our team will reach out within 24 hours."}
+
+
+@api_router.get("/registrations")
+async def list_registrations(x_admin_token: Optional[str] = Header(default=None), type: Optional[str] = None, limit: int = 100):
+    if x_admin_token != "infrajagat-admin":
+        raise HTTPException(status_code=401, detail="Admin only")
+    q: Dict[str, Any] = {}
+    if type: q["type"] = type
+    cur = db.registrations.find(q).sort("created_at", -1).limit(min(max(limit, 1), 500))
+    out = []
+    async for doc in cur:
+        doc.pop("_id", None)
+        out.append(doc)
+    return out
+
+
 app.include_router(api_router)
 
 app.add_middleware(

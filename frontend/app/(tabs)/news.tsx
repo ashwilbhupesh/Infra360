@@ -7,6 +7,7 @@ import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius } from "@/src/theme";
 import { api } from "@/src/api";
 import { getOfflineNews, saveOffline, removeOffline, shareNewsNative, shareOnWhatsApp, shareOnInstagram } from "@/src/utils/news-share";
+import { HeaderLocationPill } from "@/src/components/header-location-pill";
 
 const CATS = ["All", "Infrastructure", "Government", "Development", "Residential", "Industrial", "Commercial"];
 
@@ -99,15 +100,9 @@ export default function News() {
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
       <View style={{ paddingTop: insets.top + spacing.md, paddingHorizontal: spacing.xl, paddingBottom: spacing.sm, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.title}>InfraJagat News</Text>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 2 }}>
-              <Icon name="location-outline" size={13} color={colors.muted} />
-              <Text style={styles.sub} numberOfLines={1}>{selectedArea}</Text>
-            </View>
-          </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+        <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: spacing.sm, marginBottom: spacing.sm }}>
+          <HeaderLocationPill testID="news-location-pill" compact />
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
             <Pressable
               testID="news-publish-btn"
               onPress={() => router.push("/publish-news" as any)}
@@ -123,8 +118,17 @@ export default function News() {
               style={styles.menuBtn}
               hitSlop={10}
             >
-              <Icon name="settings-outline" size={22} color={colors.onSurface} />
+              <Icon name="settings-outline" size={20} color={colors.onSurface} />
             </Pressable>
+          </View>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.title}>InfraJagat News</Text>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 4, marginTop: 2 }}>
+              <Icon name="location-outline" size={13} color={colors.muted} />
+              <Text style={styles.sub} numberOfLines={1}>{selectedArea}</Text>
+            </View>
           </View>
         </View>
 
@@ -281,13 +285,13 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: "800", color: colors.brand, letterSpacing: -0.3 },
   sub: { color: colors.muted, fontSize: 13 },
   menuBtn: {
-    width: 40, height: 40, borderRadius: 20,
+    width: 36, height: 36, borderRadius: 18,
     backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border,
     alignItems: "center", justifyContent: "center",
   },
   publishBtn: {
     flexDirection: "row", alignItems: "center", gap: 4,
-    paddingHorizontal: 12, height: 40, borderRadius: radius.pill,
+    paddingHorizontal: 12, height: 36, borderRadius: radius.pill,
     backgroundColor: colors.brandPrimary,
   },
   publishText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "800" },

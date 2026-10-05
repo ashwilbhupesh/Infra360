@@ -7,6 +7,7 @@ import Icon from "@react-native-vector-icons/ionicons";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { tierColor, tierBgColor } from "@/src/utils/tier";
+import { HeaderLocationPill } from "@/src/components/header-location-pill";
 
 type AgentCategory = { id: string; name: string; icon: string; description: string; agents_count: number };
 type Agent = {
@@ -92,19 +93,33 @@ export default function Agents() {
     <View style={{ flex: 1, backgroundColor: colors.surfaceSecondary }}>
       <View style={{ paddingTop: insets.top + spacing.md, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }}>
         <View style={{ paddingHorizontal: spacing.xl }}>
+          <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: spacing.sm, marginBottom: spacing.sm }}>
+            <HeaderLocationPill testID="experts-location-pill" compact />
+            <View style={{ flexDirection: "row", gap: 6 }}>
+              <Pressable
+                testID="experts-register-btn"
+                onPress={() => router.push({ pathname: "/register", params: { type: "expert" } } as any)}
+                style={styles.registerBtn}
+                hitSlop={6}
+              >
+                <Icon name="add" size={14} color={colors.onBrandPrimary} />
+                <Text style={styles.registerBtnText}>Register</Text>
+              </Pressable>
+              <Pressable
+                testID="agents-menu-btn"
+                onPress={() => router.push("/profile" as any)}
+                style={styles.menuBtn}
+                hitSlop={10}
+              >
+                <Icon name="settings-outline" size={20} color={colors.onSurface} />
+              </Pressable>
+            </View>
+          </View>
           <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
             <View style={{ flex: 1 }}>
               <Text style={styles.title}>Experts</Text>
               <Text style={styles.sub}>Brokers, JDA liaison, lawyers & loan advisors — verified.</Text>
             </View>
-            <Pressable
-              testID="agents-menu-btn"
-              onPress={() => router.push("/profile" as any)}
-              style={styles.menuBtn}
-              hitSlop={10}
-            >
-              <Icon name="settings-outline" size={22} color={colors.onSurface} />
-            </Pressable>
           </View>
           <View style={styles.searchWrap}>
             <Icon name="search" size={18} color={colors.muted} />
@@ -181,10 +196,16 @@ const styles = StyleSheet.create({
   title: { fontSize: 26, fontWeight: "800", color: colors.onSurface, letterSpacing: -0.3 },
   sub: { fontSize: 13, color: colors.muted, marginTop: 4 },
   menuBtn: {
-    width: 40, height: 40, borderRadius: 20,
+    width: 36, height: 36, borderRadius: 18,
     backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border,
     alignItems: "center", justifyContent: "center",
   },
+  registerBtn: {
+    flexDirection: "row", alignItems: "center", gap: 4,
+    paddingHorizontal: spacing.sm + 2, height: 36, borderRadius: radius.pill,
+    backgroundColor: colors.brandPrimary,
+  },
+  registerBtnText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "800" },
   searchWrap: {
     flexDirection: "row", alignItems: "center", gap: 10,
     backgroundColor: colors.surfaceSecondary, borderRadius: radius.lg,
