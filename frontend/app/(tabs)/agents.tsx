@@ -92,8 +92,20 @@ export default function Agents() {
     <View style={{ flex: 1, backgroundColor: colors.surfaceSecondary }}>
       <View style={{ paddingTop: insets.top + spacing.md, backgroundColor: colors.surface, borderBottomWidth: 1, borderBottomColor: colors.border }}>
         <View style={{ paddingHorizontal: spacing.xl }}>
-          <Text style={styles.title}>Agents</Text>
-          <Text style={styles.sub}>Brokers, JDA liaison, lawyers & loan advisors — verified.</Text>
+          <View style={{ flexDirection: "row", alignItems: "flex-start", justifyContent: "space-between" }}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.title}>Agents</Text>
+              <Text style={styles.sub}>Brokers, JDA liaison, lawyers & loan advisors — verified.</Text>
+            </View>
+            <Pressable
+              testID="agents-menu-btn"
+              onPress={() => router.push("/profile" as any)}
+              style={styles.menuBtn}
+              hitSlop={10}
+            >
+              <Icon name="menu-outline" size={22} color={colors.onSurface} />
+            </Pressable>
+          </View>
           <View style={styles.searchWrap}>
             <Icon name="search" size={18} color={colors.muted} />
             <TextInput
@@ -168,6 +180,11 @@ export default function Agents() {
 const styles = StyleSheet.create({
   title: { fontSize: 26, fontWeight: "800", color: colors.onSurface, letterSpacing: -0.3 },
   sub: { fontSize: 13, color: colors.muted, marginTop: 4 },
+  menuBtn: {
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border,
+    alignItems: "center", justifyContent: "center",
+  },
   searchWrap: {
     flexDirection: "row", alignItems: "center", gap: 10,
     backgroundColor: colors.surfaceSecondary, borderRadius: radius.lg,

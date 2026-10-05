@@ -171,10 +171,22 @@ agent_communication:
       Known cosmetic: some Unsplash category tile images 404 — not functional, display empty tile with name; non-blocking.
   - agent: "main"
     message: |
-      User reported: "Map view and other features aren't working on Android" + "Back to listing button isn't working".
-      Root cause: `PROVIDER_DEFAULT` in react-native-maps on Android requires a Google Maps API key — without one the map renders blank, which broke the whole explore screen (including the "Back to listings" button inside the BottomSheet pin preview).
-      Fix (frontend/app/(tabs)/explore.tsx):
-        1. Added <UrlTile> with OpenStreetMap tiles ("https://tile.openstreetmap.org/{z}/{x}/{y}.png") so no API key is needed.
-        2. On Android, set `mapType="none"` to disable the blank Google Maps base layer so OSM tiles are the only visible map. iOS keeps `mapType="standard"` (Apple Maps works fine out of the box).
-        3. Enlarged the "Back to listings" Pressable: `minHeight: 44`, `paddingVertical: 8`, `hitSlop: {top:12,bottom:12,left:12,right:12}`, added `android_ripple` for tactile feedback. This fixes the touch target on Android.
-      Needs testing on a real Android device (Expo Go or dev build) since the web preview uses explore.web.tsx fallback and can't simulate the native MapView.
+      User reported 8 issues + a new feature after the Materials ship:
+       1. Commercial filter leaking → explore.tsx & web variant: items are already filtered server-side; locality strips still show (user confirmed they want those visible); Book button removed from Buy/Rent segmented control.
+       2. "Show on map" → pin-preview.tsx now does `router.push({pathname: "/(tabs)/explore", params: {highlight, type}})` so cross-screen navigation lands on the map with the pin selected. explore.tsx picks up `type` via a new useEffect.
+       3. News area filter → news.tsx now has an "Area" chip row sourced from /api/localities + a Topic row; `locality_id` passed to GET /api/news; backend now enriches news with `locality_name` for display.
+       4. Location permission → onboarding.tsx silently requests `Location.requestForegroundPermissionsAsync()` on submit (expo-location added). City text remains source of truth.
+       5. List view hides map → explore.tsx conditionally mounts <MapView> only when `view === "map"`; otherwise a plain surfaceSecondary background is rendered. When `view` toggles to "list", the BottomSheet auto-snaps to its max index (fullscreen list).
+       6. Hamburger menu on all tabs → menuBtn added to agents.tsx, news.tsx, saved.tsx, market.tsx (both materials and non-materials paths). Each routes to /profile.
+       7. Materials chips → category/[id].tsx: `sort` is now nullable; clicking the active sort chip deselects it (toggle). Verified-only remains an independent boolean.
+       8. Persistent 5-tab bar → new PersistentTabBar in src/components/persistent-tab-bar.tsx; rendered as a flex child in app/_layout.tsx on all screens EXCEPT the (tabs) group (which has its own), /onboarding, /otp, /list-property, and "/" (index redirect). Not absolutely positioned, so detail-screen sticky footers (materials cart, property detail) sit above it correctly.
+
+      New feature — Important dates:
+       - Backend: User model + /api/users/{id}/dates (PUT) accept `dob`, `spouse_dob`, `anniversary` (ISO YYYY-MM-DD; empty string clears; invalid date → 400).
+       - Frontend: new /personal-dates.tsx with 3 rows, native @react-native-community/datetimepicker (iOS spinner sheet + Android default), days-until countdown ("In N days"/"🎉 Today!"), save button posts PUT. Linked from Profile → Account section as "Important dates".
+
+      All lint clean. Backend verified via curl: /news locality filter works and returns locality_name; PUT dates saves correctly; invalid date → 400; empty string clears. Frontend verified via screenshots: News (Area + Topic + menu), Profile with Important dates row, Personal dates screen with sticky Save, Materials chip toggle, Explore Commercial filter + Book removed + floating tab bar on detail routes.
+      Needs retest focus:
+       - List-view-hides-map on native (web uses explore.web.tsx — not affected).
+       - "Show on map" from a property detail jumping to explore with correct filter.
+       - Floating tab bar persistence across all detail screens.

@@ -28,7 +28,7 @@ export default function MaterialsCategoryPage() {
   const [stores, setStores] = useState<Store[]>([]);
   const [loading, setLoading] = useState(true);
   const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [sort, setSort] = useState<"featured" | "rating" | "price">("featured");
+  const [sort, setSort] = useState<"featured" | "rating" | "price" | null>(null);
 
   const hydrate = useMaterialsCart((s) => s.hydrate);
   const totalItems = useMaterialsCart((s) => s.totalItems());
@@ -225,13 +225,13 @@ export default function MaterialsCategoryPage() {
         </View>
 
         <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={styles.chipsRow}>
-          <Pressable testID="sort-featured" onPress={() => setSort("featured")} style={[styles.chip, sort === "featured" && styles.chipActive]}>
+          <Pressable testID="sort-featured" onPress={() => setSort(sort === "featured" ? null : "featured")} style={[styles.chip, sort === "featured" && styles.chipActive]}>
             <Text style={[styles.chipText, sort === "featured" && styles.chipTextActive]}>Featured</Text>
           </Pressable>
-          <Pressable testID="sort-rating" onPress={() => setSort("rating")} style={[styles.chip, sort === "rating" && styles.chipActive]}>
+          <Pressable testID="sort-rating" onPress={() => setSort(sort === "rating" ? null : "rating")} style={[styles.chip, sort === "rating" && styles.chipActive]}>
             <Text style={[styles.chipText, sort === "rating" && styles.chipTextActive]}>Top rated</Text>
           </Pressable>
-          <Pressable testID="sort-price" onPress={() => setSort("price")} style={[styles.chip, sort === "price" && styles.chipActive]}>
+          <Pressable testID="sort-price" onPress={() => setSort(sort === "price" ? null : "price")} style={[styles.chip, sort === "price" && styles.chipActive]}>
             <Text style={[styles.chipText, sort === "price" && styles.chipTextActive]}>Low price</Text>
           </Pressable>
           <Pressable testID="filter-verified" onPress={() => setVerifiedOnly((v) => !v)} style={[styles.chip, verifiedOnly && styles.chipActive]}>

@@ -77,7 +77,15 @@ class User(BaseModel):
     mobile: str
     area: Optional[str] = None
     profession: Optional[str] = None
+    dob: Optional[str] = None            # ISO date YYYY-MM-DD
+    spouse_dob: Optional[str] = None     # ISO date YYYY-MM-DD
+    anniversary: Optional[str] = None    # ISO date YYYY-MM-DD
     created_at: str
+
+class UserDatesUpdate(BaseModel):
+    dob: Optional[str] = None
+    spouse_dob: Optional[str] = None
+    anniversary: Optional[str] = None
 
 class PropertyIn(BaseModel):
     title: str
@@ -246,6 +254,41 @@ async def me(user_id: str):
         raise HTTPException(404, "User not found")
     return u
 
+
+def _validate_date(s: Optional[str]) -> Optional[str]:
+    """Validate YYYY-MM-DD; return the string or raise."""
+    if s is None or s == "":
+        return None
+    try:
+        d = datetime.strptime(s, "%Y-%m-%d").date()
+        if d.year < 1900 or d.year > datetime.now().year + 1:
+            raise ValueError()
+        return s
+    except Exception:
+        raise HTTPException(400, f"Invalid date: {s}. Use YYYY-MM-DD.")
+
+
+@api_router.put("/users/{user_id}/dates")
+async def update_user_dates(user_id: str, req: UserDatesUpdate):
+    """Update birth / spouse birth / anniversary dates for personalised reminders."""
+    u = await db.users.find_one({"id": user_id}, NO_ID)
+    if not u:
+        raise HTTPException(404, "User not found")
+    # Build $set with only provided fields; empty string clears the field
+    update: Dict[str, Any] = {}
+    for field, value in [("dob", req.dob), ("spouse_dob", req.spouse_dob), ("anniversary", req.anniversary)]:
+        if value is None:
+            continue
+        if value == "":
+            update[field] = None
+        else:
+            update[field] = _validate_date(value)
+    if not update:
+        return u
+    await db.users.update_one({"id": user_id}, {"$set": update})
+    u.update(update)
+    return u
+
 # Localities
 @api_router.get("/localities")
 async def list_localities():
@@ -405,6 +448,14 @@ async def list_news(locality_id: Optional[str] = None, category: Optional[str] =
     if locality_id: q["locality_id"] = locality_id
     if category: q["category"] = category
     docs = await db.news.find(q, NO_ID).sort("date", -1).limit(limit).to_list(limit)
+    # Attach locality name for display
+    if docs:
+        loc_ids = list({d.get("locality_id") for d in docs if d.get("locality_id")})
+        if loc_ids:
+            locs = await db.localities.find({"id": {"$in": loc_ids}}, {"_id": 0, "id": 1, "name": 1}).to_list(100)
+            lmap = {l["id"]: l["name"] for l in locs}
+            for d in docs:
+                d["locality_name"] = lmap.get(d.get("locality_id"))
     return docs
 
 # Saved / Follows

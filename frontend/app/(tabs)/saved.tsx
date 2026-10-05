@@ -59,18 +59,28 @@ export default function Saved() {
               <Text style={styles.sub}>Your properties & followed localities</Text>
             </View>
           </View>
-          {tab === "props" && saved.length >= 2 && (
+          <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+            {tab === "props" && saved.length >= 2 && (
+              <Pressable
+                testID="compare-mode-toggle"
+                onPress={() => { setCompareMode(v => !v); setSelected([]); }}
+                style={[styles.compareToggle, compareMode && styles.compareToggleActive]}
+              >
+                <Icon name="git-compare-outline" size={14} color={compareMode ? colors.onBrandPrimary : colors.onSurface} />
+                <Text style={[styles.compareToggleText, compareMode && { color: colors.onBrandPrimary }]}>
+                  {compareMode ? "Cancel" : "Compare"}
+                </Text>
+              </Pressable>
+            )}
             <Pressable
-              testID="compare-mode-toggle"
-              onPress={() => { setCompareMode(v => !v); setSelected([]); }}
-              style={[styles.compareToggle, compareMode && styles.compareToggleActive]}
+              testID="saved-menu-btn"
+              onPress={() => router.push("/profile" as any)}
+              style={styles.menuBtn}
+              hitSlop={10}
             >
-              <Icon name="git-compare-outline" size={14} color={compareMode ? colors.onBrandPrimary : colors.onSurface} />
-              <Text style={[styles.compareToggleText, compareMode && { color: colors.onBrandPrimary }]}>
-                {compareMode ? "Cancel" : "Compare"}
-              </Text>
+              <Icon name="menu-outline" size={22} color={colors.onSurface} />
             </Pressable>
-          )}
+          </View>
         </View>
         <View style={styles.tabs}>
           <Pressable testID="saved-tab-properties" onPress={() => setTab("props")} style={[styles.tab, tab === "props" && styles.tabActive]}>
@@ -156,6 +166,11 @@ const styles = StyleSheet.create({
   compareToggle: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 12, height: 34, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, backgroundColor: colors.surface },
   compareToggleActive: { backgroundColor: colors.brandPrimary, borderColor: colors.brandPrimary },
   compareToggleText: { fontSize: 12, fontWeight: "700", color: colors.onSurface },
+  menuBtn: {
+    width: 40, height: 40, borderRadius: 20,
+    backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border,
+    alignItems: "center", justifyContent: "center",
+  },
   compareHint: { marginTop: spacing.md, padding: spacing.sm, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary },
   compareHintText: { fontSize: 12, color: colors.onSurface, fontWeight: "600", textAlign: "center" },
   tabs: { flexDirection: "row", gap: spacing.sm, marginTop: spacing.md },

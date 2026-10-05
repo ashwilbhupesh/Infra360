@@ -12,7 +12,7 @@
       "bundleIdentifier": "com.emergent.proptechindia.aobf9p",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Add photos to your property listing",
-        "NSLocationWhenInUseUsageDescription": "Show properties near your location"
+        "NSLocationWhenInUseUsageDescription": "Show properties and news near your location"
       }
     },
     "android": {
@@ -53,7 +53,8 @@
         {
           "photosPermission": "Add photos to your property listing"
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ],
     "experiments": {
       "typedRoutes": true

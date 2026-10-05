@@ -36,7 +36,7 @@ export default function MapScreen() {
   const [loading, setLoading] = useState(true);
   const [heat, setHeat] = useState(false);
   const [view, setView] = useState<"map" | "list">("map");
-  const [listingType, setListingType] = useState<"Buy" | "Rent" | "Book">("Buy");
+  const [listingType, setListingType] = useState<"Buy" | "Rent">("Buy");
   const [heatPoints, setHeatPoints] = useState<Array<{ id: string; name: string; lat: number; lng: number; intensity: number; median_price_per_sq_yd: number }>>([]);
   const [localities, setLocalities] = useState<Locality[]>([]);
   const sheetRef = useRef<BottomSheet>(null);
@@ -79,46 +79,68 @@ export default function MapScreen() {
     }
   }, [params.highlight]);
 
+  // Also sync filter when a deep link passes ?type=
+  useEffect(() => {
+    if (params.type !== undefined) {
+      setFilter(String(params.type || ""));
+    }
+  }, [params.type]);
+
+  // When toggling to list view, expand the sheet to fullscreen so the map disappears visually
+  useEffect(() => {
+    if (view === "list") {
+      setSelected(null);
+      sheetRef.current?.snapToIndex(2);
+    } else {
+      sheetRef.current?.snapToIndex(0);
+    }
+  }, [view]);
+
   const initialRegion = { latitude: 26.8891, longitude: 75.7500, latitudeDelta: 0.18, longitudeDelta: 0.18 };
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.surface }}>
-      <MapView
-        style={StyleSheet.absoluteFill}
-        provider={PROVIDER_DEFAULT}
-        mapType={Platform.OS === "android" ? "none" : "standard"}
-        initialRegion={initialRegion}
-        showsCompass={false}
-      >
-        {/* OpenStreetMap tiles — no API key required, renders on Android without Google Maps setup */}
-        <UrlTile
-          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-          maximumZ={19}
-          flipY={false}
-        />
-        {heat && heatPoints.map(pt => (
-          <Circle
-            key={`hc-${pt.id}`}
-            center={{ latitude: pt.lat, longitude: pt.lng }}
-            radius={1500}
-            fillColor={heatColor(pt.intensity, 0.45)}
-            strokeColor={heatColor(pt.intensity, 0.9)}
-            strokeWidth={1}
+      {view === "map" ? (
+        <MapView
+          style={StyleSheet.absoluteFill}
+          provider={PROVIDER_DEFAULT}
+          mapType={Platform.OS === "android" ? "none" : "standard"}
+          initialRegion={initialRegion}
+          showsCompass={false}
+        >
+          {/* OpenStreetMap tiles — no API key required, renders on Android without Google Maps setup */}
+          <UrlTile
+            urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+            maximumZ={19}
+            flipY={false}
           />
-        ))}
-        {!heat && items.map((p: any) => (
-          <Marker
-            key={p.id}
-            coordinate={{ latitude: p.lat, longitude: p.lng }}
-            onPress={() => { setSelected(p.id); sheetRef.current?.snapToIndex(2); }}
-            anchor={{ x: 0.5, y: 0.5 }}
-          >
-            <View style={[styles.pin, selected === p.id && styles.pinActive]}>
-              <Text style={[styles.pinText, selected === p.id && styles.pinTextActive]}>{formatINR(p.price)}</Text>
-            </View>
-          </Marker>
-        ))}
-      </MapView>
+          {heat && heatPoints.map(pt => (
+            <Circle
+              key={`hc-${pt.id}`}
+              center={{ latitude: pt.lat, longitude: pt.lng }}
+              radius={1500}
+              fillColor={heatColor(pt.intensity, 0.45)}
+              strokeColor={heatColor(pt.intensity, 0.9)}
+              strokeWidth={1}
+            />
+          ))}
+          {!heat && items.map((p: any) => (
+            <Marker
+              key={p.id}
+              coordinate={{ latitude: p.lat, longitude: p.lng }}
+              onPress={() => { setSelected(p.id); sheetRef.current?.snapToIndex(2); }}
+              anchor={{ x: 0.5, y: 0.5 }}
+            >
+              <View style={[styles.pin, selected === p.id && styles.pinActive]}>
+                <Text style={[styles.pinText, selected === p.id && styles.pinTextActive]}>{formatINR(p.price)}</Text>
+              </View>
+            </Marker>
+          ))}
+        </MapView>
+      ) : (
+        /* List view — full screen without map behind it */
+        <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.surfaceSecondary }]} />
+      )}
 
       {/* Top chrome */}
       <View style={[styles.topChrome, { top: insets.top + spacing.sm }]}>
@@ -153,7 +175,7 @@ export default function MapScreen() {
           ) : null}
         </View>
         <View style={styles.segRow}>
-          {(["Buy", "Rent", "Book"] as const).map(t => {
+          {(["Buy", "Rent"] as const).map(t => {
             const active = listingType === t;
             return (
               <Pressable key={t} testID={`listing-type-${t.toLowerCase()}`} onPress={() => setListingType(t)} style={[styles.segBtn, active && styles.segBtnActive]}>

@@ -170,7 +170,10 @@ export function PinPreview({ propertyId, onClose }: { propertyId: string; onClos
                   </Pressable>
                   <Pressable
                     testID={`similar-show-on-map-${s.id}`}
-                    onPress={() => { onClose?.(); router.setParams({ highlight: s.id } as any); }}
+                    onPress={() => {
+                      onClose?.();
+                      router.push({ pathname: "/(tabs)/explore", params: { highlight: s.id, type: s.type } } as any);
+                    }}
                     style={styles.simMapBtn}
                   >
                     <Icon name="map-outline" size={11} color={colors.brand} />

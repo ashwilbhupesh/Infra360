@@ -199,18 +199,38 @@ export default function Market() {
               )}
             </View>
             {isMaterials && (
+              <View style={{ flexDirection: "row", gap: 8 }}>
+                <Pressable
+                  testID="materials-cart-btn"
+                  onPress={() => router.push("/materials/cart" as any)}
+                  style={styles.cartBtn}
+                  hitSlop={10}
+                >
+                  <Icon name="cart-outline" size={22} color={colors.onSurface} />
+                  {totalItems > 0 && (
+                    <View style={styles.cartBadge}>
+                      <Text style={styles.cartBadgeText}>{totalItems > 99 ? "99+" : totalItems}</Text>
+                    </View>
+                  )}
+                </Pressable>
+                <Pressable
+                  testID="market-menu-btn"
+                  onPress={() => router.push("/profile" as any)}
+                  style={styles.cartBtn}
+                  hitSlop={10}
+                >
+                  <Icon name="menu-outline" size={22} color={colors.onSurface} />
+                </Pressable>
+              </View>
+            )}
+            {!isMaterials && (
               <Pressable
-                testID="materials-cart-btn"
-                onPress={() => router.push("/materials/cart" as any)}
+                testID="market-menu-btn"
+                onPress={() => router.push("/profile" as any)}
                 style={styles.cartBtn}
                 hitSlop={10}
               >
-                <Icon name="cart-outline" size={22} color={colors.onSurface} />
-                {totalItems > 0 && (
-                  <View style={styles.cartBadge}>
-                    <Text style={styles.cartBadgeText}>{totalItems > 99 ? "99+" : totalItems}</Text>
-                  </View>
-                )}
+                <Icon name="menu-outline" size={22} color={colors.onSurface} />
               </Pressable>
             )}
           </View>

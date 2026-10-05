@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, Text, TextInput, Pressable, StyleSheet, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Location from "expo-location";
 import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
@@ -28,6 +29,13 @@ export default function Onboarding() {
       return;
     }
     setBusy(true);
+    // Request location permission silently — city text remains source of truth.
+    try {
+      const existing = await Location.getForegroundPermissionsAsync();
+      if (existing.status !== "granted" && existing.canAskAgain) {
+        await Location.requestForegroundPermissionsAsync();
+      }
+    } catch {}
     // Push to OTP verification screen; actual onboard happens after OTP.
     try {
       router.push({
