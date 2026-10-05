@@ -8,6 +8,7 @@ import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 import { useMaterialsCart } from "@/src/stores/materials-cart";
+import { useVoiceDraft } from "@/src/stores/voice-draft";
 import { VoiceSheet } from "@/src/components/voice-sheet";
 
 type Category = { id: string; group_id: string; name: string; image: string; suppliers_count?: number };
@@ -42,6 +43,7 @@ export default function Market() {
 
   const { user } = useAuth();
   const addToCart = useMaterialsCart((s) => s.add);
+  const setDraft = useVoiceDraft((s) => s.setDraft);
 
   const hydrate = useMaterialsCart((s) => s.hydrate);
   const totalItems = useMaterialsCart((s) => s.totalItems());
@@ -91,20 +93,20 @@ export default function Market() {
 
   const handleVoiceCart = (res: any) => {
     const items = res?.items || [];
-    if (items.length === 0) {
-      Alert.alert("No items matched", res?.translation ? `Heard: “${res.translation}”` : "Try narrating item names and brands more clearly.");
+    if (items.length === 0 && !(res?.unmatched?.length)) {
+      Alert.alert("No items heard", res?.translation ? `Heard: “${res.translation}”` : "Try narrating item names and brands more clearly.");
       return;
     }
-    for (const l of items) {
-      addToCart({
-        id: l.product_id, store_id: l.store_id, store_name: l.store_name || "",
-        name: l.name, brand: l.brand, image: l.image, unit: l.unit, price: l.price,
-      }, l.qty);
-    }
-    Alert.alert("Added to cart ✅", `${items.length} item${items.length === 1 ? "" : "s"} added at the cheapest live price.`, [
-      { text: "View cart", onPress: () => router.push("/materials/cart" as any) },
-      { text: "OK" },
-    ]);
+    setDraft({
+      source: "voice",
+      transcript: res?.transcript,
+      translation: res?.translation,
+      items,
+      unmatched: res?.unmatched || [],
+      total_estimated: res?.total_estimated || 0,
+      created_at: new Date().toISOString(),
+    });
+    router.push("/market/voice-cart-review" as any);
   };
 
   const isMaterials = activeGroup === MATERIALS_GROUP_ID;
@@ -164,27 +166,33 @@ export default function Market() {
   // --- Materials home: shopping-style layout ---
   const renderMaterialsHome = () => (
     <ScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
-      {/* Parcha scanner banner */}
-      <View style={{ flexDirection: "row", gap: 8, marginHorizontal: spacing.xl, marginTop: spacing.lg }}>
+      {/* Scan + voice CTAs (side-by-side, half each) */}
+      <View style={{ flexDirection: "row", gap: 10, paddingHorizontal: spacing.xl, marginTop: spacing.lg }}>
         <Pressable
           testID="scan-parcha-cta"
           onPress={() => router.push("/market/scan-parcha" as any)}
-          style={styles.parchaCta}
+          style={[styles.scanCta, { flex: 1 }]}
         >
-          <View style={styles.parchaIcon}>
-            <Icon name="scan" size={22} color="#FFFFFF" />
+          <View style={styles.scanCtaIcon}>
+            <Icon name="scan" size={20} color="#FFFFFF" />
           </View>
           <View style={{ flex: 1 }}>
-            <Text style={styles.parchaTitle}>Scan a parcha</Text>
-            <Text style={styles.parchaSub}>Snap your material list — AI picks the cheapest vendor</Text>
+            <Text style={styles.scanCtaTitle} numberOfLines={1}>Scan</Text>
+            <Text style={styles.scanCtaSub} numberOfLines={1}>requirements</Text>
           </View>
         </Pressable>
         <Pressable
           testID="voice-cart-cta"
           onPress={() => setVoiceOpen(true)}
-          style={styles.parchaVoice}
+          style={[styles.voiceCta, { flex: 1 }]}
         >
-          <Icon name="mic" size={22} color="#FFFFFF" />
+          <View style={styles.voiceCtaIcon}>
+            <Icon name="mic" size={20} color="#FFFFFF" />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.voiceCtaTitle} numberOfLines={1}>Narrate</Text>
+            <Text style={styles.voiceCtaSub} numberOfLines={1}>requirements</Text>
+          </View>
         </Pressable>
       </View>
       <Pressable
@@ -461,6 +469,14 @@ const styles = StyleSheet.create({
   parchaSub: { fontSize: 11, color: "rgba(255,255,255,0.9)", marginTop: 2, lineHeight: 15 },
   parchaArrow: { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(255,255,255,0.2)", alignItems: "center", justifyContent: "center" },
   parchaVoice: { width: 68, borderRadius: radius.lg, backgroundColor: colors.brand, alignItems: "center", justifyContent: "center", ...shadow.card },
+  scanCta: { flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 12, paddingHorizontal: 12, borderRadius: radius.lg, backgroundColor: colors.success, ...shadow.card },
+  scanCtaIcon: { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(255,255,255,0.22)", alignItems: "center", justifyContent: "center" },
+  scanCtaTitle: { fontSize: 14, fontWeight: "800", color: "#FFFFFF", letterSpacing: 0.2 },
+  scanCtaSub: { fontSize: 10, color: "rgba(255,255,255,0.92)", marginTop: 1 },
+  voiceCta: { flexDirection: "row", alignItems: "center", gap: 10, paddingVertical: 12, paddingHorizontal: 12, borderRadius: radius.lg, backgroundColor: colors.brand, ...shadow.card },
+  voiceCtaIcon: { width: 36, height: 36, borderRadius: 18, backgroundColor: "rgba(255,255,255,0.22)", alignItems: "center", justifyContent: "center" },
+  voiceCtaTitle: { fontSize: 14, fontWeight: "800", color: colors.onBrand, letterSpacing: 0.2 },
+  voiceCtaSub: { fontSize: 10, color: "rgba(255,255,255,0.9)", marginTop: 1 },
   parchaHistory: { flexDirection: "row", alignItems: "center", gap: 8, marginHorizontal: spacing.xl, marginTop: 10, paddingHorizontal: 14, paddingVertical: 10, borderRadius: radius.md, backgroundColor: colors.surfaceSecondary, borderWidth: 1, borderColor: colors.border },
   parchaHistoryTxt: { flex: 1, fontSize: 12, fontWeight: "700", color: colors.onSurface },
 

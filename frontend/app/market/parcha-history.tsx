@@ -8,6 +8,7 @@ import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 import { useMaterialsCart } from "@/src/stores/materials-cart";
+import { useVoiceDraft } from "@/src/stores/voice-draft";
 import { indianComma } from "@/src/utils/format";
 
 type Scan = {
@@ -22,6 +23,7 @@ export default function ParchaHistory() {
   const router = useRouter();
   const { user } = useAuth();
   const addToCart = useMaterialsCart(s => s.add);
+  const setDraft = useVoiceDraft(s => s.setDraft);
   const [list, setList] = useState<Scan[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState<string | null>(null);
@@ -43,16 +45,16 @@ export default function ParchaHistory() {
       const full = await api.get<any>(`/materials/parcha-scans/${sid}`);
       const items = full.items || [];
       if (!items.length) { Alert.alert("Empty", "This scan had no matched items."); return; }
-      for (const l of items) {
-        addToCart({
-          id: l.product_id, store_id: l.store_id, store_name: l.store_name || "",
-          name: l.name, brand: l.brand, image: l.image, unit: l.unit, price: l.price,
-        }, l.qty);
-      }
-      Alert.alert("Added to cart ✅", `${items.length} item${items.length === 1 ? "" : "s"} re-ordered.`, [
-        { text: "View cart", onPress: () => router.push("/materials/cart" as any) },
-        { text: "OK" },
-      ]);
+      setDraft({
+        source: full.source === "voice" ? "voice" : "scan",
+        transcript: full.transcript,
+        translation: full.translation,
+        items,
+        unmatched: full.unmatched || [],
+        total_estimated: full.total_estimated || 0,
+        created_at: new Date().toISOString(),
+      });
+      router.push("/market/voice-cart-review" as any);
     } catch (e: any) {
       Alert.alert("Could not reorder", e?.message || "Try again");
     } finally { setBusy(null); }

@@ -129,7 +129,7 @@ export default function MapScreen() {
 
   const handleMarkerPress = (id: string) => {
     setSelected(id);
-    sheetRef.current?.snapToIndex(0);
+    sheetRef.current?.snapToIndex(1);
   };
 
   const openSell = () => router.push("/sell" as any);
@@ -230,8 +230,11 @@ export default function MapScreen() {
               </Pressable>
             );
           })}
-          {/* View toggle lives alongside the segment control so it's always pinned */}
+          {/* View toggle + voice mic live alongside the segment control so they're always pinned */}
           <View style={styles.viewTogglePinned}>
+            <Pressable testID="explore-voice-mic" onPress={() => setVoiceOpen(true)} style={styles.inlineMicBtn} hitSlop={6}>
+              <Icon name="mic" size={14} color="#FFFFFF" />
+            </Pressable>
             <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
               <Icon name="map-outline" size={13} color={view === "map" ? colors.onBrandPrimary : colors.onSurface} />
             </Pressable>
@@ -343,13 +346,6 @@ export default function MapScreen() {
         </View>
       )}
 
-      {/* AI voice mic — floating above tab bar */}
-      {view === "map" ? (
-        <Pressable testID="explore-voice-mic" onPress={() => setVoiceOpen(true)} style={[styles.voiceFab, { bottom: insets.bottom + 110 }]} hitSlop={10}>
-          <Icon name="mic" size={20} color="#FFFFFF" />
-        </Pressable>
-      ) : null}
-
       {voiceSummary ? (
         <View style={[styles.voiceSummary, { top: insets.top + (filter ? 232 : 198) }]}>
           <Icon name="mic" size={11} color={colors.brand} />
@@ -378,38 +374,40 @@ export default function MapScreen() {
       ) : (
         <BottomSheet
           ref={sheetRef}
-          index={0}
-          snapPoints={selected ? ["55%"] : ["22%", "55%"]}
-          topInset={insets.top + 220}
+          index={selected ? 1 : 0}
+          snapPoints={["25%", "60%", "92%"]}
+          topInset={insets.top + 100}
           enableDynamicSizing={false}
-          enableOverDrag={false}
+          enableOverDrag={true}
           backgroundStyle={styles.sheetBg}
           handleIndicatorStyle={{ backgroundColor: colors.borderStrong }}
         >
           <BottomSheetView style={styles.sheetHeader}>
             {selected ? (
-              <>
-                <Pressable
-                  testID="pin-preview-back"
-                  onPress={() => setSelected(null)}
-                  style={({ pressed }) => [styles.backChip, pressed && { opacity: 0.6 }]}
-                  hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
-                  android_ripple={{ color: colors.border, borderless: true }}
-                >
-                  <Icon name="chevron-back" size={20} color={colors.brand} />
-                  <Text style={styles.backChipText}>Back to listings</Text>
-                </Pressable>
-                <Text style={styles.selectedKicker}>SELECTED</Text>
-              </>
+              <Text style={styles.selectedKicker}>SELECTED PROPERTY</Text>
             ) : (
               <Text style={styles.sheetTitle}>{items.length} properties</Text>
             )}
           </BottomSheetView>
 
           {selected ? (
-            <BottomSheetScrollView contentContainerStyle={{ paddingBottom: spacing.xxxl }}>
-              <PinPreview propertyId={selected} onClose={() => setSelected(null)} />
-            </BottomSheetScrollView>
+            <>
+              <BottomSheetScrollView contentContainerStyle={{ paddingBottom: 90 }}>
+                <PinPreview propertyId={selected} onClose={() => setSelected(null)} />
+              </BottomSheetScrollView>
+              <View style={styles.backBar}>
+                <Pressable
+                  testID="pin-preview-back"
+                  onPress={() => setSelected(null)}
+                  style={({ pressed }) => [styles.backBtnBottom, pressed && { opacity: 0.75 }]}
+                  hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+                  android_ripple={{ color: colors.border }}
+                >
+                  <Icon name="chevron-back" size={18} color={colors.onBrandPrimary} />
+                  <Text style={styles.backBtnBottomTxt}>Back to listings</Text>
+                </Pressable>
+              </View>
+            </>
           ) : (
             <BottomSheetScrollView
               contentContainerStyle={{ paddingBottom: spacing.xxxl, paddingTop: spacing.sm }}
@@ -493,6 +491,7 @@ const styles = StyleSheet.create({
   loadingChip: { position: "absolute", top: 240, alignSelf: "center", flexDirection: "row", alignItems: "center", gap: spacing.sm, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, borderRadius: radius.pill, backgroundColor: colors.surface, ...shadow.card, zIndex: 10 },
   loadingTxt: { fontSize: 12, color: colors.onSurface, fontWeight: "500" },
   voiceFab: { position: "absolute", right: 16, width: 52, height: 52, borderRadius: 26, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", ...shadow.floating, zIndex: 20 },
+  inlineMicBtn: { width: 32, height: 28, borderRadius: 14, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", marginRight: 4 },
   voiceSummary: { position: "absolute", left: spacing.lg, right: 72, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.98)", borderWidth: 1, borderColor: colors.brand, zIndex: 15, ...shadow.card },
   voiceSummaryTxt: { flex: 1, fontSize: 11, color: colors.onSurface, fontWeight: "700" },
   listOverlay: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: colors.surface, zIndex: 5 },
@@ -505,6 +504,9 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill, backgroundColor: colors.brandTertiary,
   },
   backChipText: { fontSize: 13, fontWeight: "800", color: colors.brand },
+  backBar: { position: "absolute", left: 0, right: 0, bottom: 0, padding: spacing.md, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border },
+  backBtnBottom: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, height: 48, borderRadius: radius.md, backgroundColor: colors.brandPrimary },
+  backBtnBottomTxt: { fontSize: 14, fontWeight: "800", color: colors.onBrandPrimary, letterSpacing: 0.2 },
   selectedKicker: { fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 },
   stripTitle: { fontSize: 12, fontWeight: "800", color: colors.muted, letterSpacing: 0.8, marginBottom: spacing.sm, paddingHorizontal: spacing.lg },
 });

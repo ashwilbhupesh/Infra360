@@ -10,6 +10,7 @@ import { colors, spacing, radius, shadow } from "@/src/theme";
 import { api, backendUrl as BURL } from "@/src/api";
 import { useAuth } from "@/src/auth-context";
 import { useMaterialsCart } from "@/src/stores/materials-cart";
+import { useVoiceDraft } from "@/src/stores/voice-draft";
 import { indianComma } from "@/src/utils/format";
 
 type Line = {
@@ -24,6 +25,7 @@ export default function ScanParcha() {
   const router = useRouter();
   const { user } = useAuth();
   const addToCart = useMaterialsCart(s => s.add);
+  const setDraft = useVoiceDraft(s => s.setDraft);
 
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
@@ -83,22 +85,14 @@ export default function ScanParcha() {
 
   const addAllToCart = () => {
     if (!result?.items?.length) return;
-    for (const l of result.items) {
-      addToCart({
-        id: l.product_id,
-        store_id: l.store_id,
-        store_name: l.store_name || "",
-        name: l.name,
-        brand: l.brand,
-        image: l.image,
-        unit: l.unit,
-        price: l.price,
-      }, l.qty);
-    }
-    Alert.alert("Added to cart ✅", `${result.items.length} item${result.items.length === 1 ? "" : "s"} added at the cheapest live price.`, [
-      { text: "View cart", onPress: () => router.replace("/materials/cart" as any) },
-      { text: "Keep scanning", onPress: retake },
-    ]);
+    setDraft({
+      source: "scan",
+      items: result.items as any,
+      unmatched: result.unmatched,
+      total_estimated: result.total_estimated,
+      created_at: new Date().toISOString(),
+    });
+    router.push("/market/voice-cart-review" as any);
   };
 
   // Permissions UI
@@ -255,8 +249,8 @@ export default function ScanParcha() {
           {result && result.items.length > 0 && (
             <View style={[styles.cta, { paddingBottom: insets.bottom + spacing.md }]}>
               <Pressable testID="add-all-to-cart-btn" onPress={addAllToCart} style={styles.ctaBtn}>
-                <Icon name="cart" size={16} color={colors.onBrandPrimary} />
-                <Text style={styles.ctaTxt}>Add {result.items.length} item{result.items.length === 1 ? "" : "s"} · ₹{indianComma(result.total_estimated)}</Text>
+                <Icon name="eye" size={16} color={colors.onBrandPrimary} />
+                <Text style={styles.ctaTxt}>Review {result.items.length} item{result.items.length === 1 ? "" : "s"} · ₹{indianComma(result.total_estimated)}</Text>
               </Pressable>
             </View>
           )}

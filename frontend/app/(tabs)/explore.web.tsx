@@ -271,21 +271,16 @@ export default function MapScreenWeb() {
         <View style={styles.sheetHeaderRow}>
           {selected && view === "map" ? (
             <>
-              <Pressable
-                testID="pin-preview-back"
-                onPress={() => setSelected(null)}
-                style={({ pressed }) => [styles.backPill, pressed && { opacity: 0.6 }]}
-                hitSlop={{ top: 16, bottom: 16, left: 16, right: 16 }}
-              >
-                <Icon name="chevron-back" size={20} color={colors.brand} />
-                <Text style={styles.backPillText}>Back to listings</Text>
-              </Pressable>
+              <Text style={styles.sheetTitle}>Property preview</Text>
               <Text style={{ fontSize: 10, fontWeight: "800", color: colors.brandPrimary, letterSpacing: 0.8 }}>SELECTED</Text>
             </>
           ) : (
             <>
               <Text style={styles.sheetTitle}>{loading ? "Loading..." : `${items.length} properties`}</Text>
               <View style={styles.viewToggle}>
+                <Pressable testID="explore-voice-mic" onPress={() => setVoiceOpen(true)} style={styles.inlineMicBtn} hitSlop={6}>
+                  <Icon name="mic" size={13} color="#FFFFFF" />
+                </Pressable>
                 <Pressable testID="view-toggle-map" onPress={() => setView("map")} style={[styles.viewToggleBtn, view === "map" && styles.viewToggleActive]}>
                   <Icon name="map-outline" size={13} color={view === "map" ? colors.onBrandPrimary : colors.onSurface} />
                   <Text style={[styles.viewToggleText, view === "map" && { color: colors.onBrandPrimary }]}>Map</Text>
@@ -301,9 +296,22 @@ export default function MapScreenWeb() {
         {view === "list" ? (
           <ExploreListView items={items} filter={filter} />
         ) : selected ? (
-          <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-            <PinPreview propertyId={selected} onClose={() => setSelected(null)} />
-          </ScrollView>
+          <>
+            <ScrollView contentContainerStyle={{ paddingBottom: 96 }}>
+              <PinPreview propertyId={selected} onClose={() => setSelected(null)} />
+            </ScrollView>
+            <View style={styles.backBar}>
+              <Pressable
+                testID="pin-preview-back"
+                onPress={() => setSelected(null)}
+                style={({ pressed }) => [styles.backBarBtn, pressed && { opacity: 0.75 }]}
+                hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+              >
+                <Icon name="chevron-back" size={18} color={colors.onBrandPrimary} />
+                <Text style={styles.backBarText}>Back to listings</Text>
+              </Pressable>
+            </View>
+          </>
         ) : (
           <>
             {localities.length > 0 && (
@@ -320,10 +328,6 @@ export default function MapScreenWeb() {
           </>
         )}
       </View>
-
-      <Pressable testID="explore-voice-mic" onPress={() => setVoiceOpen(true)} style={styles.voiceFab}>
-        <Icon name="mic" size={20} color="#FFFFFF" />
-      </Pressable>
 
       {voiceSummary ? (
         <View style={styles.voiceSummary}>
@@ -362,6 +366,7 @@ export default function MapScreenWeb() {
 const styles = StyleSheet.create({
   hi: { fontSize: 15, fontWeight: "800", color: colors.onSurface },
   voiceFab: { position: "absolute", right: 16, bottom: 110, width: 52, height: 52, borderRadius: 26, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", zIndex: 20 },
+  inlineMicBtn: { width: 30, height: 28, borderRadius: 14, backgroundColor: colors.brandPrimary, alignItems: "center", justifyContent: "center", marginRight: 4 },
   voiceSummary: { position: "absolute", left: spacing.lg, right: 76, top: 220, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 12, paddingVertical: 7, borderRadius: radius.pill, backgroundColor: "rgba(255,255,240,0.98)", borderWidth: 1, borderColor: colors.brand, zIndex: 15 },
   voiceSummaryTxt: { flex: 1, fontSize: 11, color: colors.onSurface, fontWeight: "700" },
   locPill: { flex: 1, flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: spacing.md, paddingVertical: 6, backgroundColor: colors.surfaceSecondary, borderRadius: radius.pill, borderWidth: 1, borderColor: colors.border, marginRight: spacing.sm, maxWidth: "68%" },
@@ -374,6 +379,9 @@ const styles = StyleSheet.create({
   locTitle: { fontSize: 13, color: colors.onSurface, fontWeight: "800" },
   backPill: { flexDirection: "row", alignItems: "center", gap: 4, paddingVertical: 10, paddingHorizontal: spacing.sm, minHeight: 44, borderRadius: radius.pill, backgroundColor: colors.brandTertiary },
   backPillText: { fontSize: 13, fontWeight: "800", color: colors.brand },
+  backBar: { position: "absolute", left: 0, right: 0, bottom: 0, paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.md, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border },
+  backBarBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 6, minHeight: 48, borderRadius: radius.pill, backgroundColor: colors.brandPrimary },
+  backBarText: { fontSize: 14, fontWeight: "800", color: colors.onBrandPrimary, letterSpacing: 0.3 },
   iconBtnWeb: { width: 34, height: 34, borderRadius: 17, backgroundColor: colors.surfaceSecondary, alignItems: "center", justifyContent: "center", borderWidth: 1, borderColor: colors.border },
   listBtn: { flexDirection: "row", alignItems: "center", gap: 4, paddingHorizontal: 14, height: 34, borderRadius: radius.pill, backgroundColor: colors.brandPrimary },
   listBtnText: { color: colors.onBrandPrimary, fontSize: 12, fontWeight: "700" },
