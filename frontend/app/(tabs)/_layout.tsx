@@ -34,17 +34,17 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="news"
-        options={{
-          title: "News",
-          tabBarIcon: ({ color, size }) => <Icon name="newspaper-outline" size={size} color={color} />,
-        }}
-      />
-      <Tabs.Screen
         name="market"
         options={{
           title: "Market",
           tabBarIcon: ({ color, size }) => <Icon name="storefront-outline" size={size} color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="news"
+        options={{
+          title: "News",
+          tabBarIcon: ({ color, size }) => <Icon name="newspaper-outline" size={size} color={color} />,
         }}
       />
       <Tabs.Screen
