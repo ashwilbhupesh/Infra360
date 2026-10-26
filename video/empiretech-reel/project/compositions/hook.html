@@ -1,0 +1,52 @@
+<template>
+  <style>
+    @font-face { font-family: "MontX"; src: url("assets/fonts/montserrat-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root { position: absolute; inset: 0; pointer-events: none; }
+    #hook-scrim { position: absolute; left: 0; right: 0; top: 0; height: 420px; background: linear-gradient(180deg, rgba(22,26,51,0.75), rgba(22,26,51,0)); opacity: 0; }
+    #hook-kicker {
+      position: absolute; top: 200px; left: 0; right: 0; display: flex; justify-content: center;
+    }
+    #hook-pill {
+      display: inline-flex; align-items: center; gap: 18px; padding: 16px 34px; border-radius: 999px;
+      background: rgba(22, 26, 51, 0.88); border: 3px solid #d4af6a;
+      font-family: "MontX", sans-serif; font-weight: 800; font-size: 40px; letter-spacing: 0.08em; color: #f3d9a0;
+      opacity: 0;
+    }
+    #hook-pill svg { width: 46px; height: 46px; }
+    .hook-icon { position: absolute; left: 0; right: 0; top: 1000px; display: flex; justify-content: center; opacity: 0; }
+    .hook-icon .badge {
+      width: 170px; height: 170px; border-radius: 40px; background: #d4af6a; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45), inset 0 0 0 6px #f3d9a0;
+    }
+    .hook-icon svg { width: 116px; height: 116px; }
+  </style>
+  <div id="root" data-composition-id="hook" data-width="1080" data-height="1920">
+    <div id="hook-scrim" class="clip" data-start="0" data-duration="2.9"></div>
+    <div id="hook-kicker" class="clip" data-start="0" data-duration="2.9">
+      <div id="hook-pill">
+        <svg viewBox="0 0 48 48" fill="none" stroke="#f3d9a0" stroke-width="4" stroke-linejoin="round" stroke-linecap="round"><path d="M6 42h36M10 42V20l14-10 14 10v22"/><path d="M18 42V28h12v14"/></svg>
+        <span>CONSTRUCTION EXPERTS</span>
+      </div>
+    </div>
+    <div id="hook-icon-1" class="hook-icon clip" data-start="1.45" data-duration="0.6">
+      <div class="badge"><svg viewBox="0 0 64 64" fill="none" stroke="#161a33" stroke-width="5" stroke-linejoin="round"><path d="M6 56h52M10 56V26L32 12l22 14v30"/><path d="M20 56V36h24v20M20 42h24M20 48h24"/></svg></div>
+    </div>
+    <div id="hook-icon-2" class="hook-icon clip" data-start="2.24" data-duration="0.66">
+      <div class="badge"><svg viewBox="0 0 64 64" fill="none" stroke="#161a33" stroke-width="5" stroke-linejoin="round"><path d="M4 58h56M8 58V34l12-8v8l12-8v8l12-8v32M46 58V12h8v46"/><path d="M14 46h6M26 46h6M38 46h-2"/></svg></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#hook-scrim", { opacity: 0 }, { opacity: 1, duration: 0.2 }, 0);
+      tl.fromTo("#hook-pill", { opacity: 0, y: -30, filter: "blur(8px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 0.05);
+      tl.to("#hook-pill", { opacity: 0, y: -20, duration: 0.15, ease: "power2.in" }, 2.7);
+      [["#hook-icon-1", 1.45, 2.05], ["#hook-icon-2", 2.24, 2.9]].forEach(([s, a, b]) => {
+        tl.fromTo(s, { opacity: 0 }, { opacity: 1, duration: 0.08 }, a);
+        tl.fromTo(s + " .badge", { scale: 0.3, rotation: -14 }, { scale: 1, rotation: 0, duration: 0.35, ease: "back.out(2.4)" }, a);
+        tl.to(s, { opacity: 0, duration: 0.08 }, b - 0.09);
+      });
+      window.__timelines["hook"] = tl;
+    })();
+  </script>
+</template>

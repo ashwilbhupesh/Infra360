@@ -1,0 +1,65 @@
+<template>
+  <style>
+    @font-face { font-family: "Anton"; src: url("assets/fonts/anton-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "MontX"; src: url("assets/fonts/montserrat-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root { position: absolute; inset: 0; pointer-events: none; }
+    #cl-host { position: absolute; inset: 0; }
+    #cl-panel {
+      position: absolute; left: 0; right: 0; top: 840px; bottom: 0; overflow: hidden;
+      background: linear-gradient(180deg, #2b3052 0%, #161a33 60%);
+      border-top: 8px solid #d4af6a; box-shadow: 0 -20px 50px rgba(0,0,0,0.45);
+    }
+    #cl-grid {
+      position: absolute; inset: 0; opacity: 0.25;
+      background-image: linear-gradient(rgba(212,175,106,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,106,0.4) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    #cl-mark { position: absolute; left: 50%; top: 600px; width: 620px; margin-left: -310px; opacity: 0.12; }
+    #cl-title { position: absolute; left: 70px; top: 44px; font-family: "MontX", sans-serif; font-weight: 800; font-size: 40px; letter-spacing: 0.3em; color: #f0cd85; }
+    .cl-item { position: absolute; left: 70px; right: 60px; display: flex; align-items: center; gap: 30px; opacity: 0; }
+    #cl-item-1 { top: 120px; }
+    #cl-item-2 { top: 245px; }
+    #cl-item-3 { top: 370px; }
+    .cl-box { flex: 0 0 auto; width: 92px; height: 92px; border-radius: 22px; border: 5px solid #d4af6a; background: rgba(22,26,51,0.6); display: flex; align-items: center; justify-content: center; }
+    .cl-box svg { width: 64px; height: 64px; }
+    .cl-box path { fill: none; stroke: #f0cd85; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .cl-text { font-family: "Anton", sans-serif; font-size: 72px; line-height: 1; color: #fff; letter-spacing: 0.01em; white-space: nowrap; }
+    .cl-text em { font-style: normal; color: #f0cd85; }
+  </style>
+  <div id="root" data-composition-id="checklist" data-width="1080" data-height="1920">
+    <div id="cl-host" class="clip" data-start="0" data-duration="3.95">
+      <div id="cl-panel">
+        <div id="cl-grid"></div>
+        <img id="cl-mark" src="assets/logo_emblem@2x.png" alt="" />
+        <div id="cl-title">THE BEST</div>
+        <div id="cl-item-1" class="cl-item">
+          <div class="cl-box"><svg viewBox="0 0 24 24"><path pathLength="1" d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+          <div class="cl-text">CIVIL ENGINEERING <em>EXPERTS</em></div>
+        </div>
+        <div id="cl-item-2" class="cl-item">
+          <div class="cl-box"><svg viewBox="0 0 24 24"><path pathLength="1" d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+          <div class="cl-text"><em>CONTRACTORS</em></div>
+        </div>
+        <div id="cl-item-3" class="cl-item">
+          <div class="cl-box"><svg viewBox="0 0 24 24"><path pathLength="1" d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+          <div class="cl-text"><em>TEAM</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#cl-title", { opacity: 0, x: -30 }, { opacity: 1, x: 0, duration: 0.3, ease: "expo.out" }, 0.3);
+      [["#cl-item-1", 0.35, 0.62], ["#cl-item-2", 1.94, 2.32], ["#cl-item-3", 2.85, 3.3]].forEach(([s, a, tick]) => {
+        tl.fromTo(s, { opacity: 0, x: 80, filter: "blur(8px)" }, { opacity: 1, x: 0, filter: "blur(0px)", duration: 0.3, ease: "expo.out" }, a);
+        tl.fromTo(s + " .cl-box", { backgroundColor: "rgba(22,26,51,0.6)" }, { backgroundColor: "#d4af6a", duration: 0.12 }, tick);
+        tl.fromTo(s + " .cl-box path", { strokeDashoffset: 1, stroke: "#f0cd85" }, { strokeDashoffset: 0, stroke: "#161a33", duration: 0.2, ease: "power2.out" }, tick);
+        tl.fromTo(s + " .cl-box", { scale: 1 }, { scale: 1.15, duration: 0.08, yoyo: true, repeat: 1, ease: "power1.out" }, tick);
+      });
+      tl.fromTo("#cl-mark", { rotation: -4, scale: 0.95 }, { rotation: 2, scale: 1.02, duration: 3.95, ease: "none" }, 0);
+      tl.to("#cl-panel", { y: 1100, duration: 0.3, ease: "power3.in" }, 3.62);
+      window.__timelines["checklist"] = tl;
+    })();
+  </script>
+</template>
