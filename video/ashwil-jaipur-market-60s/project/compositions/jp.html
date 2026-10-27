@@ -1,0 +1,44 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .panel { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; overflow: hidden; }
+    .panel video { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; object-fit: cover; }
+    .fade { position: absolute; left: 0; right: 0; top: 840px; height: 262px; background: linear-gradient(180deg, rgba(18,13,10,0), #120D0A); }
+    .rep { position: absolute; right: 164px; top: 1050px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(243,231,211,0.7); }
+    .chip { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 12px 22px; border-radius: 14px; background: rgba(27,20,15,0.86); border: 1.5px solid rgba(243,231,211,0.25);
+      font-family: "Inter", sans-serif; font-weight: 700; font-size: 38px; color: #F3E7D3; white-space: nowrap; }
+    .chip.amb { border-color: #E3A23B; background: rgba(60,38,14,0.92); }
+    .chip i { font-style: normal; display: inline-flex; width: 44px; height: 44px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; }
+    .mono { font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.14em; color: #E3A23B; text-transform: uppercase; white-space: nowrap; }
+    .label { position: absolute; left: 96px; top: 190px; padding: 10px 18px; border-radius: 10px; background: rgba(27,20,15,0.86); border: 1.5px solid #E3A23B; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.16em; color: #F3E7D3; text-transform: uppercase; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+
+  </style>
+  <div id="root" data-composition-id="jp" data-width="1080" data-height="1920">
+    <div id="jp-host" class="host clip" data-start="0" data-duration="3.05"><div id="jp-bg" class="ins"><div class=grain></div></div></div>
+    <div id="jp-vids"></div>
+    <div id="jp-fg" class="host">
+    <img src="assets/img/hawa_bg.jpg" style="position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover" alt="">
+    <div id="jp-f" style="position:absolute;left:96px;top:330px;width:888px;border-radius:24px;overflow:hidden;box-shadow:0 30px 70px rgba(0,0,0,.55);border:2px solid rgba(243,231,211,.35)">
+      <img id="jp-i" src="assets/img/hawa.jpg" style="display:block;width:888px;height:auto" alt="Hawa Mahal, Jaipur"></div>
+    <div class="chip amb" id="jp-t" style="left:96px;top:880px;font-size:44px">Jaipur</div>
+    <div class="mono" id="jp-s" style="position:absolute;left:96px;top:980px;color:#F3E7D3">Source: PropEquity · calendar year 2024</div></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 16 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
+      tl.fromTo(["#jp-bg", "#jp-vids", "#jp-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#jp-vids", { scale: 1.04 }, { scale: 1.0, duration: 3.05, ease: "none" }, 0);
+      IN("#jp-f", 0.05, { scale: 0.96 }, { scale: 1 }); tl.fromTo("#jp-i", { scale: 1.0 }, { scale: 1.06, duration: 3.05, ease: "none" }, 0);
+      IN("#jp-t", 0.5); IN("#jp-s", 0.45);
+      tl.to(["#jp-bg", "#jp-vids", "#jp-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 2.77);
+      window.__timelines["jp"] = tl;
+    })();
+  </script>
+</template>
