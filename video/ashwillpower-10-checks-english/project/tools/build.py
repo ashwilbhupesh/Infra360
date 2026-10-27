@@ -90,12 +90,12 @@ BASE = """
     .host { position: absolute; inset: 0; }
     .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
     .grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
-    .bug { position: absolute; left: 60px; top: 178px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.6); z-index: 5; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
-    .panel { position: absolute; left: 0; top: 0; width: 1080px; height: 950px; overflow: hidden; }
-    .panel video { position: absolute; left: 0; top: 0; width: 1080px; height: 960px; object-fit: cover; }
-    .panel-fade { position: absolute; left: 0; right: 0; top: 700px; height: 260px; background: linear-gradient(180deg, rgba(18,13,10,0), #120D0A); }
-    .rep { position: absolute; right: 60px; top: 895px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(243,231,211,0.7); }
-    .note { position: absolute; left: 60px; top: 895px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.85); white-space: nowrap; }
+    .bug { position: absolute; left: 96px; top: 190px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.6); z-index: 5; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    .panel { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; overflow: hidden; }
+    .panel video { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; object-fit: cover; }
+    .panel-fade { position: absolute; left: 0; right: 0; top: 840px; height: 262px; background: linear-gradient(180deg, rgba(18,13,10,0), #120D0A); }
+    .rep { position: absolute; right: 96px; top: 960px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(243,231,211,0.7); }
+    .note { position: absolute; left: 96px; top: 960px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.85); white-space: nowrap; }
     .ln { fill: none; stroke: #F3E7D3; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
     .ln-a { fill: none; stroke: #E3A23B; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
     .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
@@ -104,7 +104,7 @@ BASE = """
     .tag i { font-style: normal; display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; }
     .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
     .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9B79C; white-space: nowrap; }
-    .row { position: absolute; left: 60px; right: 60px; height: 84px; display: flex; align-items: center; gap: 22px; border-bottom: 1px solid rgba(243,231,211,0.16); font-family: "Inter", sans-serif; font-weight: 700; font-size: 44px; color: #F3E7D3; }
+    .row { position: absolute; left: 96px; right: 96px; height: 84px; display: flex; align-items: center; gap: 22px; border-bottom: 1px solid rgba(243,231,211,0.16); font-family: "Inter", sans-serif; font-weight: 700; font-size: 44px; color: #F3E7D3; }
     .row b { display: inline-flex; width: 50px; height: 50px; border-radius: 12px; border: 2px solid #E3A23B; align-items: center; justify-content: center; color: #E3A23B; font-size: 32px; }
 """
 INSERTS = []
@@ -119,7 +119,7 @@ def scene(cid, start, end, body, js, videos=()):
   <div id="root" data-composition-id="{cid}" data-width="1080" data-height="1920">
     <div id="{cid}-host" class="host clip" data-start="0" data-duration="{dur}"><div id="{cid}-bg" class="ins"><div class="grain"></div></div></div>
     <div id="{cid}-vids">{vids}</div>
-    <div id="{cid}-fg" class="host"><div class="bug">ASHWILLPOWER</div>{body}</div>
+    <div id="{cid}-fg" class="host"><div class="bug">ASHWILLPOWER</div><div class="body" style="position:absolute;inset:0;transform:translateY(90px)">{body}</div></div>
   </div>
   <script>
     (function () {{
@@ -142,25 +142,25 @@ DOC = lambda x, y, w, h: f'<rect class="ln" x="{x}" y="{y}" width="{w}" height="
 
 # CHECK 01 — owner: lawyer reviewing papers, then ownership chain graphic
 s = 7.30
-scene("c1a", s, 9.95, FADE + '<div class="tag amb" style="left:60px;top:760px" id="c1a-t">Seller identity</div>',
+scene("c1a", s, 9.95, FADE + '<div class="tag amb" style="left:96px;top:760px" id="c1a-t">Seller identity</div>',
       f'      IN("#c1a-t", {rel(8.05, s)});', [("docs", 0, 2.65)])
 s = 9.95
 scene("c1b", s, 12.60, f"""
-      <svg style="position:absolute;left:60px;top:300px;width:960px;height:420px" viewBox="0 0 960 420">
+      <svg style="position:absolute;left:96px;top:300px;width:888px;height:388px" viewBox="0 0 960 420">
         <g id="c1b-d1">{DOC(20,40,230,300)}</g><g id="c1b-d2">{DOC(365,40,230,300)}</g><g id="c1b-d3">{DOC(710,40,230,300)}</g>
         <path id="c1b-a1" class="ln-a draw" pathLength="1" d="M252 190 H362"/><path id="c1b-a2" class="ln-a draw" pathLength="1" d="M597 190 H707"/></svg>
       <div class="lbl" style="position:absolute;left:80px;top:250px">Previous sale deeds</div>
-      <div class="tag amb" style="left:60px;top:760px" id="c1b-t">Ownership chain</div>
+      <div class="tag amb" style="left:96px;top:760px" id="c1b-t">Ownership chain</div>
       <div class="note">Illustrative</div>""",
       f"""      IN("#c1b-d1", 0.1); IN("#c1b-d2", {rel(10.8, s)}); DRAW("#c1b-a1", {rel(10.8, s)}, 0.4);
       IN("#c1b-d3", {rel(11.5, s)}); DRAW("#c1b-a2", {rel(11.5, s)}, 0.4); IN("#c1b-t", {rel(11.84, s)});""")
 
 # CHECK 02 — records: document close-up, then revenue record + mutation entry graphic
 s = 15.05
-scene("c2a", s, 17.20, FADE + '<div class="tag amb" style="left:60px;top:760px" id="c2a-t">Revenue records</div>', f'      IN("#c2a-t", {rel(15.68, s)});', [("mag", 0, 2.15)])
+scene("c2a", s, 17.20, FADE + '<div class="tag amb" style="left:96px;top:760px" id="c2a-t">Revenue records</div>', f'      IN("#c2a-t", {rel(15.68, s)});', [("mag", 0, 2.15)])
 s = 17.20
 scene("c2b", s, 20.15, f"""
-      <svg style="position:absolute;left:60px;top:300px;width:960px;height:420px" viewBox="0 0 960 420"><g id="c2b-d1">{DOC(20,20,380,380)}</g><g id="c2b-d2">{DOC(560,20,380,380)}</g>
+      <svg style="position:absolute;left:96px;top:300px;width:888px;height:388px" viewBox="0 0 960 420"><g id="c2b-d1">{DOC(20,20,380,380)}</g><g id="c2b-d2">{DOC(560,20,380,380)}</g>
         <path id="c2b-ar" class="ln-a draw" pathLength="1" d="M420 210 H540 M515 190 L540 210 L515 230"/></svg>
       <div class="serif" style="position:absolute;left:100px;top:740px;font-size:56px">Revenue record</div>
       <div class="serif" id="c2b-h2" style="position:absolute;left:640px;top:740px;font-size:56px;color:#E3A23B">Mutation entry</div>
@@ -170,34 +170,34 @@ scene("c2b", s, 20.15, f"""
 
 # CHECK 03 — right to sell: neutral signing, then co-ownership diagram
 s = 24.90
-scene("c3a", s, 26.55, FADE + '<div class="tag amb" style="left:60px;top:760px" id="c3a-t">Co-owners</div>', f'      IN("#c3a-t", {rel(25.44, s)});', [("sign1", 0, 1.65)])
+scene("c3a", s, 26.55, FADE + '<div class="tag amb" style="left:96px;top:760px" id="c3a-t">Co-owners</div>', f'      IN("#c3a-t", {rel(25.44, s)});', [("sign1", 0, 1.65)])
 s = 26.55
 scene("c3b", s, 28.75, """
-      <svg style="position:absolute;left:60px;top:260px;width:960px;height:520px" viewBox="0 0 960 520">
+      <svg style="position:absolute;left:96px;top:260px;width:888px;height:481px" viewBox="0 0 960 520">
         <rect class="ln-a" x="380" y="200" width="200" height="150" rx="6" style="fill:rgba(227,162,59,0.12)"/>
         <text x="480" y="288" text-anchor="middle" style="font-family:Instrument Serif,serif;font-style:italic;font-size:44px;fill:#E3A23B">Land</text>
         <path class="ln" d="M180 120 L380 230 M780 120 L580 230"/><path id="c3b-l3" class="ln draw" pathLength="1" d="M480 470 L480 350"/>
         <circle class="ln" cx="150" cy="100" r="42"/><circle class="ln" cx="810" cy="100" r="42"/><circle id="c3b-n3" class="ln" cx="480" cy="480" r="36"/></svg>
-      <div class="tag" style="left:60px;top:430px">Co-owner</div><div class="tag" style="left:780px;top:430px">Co-owner</div>
+      <div class="tag" style="left:96px;top:430px">Co-owner</div><div class="tag" style="left:740px;top:430px">Co-owner</div>
       <div class="tag" id="c3b-t1" style="left:560px;top:700px">Legal heirs</div>
-      <div class="tag amb" id="c3b-t2" style="left:60px;top:800px">Transfer restrictions</div>
-      <div class="note" style="left:auto;right:60px">Illustrative</div>""",
+      <div class="tag amb" id="c3b-t2" style="left:96px;top:800px">Transfer restrictions</div>
+      <div class="note" style="left:auto;right:96px">Illustrative</div>""",
       f"""      IN("#c3b-t1", {rel(26.62, s)}); IN("#c3b-n3", {rel(26.62, s)}); DRAW("#c3b-l3", {rel(26.62, s)}, 0.4); IN("#c3b-t2", {rel(27.36, s)});""")
 
 # CHECK 04 — loans & disputes: mortgage paperwork, scales of justice, checklist
 s = 34.40
-scene("c4a", s, 36.05, FADE + '<div class="tag amb" style="left:60px;top:760px" id="c4a-t">Mortgage?</div>', f'      IN("#c4a-t", {rel(35.12, s)});', [("mort", 0, 1.65)])
+scene("c4a", s, 36.05, FADE + '<div class="tag amb" style="left:96px;top:760px" id="c4a-t">Mortgage?</div>', f'      IN("#c4a-t", {rel(35.12, s)});', [("mort", 0, 1.65)])
 s = 36.05
 items4 = [("Mortgage", 35.12), ("Court case", 36.48), ("Stay order", 37.36), ("Existing agreement to sell", 38.56)]
-rows4 = "".join(f'<div class="row" id="c4b-r{k}" style="top:{560 + k*84}px;font-size:40px"><b>&#10003;</b>{n}</div>' for k, (n, _) in enumerate(items4))
-scene("c4b", s, 39.95, '<div class="panel-fade" style="top:300px;height:260px"></div>' + rows4 + '<div class="rep" style="top:470px">Representative footage</div>',
+rows4 = "".join(f'<div class="row" id="c4b-r{k}" style="top:{620 + k*80}px;font-size:40px;left:120px;right:120px"><b>&#10003;</b>{n}</div>' for k, (n, _) in enumerate(items4))
+scene("c4b", s, 39.95, FADE + '<div style="position:absolute;left:72px;right:72px;top:600px;height:360px;border-radius:24px;background:rgba(18,13,10,0.84)"></div>' + rows4,
       "\n".join(f'      IN("#c4b-r{k}", {max(0.05, rel(t, s))}, {{ x: -20, y: 0 }}, {{ x: 0 }});' for k, (_, t) in enumerate(items4)), [("statue", 0, 3.9)])
 
 # CHECK 05 — permitted use: agricultural land, then home / warehouse / resort tiles
 s = 42.30
 tiles = [("home", "Home", 43.36), ("wh", "Warehouse", 43.76), ("resort", "Resort", 44.64)]
-tile_html = "".join(f'<div id="c5a-k{k}" style="position:absolute;left:{40 + k*340}px;top:560px;width:320px;height:300px;border-radius:20px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="c5a-tv{k}" class="clip" src="assets/broll/{src}.mp4" data-start="{rel(t, s) - 0.1}" data-duration="{rel(45.35, s) - rel(t, s) + 0.1}" muted playsinline style="position:absolute;left:-120px;top:0;width:560px;height:300px;object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:10px 16px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.9));font-family:Inter,sans-serif;font-weight:800;font-size:38px;color:#F3E7D3">{n}</div></div>' for k, (src, n, t) in enumerate(tiles))
-scene("c5a", s, 45.35, FADE + '<div class="tag" style="left:60px;top:300px" id="c5a-t0">Agricultural land</div>' + tile_html,
+tile_html = "".join(f'<div id="c5a-k{k}" style="position:absolute;left:{96 + k*302}px;top:600px;width:284px;height:300px;border-radius:20px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="c5a-tv{k}" class="clip" src="assets/broll/{src}.mp4" data-start="{rel(t, s) - 0.1}" data-duration="{rel(45.35, s) - rel(t, s) + 0.1}" muted playsinline style="position:absolute;left:-120px;top:0;width:560px;height:300px;object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:10px 16px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.9));font-family:Inter,sans-serif;font-weight:800;font-size:38px;color:#F3E7D3">{n}</div></div>' for k, (src, n, t) in enumerate(tiles))
+scene("c5a", s, 45.35, FADE + '<div class="tag" style="left:96px;top:300px" id="c5a-t0">Agricultural land</div>' + tile_html,
       "\n".join(f'      IN("#c5a-k{k}", {rel(t, s) - 0.1}, {{ scale: 0.94 }}, {{ scale: 1 }});' for k, (_, _, t) in enumerate(tiles)) + '\n      IN("#c5a-t0", 0.15);',
       [("field", 0, 3.05)])
 
@@ -207,7 +207,7 @@ plots = "".join(f'<rect class="ln c6-p" x="{20+c*88}" y="{20+r*110 + (40 if r>=2
 items6 = [("Patta", 54.56), ("Approved layout", 55.28), ("Authority verification", 56.16)]
 rows6 = "".join(f'<div class="tag" id="c6-c{k}" style="left:540px;top:{330 + k*110}px;font-size:36px"><i>&#10003;</i>{n}</div>' for k, (n, _) in enumerate(items6))
 scene("c6", s, 58.20, f"""
-      <svg style="position:absolute;left:60px;top:300px;width:450px;height:540px" viewBox="0 0 460 540">{plots}<path class="ln-a" d="M10 255 H450" style="stroke-width:6"/></svg>{rows6}
+      <svg style="position:absolute;left:96px;top:300px;width:420px;height:504px" viewBox="0 0 460 540">{plots}<path class="ln-a" d="M10 255 H450" style="stroke-width:6"/></svg>{rows6}
       <div class="note">Illustrative layout · not an official document</div>""",
       "      tl.fromTo('#c6-host ~ #c6-fg .c6-p, .c6-p', { opacity: 0 }, { opacity: 1, duration: 0.2, stagger: 0.02 }, 0.05);\n" +
       "\n".join(f'      IN("#c6-c{k}", {max(0.05, rel(t, s))}, {{ x: -16, y: 0 }}, {{ x: 0 }});' for k, (_, t) in enumerate(items6)))
@@ -215,56 +215,56 @@ scene("c6", s, 58.20, f"""
 # CHECK 07 — boundary + area survey (illustrative; no surveyor footage available on Mixkit)
 s = 61.85
 scene("c7", s, 65.20, """
-      <svg style="position:absolute;left:60px;top:260px;width:960px;height:600px" viewBox="0 0 960 600">
+      <svg style="position:absolute;left:96px;top:260px;width:888px;height:555px" viewBox="0 0 960 600">
         <g id="c7-ts"><path class="ln" d="M100 560 L150 380 L200 560 M150 380 V340"/><rect class="ln-a" x="120" y="290" width="60" height="50" rx="6"/><path class="ln" d="M180 315 H220"/></g>
         <path id="c7-plot" class="ln-a draw" pathLength="1" style="fill:rgba(227,162,59,0.10)" d="M400 140 L860 100 L900 460 L440 510 Z"/>
         <g id="c7-pins"><rect class="ln" x="390" y="120" width="20" height="40"/><rect class="ln" x="850" y="80" width="20" height="40"/><rect class="ln" x="890" y="440" width="20" height="40"/><rect class="ln" x="430" y="490" width="20" height="40"/></g>
         <path class="ln" style="stroke-dasharray:10 12;opacity:.6" d="M220 315 L400 140"/></svg>
       <div class="tag" id="c7-t1" style="left:480px;top:420px">Boundaries</div>
       <div class="tag" id="c7-t2" style="left:540px;top:530px">Area</div>
-      <div class="tag amb" id="c7-t3" style="left:60px;top:800px">Match with records</div>
-      <div class="note" style="left:auto;right:60px">Illustrative</div>""",
+      <div class="tag amb" id="c7-t3" style="left:96px;top:800px">Match with records</div>
+      <div class="note" style="left:auto;right:96px">Illustrative</div>""",
       f"""      IN("#c7-ts", 0.05); DRAW("#c7-plot", 0.15, 1.0); IN("#c7-pins", {rel(62.32, s)});
       IN("#c7-t1", {rel(62.32, s)}); IN("#c7-t2", {rel(62.88, s)}); IN("#c7-t3", {rel(63.92, s)});""")
 
 # CHECK 08 — approach road, then visible road vs legal access diagram
 s = 70.30
-scene("c8a", s, 72.45, FADE + '<div class="tag" style="left:60px;top:760px" id="c8a-t">A road reaching the plot…</div>', f'      IN("#c8a-t", {rel(70.56, s)});', [("road", 0, 2.15)])
+scene("c8a", s, 72.45, FADE + '<div class="tag" style="left:96px;top:760px" id="c8a-t">A road reaching the plot…</div>', f'      IN("#c8a-t", {rel(70.56, s)});', [("road", 0, 2.15)])
 s = 72.45
 scene("c8b", s, 74.45, """
-      <svg style="position:absolute;left:60px;top:260px;width:960px;height:600px" viewBox="0 0 960 600">
+      <svg style="position:absolute;left:96px;top:260px;width:888px;height:555px" viewBox="0 0 960 600">
         <path class="ln" style="stroke-width:26;opacity:.3" d="M0 560 H960"/><path class="ln" style="stroke-dasharray:22 16" d="M0 560 H960"/>
         <rect class="ln-a" x="640" y="60" width="260" height="190" rx="6" style="fill:rgba(227,162,59,0.12)"/>
         <rect class="ln" style="opacity:.4" x="300" y="60" width="300" height="400" rx="6"/>
         <path class="ln" style="opacity:.55" d="M170 548 C190 420 300 330 470 300 C560 285 600 250 640 230"/>
         <path id="c8b-legal" class="ln-a draw" pathLength="1" d="M780 548 V250"/></svg>
       <div class="serif" style="position:absolute;left:720px;top:400px;font-size:46px;font-style:italic;color:#E3A23B">Plot</div>
-      <div class="tag" style="left:60px;top:300px;font-size:34px">Visible track</div>
+      <div class="tag" style="left:96px;top:300px;font-size:34px">Visible track</div>
       <div class="tag amb" id="c8b-t" style="left:560px;top:880px;font-size:34px">Legal access route</div>
       <div class="note">Illustrative</div>""",
       f'      DRAW("#c8b-legal", {rel(73.1, s)}, 0.7); IN("#c8b-t", {rel(73.12, s)});')
 
 # CHECK 09 — restrictions & risks: footage + text tiles
 s = 79.70
-scene("c9a", s, 81.75, FADE + '<div class="tag amb" style="left:60px;top:760px" id="c9a-t">Proposed roads</div><div class="tag" style="left:60px;top:300px;font-size:34px" id="c9a-t2">Acquisition notices</div>',
+scene("c9a", s, 81.75, FADE + '<div class="tag amb" style="left:96px;top:760px" id="c9a-t">Proposed roads</div><div class="tag" style="left:96px;top:300px;font-size:34px" id="c9a-t2">Acquisition notices</div>',
       f'      IN("#c9a-t", {rel(80.24, s)}); IN("#c9a-t2", {rel(81.12, s)});', [("clear", 0, 2.05)])
 s = 81.75
-scene("c9b", s, 84.40, FADE + '<div class="tag" style="left:60px;top:300px;font-size:34px" id="c9b-t0">Drainage channels</div><div class="tag amb" style="left:60px;top:760px" id="c9b-t">Flood risks</div>',
+scene("c9b", s, 84.40, FADE + '<div class="tag" style="left:96px;top:300px;font-size:34px" id="c9b-t0">Drainage channels</div><div class="tag amb" style="left:96px;top:760px" id="c9b-t">Flood risks</div>',
       f'      IN("#c9b-t0", {rel(82.40, s)}); IN("#c9b-t", {rel(83.52, s)});', [("flood", 0, 2.65)])
 s = 84.40
-scene("c9c", s, 87.5, FADE + '<div class="tag" style="left:60px;top:300px;font-size:34px" id="c9c-t0">Forest restrictions</div><div class="tag amb" style="left:60px;top:760px" id="c9c-t">High-voltage power lines</div>',
+scene("c9c", s, 87.5, FADE + '<div class="tag" style="left:96px;top:300px;font-size:34px" id="c9c-t0">Forest restrictions</div><div class="tag amb" style="left:96px;top:760px" id="c9c-t">High-voltage power lines</div>',
       f'      IN("#c9c-t0", {rel(84.48, s)}); IN("#c9c-t", {rel(85.92, s)});', [("ht", 0, 3.1)])
 
 # CHECK 10 — cost checklist, then written terms over neutral signing
 s = 91.20
 items10 = [("Stamp duty", 91.76), ("Registration", 92.72), ("Brokerage", 93.84), ("Development costs", 94.72), ("Outstanding dues", 96.0)]
 rows10 = "".join(f'<div class="row" id="c10a-r{k}" style="top:{290 + k*96}px"><b>&#10003;</b>{n}</div>' for k, (n, _) in enumerate(items10))
-scene("c10a", s, 96.95, rows10 + '<div class="lbl" style="position:absolute;left:60px;top:240px;color:#E3A23B">Full cost</div>',
+scene("c10a", s, 96.95, rows10 + '<div class="lbl" style="position:absolute;left:96px;top:240px;color:#E3A23B">Full cost</div>',
       "\n".join(f'      IN("#c10a-r{k}", {max(0.05, rel(t, s))}, {{ x: -20, y: 0 }}, {{ x: 0 }});' for k, (_, t) in enumerate(items10)))
 s = 98.60
 items10b = [("Verification", 98.88), ("Refund", 100.0), ("Possession terms", 100.64)]
-rows10b = "".join(f'<div class="tag" id="c10b-c{k}" style="left:60px;top:{300 + k*110}px;font-size:38px"><i>&#10003;</i>{n}</div>' for k, (n, _) in enumerate(items10b))
-scene("c10b", s, 102.0, FADE + rows10b + '<div class="tag amb" style="left:60px;top:760px" id="c10b-w">In writing — before any token</div>',
+rows10b = "".join(f'<div class="tag" id="c10b-c{k}" style="left:96px;top:{300 + k*110}px;font-size:38px"><i>&#10003;</i>{n}</div>' for k, (n, _) in enumerate(items10b))
+scene("c10b", s, 102.0, FADE + rows10b + '<div class="tag amb" style="left:96px;top:760px" id="c10b-w">In writing — before any token</div>',
       "\n".join(f'      IN("#c10b-c{k}", {max(0.05, rel(t, s))}, {{ x: -20, y: 0 }}, {{ x: 0 }});' for k, (_, t) in enumerate(items10b)) + f'\n      IN("#c10b-w", {rel(100.75, s)});',
       [("sign2", 0, 3.4)])
 
@@ -287,18 +287,21 @@ js += "".join(f"""
       tl.to("#{i}", {{ opacity: 0, duration: 0.2 }}, {round(b - 0.2, 2)});""" for i, a, b, _ in CALL)
 open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   <style>{BASE}
-    .hd {{ position: absolute; left: 60px; top: 965px; max-width: 880px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.88); border-left: 6px solid #E3A23B; opacity: 0; }}
+    .hd {{ position: absolute; left: 96px; top: 1160px; max-width: 820px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.88); border-left: 6px solid #E3A23B; opacity: 0; }}
     .hd-c {{ font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.2em; color: #E3A23B; }}
-    .hd-h {{ font-family: "Inter", sans-serif; font-weight: 800; font-size: 46px; letter-spacing: 0.01em; line-height: 1.08; color: #F3E7D3; }}
-    #op {{ position: absolute; left: 60px; right: 160px; top: 958px; padding: 14px 28px 16px; border-radius: 20px; background: rgba(27,20,15,0.9); border-left: 6px solid #E3A23B; }}
+    .hd-h {{ font-family: "Inter", sans-serif; font-weight: 800; font-size: 52px; letter-spacing: 0.01em; line-height: 1.08; color: #F3E7D3; }}
+    #op {{ position: absolute; left: 96px; right: 164px; top: 1160px; padding: 14px 28px 16px; border-radius: 20px; background: rgba(27,20,15,0.9); border-left: 6px solid #E3A23B; }}
     #op-a {{ font-family: "Inter", sans-serif; font-weight: 800; font-size: 54px; color: #F3E7D3; line-height: 1.05; }}
     #op-b {{ font-family: "Inter", sans-serif; font-weight: 900; font-size: 60px; color: #E3A23B; line-height: 1.05; }}
-    .co {{ position: absolute; left: 60px; top: 860px; padding: 12px 22px; border-radius: 14px; background: rgba(60,38,14,0.92); border: 1.5px solid #E3A23B; font-family: "Inter", sans-serif; font-weight: 700; font-size: 36px; color: #F3E7D3; opacity: 0; white-space: nowrap; }}
+    #pg {{ position: absolute; left: 96px; right: 164px; top: 1118px; display: flex; gap: 10px; opacity: 0; }}
+    #pg i {{ flex: 1; height: 6px; border-radius: 3px; background: rgba(243,231,211,0.18); }}
+    .co {{ position: absolute; left: 96px; top: 1565px; padding: 12px 22px; border-radius: 14px; background: rgba(60,38,14,0.92); border: 1.5px solid #E3A23B; font-family: "Inter", sans-serif; font-weight: 700; font-size: 38px; color: #F3E7D3; opacity: 0; white-space: nowrap; }}
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="{VIDEO_END}">
       <div id="op"><div id="op-a">BUYING LAND?</div><div id="op-b">SAVE THESE 10 CHECKS</div></div>
-      {hd_html}{co_html}
+      <div id="pg">{"".join(f'<i id="pg-{k+1}"></i>' for k in range(10))}</div>
+      {hd_html}{co_html}<div id="hd-end" class="hd"><div class="hd-c">THE BOTTOM LINE</div><div class="hd-h">Legally own · use · sell</div></div>
     </div>
   </div>
   <script>
@@ -306,7 +309,12 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
       const tl = gsap.timeline({{ paused: true }});
       tl.fromTo("#op", {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }}, 0.12);
       tl.fromTo("#op-b", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.35 }}, 0.4);
-      tl.to("#op", {{ opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }}, 4.75);{js}
+      tl.to("#op", {{ opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }}, 4.75);
+      tl.fromTo("#pg", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3 }}, 5.1);
+      tl.fromTo("#hd-end", {{ opacity: 0, y: 12 }}, {{ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }}, 102.24);
+      tl.to("#hd-end", {{ opacity: 0, duration: 0.2 }}, {VIDEO_END - 0.22});
+      tl.to("#pg", {{ opacity: 0, duration: 0.3 }}, 102.0);{"".join(f"""
+      tl.fromTo("#pg-{k+1}", {{ backgroundColor: "rgba(243,231,211,0.18)" }}, {{ backgroundColor: "#E3A23B", duration: 0.3 }}, {t});""" for k, (t, _) in enumerate(CHECKS))}{js}
       window.__timelines["chrome"] = tl;
     }})();
   </script>
@@ -319,9 +327,9 @@ data = [[a, b, [w["s"] for w in g]] for a, b, g in caps]
 open(f"{P}/compositions/captions.html", "w").write("""<template>
   <style>
     #root { position: absolute; inset: 0; pointer-events: none; }
-    .cp { position: absolute; left: 60px; width: 860px; top: 1140px; display: flex; justify-content: center; opacity: 0; }
-    .cp-in { max-width: 860px; text-align: center; padding: 12px 24px 14px; border-radius: 18px; background: rgba(20,14,10,0.82);
-      font-family: "Inter", sans-serif; font-weight: 700; font-size: 50px; line-height: 1.22; color: #FFF8EE; }
+    .cp { position: absolute; left: 96px; width: 820px; top: 1375px; display: flex; justify-content: center; opacity: 0; }
+    .cp-in { max-width: 820px; text-align: center; padding: 12px 24px 14px; border-radius: 18px; background: rgba(20,14,10,0.82);
+      font-family: "Inter", sans-serif; font-weight: 700; font-size: 56px; line-height: 1.2; color: #FFF8EE; }
     .w { opacity: 0.6; }
     .w.em { color: #F5B04A; }
   </style>
@@ -352,12 +360,12 @@ lis = "".join(f'<div class="ec-i"><b>{k+1:02d}</b>{t}</div>' for k, t in enumera
 ED = round(END - VIDEO_END, 2)
 open(f"{P}/compositions/endcard.html", "w").write(f"""<template>
   <style>{BASE}
-    #ec-t {{ position: absolute; left: 70px; right: 70px; top: 250px; font-family: "Instrument Serif", serif; font-size: 92px; line-height: 1.02; color: #F3E7D3; }}
+    #ec-t {{ position: absolute; left: 96px; right: 96px; top: 380px; font-family: "Instrument Serif", serif; font-size: 104px; line-height: 1.02; color: #F3E7D3; }}
     #ec-t em {{ color: #E3A23B; }}
-    #ec-l {{ position: absolute; left: 70px; right: 70px; top: 560px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px 26px; }}
-    .ec-i {{ font-family: "Inter", sans-serif; font-weight: 600; font-size: 34px; color: #F3E7D3; display: flex; gap: 14px; align-items: baseline; white-space: nowrap; }}
+    #ec-l {{ position: absolute; left: 96px; right: 96px; top: 790px; display: grid; grid-template-columns: 1fr 1fr; gap: 44px 26px; }}
+    .ec-i {{ font-family: "Inter", sans-serif; font-weight: 600; font-size: 36px; color: #F3E7D3; display: flex; gap: 14px; align-items: baseline; white-space: nowrap; }}
     .ec-i b {{ font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 28px; color: #E3A23B; }}
-    #ec-b {{ position: absolute; left: 0; right: 0; top: 1060px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 34px; letter-spacing: 0.3em; color: #C9B79C; }}
+    #ec-b {{ position: absolute; left: 0; right: 0; top: 1420px; text-align: center; font-family: "JetBrains Mono", monospace; font-size: 34px; letter-spacing: 0.3em; color: #C9B79C; }}
   </style>
   <div id="root" data-composition-id="endcard" data-width="1080" data-height="1920">
     <div id="endcard-host" class="host clip" data-start="0" data-duration="{ED}">
@@ -396,9 +404,10 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html>
       html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #120D0A; }}
       #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; }}
       #ground {{ position: absolute; inset: 0; background: #120D0A; }}
-      #cam {{ position: absolute; inset: 0; transform-origin: 50% 38%; }}
+      #cam {{ position: absolute; inset: 0; transform-origin: 50% 30%; }}
       #avatar {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }}
       .scene {{ position: absolute; inset: 0; }}
+      #lower {{ position: absolute; left: 0; right: 0; top: 1040px; bottom: 0; background: linear-gradient(180deg, rgba(18,13,10,0) 0px, rgba(18,13,10,0.92) 60px, #1A130E 120px, #120D0A 100%); }}
     </style>
   </head>
   <body>
@@ -407,6 +416,7 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html>
       <div id="cam" style="z-index: 1">
         <video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="{VIDEO_END}" data-track-index="0" playsinline data-has-audio="true" data-volume="1"></video>
       </div>
+      <div id="lower" style="z-index: 2"></div>
 {hosts}
       <div id="chrome" class="scene" style="z-index: 6" data-composition-id="chrome" data-composition-src="compositions/chrome.html" data-start="0" data-duration="{VIDEO_END}" data-track-index="3" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
       <div id="captions" class="scene" style="z-index: 7" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="{VIDEO_END}" data-track-index="4" data-track-kind="captions" data-width="1080" data-height="1920"></div>

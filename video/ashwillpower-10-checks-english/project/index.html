@@ -9,9 +9,10 @@
       html, body { width: 1080px; height: 1920px; overflow: hidden; background: #120D0A; }
       #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
       #ground { position: absolute; inset: 0; background: #120D0A; }
-      #cam { position: absolute; inset: 0; transform-origin: 50% 38%; }
+      #cam { position: absolute; inset: 0; transform-origin: 50% 30%; }
       #avatar { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
       .scene { position: absolute; inset: 0; }
+      #lower { position: absolute; left: 0; right: 0; top: 1040px; bottom: 0; background: linear-gradient(180deg, rgba(18,13,10,0) 0px, rgba(18,13,10,0.92) 60px, #1A130E 120px, #120D0A 100%); }
     </style>
   </head>
   <body>
@@ -20,6 +21,7 @@
       <div id="cam" style="z-index: 1">
         <video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="106.67" data-track-index="0" playsinline data-has-audio="true" data-volume="1"></video>
       </div>
+      <div id="lower" style="z-index: 2"></div>
       <div id="c1a" class="scene" style="z-index: 4" data-composition-id="c1a" data-composition-src="compositions/c1a.html" data-start="7.3" data-duration="2.65" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
       <div id="c1b" class="scene" style="z-index: 4" data-composition-id="c1b" data-composition-src="compositions/c1b.html" data-start="9.95" data-duration="2.65" data-track-index="2" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
       <div id="c2a" class="scene" style="z-index: 4" data-composition-id="c2a" data-composition-src="compositions/c2a.html" data-start="15.05" data-duration="2.15" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>

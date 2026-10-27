@@ -4,6 +4,14 @@ Source: 46a62b4d-…mp4, 1080×1920, 25 fps, 106.67 s. Output: Ashwillpower_10_L
 
 **Silence:** no pause in the narration is longer than 0.74 s, so none counted as unnecessary. The narration runs uncut, and measured lip-sync offset against the source is 0.0 ms at 5 s, 50 s and 90 s.
 
+## Layout (revision 2)
+
+- Avatar: full frame, with face, shoulders and the neon sign visible in the top ~57% (y 0–1100). No text is placed over the face or body.
+- Lower information panel (y 1040–1920, warm dark gradient with a feathered top edge) holds everything: a 10-segment progress bar (y 1118), the CHECK NN/10 counter and heading (y 1160), captions (y 1375, 56 px, max two lines), and callouts (y 1565).
+- Margins: at least 96 px from the left edge, 164 px from the right (clear of Instagram's action rail), and nothing below y ≈ 1630 (clear of the caption and username overlay).
+- B-roll fills the frame: footage panels are 1080×1100 (re-cut from the same Mixkit 720p sources), and the illustrative graphics sit across y 300–1100.
+- Conclusion: a 'THE BOTTOM LINE / Legally own · use · sell' heading in the panel (101:42–106:45).
+
 ## Sections (word-level timings from the audio)
 
 | Section | Start | End |
