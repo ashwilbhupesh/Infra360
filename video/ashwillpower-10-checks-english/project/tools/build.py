@@ -287,15 +287,15 @@ js += "".join(f"""
       tl.to("#{i}", {{ opacity: 0, duration: 0.2 }}, {round(b - 0.2, 2)});""" for i, a, b, _ in CALL)
 open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   <style>{BASE}
-    .hd {{ position: absolute; left: 96px; top: 1160px; max-width: 820px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.88); border-left: 6px solid #E3A23B; opacity: 0; }}
+    .hd {{ position: absolute; left: 96px; top: 1226px; max-width: 820px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.88); border-left: 6px solid #E3A23B; opacity: 0; }}
     .hd-c {{ font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.2em; color: #E3A23B; }}
     .hd-h {{ font-family: "Inter", sans-serif; font-weight: 800; font-size: 52px; letter-spacing: 0.01em; line-height: 1.08; color: #F3E7D3; }}
-    #op {{ position: absolute; left: 96px; right: 164px; top: 1160px; padding: 14px 28px 16px; border-radius: 20px; background: rgba(27,20,15,0.9); border-left: 6px solid #E3A23B; }}
+    #op {{ position: absolute; left: 96px; right: 164px; top: 1226px; padding: 14px 28px 16px; border-radius: 20px; background: rgba(27,20,15,0.9); border-left: 6px solid #E3A23B; }}
     #op-a {{ font-family: "Inter", sans-serif; font-weight: 800; font-size: 54px; color: #F3E7D3; line-height: 1.05; }}
     #op-b {{ font-family: "Inter", sans-serif; font-weight: 900; font-size: 60px; color: #E3A23B; line-height: 1.05; }}
-    #pg {{ position: absolute; left: 96px; right: 164px; top: 1118px; display: flex; gap: 10px; opacity: 0; }}
-    #pg i {{ flex: 1; height: 6px; border-radius: 3px; background: rgba(243,231,211,0.18); }}
-    .co {{ position: absolute; left: 96px; top: 1565px; padding: 12px 22px; border-radius: 14px; background: rgba(60,38,14,0.92); border: 1.5px solid #E3A23B; font-family: "Inter", sans-serif; font-weight: 700; font-size: 38px; color: #F3E7D3; opacity: 0; white-space: nowrap; }}
+    #pg {{ position: absolute; left: 96px; right: 164px; top: 1196px; display: flex; gap: 10px; opacity: 0; }}
+    #pg i {{ flex: 1; height: 7px; border-radius: 4px; background: rgba(27,20,15,0.55); box-shadow: 0 0 0 1px rgba(243,231,211,0.25); }}
+    .co {{ position: absolute; left: 96px; top: 1118px; padding: 12px 22px; border-radius: 14px; background: rgba(60,38,14,0.92); border: 1.5px solid #E3A23B; font-family: "Inter", sans-serif; font-weight: 700; font-size: 38px; color: #F3E7D3; opacity: 0; white-space: nowrap; }}
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="{VIDEO_END}">
@@ -314,7 +314,7 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
       tl.fromTo("#hd-end", {{ opacity: 0, y: 12 }}, {{ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }}, 102.24);
       tl.to("#hd-end", {{ opacity: 0, duration: 0.2 }}, {VIDEO_END - 0.22});
       tl.to("#pg", {{ opacity: 0, duration: 0.3 }}, 102.0);{"".join(f"""
-      tl.fromTo("#pg-{k+1}", {{ backgroundColor: "rgba(243,231,211,0.18)" }}, {{ backgroundColor: "#E3A23B", duration: 0.3 }}, {t});""" for k, (t, _) in enumerate(CHECKS))}{js}
+      tl.fromTo("#pg-{k+1}", {{ backgroundColor: "rgba(27,20,15,0.55)" }}, {{ backgroundColor: "#E3A23B", duration: 0.3 }}, {t});""" for k, (t, _) in enumerate(CHECKS))}{js}
       window.__timelines["chrome"] = tl;
     }})();
   </script>
@@ -327,7 +327,7 @@ data = [[a, b, [w["s"] for w in g]] for a, b, g in caps]
 open(f"{P}/compositions/captions.html", "w").write("""<template>
   <style>
     #root { position: absolute; inset: 0; pointer-events: none; }
-    .cp { position: absolute; left: 96px; width: 820px; top: 1375px; display: flex; justify-content: center; opacity: 0; }
+    .cp { position: absolute; left: 96px; width: 820px; top: 1426px; display: flex; justify-content: center; opacity: 0; }
     .cp-in { max-width: 820px; text-align: center; padding: 12px 24px 14px; border-radius: 18px; background: rgba(20,14,10,0.82);
       font-family: "Inter", sans-serif; font-weight: 700; font-size: 56px; line-height: 1.2; color: #FFF8EE; }
     .w { opacity: 0.6; }
@@ -407,7 +407,6 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html>
       #cam {{ position: absolute; inset: 0; transform-origin: 50% 30%; }}
       #avatar {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }}
       .scene {{ position: absolute; inset: 0; }}
-      #lower {{ position: absolute; left: 0; right: 0; top: 1040px; bottom: 0; background: linear-gradient(180deg, rgba(18,13,10,0) 0px, rgba(18,13,10,0.92) 60px, #1A130E 120px, #120D0A 100%); }}
     </style>
   </head>
   <body>
@@ -416,7 +415,6 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html>
       <div id="cam" style="z-index: 1">
         <video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="{VIDEO_END}" data-track-index="0" playsinline data-has-audio="true" data-volume="1"></video>
       </div>
-      <div id="lower" style="z-index: 2"></div>
 {hosts}
       <div id="chrome" class="scene" style="z-index: 6" data-composition-id="chrome" data-composition-src="compositions/chrome.html" data-start="0" data-duration="{VIDEO_END}" data-track-index="3" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
       <div id="captions" class="scene" style="z-index: 7" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="{VIDEO_END}" data-track-index="4" data-track-kind="captions" data-width="1080" data-height="1920"></div>
