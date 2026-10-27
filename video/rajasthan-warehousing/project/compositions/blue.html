@@ -1,0 +1,87 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .sans { font-family: "Inter", sans-serif; color: #fff; }
+    .serif { font-family: "Instrument Serif", serif; color: #fff; }
+    .it { font-style: italic; }
+    .amb { color: #F5A524; } .teal { color: #2EC4B6; }
+    .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.2em; text-transform: uppercase; color: #9aa3b2; white-space: nowrap; }
+    .lbl b { color: #F5A524; font-weight: 400; }
+    .card { position: absolute; left: 44px; right: 44px; top: 905px; height: 420px; border-radius: 34px; overflow: hidden;
+      background: linear-gradient(160deg, rgba(20,26,40,0.94), rgba(10,13,22,0.94)); border: 1.5px solid rgba(255,255,255,0.12);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.5); }
+    .card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: #F5A524; }
+    .fs { position: absolute; inset: 0; background: radial-gradient(120% 70% at 50% 30%, #172033 0%, #0B0F17 70%); overflow: hidden; }
+    .grid { position: absolute; inset: 0; opacity: 0.22; background-image: linear-gradient(rgba(46,196,182,0.35) 1px, transparent 1px), linear-gradient(90deg, rgba(46,196,182,0.35) 1px, transparent 1px); background-size: 72px 72px; }
+    .pip { position: absolute; right: 40px; top: 190px; width: 230px; height: 230px; border-radius: 50%; overflow: hidden; border: 4px solid #F5A524; box-shadow: 0 12px 34px rgba(0,0,0,0.5); }
+    .pip video { position: absolute; left: -15px; top: -58px; width: 260px; height: 462px; object-fit: cover; }
+    .kick { position: absolute; left: 64px; top: 200px; }
+    .ttl { position: absolute; left: 64px; right: 300px; top: 250px; font-family: "Inter", sans-serif; font-weight: 800; font-size: 74px; line-height: 1.02; letter-spacing: -0.02em; color: #fff; }
+    .ttl em { font-family: "Instrument Serif", serif; font-weight: 400; font-style: italic; color: #F5A524; font-size: 1.12em; letter-spacing: 0; }
+    .src { position: absolute; left: 64px; right: 64px; top: 1175px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.06em; color: #6f7888; white-space: nowrap; }
+
+    #bp { position: absolute; left: 40px; top: 400px; width: 1000px; height: 760px; overflow: visible; }
+    #bp .ln { fill: none; stroke: #2EC4B6; stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    #bp .fl { fill: none; stroke: #F5A524; stroke-width: 6; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .ann { position: absolute; display: flex; align-items: center; gap: 14px; padding: 12px 20px; border-radius: 14px; background: rgba(11,15,23,0.86); border: 1.5px solid rgba(255,255,255,0.18); font-family: "Inter", sans-serif; font-weight: 800; font-size: 36px; color: #fff; white-space: nowrap; }
+    .ann i { font-style: normal; display: flex; width: 44px; height: 44px; border-radius: 50%; background: #F5A524; color: #0B0F17; align-items: center; justify-content: center; font-family: "JetBrains Mono", monospace; font-size: 28px; font-weight: 700; }
+    #an-2 { left: 64px; top: 1045px; } #an-3 { left: 64px; top: 1125px; } #an-4 { right: 64px; top: 520px; } #an-5 { left: 330px; top: 430px; }
+    #an-3 small { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; font-size: 36px; color: #F5A524; }
+    #bp-truck { position: absolute; left: 0; top: 935px; width: 170px; height: 90px; }
+    .drop { fill: #2EC4B6; }
+    .ldarr { stroke: #F5A524; stroke-width: 4; fill: #F5A524; }
+
+  </style>
+  <div id="root" data-composition-id="blue" data-width="1080" data-height="1920">
+    <div id="blue-host" class="host clip" data-start="0" data-duration="8.0">
+      <div id="blue-fs" class="fs"><div class="grid" style="opacity:0.35"></div>
+        <div class="kick lbl">Execution &middot; <b>checklist</b></div>
+        <div class="ttl">What makes it <em>work</em></div>
+        <svg id="bp" viewBox="0 0 1000 760">
+          <path class="ln" pathLength="1" d="M120 620 V260 L500 120 L880 260 V620"/>
+          <path class="ln" pathLength="1" d="M120 260 H880"/>
+          <path class="ln" pathLength="1" d="M300 620 V420 H460 V620 M540 620 V420 H700 V620"/>
+          <path class="fl" pathLength="1" d="M60 620 H940"/>
+          <g id="bp-ht"><path d="M930 620 V260" stroke="#fff" stroke-width="3"/><path d="M915 275 L930 255 L945 275 M915 605 L930 625 L945 605" stroke="#fff" stroke-width="3" fill="none"/></g>
+          <g id="bp-load"><path class="ldarr" d="M360 500 V560 M345 545 L360 565 L375 545"/><path class="ldarr" d="M500 500 V560 M485 545 L500 565 L515 545"/><path class="ldarr" d="M640 500 V560 M625 545 L640 565 L655 545"/></g>
+          <g id="bp-spr"><path d="M200 262 V290 M800 262 V290" stroke="#2EC4B6" stroke-width="4"/><circle class="drop" cx="200" cy="310" r="6"/><circle class="drop" cx="190" cy="330" r="5"/><circle class="drop" cx="210" cy="330" r="5"/><circle class="drop" cx="800" cy="310" r="6"/><circle class="drop" cx="790" cy="330" r="5"/><circle class="drop" cx="810" cy="330" r="5"/></g>
+        </svg>
+        <svg id="bp-truck" viewBox="0 0 120 64"><path d="M2 8h72v40H2z" fill="#2EC4B6"/><path d="M74 22h24l18 16v10H74z" fill="#fff"/><circle cx="22" cy="52" r="9" fill="#0B0F17" stroke="#fff" stroke-width="3"/><circle cx="94" cy="52" r="9" fill="#0B0F17" stroke="#fff" stroke-width="3"/></svg>
+        <div id="an-5" class="ann"><i>1</i>Location</div>
+        <div id="an-2" class="ann"><i>2</i>Truck movement</div>
+        <div id="an-3" class="ann"><i>3</i>Floor load capacity <small>kitna weight?</small></div>
+        <div id="an-4" class="ann"><i>4</i>Clear height</div>
+        <div id="an-6" class="ann" style="left:64px;top:560px"><i>5</i>Fire safety</div>
+      </div>
+    </div>
+      <div id="blue-pipw" class="pip"><video id="blue-pipv" class="clip" src="assets/talk.mp4" data-start="0" data-duration="8.0" data-media-start="40.45" muted playsinline></video></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, filter: "blur(10px)" }, f || {}), Object.assign({ opacity: 1, filter: "blur(0px)", duration: 0.36, ease: "expo.out" }, to || {}), t);
+      const OUTALL = (sel, t) => tl.to(sel, { opacity: 0, filter: "blur(8px)", duration: 0.2, ease: "power2.in" }, t);
+      tl.fromTo("#blue-fs", { x: -1080, filter: "blur(18px)" }, { x: 0, filter: "blur(0px)", duration: 0.5, ease: "expo.out" }, 0);
+      tl.fromTo("#blue-pipw", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.8)" }, 0.35);
+      tl.to("#blue-pipw", { scale: 0.6, opacity: 0, duration: 0.2, ease: "power2.in" }, 7.58);
+      tl.to("#blue-fs", { x: 1080, filter: "blur(14px)", duration: 0.38, ease: "power3.in" }, 7.62);
+      IN("#blue-fs .kick", 0.35); IN("#blue-fs .ttl", 0.45, { y: 30 }, { y: 0 });
+      tl.fromTo("#bp .ln", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.2, stagger: 0.12, ease: "power2.inOut" }, 0.3);
+      IN("#an-5", 0.6, { y: 20 }, { y: 0 });
+      tl.fromTo("#bp-truck", { x: -200 }, { x: 760, duration: 1.6, ease: "power2.inOut" }, 1.5);
+      IN("#an-2", 1.65, { y: 20 }, { y: 0 });
+      tl.fromTo("#bp .fl", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.6, ease: "expo.out" }, 2.4);
+      tl.fromTo("#bp-load", { opacity: 0, y: -30 }, { opacity: 1, y: 0, duration: 0.4, ease: "expo.out" }, 2.5);
+      IN("#an-3", 2.5, { y: 20 }, { y: 0 });
+      tl.fromTo("#bp-ht", { opacity: 0, scaleY: 0, transformOrigin: "930px 620px" }, { opacity: 1, scaleY: 1, duration: 0.5, ease: "expo.out" }, 6.2);
+      IN("#an-4", 6.2, { x: 30 }, { x: 0 });
+      tl.fromTo("#bp-spr", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 7.0);
+      tl.fromTo("#bp-spr .drop", { y: -10 }, { y: 16, duration: 0.6, ease: "power1.in" }, 7.0);
+      IN("#an-6", 7.0, { y: 20 }, { y: 0 });
+      window.__timelines["blue"] = tl;
+    })();
+  </script>
+</template>
