@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #120D0A; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      #ground { position: absolute; inset: 0; background: #120D0A; }
+      #cam { position: absolute; inset: 0; transform-origin: 50% 38%; }
+      #avatar { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .scene { position: absolute; inset: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="110.6" data-width="1080" data-height="1920" data-fps="25">
+      <div id="ground"></div>
+      <div id="cam" style="z-index: 1">
+        <video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="107.12" data-track-index="0" playsinline data-has-audio="true" data-volume="1"></video>
+      </div>
+      <div id="i01" class="scene" style="z-index: 4" data-composition-id="i01" data-composition-src="compositions/i01.html" data-start="8.5" data-duration="3.75" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i02" class="scene" style="z-index: 4" data-composition-id="i02" data-composition-src="compositions/i02.html" data-start="15.0" data-duration="3.3" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i03" class="scene" style="z-index: 4" data-composition-id="i03" data-composition-src="compositions/i03.html" data-start="25.7" data-duration="3.5" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i04" class="scene" style="z-index: 4" data-composition-id="i04" data-composition-src="compositions/i04.html" data-start="35.4" data-duration="3.5" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i05" class="scene" style="z-index: 4" data-composition-id="i05" data-composition-src="compositions/i05.html" data-start="41.5" data-duration="4.3" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i06" class="scene" style="z-index: 4" data-composition-id="i06" data-composition-src="compositions/i06.html" data-start="53.7" data-duration="4.0" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i07" class="scene" style="z-index: 4" data-composition-id="i07" data-composition-src="compositions/i07.html" data-start="61.2" data-duration="4.3" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i08" class="scene" style="z-index: 4" data-composition-id="i08" data-composition-src="compositions/i08.html" data-start="71.9" data-duration="4.2" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i09" class="scene" style="z-index: 4" data-composition-id="i09" data-composition-src="compositions/i09.html" data-start="81.15" data-duration="3.75" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i10" class="scene" style="z-index: 4" data-composition-id="i10" data-composition-src="compositions/i10.html" data-start="85.15" data-duration="2.4" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i11" class="scene" style="z-index: 4" data-composition-id="i11" data-composition-src="compositions/i11.html" data-start="91.3" data-duration="3.7" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="i12" class="scene" style="z-index: 4" data-composition-id="i12" data-composition-src="compositions/i12.html" data-start="98.4" data-duration="2.4" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="chrome" class="scene" style="z-index: 6" data-composition-id="chrome" data-composition-src="compositions/chrome.html" data-start="0" data-duration="107.12" data-track-index="2" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="captions" class="scene" style="z-index: 7" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="107.12" data-track-index="3" data-track-kind="captions" data-width="1080" data-height="1920"></div>
+      <div id="endcard" class="scene" style="z-index: 9" data-composition-id="endcard" data-composition-src="compositions/endcard.html" data-start="107.12" data-duration="3.48" data-track-index="4" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="110.6" data-track-index="10" data-volume="0.55" data-fade-in="1.0" data-fade-out="2.0"></audio>
+      <audio id="sfx-chk-1" class="clip" src="assets/sfx/click-soft.mp3" data-start="5.39" data-duration="0.36" data-track-index="11" data-volume="0.35"></audio>
+      <audio id="sfx-chk-2" class="clip" src="assets/sfx/click-soft.mp3" data-start="12.64" data-duration="0.36" data-track-index="12" data-volume="0.35"></audio>
+      <audio id="sfx-chk-3" class="clip" src="assets/sfx/click-soft.mp3" data-start="23.89" data-duration="0.36" data-track-index="11" data-volume="0.35"></audio>
+      <audio id="sfx-chk-4" class="clip" src="assets/sfx/click-soft.mp3" data-start="33.36" data-duration="0.36" data-track-index="12" data-volume="0.35"></audio>
+      <audio id="sfx-chk-5" class="clip" src="assets/sfx/click-soft.mp3" data-start="39.87" data-duration="0.36" data-track-index="11" data-volume="0.35"></audio>
+      <audio id="sfx-chk-6" class="clip" src="assets/sfx/click-soft.mp3" data-start="49.1" data-duration="0.36" data-track-index="12" data-volume="0.35"></audio>
+      <audio id="sfx-chk-7" class="clip" src="assets/sfx/click-soft.mp3" data-start="59.27" data-duration="0.36" data-track-index="11" data-volume="0.35"></audio>
+      <audio id="sfx-chk-8" class="clip" src="assets/sfx/click-soft.mp3" data-start="70.17" data-duration="0.36" data-track-index="12" data-volume="0.35"></audio>
+      <audio id="sfx-chk-9" class="clip" src="assets/sfx/click-soft.mp3" data-start="78.61" data-duration="0.36" data-track-index="11" data-volume="0.35"></audio>
+      <audio id="sfx-chk-10" class="clip" src="assets/sfx/click-soft.mp3" data-start="88.05" data-duration="0.36" data-track-index="12" data-volume="0.35"></audio>
+      <audio id="sfx-end" class="clip" src="assets/sfx/chime.mp3" data-start="107.12" data-duration="2.2" data-track-index="13" data-volume="0.18" data-fade-out="0.8"></audio>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      [[0, 1.0], [5.39, 1.05], [12.64, 1.0], [23.89, 1.05], [33.36, 1.0], [39.87, 1.05], [49.1, 1.0], [59.27, 1.05], [70.17, 1.0], [78.61, 1.05], [88.05, 1.0], [101.42, 1.06]].forEach(([t, s]) => tl.set("#cam", { scale: s }, t));
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

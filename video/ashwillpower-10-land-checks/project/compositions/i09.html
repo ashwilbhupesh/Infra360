@@ -1,0 +1,42 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9B79C; white-space: nowrap; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .ins-grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .bug { position: absolute; left: 60px; top: 178px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.55); }
+    .note { position: absolute; left: 60px; right: 200px; top: 905px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.75); white-space: nowrap; }
+    .stage { position: absolute; left: 60px; right: 60px; top: 250px; height: 640px; }
+    .ln { fill: none; stroke: #F3E7D3; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .ln-a { fill: none; stroke: #E3A23B; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .tag { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px; background: rgba(243,231,211,0.07); border: 1.5px solid rgba(243,231,211,0.22); font-family: "Inter", sans-serif; font-weight: 700; font-size: 40px; color: #F3E7D3; white-space: nowrap; }
+    .tag.amb { border-color: #E3A23B; background: rgba(227,162,59,0.14); }
+    .tag i { font-style: normal; display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+
+  </style>
+  <div id="root" data-composition-id="i09" data-width="1080" data-height="1920">
+    <div id="i09-host" class="host clip" data-start="0" data-duration="3.75">
+      <div id="i09-bg" class="ins"><div class="ins-grain"></div><div class="bug">ASHWILLPOWER</div><div class="i09-c" id="i09-c0" style="position:absolute;left:60px;top:250px;width:470px;height:260px;border-radius:24px;border:1.5px solid rgba(243,231,211,0.22);background:rgba(243,231,211,0.05)"><svg viewBox="0 0 180 140" style="position:absolute;left:30px;top:40px;width:180px;height:140px"><path class="ln" d="M40 120 L90 20 M140 120 L110 20 M88 110 V95 M93 70 V55 M98 35 V25"/></svg><div style="position:absolute;left:230px;top:96px;font-family:Inter,sans-serif;font-weight:800;font-size:42px;color:#F3E7D3">Proposed road</div></div><div class="i09-c" id="i09-c1" style="position:absolute;left:550px;top:250px;width:470px;height:260px;border-radius:24px;border:1.5px solid rgba(243,231,211,0.22);background:rgba(243,231,211,0.05)"><svg viewBox="0 0 180 140" style="position:absolute;left:30px;top:40px;width:180px;height:140px"><path class="ln" d="M30 110 V40 H150 V110 Z"/><path class="ln-a" d="M30 40 L150 110 M150 40 L30 110"/></svg><div style="position:absolute;left:230px;top:96px;font-family:Inter,sans-serif;font-weight:800;font-size:42px;color:#F3E7D3">Acquisition</div></div><div class="i09-c" id="i09-c2" style="position:absolute;left:60px;top:540px;width:470px;height:260px;border-radius:24px;border:1.5px solid rgba(243,231,211,0.22);background:rgba(243,231,211,0.05)"><svg viewBox="0 0 180 140" style="position:absolute;left:30px;top:40px;width:180px;height:140px"><path class="ln" d="M20 60 C50 40 70 80 100 60 C130 40 150 80 170 60 M20 95 C50 75 70 115 100 95 C130 75 150 115 170 95"/></svg><div style="position:absolute;left:230px;top:96px;font-family:Inter,sans-serif;font-weight:800;font-size:42px;color:#F3E7D3">Naala</div></div><div class="i09-c" id="i09-c3" style="position:absolute;left:550px;top:540px;width:470px;height:260px;border-radius:24px;border:1.5px solid rgba(243,231,211,0.22);background:rgba(243,231,211,0.05)"><svg viewBox="0 0 180 140" style="position:absolute;left:30px;top:40px;width:180px;height:140px"><path class="ln" d="M90 15 C60 60 45 80 45 95 A45 45 0 0 0 135 95 C135 80 120 60 90 15 Z"/><path class="ln-a" d="M20 125 H160"/></svg><div style="position:absolute;left:230px;top:96px;font-family:Inter,sans-serif;font-weight:800;font-size:42px;color:#F3E7D3">Flood risk</div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 18 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
+      const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
+      tl.fromTo("#i09-bg", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }, 0);
+      IN("#i09-c0", 0.05);
+      IN("#i09-c1", 1.03);
+      IN("#i09-c2", 2.13);
+      IN("#i09-c3", 3.04);
+      tl.to("#i09-bg", { opacity: 0, duration: 0.3, ease: "power2.in" }, 3.45);
+      window.__timelines["i09"] = tl;
+    })();
+  </script>
+</template>
