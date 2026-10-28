@@ -35,7 +35,7 @@ def scene(cid, start, end, body, js, videos=()):
   <div id="root" data-composition-id="{cid}" data-width="1080" data-height="1920">
     <div id="{cid}-host" class="host clip" data-start="0" data-duration="{dur}"><div id="{cid}-bg" class="ins"><div class="grain"></div></div></div>
     <div id="{cid}-vids">{vids}</div>
-    <div id="{cid}-fg" class="host"><div class="bug">ASHWILLPOWER</div><div class="body" style="position:absolute;inset:0;transform:translateY(90px)">{body}</div></div>
+    <div id="{cid}-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(250px)">{body}</div></div>
   </div>
   <script>
     (function () {{

@@ -179,15 +179,15 @@ js += "".join(f"""
       tl.to("#{i}", {{ opacity: 0, duration: 0.2 }}, {round(b - 0.2, 2)});""" for i, a, b, _ in CALL)
 open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   <style>{BASE}
-    .hd {{ position: absolute; left: 96px; top: 1226px; max-width: 820px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.88); border-left: 6px solid #E3A23B; opacity: 0; }}
+    .hd {{ position: absolute; left: 96px; top: 222px; max-width: 820px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.88); border-left: 6px solid #E3A23B; opacity: 0; }}
     .hd-c {{ font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.2em; color: #E3A23B; }}
     .hd-h {{ font-family: "Inter", sans-serif; font-weight: 800; font-size: 52px; letter-spacing: 0.01em; line-height: 1.08; color: #F3E7D3; }}
-    #op {{ position: absolute; left: 96px; right: 164px; top: 1226px; padding: 14px 28px 16px; border-radius: 20px; background: rgba(27,20,15,0.9); border-left: 6px solid #E3A23B; }}
+    #op {{ position: absolute; left: 96px; right: 164px; top: 222px; padding: 14px 28px 16px; border-radius: 20px; background: rgba(27,20,15,0.9); border-left: 6px solid #E3A23B; }}
     #op-a {{ font-family: "Inter", sans-serif; font-weight: 800; font-size: 54px; color: #F3E7D3; line-height: 1.05; }}
     #op-b {{ font-family: "Inter", sans-serif; font-weight: 900; font-size: 60px; color: #E3A23B; line-height: 1.05; }}
-    #pg {{ position: absolute; left: 96px; right: 164px; top: 1196px; display: flex; gap: 10px; opacity: 0; }}
+    #pg {{ position: absolute; left: 96px; right: 164px; top: 196px; display: flex; gap: 10px; opacity: 0; }}
     #pg i {{ flex: 1; height: 7px; border-radius: 4px; background: rgba(27,20,15,0.55); box-shadow: 0 0 0 1px rgba(243,231,211,0.25); }}
-    .co {{ position: absolute; left: 96px; top: 1118px; padding: 12px 22px; border-radius: 14px; background: rgba(60,38,14,0.92); border: 1.5px solid #E3A23B; font-family: "Inter", sans-serif; font-weight: 700; font-size: 38px; color: #F3E7D3; opacity: 0; white-space: nowrap; }}
+    .co {{ position: absolute; left: 96px; top: 398px; padding: 12px 22px; border-radius: 14px; background: rgba(60,38,14,0.92); border: 1.5px solid #E3A23B; font-family: "Inter", sans-serif; font-weight: 700; font-size: 38px; color: #F3E7D3; opacity: 0; white-space: nowrap; }}
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="{VIDEO_END}">
@@ -217,9 +217,9 @@ data = [[a, b, [w["s"] for w in g]] for a, b, g in caps]
 open(f"{P}/compositions/captions.html", "w").write("""<template>
   <style>
     #root { position: absolute; inset: 0; pointer-events: none; }
-    .cp { position: absolute; left: 96px; width: 820px; top: 1426px; display: flex; justify-content: center; opacity: 0; }
+    .cp { position: absolute; left: 96px; width: 820px; top: 1440px; display: flex; justify-content: center; opacity: 0; }
     .cp-in { max-width: 820px; text-align: center; padding: 12px 24px 14px; border-radius: 18px; background: rgba(20,14,10,0.82);
-      font-family: "Inter", sans-serif; font-weight: 700; font-size: 56px; line-height: 1.2; color: #FFF8EE; }
+      font-family: "Inter", sans-serif; font-weight: 700; font-size: 52px; line-height: 1.2; color: #FFF8EE; }
     .w { opacity: 0.6; }
     .w.em { color: #F5B04A; }
   </style>
@@ -291,7 +291,7 @@ open(f"{P}/compositions/endcard.html", "w").write(f"""<template>
 hosts = "\n".join(f'      <div id="{c}" class="scene" style="z-index: 4" data-composition-id="{c}" data-composition-src="compositions/{c}.html" data-start="{s}" data-duration="{d}" data-track-index="{1 + k % 2}" data-track-kind="graphics" data-width="1080" data-height="1920"></div>' for k, (c, s, d) in enumerate(INSERTS))
 sfx = [f'      <audio id="sfx-sec-{k+1}" class="clip" src="assets/sfx/click-soft.mp3" data-start="{t}" data-duration="0.36" data-track-index="{11 + k % 2}" data-volume="0.32"></audio>' for k, (t, _, _) in enumerate(SECT)]
 sfx.append(f'      <audio id="sfx-end" class="clip" src="assets/sfx/chime.mp3" data-start="{VIDEO_END}" data-duration="2.2" data-track-index="13" data-volume="0.16" data-fade-out="0.8"></audio>')
-PUNCH = [(0, 1.0), (6.88, 1.05), (16.4, 1.0), (47.46, 1.05), (54.37, 1.0), (72.63, 1.06), (82.4, 1.0), (91.6, 1.05), (104.7, 1.0), (116.0, 1.05), (119.5, 1.0), (132.59, 1.0), (161.0, 1.05), (167.14, 1.0), (172.1, 1.06)]
+PUNCH = [(0, 1.0), (6.88, 1.035), (16.4, 1.0), (47.46, 1.035), (54.37, 1.0), (72.63, 1.035), (82.4, 1.0), (91.6, 1.035), (104.7, 1.0), (116.0, 1.035), (119.5, 1.0), (132.59, 1.0), (161.0, 1.035), (167.14, 1.0), (172.1, 1.035)]
 open(f"{P}/index.html", "w").write(f"""<!doctype html>
 <html lang="en">
   <head>
@@ -303,7 +303,7 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html>
       html, body {{ width: 1080px; height: 1920px; overflow: hidden; background: #120D0A; }}
       #root {{ position: relative; width: 1080px; height: 1920px; overflow: hidden; }}
       #ground {{ position: absolute; inset: 0; background: #120D0A; }}
-      #cam {{ position: absolute; inset: 0; transform-origin: 50% 30%; }}
+      #cam {{ position: absolute; inset: 0; transform-origin: 50% 15%; }}
       #avatar {{ position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }}
       .scene {{ position: absolute; inset: 0; }}
     </style>
