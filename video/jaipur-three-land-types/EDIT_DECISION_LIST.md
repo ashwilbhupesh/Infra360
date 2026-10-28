@@ -2,7 +2,12 @@
 
 - **Source:** 4bf756be-a996113b537445a3b8973e9657db7cc5.mp4 (1080×1920, 30 fps, 195.8 s). Selfie-style talking head, English.
 - **Output:** `Jaipur_Three_Land_Types.mp4` (1080×1920, 30 fps, 178.6 s): 174.6 s of edited talk plus a 4 s closing card. That is under Instagram's 3-minute Reel limit.
-- **Style:** the approved Ashwillpower layout. The speaker stays full frame. Headings sit mid-lower (y≈1226) with captions below them (y≈1426); nothing goes on the face or below y≈1600. Margins are 96 px left and 164 px right. Palette is amber, cream and espresso. Punch-ins are gentle.
+- **Style:** the Ashwillpower look. The speaker stays full frame, with 96 px left and 164 px right margins, the amber, cream and espresso palette, and gentle punch-ins.
+- **Layout (revision 2, after feedback that text covered the face):** face detection over the whole edit put the face at y≈600–1370. That is lower than in the studio videos, so the mid-lower headings landed on the chin and mouth. The text was moved:
+  - progress bar, headings and callouts now sit on the plain ceiling above the head (y≈196–470);
+  - captions sit on the shirt below the chin (y≈1440–1600);
+  - insert graphics moved down to clear the headings;
+  - punch-ins reduced to 3.5%, anchored near the top, so the face stays between the two text zones.
 
 ## Cuts (source times)
 Every cut falls in a pause between words. Each cut is hidden by B-roll or by a small reframe (punch-in). Audio has 20–30 ms fades at each join, and loudness is normalised to −16 LUFS.
