@@ -190,267 +190,408 @@ def tiles_scene(cid, s, e, kicker, items, cols=2, top=300, h=420, rep=True):
 
 
 STRIP = "".join(photo(f"g0-s{k}", f + ".jpg", 72 + k * 237, 1190, 222, 160, cap) for k, (f, cap) in enumerate([("hawa", "Hawa Mahal"), ("amer", "Amer Fort"), ("jalmahal", "Jal Mahal"), ("ghoomar", "Ghoomar")]))
-def badge(m, rid, at, text, dx=20, dy=-110, size=30):
-    """White text badge pinned to a map point (company names shown as text, no logos)."""
-    x, y = m.px(K(at) if isinstance(at, str) else at); x += dx; y += dy
-    w = len(text) * size * 0.6 + 40
-    x = max(48, min(1080 - 48 - w, x))
-    m.html.append(f'<div id="{m.cid}-{rid}" style="position:absolute;left:{x:.0f}px;top:{y - 90:.0f}px;padding:10px 18px;border-radius:14px;background:#FFFFFF;box-shadow:0 8px 24px rgba(0,0,0,0.5);font-family:Inter,sans-serif;font-weight:800;font-size:{size}px;color:#1B140F;white-space:nowrap">{text}</div>')
-    return f"#{m.cid}-{rid}"
-def pin(m, rid, at, color="#F5B04A"):
-    p = K(at) if isinstance(at, str) else at; u = m.u
-    m.svg.append(f'<g id="{m.cid}-{rid}" style="opacity:0"><circle cx="{p[0]:.3f}" cy="{p[1]:.3f}" r="{22*u:.3f}" style="fill:none;stroke:{color};stroke-width:{4*u};filter:url(#{m.cid}-glow)"/>'
-                 f'<circle cx="{p[0]:.3f}" cy="{p[1]:.3f}" r="{9*u:.3f}" style="fill:{color}"/></g>')
-    return f"#{m.cid}-{rid}"
-def line(m, rid, pts, color="#F5B04A", width=8, dash=None, glow=True):
-    pts = [K(p) if isinstance(p, str) else p for p in pts]; u = m.u
-    da = f"stroke-dasharray:{dash[0]*u} {dash[1]*u};" if dash else "stroke-dasharray:1;"
-    m.svg.append(f'<path id="{m.cid}-{rid}" {"" if dash else "class=\"draw\" pathLength=\"1\""} d="{smooth(pts, False)}" style="fill:none;stroke:{color};stroke-width:{width*u};stroke-linecap:round;{da}{"filter:url(#" + m.cid + "-glow);" if glow else ""}{"opacity:0;" if dash else ""}"/>')
-    return f"#{m.cid}-{rid}"
-def mask_draw(m, rid, pts, t, d, color="#B8E07A", width=7, dash=(10, 8)):
-    """A dashed road that 'draws' itself: a dashed path revealed by an animated solid mask."""
-    pts = [K(p) if isinstance(p, str) else p for p in pts]; u = m.u
-    m.svg.append(f'<mask id="{m.cid}-{rid}m" maskUnits="userSpaceOnUse"><path id="{m.cid}-{rid}k" pathLength="1" d="{smooth(pts, False)}" style="fill:none;stroke:#fff;stroke-width:{(width+8)*u};stroke-dasharray:1;stroke-dashoffset:1"/></mask>'
-                 f'<path d="{smooth(pts, False)}" mask="url(#{m.cid}-{rid}m)" style="fill:none;stroke:{color};stroke-width:{width*u};stroke-linecap:round;stroke-dasharray:{dash[0]*u} {dash[1]*u};filter:url(#{m.cid}-glow)"/>')
-    return f'      tl.fromTo("#{m.cid}-{rid}k", {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: {d}, ease: "power1.inOut" }}, {t});\n'
-def popup(m, rid, src, at, t_on, t_off, cap, w=400, h=260, img=None, sub=None, box=(48, 360)):
-    """Clip (or photo) pop-up placed in a clear slot of the map, with a leader line to its spot."""
-    p = K(at) if isinstance(at, str) else at; x, y = m.px(p)
+# ===================== v16: one continuous map with a camera (real OpenStreetMap geometry) =====================
+import glob, os
+KM = 10                                     # world px per km
+OSMD = __file__.replace("gen/build.py", "osm").replace("build.py", "osm")
+def _ways(pattern):
+    out = []
+    for f in sorted(glob.glob(os.path.join(OSMD, pattern))):
+        try: d = json.load(open(f))
+        except Exception: continue
+        for el in d.get("elements", []):
+            if el.get("type") == "way" and el.get("geometry"):
+                out.append((el.get("tags", {}), [km(g["lat"], g["lon"]) for g in el["geometry"]], el["id"]))
+            elif el.get("type") == "relation":
+                for mbr in el.get("members", []):
+                    if mbr.get("geometry") and mbr.get("role") in ("outer", ""):
+                        out.append((el.get("tags", {}), [km(g["lat"], g["lon"]) for g in mbr["geometry"]], el["id"]))
+    seen, res = set(), []
+    for t, p, i in out:
+        if (i, len(p), p[0]) in seen: continue
+        seen.add((i, len(p), p[0])); res.append((t, p))
+    return res
+def rdp(pts, eps):
+    if len(pts) < 3: return pts
+    a, b = pts[0], pts[-1]; dx, dy = b[0] - a[0], b[1] - a[1]; L = math.hypot(dx, dy)
+    if L < 1e-6:   # closed ring: split at the farthest vertex
+        i = max(range(len(pts)), key=lambda i: math.hypot(pts[i][0] - a[0], pts[i][1] - a[1]))
+        return rdp(pts[:i + 1], eps)[:-1] + rdp(pts[i:], eps)
+    dmax, idx = 0, 0
+    for i in range(1, len(pts) - 1):
+        d = abs(dy * (pts[i][0] - a[0]) - dx * (pts[i][1] - a[1])) / L
+        if d > dmax: dmax, idx = d, i
+    if dmax > eps: return rdp(pts[:idx + 1], eps)[:-1] + rdp(pts[idx:], eps)
+    return [a, b]
+def pd(pts, close=False):
+    return "M" + " L".join(f"{p[0]*KM:.1f} {p[1]*KM:.1f}" for p in pts) + (" Z" if close else "")
+MAJOR = _ways("major_*.json"); CITY = _ways("city_*.json"); RAIL = _ways("rail_*.json"); WATER = _ways("water.json")
+def pick(cond): return [p for t, p in MAJOR if cond(t)]
+def _nm(t): return (t.get("name", "") + " " + t.get("name:en", "") + " " + t.get("ref", "")).lower()
+NH48 = pick(lambda t: ((t.get("ref", "") == "NH48") or ("ajmer road" in t.get("name", "").lower()) or ("kishangarh expressway" in t.get("name", "").lower())) and t.get("highway") in ("trunk", "motorway"))
+NH48 = [p for p in NH48 if min(q[0] for q in p) < -8 and max(q[1] for q in p) > -2]          # west of Jaipur: the Ajmer Road
+if NH48 and min(min(q[0] for q in p) for p in NH48) > -100: NH48.append([K("kishangarh"), km(26.53, 74.75), K("ajmer")])   # Ajmer end: schematic until the OSM tile loads
+SRING = pick(lambda t: "outer ring road" in _nm(t) or t.get("ref") == "ORR")
+BDK = pick(lambda t: "bandikui" in _nm(t))
+DME = pick(lambda t: ("mumbai" in _nm(t) and "delhi" in _nm(t)) or t.get("ref", "").replace(" ", "").upper() == "NE4")
+print("osm ways: major", len(MAJOR), "city", len(CITY), "rail", len(RAIL), "water", len(WATER), "| nh48", len(NH48), "sring", len(SRING), "bdk", len(BDK), "dme", len(DME))
+
+# ---------- camera ----------
+OVR = (-62, 22, 150)          # overview: the whole Ajmer Road, Jaipur → Ajmer/Pushkar
+WIDE = (-25, -12, 235)        # wider still: Kotputli and Bandikui in frame
+CAMS = []                     # (t0, t1, view_from, view_to)
+CUR = [OVR]
+def sc(v): return 1080 / (v[2] * KM)
+def cam(t, v, d=1.0):
+    CAMS.append((round(t, 2), round(t + d, 2), CUR[0], v)); CUR[0] = v
+def view_at(t):
+    v = CAMS[0][2] if CAMS else OVR
+    for a, b, v0, v1 in CAMS:
+        if t >= b: v = v1
+        elif t >= a: return v1
+    return v
+def scr(p, v): s = sc(v); return (540 + (p[0] - v[0]) * KM * s, 875 + (p[1] - v[1]) * KM * s)
+def cam_js(rel0):
+    js = []
+    def put(t, d, v):
+        s = sc(v); tr = f"translate(540 785) scale({s:.5f}) translate({-v[0]*KM:.2f} {-v[1]*KM:.2f})"
+        js.append(f'      tl.to("#mp-W", {{ "--s": {s:.5f}, "--cx": {v[0]*KM:.2f}, "--cy": {v[1]*KM:.2f}, duration: {d:.3f}, ease: "none" }}, {t:.3f});\n')
+        js.append(f'      tl.to("#mp-G", {{ attr: {{ transform: "{tr}" }}, "--s": {s:.5f}, duration: {d:.3f}, ease: "none" }}, {t:.3f});\n')
+    for a, b, v0, v1 in CAMS:
+        N = 10; s0, s1 = sc(v0), sc(v1)
+        for i in range(N):
+            u0, u1 = i / N, (i + 1) / N
+            e = lambda u: 0.5 - 0.5 * math.cos(math.pi * u)            # ease in-out over the move
+            ta, tb = a + (b - a) * e(u0), a + (b - a) * e(u1)
+            s = s0 * (s1 / s0) ** u1                                     # geometric zoom
+            f = u1 if abs(s1 - s0) < 1e-9 else (1 / s - 1 / s0) / (1 / s1 - 1 / s0)
+            v = (v0[0] + (v1[0] - v0[0]) * f, v0[1] + (v1[1] - v0[1]) * f, 1080 / (s * KM))
+            put(ta - rel0, tb - ta, v)
+    return "".join(js)
+
+# ---------- world layers ----------
+SVG, HTML, JS = [], [], []
+def layer(svg): SVG.append(svg)
+CORE_PTS = CORE
+layer(f'<path d="{pd(CORE_PTS, True)}" style="fill:rgba(243,231,211,0.08);stroke:rgba(243,231,211,0.18);stroke-width:1.5"/>')
+for t, p in WATER:
+    layer(f'<path d="{pd(rdp(p, 0.05), True)}" style="fill:rgba(96,165,214,0.55);stroke:rgba(127,200,248,0.8);stroke-width:1.2"/>')
+for t, p in RAIL:
+    layer(f'<path d="{pd(rdp(p, 0.08))}" style="fill:none;stroke:rgba(200,180,160,0.30);stroke-width:1.2;stroke-dasharray:5 4"/>')
+for t, p in CITY:
+    layer(f'<path d="{pd(rdp(p, 0.03))}" style="fill:none;stroke:rgba(243,231,211,0.16);stroke-width:1"/>')
+for t, p in MAJOR:
+    w = 2.6 if t.get("highway") == "motorway" else 2.0
+    layer(f'<path d="{pd(rdp(p, 0.05))}" style="fill:none;stroke:rgba(243,231,211,0.42);stroke-width:{w}"/>')
+if not MAJOR:   # fallback when OpenStreetMap was unreachable: schematic radials
+    for r in ("ajmer", "tonk", "sikar", "delhiNH", "agra", "nh48w"): layer(f'<path d="{pd(ROADS[r])}" style="fill:none;stroke:rgba(243,231,211,0.35);stroke-width:2"/>')
+layer(f'<path d="{pd(WALL, True)}" style="fill:rgba(232,102,74,0.35);stroke:#E8664A;stroke-width:1.5"/>')
+
+def route(rid, segs, start, t0, d, color="#F5B04A", width=6, halo=18, dash=None, op=1.0):
+    """Highlight a route made of OSM way segments: each segment draws in order of its distance from `start`."""
+    if not segs: return ""
+    st = K(start) if isinstance(start, str) else start
+    def dist(p): return math.hypot(p[0] - st[0], p[1] - st[1])
+    items = []
+    for p in segs:
+        p = rdp(p, 0.04)
+        if dist(p[0]) > dist(p[-1]): p = p[::-1]
+        items.append((dist(p[0]), dist(p[-1]), p))
+    lo = min(a for a, _, _ in items); hi = max(b for _, b, _ in items) or 1
+    js = ""
+    for k, (a, b, p) in enumerate(items):
+        da = "" if not dash else f"stroke-dasharray:{dash};"
+        SVG.append(f'<g id="mp-{rid}{k}" style="opacity:0"><path d="{pd(p)}" style="fill:none;stroke:{color};stroke-opacity:0.28;stroke-width:{halo};stroke-linecap:round"/>'
+                   f'<path class="dr" pathLength="1" d="{pd(p)}" style="fill:none;stroke:{color};stroke-width:{width};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/></g>')
+        ta = t0 + d * (a - lo) / (hi - lo); tb = max(ta + 0.15, t0 + d * (b - lo) / (hi - lo))
+        js += f'      tl.set("#mp-{rid}{k}", {{ opacity: {op} }}, {ta:.3f});\n      tl.fromTo("#mp-{rid}{k} .dr", {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: {tb - ta:.3f}, ease: "none" }}, {ta:.3f});\n'
+    return js
+def route_fx(rid, n, t, kind):
+    """Pulse (highlight) or dim an already-drawn route."""
+    sels = ", ".join(f'"#mp-{rid}{k}"' for k in range(n))
+    if kind == "pulse": return f'      tl.fromTo([{sels}], {{ opacity: 1, filter: "brightness(1)" }}, {{ opacity: 1, filter: "brightness(1.8)", duration: 0.4, yoyo: true, repeat: 3, immediateRender: false }}, {t:.3f});\n'
+    return f'      tl.to([{sels}], {{ opacity: {kind}, duration: 0.4 }}, {t:.3f});\n'
+def sch(rid, pts, t0, d, color="#B8E07A", width=6, dash="10 8"):
+    """Schematic (proposed) route: dashed line revealed along its length with a moving clip of its solid twin."""
+    pts = [K(p) if isinstance(p, str) else p for p in pts]
+    SVG.append(f'<g id="mp-{rid}" style="opacity:0"><path d="{pd(pts)}" style="fill:none;stroke:{color};stroke-opacity:0.25;stroke-width:16;stroke-linecap:round"/>'
+               f'<path class="dr" pathLength="1" d="{pd(pts)}" style="fill:none;stroke:{color};stroke-width:{width};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+               (f'<path class="ds" d="{pd(pts)}" style="fill:none;stroke:#120D0A;stroke-width:{width + 1};stroke-dasharray:{dash};opacity:0"/>' if dash != "1 0" else "") + '</g>')
+    return (f'      tl.set("#mp-{rid}", {{ opacity: 1 }}, {t0:.3f});\n      tl.fromTo("#mp-{rid} .dr", {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: {d:.3f}, ease: "power1.inOut" }}, {t0:.3f});\n'
+            f'      tl.to("#mp-{rid} .ds", {{ opacity: 1, duration: 0.3 }}, {t0 + d:.3f});\n')
+LBL = {}
+def label(rid, at, text, t, tier="minor", dx=16, dy=-24, amb=True, size=30, right=False, until=None):
+    """Counter-scaled label + dot in the world. 'major' labels persist (what we've covered stays visible)."""
+    p = K(at) if isinstance(at, str) else at
+    cls = "tag amb" if amb else "tag"
+    tx = f"translate(calc(-100% - {dx}px), {dy}px)" if right else f"translate({dx}px, {dy}px)"
+    rid = "L" + rid
+    HTML.append(f'<div class="lb" id="mp-{rid}" style="left:{p[0]*KM:.1f}px;top:{p[1]*KM:.1f}px;opacity:0"><i class="pd"></i>'
+                f'<div class="{cls}" style="position:absolute;left:0;top:0;transform:{tx};font-size:{size}px;padding:8px 16px">{text}</div></div>')
+    LBL[rid] = (tier, t)
+    js = f'      tl.fromTo("#mp-{rid}", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.35 }}, {t:.3f});\n      tl.fromTo("#mp-{rid} .pd", {{ scale: 0 }}, {{ scale: 1, duration: 0.4, ease: "back.out(2.5)" }}, {t:.3f});\n'
+    if until is not None:
+        js += (f'      tl.to("#mp-{rid} .tag", {{ opacity: 0, duration: 0.3 }}, {until:.3f});\n      tl.to("#mp-{rid} .pd", {{ scale: 0.6, opacity: 0.8, duration: 0.3 }}, {until:.3f});\n'
+               if tier == "major" else f'      tl.to("#mp-{rid}", {{ opacity: 0, duration: 0.3 }}, {until:.3f});\n')
+    return js
+def ring(rid, at, r_km, t, color="#F5B04A", until=None):
+    p = K(at) if isinstance(at, str) else at
+    SVG.append(f'<circle id="mp-{rid}" cx="{p[0]*KM:.1f}" cy="{p[1]*KM:.1f}" r="{r_km*KM:.1f}" style="fill:{color};fill-opacity:0.18;stroke:{color};stroke-width:3;opacity:0"/>')
+    js = f'      tl.fromTo("#mp-{rid}", {{ opacity: 0, attr: {{ r: 0 }} }}, {{ opacity: 1, attr: {{ r: {r_km*KM:.1f} }}, duration: 0.6, ease: "back.out(1.6)" }}, {t:.3f});\n'
+    if until is not None: js += f'      tl.to("#mp-{rid}", {{ opacity: 0, duration: 0.4 }}, {until:.3f});\n'
+    return js
+
+# ---------- screen overlays (pop-ups, news, chips) ----------
+OVL = []
+TL, TR, BL, BR = (48, 360), (632, 360), (48, 1090), (632, 1090)
+def popup(rid, src, at, t_on, t_off, cap, box=TL, w=400, h=260, img=None, sub=None):
+    p = K(at) if isinstance(at, str) else at; x, y = scr(p, view_at(t_on + 0.01 + R0))
     bx, by = box
     ax = min(max(x, bx + 20), bx + w - 20); ay = by + h if y > by + h else (by if y < by else by + h / 2)
     if by <= y <= by + h: ax = bx + w if x > bx + w else bx
     media = (f'<img src="{IMG}{img}" style="width:100%;height:100%;object-fit:cover;display:block"/>' if img else
-             f'<video id="{m.cid}-{rid}v" class="clip" src="assets/broll/{src}.mp4" data-start="{max(0, round(t_on - 0.1, 2))}" data-duration="{round(t_off - t_on + 0.5, 2)}" muted playsinline style="width:100%;height:100%;object-fit:cover"></video>')
+             f'<video id="mp-{rid}v" class="clip" src="assets/broll/{src}.mp4" data-start="{max(0, round(t_on - 0.1, 2))}" data-duration="{round(t_off - t_on + 0.5, 2)}" muted playsinline style="width:100%;height:100%;object-fit:cover"></video>')
     sb = f'<div style="font-weight:600;font-size:24px;color:#E8D9BF;margin-top:2px">{sub}</div>' if sub else ""
-    m.html.append(f'<svg id="{m.cid}-{rid}l" data-layout-allow-overlap style="position:absolute;left:0;top:-90px;width:1080px;height:1920px;overflow:visible;opacity:0;pointer-events:none"><path d="M{ax:.0f} {ay:.0f} L{x:.0f} {y:.0f}" style="stroke:#F5B04A;stroke-width:3;fill:none"/><circle cx="{x:.0f}" cy="{y:.0f}" r="7" style="fill:#F5B04A"/></svg>'
-                  f'<div id="{m.cid}-{rid}" data-layout-allow-overlap style="position:absolute;left:{bx:.0f}px;top:{by - 90:.0f}px;width:{w}px;height:{h}px;border-radius:16px;overflow:hidden;border:3px solid #F5B04A;box-shadow:0 12px 32px rgba(0,0,0,0.65);background:#1B140F;opacity:0">{media}'
-                  f'<div style="position:absolute;left:0;right:0;bottom:0;padding:26px 14px 8px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:32px;line-height:1.1;color:#F3E7D3">{cap}{sb}</div></div>')
-    sel = f"#{m.cid}-{rid}"
-    return (f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.6, transformOrigin: "50% 100%" }}, {{ opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }}, {t_on});\n'
-            f'      tl.fromTo("{sel}l", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.25 }}, {t_on});\n'
-            f'      tl.to(["{sel}", "{sel}l"], {{ opacity: 0, scale: 0.9, duration: 0.3, ease: "power2.in" }}, {t_off});\n')
-def popups(m, items, end, **kw):
-    """items: (rid, src, at, t, cap, box[, img, sub]); each pop-up stays until the next one appears."""
+    OVL.append(f'<svg id="mp-{rid}l" data-layout-allow-overlap style="position:absolute;left:0;top:-90px;width:1080px;height:1920px;overflow:visible;opacity:0;pointer-events:none"><path d="M{ax:.0f} {ay:.0f} L{x:.0f} {y:.0f}" style="stroke:#F5B04A;stroke-width:3;fill:none"/><circle cx="{x:.0f}" cy="{y:.0f}" r="7" style="fill:#F5B04A"/></svg>'
+               f'<div id="mp-{rid}" data-layout-allow-overlap style="position:absolute;left:{bx}px;top:{by - 90}px;width:{w}px;height:{h}px;border-radius:16px;overflow:hidden;border:3px solid #F5B04A;box-shadow:0 12px 32px rgba(0,0,0,0.65);background:#1B140F;opacity:0">{media}'
+               f'<div style="position:absolute;left:0;right:0;bottom:0;padding:26px 14px 8px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:32px;line-height:1.1;color:#F3E7D3">{cap}{sb}</div></div>')
+    sel = f"#mp-{rid}"
+    return (f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.6, transformOrigin: "50% 100%" }}, {{ opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }}, {t_on:.3f});\n'
+            f'      tl.fromTo("{sel}l", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.25 }}, {t_on:.3f});\n'
+            f'      tl.to(["{sel}", "{sel}l"], {{ opacity: 0, scale: 0.9, duration: 0.3, ease: "power2.in" }}, {t_off:.3f});\n')
+def popups(items, end):
     js = ""
     for k, it in enumerate(items):
         rid, src, at, t, cap, box = it[:6]; img = it[6] if len(it) > 6 else None; sub = it[7] if len(it) > 7 else None
+        wh = it[8] if len(it) > 8 else (400, 260)
         t_off = items[k + 1][3] + 0.1 if k + 1 < len(items) else end
-        js += popup(m, rid, src, at, t, t_off, cap, box=box, img=img, sub=sub, **kw)
+        js += popup(rid, src, at, t, t_off, cap, box=box, img=img, sub=sub, w=wh[0], h=wh[1])
     return js
-def news(m, rid, outlet, date, headline, t_on, t_off, top=360):
-    """Original news card quoting a published headline (outlet + date), not a scan."""
-    m.html.append(f'<div id="{m.cid}-{rid}" data-layout-allow-overlap style="position:absolute;left:70px;right:70px;top:{top - 90}px;padding:22px 30px 20px;background:#F2EBDD;border-radius:8px;box-shadow:0 14px 36px rgba(0,0,0,0.6);transform:rotate(-1deg);opacity:0">'
-                  f'<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #1B140F;padding-bottom:8px;margin-bottom:12px;font-family:Inter,sans-serif;color:#1B140F">'
-                  f'<span style="font-weight:900;font-size:34px">{outlet}</span><span style="font-family:JetBrains Mono,monospace;font-size:26px">{date}</span></div>'
-                  f'<div style="font-family:Instrument Serif,serif;font-size:50px;line-height:1.08;color:#1B140F">“{headline}”</div>'
-                  f'<div style="font-family:JetBrains Mono,monospace;font-size:22px;color:#5A4A3A;margin-top:10px">Headline as published · card recreated for this video</div></div>')
-    sel = f"#{m.cid}-{rid}"
-    return (f'      tl.fromTo("{sel}", {{ opacity: 0, y: -30, rotation: -4 }}, {{ opacity: 1, y: 0, rotation: -1, duration: 0.5, ease: "back.out(1.4)" }}, {t_on});\n'
-            f'      tl.to("{sel}", {{ opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }}, {t_off});\n')
-ON1 = lambda sel, t: f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.6, transformOrigin: "50% 50%" }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }}, {t});\n'
-OFF = lambda sel, t: f'      tl.to("{sel}", {{ opacity: 0, duration: 0.3 }}, {t});\n'
-def P_(rid, at, t, m, label=None, dx=24, dy=-20, amb=True, right=False, size=30):
-    """Pin + label at word time t (scene-relative)."""
-    js = ON1(pin(m, rid, at), t)
-    if label: js += SHOW(m.tag(rid + "t", label, at, dx=dx, dy=dy, amb=amb, right=right, size=size), t + 0.05)
-    return js
-OV = 0.35  # scene overlap: the next map fades in over the previous one
-def go(m, s, e, js, focus=None, note="Schematic · positions: OpenStreetMap", last=False):
-    """Render a map scene with a gentle zoom-in on entry and a dissolve into the next scene."""
-    fx, fy = m.px(K(focus) if isinstance(focus, str) else focus) if focus else (540, MT + MH / 2)
-    js = f'      tl.fromTo("#{m.cid}-fg", {{ scale: 1.12 }}, {{ scale: 1, duration: 1.0, ease: "power2.out", transformOrigin: "{fx:.0f}px {fy:.0f}px" }}, 0);\n' + js
-    if not last:
-        js += f'      tl.to("#{m.cid}-fg", {{ opacity: 0, scale: 1.08, duration: {OV}, ease: "power1.in", transformOrigin: "{fx:.0f}px {fy:.0f}px" }}, {round(e - s, 2)});\n'
-    m.render(s, round(e + (0 if last else OV), 2), js, note=note, keep=not last)
-TL, TR, BL, BR = (48, 360), (632, 360), (48, 1090), (632, 1090)
-NOTE_C = "Schematic · clips: representative footage"
+def news(rid, outlet, date, headline, t_on, t_off, top=360):
+    OVL.append(f'<div id="mp-{rid}" data-layout-allow-overlap style="position:absolute;left:70px;right:70px;top:{top - 90}px;padding:22px 30px 20px;background:#F2EBDD;border-radius:8px;box-shadow:0 14px 36px rgba(0,0,0,0.6);transform:rotate(-1deg);opacity:0">'
+               f'<div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #1B140F;padding-bottom:8px;margin-bottom:12px;font-family:Inter,sans-serif;color:#1B140F">'
+               f'<span style="font-weight:900;font-size:34px">{outlet}</span><span style="font-family:JetBrains Mono,monospace;font-size:26px">{date}</span></div>'
+               f'<div style="font-family:Instrument Serif,serif;font-size:50px;line-height:1.08;color:#1B140F">“{headline}”</div>'
+               f'<div style="font-family:JetBrains Mono,monospace;font-size:22px;color:#5A4A3A;margin-top:10px">Headline as published · card recreated for this video</div></div>')
+    return (f'      tl.fromTo("#mp-{rid}", {{ opacity: 0, y: -30, rotation: -4 }}, {{ opacity: 1, y: 0, rotation: -1, duration: 0.5, ease: "back.out(1.4)" }}, {t_on:.3f});\n'
+            f'      tl.to("#mp-{rid}", {{ opacity: 0, y: -20, duration: 0.3, ease: "power2.in" }}, {t_off:.3f});\n')
+def chip(rid, kicker, text, t_on, t_off, y=1205, left=64, right=64):
+    OVL.append(f'<div id="mp-{rid}" style="position:absolute;left:{left}px;right:{right}px;top:{y - 90}px;padding:16px 24px;border-radius:18px;background:rgba(18,13,10,0.94);border:1.5px solid #E3A23B;opacity:0">'
+               f'<div class="lbl" style="color:#E3A23B;font-size:26px">{kicker}</div><div style="font-family:Inter,sans-serif;font-weight:700;font-size:33px;line-height:1.2;color:#F3E7D3;margin-top:4px">{text}</div></div>')
+    return f'      IN("#mp-{rid}", {t_on:.3f});\n      tl.to("#mp-{rid}", {{ opacity: 0, duration: 0.3 }}, {t_off:.3f});\n'
+def logo_badge(rid, at, files, t_on, t_off, dx=0, dy=60, h=54, text=None):
+    p = K(at) if isinstance(at, str) else at; x, y = scr(p, view_at(t_on + 0.01 + R0))
+    inner = "".join(f'<img src="{IMG}{f}" style="height:{h}px;width:auto;display:block"/>' for f in files) + (f'<span style="font-family:Inter,sans-serif;font-weight:800;font-size:30px;color:#1B140F">{text}</span>' if text else "")
+    OVL.append(f'<div id="mp-{rid}" style="position:absolute;left:{x + dx:.0f}px;top:{y + dy - 90:.0f}px;display:flex;gap:12px;align-items:center;padding:12px 18px;border-radius:14px;background:#FFFFFF;box-shadow:0 8px 24px rgba(0,0,0,0.5);opacity:0">{inner}</div>')
+    return f'      tl.fromTo("#mp-{rid}", {{ opacity: 0, scale: 0.6 }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }}, {t_on:.3f});\n      tl.to("#mp-{rid}", {{ opacity: 0, duration: 0.3 }}, {t_off:.3f});\n'
+NOTES = []
+def note(t_on, t_off, text): NOTES.append((t_on, t_off, text)); return ""
+R0 = 2.3                      # the map composition starts here (after the poster + a beat of the speaker's face)
+def r(t): return round(t - R0, 3)
+FACE = [(31.45, 32.35), (88.55, 89.35), (126.85, 127.75)]   # short face breaks inside the map run
 
-# 0 · cover (0–2.45): Ajmer Road hero, fully formed on frame 0 for the reel thumbnail
-cv = Map("cv", -66, 22, 140)
-cv.svg.append(f'<g style="stroke:rgba(243,231,211,0.05);stroke-width:{cv.u}">' + "".join(f'<path d="M{x} -120 V120"/>' for x in range(-150, 40, 10)) + "</g>")
+# ---------- 0 · poster (0–1.15), then the speaker for a beat (1.15–2.3) ----------
+cv = Map("cv", -62, 22, 140)
+cv.svg.append(f'<g style="stroke:rgba(243,231,211,0.05);stroke-width:{cv.u}">' + "".join(f'<path d="M{x} -120 V160"/>' for x in range(-150, 40, 10)) + "</g>")
+for t, p in MAJOR: cv.svg.append(f'<path d="{smooth(rdp(p, 0.3), False) if len(rdp(p, 0.3)) > 1 else ""}" style="fill:none;stroke:rgba(243,231,211,0.22);stroke-width:{2*cv.u}"/>')
+for t, p in WATER: cv.svg.append(f'<path d="{"M" + " L".join(f"{q[0]:.2f} {q[1]:.2f}" for q in rdp(p, 0.1)) + " Z"}" style="fill:rgba(96,165,214,0.5)"/>')
 cv.svg.append(f'<path d="{smooth(CORE)}" style="fill:rgba(243,231,211,0.10);stroke:rgba(243,231,211,0.3);stroke-width:{2*cv.u}"/>')
-for r in ("sring", "delhiNH", "tonk", "agra"): cv.svg.append(f'<path d="{smooth(ROADS[r], False)}" style="fill:none;stroke:rgba(243,231,211,0.22);stroke-width:{3*cv.u}"/>')
-cv.svg.append(f'<path d="{smooth(ROADS["nh48w"], False)}" style="fill:none;stroke:#F5B04A;stroke-width:{14*cv.u};stroke-linecap:round;filter:url(#cv-glow)"/>')
-cv.svg.append(f'<path d="{smooth([K("ajmer"), K("pushkar")], False)}" style="fill:none;stroke:#F5B04A;stroke-width:{8*cv.u};stroke-linecap:round;filter:url(#cv-glow)"/>')
-cvjs = ""
+for p in (NH48 or [ROADS["nh48w"]]): cv.svg.append(f'<path d="{"M" + " L".join(f"{q[0]:.2f} {q[1]:.2f}" for q in rdp(p, 0.1))}" style="fill:none;stroke:#F5B04A;stroke-width:{12*cv.u};stroke-linecap:round;filter:url(#cv-glow)"/>')
+cv.svg.append(f'<path d="{smooth([K("ajmer"), K("pushkar")], False)}" style="fill:none;stroke:#F5B04A;stroke-width:{7*cv.u};stroke-linecap:round;filter:url(#cv-glow)"/>')
 for k, (key, lab, dx, dy) in enumerate([("hirapura", "JAIPUR", -40, 40), ("bagru", "BAGRU", -60, 40), ("dudu", "DUDU", -40, 40), ("kishangarh", "KISHANGARH", -110, 40), ("ajmer", "AJMER", -30, 44), ("pushkar", "PUSHKAR", -60, -80)]):
     cv.dot(key, big=True)
     cv.html.append(f'<div class="tag amb" style="left:{min(870, max(48, cv.px(K(key))[0] + dx)):.0f}px;top:{cv.px(K(key))[1] + dy - 90:.0f}px;font-size:30px;padding:8px 16px">{lab}</div>')
 cv.html.append('<div style="position:absolute;left:70px;right:70px;top:250px;font-family:Inter,sans-serif;font-weight:900;font-size:170px;line-height:0.92;letter-spacing:-0.01em;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,0.6)">AJMER<br><span style="color:#F5B04A">ROAD</span></div>'
                '<div style="position:absolute;left:76px;right:70px;top:620px;font-family:Inter,sans-serif;font-weight:800;font-size:52px;line-height:1.1;color:#F3E7D3">Jaipur → Ajmer<br>every stretch, decoded</div>'
                '<div style="position:absolute;left:76px;top:1210px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,0.92);border:2px solid #E3A23B;font-family:Inter,sans-serif;font-weight:800;font-size:40px;color:#F3E7D3">NH-48 · 9 stretches · 2 new expressways</div>')
-cvjs += f'      tl.to("#cv-fg", {{ scale: 2.4, opacity: 0, duration: 0.6, ease: "power2.in", transformOrigin: "{cv.px(K("hirapura"))[0]:.0f}px {cv.px(K("hirapura"))[1]:.0f}px" }}, 2.0);\n'
-cv.render(0, 2.6, cvjs, note=None, keep=True, fade_in=False)
+cv.render(0, 1.15, "", note="Map data © OpenStreetMap contributors", keep=False, fade_in=False)
 
-# 1 · 200-ft bypass → Bhankrota: bus terminal, Westway Heights, PinkWest (2.45–23.4)
-s, e = 2.45, 23.4; m = Map("m1", -12, 5.6, 10).base(sring=False, nring=False)
-rN = line(m, "rn", ROADS["nh48w"][:4], width=10)
-js = DR(rN, 0.5, 1.4) + SHOW(m.tag("t0", "AJMER ROAD (NH-48)", km(26.880, 75.718), dx=-60, dy=60, amb=True), 0.9)
-js += P_("p0", "hirapura", rel(3.3, s), m, "200-ft Bypass", dx=24, dy=-70)
-js += P_("p1", "hirapura", rel(4.9, s), m, None) + SHOW(m.tag("p1t", "Hirapura bus terminal", "hirapura", dx=24, dy=10, size=28), rel(4.95, s))
-js += P_("p2", "keshopura", rel(6.5, s), m, "Keshopura", dx=-10, dy=-80)
-js += P_("p3", "westway", rel(7.7, s), m, "Westway Heights", dx=24, dy=-80) + OFF("#m1-t0", rel(7.5, s))
-js += P_("p4", "bhankrota", rel(8.7, s), m, "Bhankrota", dx=-30, dy=-80, right=True)
-js += ON1(badge(m, "b1", "vrb", "VRB Golden Tower · upcoming", dx=-300, dy=-150, size=28), rel(12.2, s))
-js += news(m, "n1", "Construction World", "", "Manglam Group Launches Rs 1,000 Cr PinkWest in West Jaipur", rel(14.6, s), rel(17.0, s))
-js += popup(m, "q0", "freeway", "hirapura", rel(5.0, s), rel(12.1, s), "Bus terminal", box=BR)
-js += popup(m, "pv", None, "vrb", rel(12.3, s), rel(16.9, s), "VRB Golden Tower", w=330, h=590, img="vrb.jpg", sub="Developer render · supplied", box=(700, 800))
-js += popup(m, "pp", None, "pinkwest", rel(13.9, s), rel(20.9, s), "Manglam PinkWest", w=430, h=430, img="pinkwest.jpg", sub="Developer render · supplied", box=(48, 980))
-js += popups(m, [("q2", "freeway", "hirapura", rel(17.0, s), "Transport anchor", BR), ("q3", "market", "pinkwest", rel(21.2, s), "Shops", BL),
-                 ("q4", "office", "vrb", rel(21.8, s), "Offices", BR), ("q5", "dining", "westway", rel(22.6, s), "Services", BL)], rel(23.4, s) - 0.1)
-go(m, s, e, js, focus="hirapura", note="Schematic · positions approx. (OpenStreetMap)")
-
-# 2 · the 200-ft bypass junction goes signal-free (23.4–31.25)
-s, e = 23.4, 31.25
-J = K("hirapura"); m = Map("m2", J[0], J[1] + 0.2, 4.2).base(sring=False, nring=False, core=False, wall=False)
-ew = [km(26.8925, 75.700), J, km(26.8840, 75.775)]; ns = [km(26.950, 75.745), J, km(26.830, 75.725)]
-m.svg.append(f'<path d="{smooth(ew, False)}" style="fill:none;stroke:rgba(243,231,211,0.35);stroke-width:{26*m.u};stroke-linecap:round"/><path d="{smooth(ns, False)}" style="fill:none;stroke:rgba(243,231,211,0.35);stroke-width:{26*m.u};stroke-linecap:round"/>')
-f1 = line(m, "f1", [km(26.8915, 75.717), km(26.8905, 75.733), km(26.8880, 75.744), km(26.8860, 75.758)], color="#F5B04A", width=12)
-f2 = line(m, "f2", [km(26.8870, 75.757), km(26.8890, 75.745), km(26.8912, 75.732), km(26.8922, 75.716)], color="#F5B04A", width=12)
-u1 = line(m, "u1", [km(26.912, 75.7425), km(26.8895, 75.7378), km(26.866, 75.733)], color="#7FC8F8", width=10)
-u2 = line(m, "u2", [km(26.866, 75.7355), km(26.8888, 75.7400), km(26.911, 75.7450)], color="#7FC8F8", width=10)
-js = SHOW(m.tag("j0", "200-ft Bypass junction", J, dx=30, dy=-150, amb=True), 0.3)
-js += SHOW(m.tag("j1", "Ajmer Rd", km(26.8925, 75.704), dx=0, dy=-70, size=28), 0.5) + SHOW(m.tag("j2", "Delhi / Mansarovar", km(26.935, 75.743), dx=20, dy=0, size=28), 0.5)
-js += DR(f1, rel(26.0, s), 0.8) + DR(f2, rel(26.3, s), 0.8) + SHOW(m.tag("j3", "▲ 2 flyovers", km(26.8935, 75.722), dx=0, dy=-80, size=30, amb=True), rel(26.1, s))
-js += DR(u1, rel(26.9, s), 0.8) + DR(u2, rel(27.2, s), 0.8) + SHOW(m.tag("j4", "▼ 2 underpasses", km(26.870, 75.733), dx=30, dy=-60, size=30), rel(27.0, s))
-js += news(m, "n1", "Construction World", "Mar 2026", "NHAI Awards Contract for Flyovers and Underpasses at Jaipur Junction", rel(27.8, s), rel(31.2, s))
-js += SHOW(m.chip("c1", "Awarded · NHAI (EPC)", "₹130.65 cr · signal-free junction on NH-48"), rel(28.6, s))
-js += popups(m, [("q0", "avenue", J, rel(24.7, s), "Flyovers", BL)], rel(27.7, s))
-go(m, s, e, js, focus="hirapura", note="Schematic layout · reported scope")
-
-# 3 · Mahapura and the Southern Ring Road to Tonk Rd and Bagrana (31.25–39.5)
-s, e = 31.25, 39.5; m = Map("m3", -2, 12, 40).base(sring=False, nring=False)
-rS = line(m, "rs", ROADS["sring"], width=10)
-js = P_("p0", "mahapura", rel(32.4, s), m, "Mahapura", dx=-30, dy=-80, right=True)
-js += DR(rS, rel(34.1, s), 2.6) + SHOW(m.tag("t0", "SOUTHERN RING ROAD", km(26.745, 75.850), dx=-180, dy=40, amb=True), rel(34.6, s))
-js += P_("p1", km(26.765, 75.800), rel(36.9, s), m, "Tonk Rd", dx=20, dy=10, amb=False)
-js += P_("p2", "bagrana", rel(37.8, s), m, "Bagrana · Agra Rd", dx=-40, dy=40, right=True)
-js += popups(m, [("q0", "cityhwy", "mahapura", rel(32.6, s), "Ring Road link", TR), ("q1", "hwysun", "bagrana", rel(37.9, s), "Agra Road", BL)], rel(39.4, s))
-go(m, s, e, js, focus="mahapura")
-
-# 4 · Jaipur–Bandikui link to the Delhi–Mumbai Expressway (39.5–47.5)
-s, e = 39.5, 47.5; m = Map("m4", 32, -3, 125).base(sring=True, nring=False, wall=False)
-for r in ("nh48w", "delhiNH"): m.svg.append(f'<path d="{smooth(ROADS[r], False)}" style="fill:none;stroke:rgba(243,231,211,0.30);stroke-width:{3*m.u}"/>')
-rB = line(m, "rb", ROADS["bdk"], width=10); rE = line(m, "re", ROADS["dme"], color="#7FC8F8", width=10)
-js = SHOW(m.tag("t9", "Jaipur", "hawa", dx=-140, dy=-30, size=30), 0.2) + ON1(pin(m, "pb", "bagrana"), 0.3)
-js += DR(rB, rel(40.4, s), 1.4) + SHOW(m.tag("t0", "Jaipur–Bandikui link", km(26.97, 76.25), dx=-120, dy=50, amb=True), rel(40.8, s))
-js += P_("p1", "bandikui", rel(41.6, s), m, "Bandikui", dx=24, dy=10)
-js += DR(rE, rel(42.4, s), 1.4) + SHOW(m.tag("t1", "Delhi–Mumbai Expressway", km(27.45, 76.75), dx=-330, dy=-40, amb=True), rel(42.8, s))
-js += f'      tl.to("#m4-rn", {{ opacity: 1, duration: 0.4 }}, {rel(44.6, s)});\n'
-m.svg.append(f'<path id="m4-rn" d="{smooth(ROADS["nh48w"][:8], False)}" style="fill:none;stroke:#F5B04A;stroke-width:{9*m.u};stroke-linecap:round;opacity:0;filter:url(#m4-glow)"/>')
-js += SHOW(m.tag("t2", "Ajmer Rd", K("bagru"), dx=-60, dy=30, amb=True), rel(44.7, s))
-js += news(m, "n1", "Swarajya", "Jul 2025", "Bagrana–Bandikui link of Delhi–Mumbai Expressway opens to reduce Jaipur–Delhi travel time to 3.5 hours", rel(44.9, s), rel(47.4, s))
-js += popups(m, [("q0", "hwypov", "bandikui", rel(41.7, s), "Expressway link", BR)], rel(44.8, s))
-go(m, s, e, js, focus="bagrana")
-
-# 5 · Chitroli and the proposed Northern Ring Road arc (47.5–59.25)
-s, e = 47.5, 59.25; m = Map("m5", -3, -6, 62).base(sring=True, nring=False)
-js = P_("p0", "chitroli", rel(48.1, s), m, "Chitroli", dx=-30, dy=-80, right=True) + P_("p1", "bagru", rel(49.2, s), m, "Bagru", dx=-30, dy=20, right=True, amb=False)
-js += DR(line(m, "nr", ROADS["nring"], color="#B8E07A", width=7), rel(51.8, s), 6.2)
-js += SHOW(m.tag("t0", "NORTHERN RING ROAD · proposed", km(27.05, 75.60), dx=-120, dy=-90, amb=True, size=30), rel(52.2, s))
+# ---------- the map run (2.3 → 147.4) ----------
+js = ""
+# overview: the whole road draws, key towns appear
+js += route("nh", NH48 or [ROADS["nh48w"]], "hirapura", r(2.45), 1.6, width=7, halo=20)
+for k, (key, lab, t, dx, dy, right) in enumerate([("hirapura", "Jaipur", 2.6, 16, -60, True), ("bagru", "Bagru", 2.9, 16, 10, False), ("dudu", "Dudu", 3.1, 16, 10, False),
+                                                   ("kishangarh", "Kishangarh", 3.3, 16, 10, False), ("ajmer", "Ajmer", 3.5, 16, 10, False), ("pushkar", "Pushkar", 3.6, 16, -60, False)]):
+    js += label(f"o{k}", key, lab, r(t), tier="major", dx=dx, dy=dy, right=right, size=28)
+js += label("sbl", km(26.95, 75.08), "Sambhar Lake", r(3.7), tier="major", amb=False, size=26, dx=16, dy=-60)
+# stretch 1 (zoom in)
+S1 = (-12, 5.4, 10); cam(3.8, S1, 1.1)
+js += label("p1", "hirapura", "Hirapura bus terminal", r(4.9), until=r(30.4), dx=16, dy=10, size=28)
+js += label("p2", "keshopura", "Keshopura", r(6.5), until=r(30.4), dx=16, dy=-70)
+js += label("p3", "westway", "Westway Heights", r(7.7), until=r(30.4), dx=16, dy=-80)
+js += label("p4", "bhankrota", "Bhankrota", r(8.7), until=r(30.4), dx=16, dy=-80, right=True)
+js += label("p5", "vrb", "VRB Golden Tower · upcoming", r(12.2), until=r(23.3), dx=16, dy=20, size=26, amb=False)
+js += label("p6", "pinkwest", "Manglam PinkWest", r(13.8), until=r(23.3), dx=16, dy=-20, size=26, amb=False)
+js += popup("q0", None, "hirapura", r(5.0), r(12.1), "Hirapura bus terminal", box=BR, img="busterminal.jpg", sub="Photo", w=400, h=300) if os.path.exists(f"{P}/assets/img/busterminal.jpg") else popup("q0", "freeway", "hirapura", r(5.0), r(12.1), "Bus terminal", box=BR)
+js += popup("pv", None, "vrb", r(12.3), r(16.9), "VRB Golden Tower", w=330, h=590, img="vrb.jpg", sub="Developer render · supplied", box=(700, 800))
+js += popup("pp", None, "pinkwest", r(13.9), r(20.9), "Manglam PinkWest", w=430, h=430, img="pinkwest.jpg", sub="Developer render · supplied", box=(48, 980))
+js += news("n1", "Construction World", "", "Manglam Group Launches Rs 1,000 Cr PinkWest in West Jaipur", r(14.6), r(17.0))
+js += popups([("q2", "freeway", "hirapura", r(17.0), "Transport anchor", BR), ("q3", "market", "pinkwest", r(21.2), "Shops", BL),
+              ("q4", "office", "vrb", r(21.8), "Offices", BR), ("q5", "dining", "westway", r(22.6), "Services", BL)], r(23.3))
+# 200-ft bypass junction (zoom further in)
+J = (K("hirapura")[0], K("hirapura")[1] + 0.2, 3.2); cam(23.4, J, 0.9)
+for k, (pts, col, t) in enumerate([([km(26.8915, 75.717), km(26.8905, 75.733), km(26.8880, 75.744), km(26.8860, 75.758)], "#F5B04A", 26.0), ([km(26.8870, 75.757), km(26.8890, 75.745), km(26.8912, 75.732), km(26.8922, 75.716)], "#F5B04A", 26.3),
+                                    ([km(26.912, 75.7425), km(26.8895, 75.7378), km(26.866, 75.733)], "#7FC8F8", 26.9), ([km(26.866, 75.7355), km(26.8888, 75.7400), km(26.911, 75.7450)], "#7FC8F8", 27.2)]):
+    SVG.append(f'<path id="mp-fx{k}" class="dr" pathLength="1" d="{pd(pts)}" style="fill:none;stroke:{col};stroke-width:9;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
+    js += f'      tl.fromTo("#mp-fx{k}", {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: 0.8, ease: "power2.inOut" }}, {r(t)});\n      tl.to("#mp-fx{k}", {{ opacity: 0, duration: 0.4 }}, {r(30.4)});\n'
+js += label("j3", km(26.8935, 75.722), "▲ 2 flyovers", r(26.1), until=r(30.4), dx=0, dy=-70, size=30)
+js += label("j4", km(26.870, 75.733), "▼ 2 underpasses", r(27.0), until=r(30.4), dx=16, dy=-60, size=30, amb=False)
+bypass_img = os.path.exists(f"{P}/assets/img/bypass.jpg")
+js += popup("qj", None if bypass_img else "avenue", "hirapura", r(24.4), r(27.7), "200-ft Bypass" if bypass_img else "Flyovers", box=BL, img="bypass.jpg" if bypass_img else None, sub="Photo" if bypass_img else None, w=440 if bypass_img else 400, h=300 if bypass_img else 260)
+js += news("n2", "Construction World", "Mar 2026", "NHAI Awards Contract for Flyovers and Underpasses at Jaipur Junction", r(27.8), r(31.2))
+js += chip("c2", "Awarded · NHAI (EPC)", "₹130.65 cr · signal-free junction on NH-48", r(28.6), r(31.2))
+# → overview → Mahapura + Southern Ring Road (highlighted while he talks about it)
+cam(30.6, OVR, 0.85)
+M = (-4, 11, 42); cam(32.35, M, 1.1)
+js += label("m0", "mahapura", "Mahapura", r(32.4), tier="major", until=r(47.0), dx=16, dy=-70, right=True)
+js += ring("mr", "mahapura", 1.4, r(32.4), until=r(39.4))
+js += route("sr", SRING or [ROADS["sring"]], "mahapura", r(34.1), 3.6, color="#F5B04A", width=6, halo=20)
+js += label("m1", "SRL", "SOUTHERN RING ROAD · existing", r(34.6), tier="minor", until=r(47.0), dx=16, dy=40, size=28) if False else ""
+js += label("m1", km(26.745, 75.850), "SOUTHERN RING ROAD · existing", r(34.6), until=r(39.4), dx=-180, dy=40, size=28)
+js += label("m2", km(26.765, 75.800), "Tonk Rd", r(36.9), until=r(39.4), dx=16, dy=10, amb=False)
+js += label("m3", "bagrana", "Bagrana · Agra Rd", r(37.8), tier="major", until=r(47.0), dx=16, dy=10)
+js += popups([("qm0", "cityhwy", "mahapura", r(33.6), "Ring Road link", TR), ("qm1", "hwysun", "bagrana", r(37.9), "Agra Road", BL)], r(39.4))
+# → zoom out east: the Bandikui link and the Delhi–Mumbai Expressway
+E = (30, -5, 130); cam(39.4, E, 1.1)
+js += route("bk", BDK or [ROADS["bdk"]], "bagrana", r(40.4), 1.4, color="#F5B04A", width=6, halo=18)
+js += label("e0", km(26.97, 76.25), "Jaipur–Bandikui link", r(40.8), until=r(47.0), dx=-120, dy=40, size=28)
+js += label("e1", "bandikui", "Bandikui", r(41.6), tier="major", until=r(47.0), dx=16, dy=10)
+js += route("dm", DME or [ROADS["dme"]], "bandikui", r(42.4), 1.4, color="#7FC8F8", width=6, halo=18)
+js += label("e2", km(27.45, 76.75), "Delhi–Mumbai Expressway", r(42.8), until=r(47.0), dx=-330, dy=-40, size=28)
+js += route_fx("nh", len(NH48 or [1]), r(44.4), "pulse")
+js += news("n3", "Swarajya", "Jul 2025", "Bagrana–Bandikui link of Delhi–Mumbai Expressway opens to reduce Jaipur–Delhi travel time to 3.5 hours", r(44.9), r(47.3))
+js += popup("qe", "hwypov", "bandikui", r(41.7), r(44.8), "Expressway link", box=BR)
+# → overview → Chitroli + Northern Ring Road (proposed), highlighted while he talks about it
+cam(47.1, OVR, 0.8)
+N = (-6, -4, 64); cam(47.9, N, 1.0)
+js += label("n0", "chitroli", "Chitroli", r(48.1), tier="major", until=r(66.0), dx=16, dy=-70, right=True)
+js += ring("nr0", "chitroli", 1.4, r(48.1), color="#B8E07A", until=r(59.2))
+js += route_fx("sr", len(SRING or [1]), r(48.0), 0.35)
+js += sch("nring", ROADS["nring"], r(51.8), 6.2)
+js += label("n1", km(27.05, 75.60), "NORTHERN RING ROAD · proposed", r(52.2), until=r(59.2), dx=-120, dy=-90, size=28)
 for k, (key, lab, t, dx, dy) in enumerate([("kalwar", "Kalwar Rd", 55.1, -40, 20), (km(27.110, 75.700), "Sikar Rd", 56.2, -30, -70), (km(27.135, 75.830), "Delhi Rd", 57.1, -10, -70), (km(27.020, 75.985), "Agra Rd", 58.0, -160, 20)]):
-    js += P_(f"r{k}", key, rel(t, s), m, lab, dx=dx, dy=dy, amb=False)
-js += news(m, "n1", "Patrika", "Dec 2025", "Jaipur Northern Ring Road project: land measurement and survey for 99 km ring begins", rel(50.3, s), rel(53.6, s))
-js += popups(m, [("q0", "build", "chitroli", rel(48.3, s), "Proposed link", TR)], rel(50.2, s))
-go(m, s, e, js, focus="chitroli", note="Schematic · proposed alignment as reported")
-
-# 6 · Mahapura vs Chitroli (59.25–66.85)
-s, e = 59.25, 66.85; m = Map("m6", -20.5, 8.2, 24).base(sring=True, nring=False)
-js = DR(line(m, "nr", ROADS["nring"][:4], color="#B8E07A", width=7), 0.1, 1.0)
-cM = m.circle("cm", "mahapura", 1.6, "rgba(245,176,74,0.25)", "#F5B04A"); cC = m.circle("cc", "chitroli", 1.6, "rgba(160,220,120,0.25)", "#B8E07A")
-js += POP(cM, rel(59.4, s)) + SHOW(m.tag("t0", "Mahapura", "mahapura", dx=40, dy=-60, amb=True), rel(59.4, s))
-js += POP(cC, rel(60.0, s)) + SHOW(m.tag("t1", "Chitroli", "chitroli", dx=-60, dy=60, amb=True), rel(60.0, s))
-js += SHOW(m.chip("c1", "Mahapura · existing", "Southern Ring Road · serves the southern corridor", y=430), rel(62.3, s))
-js += SHOW(m.chip("c2", "Chitroli · proposed", "Northern Ring Road · Ajmer Road end (as reported)", y=1180), rel(64.7, s))
-go(m, s, e, js, focus=km(26.85, 75.63), note="Schematic · two separate locations")
-
-# 7 · Mahindra World City · Kalwara (66.85–77.6)
-s, e = 66.85, 77.6; m = Map("m7", -19.5, 14, 20).base(sring=True, nring=False)
-cW = m.circle("cw", "mwc", 2.4, "rgba(127,200,248,0.22)", "#7FC8F8")
-js = POP(cW, rel(68.4, s)) + P_("p0", "mwc", rel(68.4, s), m, "Mahindra World City", dx=30, dy=-80)
-js += P_("p1", "kalwara", rel(71.0, s), m, "Kalwara", dx=-90, dy=10, right=True, amb=False)
-js += ON1(badge(m, "b1", "mwc", "Infosys", dx=-330, dy=170), rel(72.5, s)) + ON1(badge(m, "b2", "mwc", "Deutsche Bank", dx=60, dy=170), rel(73.3, s))
-js += SHOW(m.chip("c1", "Employment anchor", "SEZ · Infosys and Deutsche Bank were its first anchor clients"), rel(75.1, s))
-js += popups(m, [("q0", "corporate", "mwc", rel(68.6, s), "IT & business park", TL), ("q1", "coworkers", "mwc", rel(74.3, s), "Jobs", TR)], rel(77.5, s))
-go(m, s, e, js, focus="mwc")
-
-# 8 · Dehmi Kalan · Manipal University: what to study around a campus (77.6–88.4)
-s, e = 77.6, 88.4; m = Map("m8", -25, 8, 18).base(sring=True, nring=False)
-cU = m.circle("cu", "manipal", 1.5, "rgba(127,200,248,0.22)", "#7FC8F8")
-js = P_("p0", "manipal", rel(78.0, s), m, "Dehmi Kalan", dx=30, dy=-80) + POP(cU, rel(79.5, s)) + ON1(badge(m, "b1", "manipal", "Manipal University Jaipur", dx=-200, dy=110), rel(79.5, s))
+    js += label(f"n{k+2}", key, lab, r(t), until=r(59.2), dx=dx, dy=dy, amb=False, size=28)
+js += news("n4", "Patrika", "Dec 2025", "Jaipur Northern Ring Road project: land measurement and survey for 99 km ring begins", r(50.3), r(53.6))
+js += popup("qn", "build", "chitroli", r(49.0), r(50.2), "Proposed link", box=TR)
+# Mahapura (southern) vs Chitroli (northern) — each highlighted as it is named
+C = (-19, 7.6, 26); cam(59.25, C, 0.9)
+js += route_fx("sr", len(SRING or [1]), r(59.3), 1) + route_fx("sr", len(SRING or [1]), r(59.4), "pulse") + ring("cm", "mahapura", 1.3, r(59.4), until=r(66.0))
+js += f'      tl.to("#mp-nring", {{ opacity: 0.35, duration: 0.3 }}, {r(59.3)});\n      tl.to("#mp-nring", {{ opacity: 1, duration: 0.3 }}, {r(60.0)});\n'
+js += label("cm2", "mahapura", "Mahapura · southern", r(59.4), until=r(66.0), dx=16, dy=-80) + label("cc2", "chitroli", "Chitroli · northern", r(60.0), until=r(66.0), dx=16, dy=40, right=True)
+js += ring("cc", "chitroli", 1.3, r(60.0), color="#B8E07A", until=r(66.0))
+js += chip("c6a", "Mahapura · existing", "Southern Ring Road · serves the southern corridor", r(62.0), r(66.0), y=1205)
+js += route_fx("sr", len(SRING or [1]), r(62.3), "pulse")
+js += f'      tl.fromTo("#mp-nring", {{ filter: "brightness(1)" }}, {{ filter: "brightness(1.9)", duration: 0.4, yoyo: true, repeat: 3, immediateRender: false }}, {r(64.3)});\n'
+js += chip("c6b", "Chitroli · proposed", "Northern Ring Road · its Ajmer Road end (as reported)", r(64.3), r(66.0), y=360)
+# → overview → Mahindra World City
+cam(66.0, OVR, 0.8)
+W_ = (-19.5, 14, 20); cam(67.5, W_, 0.9)
+js += f'      tl.to("#mp-nring", {{ opacity: 0.35, duration: 0.4 }}, {r(66.0)});\n'
+js += ring("wr", "mwc", 2.2, r(68.4), color="#7FC8F8", until=r(77.0))
+js += label("w0", "mwc", "Mahindra World City", r(68.4), tier="major", until=r(77.0), dx=16, dy=-80)
+js += label("w1", "kalwara", "Kalwara", r(71.0), until=r(77.0), dx=-90, dy=10, right=True, amb=False)
+ldb = os.path.exists(f"{P}/assets/img/logo_db.png"); lin = os.path.exists(f"{P}/assets/img/logo_infosys.png")
+js += logo_badge("wl", "mwc", ["logo_infosys.png"], r(72.5), r(77.0), dx=-330, dy=150, h=56)
+js += chip("c7", "Employment anchor", "SEZ · Infosys and Deutsche Bank were its first anchor clients", r(75.1), r(77.0))
+js += popups([("qw0", "corporate", "mwc", r(68.6), "IT & business park", TL), ("qw1", None, "mwc", r(73.3), "Deutsche Bank", TR, "deutsche.jpg", "Image supplied", (420, 280)), ("qw2", "coworkers", "mwc", r(75.3), "Jobs", TL)], r(77.0))
+# → overview → Dehmi Kalan · Manipal University
+cam(77.0, OVR, 0.7)
+U = (-26, 9, 14); cam(77.7, U, 0.9)
+js += ring("ur", "manipal", 1.2, r(79.5), color="#7FC8F8", until=r(88.0))
+js += label("u0", "manipal", "Manipal University · Dehmi Kalan", r(78.0), tier="major", until=r(88.0), dx=16, dy=-80, size=28)
 for k, (txt, t) in enumerate([("◆ Student accommodation", 81.6), ("◆ Rental housing", 82.8), ("◆ Food outlets", 83.8), ("◆ Everyday retail", 85.5)]):
-    m.html.append(f'<div class="tag amb" id="m8-w{k}" style="left:60px;top:{1180 + k * 62 - 90}px;font-size:30px;padding:10px 18px">{txt}</div>')
-    js += SHOW(f"#m8-w{k}", rel(t, s))
-js += popups(m, [("q0", "campus", "manipal", rel(79.6, s), "Campus", TL), ("q1", "students", "manipal", rel(81.6, s), "Student accommodation", TL),
-                 ("q2", "rental", "manipal", rel(82.8, s), "Rental housing", TR), ("q3", "dining", "manipal", rel(83.8, s), "Food outlets", TL),
-                 ("q4", "market", "manipal", rel(85.5, s), "Everyday retail", TR)], rel(88.3, s))
-go(m, s, e, js, focus="manipal")
-
-# 9 · Bagru industrial belt: block-printing heritage (88.4–97.5)
-s, e = 88.4, 97.5; m = Map("m9", -30, 10, 26).base(sring=False, nring=False, wall=False)
-rN = line(m, "rn", ROADS["nh48w"][3:8], width=9)
-cB = m.circle("cb", "bagru", 2.2, "rgba(232,102,74,0.22)", "#E8664A")
-js = DR(rN, 0.3, 1.2) + POP(cB, rel(89.6, s)) + P_("p0", "bagru", rel(89.6, s), m, "Bagru Industrial Belt", dx=30, dy=-80)
-js += popups(m, [("q0", "factory", "bagru", rel(90.2, s), "Industrial belt", TR), ("q1", None, "bagru", rel(91.9, s), "Bagru block printing", TL, "block.jpg", "Photo · Anildiggiwal, CC0")], rel(97.4, s), w=470, h=320)
-js += SHOW(m.chip("c1", "Heritage craft", "Hand block printing on textiles · Bagru"), rel(93.7, s))
-go(m, s, e, js, focus="bagru")
-
-# 10 · Mahla, Mokhampura, Dudu; roads to Phulera, Narena, Sambhar; what changes here (97.5–116.4)
-s, e = 97.5, 116.4; m = Map("m10", -62, 14, 62).base(sring=False, nring=False, wall=False, core=False)
-rN = line(m, "rn", ROADS["nh48w"][5:10], width=9)
-js = DR(rN, 0.2, 1.0)
-for k, (key, lab, t, dx, dy) in enumerate([("mahla", "Mahla", 98.5, -20, -80), ("mokhampura", "Mokhampura", 99.2, -40, 30), ("dudu", "Dudu", 100.1, 30, 0)]):
-    js += P_(f"p{k}", key, rel(t, s), m, lab, dx=dx, dy=dy)
-for k, (r, key, lab, t, dx, dy) in enumerate([("phulera", "phulera", "Phulera", 102.7, 24, -40), ("narena", "narena", "Narena", 103.6, -30, 30), ("sambhar", "sambhar", "Sambhar", 104.5, -30, -60)]):
-    js += DR(line(m, f"l{k}", ROADS[r], color="#B8E07A", width=6), rel(t, s) - 0.3, 0.7) + P_(f"s{k}", key, rel(t, s), m, lab, dx=dx, dy=dy, amb=False, right=dx < 0)
+    OVL.append(f'<div class="tag amb" id="mp-uw{k}" style="left:60px;top:{1150 + k * 62 - 90}px;font-size:30px;padding:10px 18px;opacity:0">{txt}</div>')
+    js += f'      IN("#mp-uw{k}", {r(t)});\n      tl.to("#mp-uw{k}", {{ opacity: 0, duration: 0.3 }}, {r(88.0)});\n'
+muj = os.path.exists(f"{P}/assets/img/manipal.jpg")
+js += popups([("qu0", None if muj else "campus", "manipal", r(79.6), "Manipal University Jaipur" if muj else "Campus", TL) + (("manipal.jpg", "Image supplied", (470, 345)) if muj else ()),
+              ("qu1", "students", "manipal", r(81.6), "Student accommodation", TR), ("qu2", "rental", "manipal", r(82.8), "Rental housing", TL),
+              ("qu3", "dining", "manipal", r(83.8), "Food outlets", TR), ("qu4", "market", "manipal", r(85.5), "Everyday retail", TL)], r(88.0))
+# → overview (face beat) → Bagru
+cam(88.0, OVR, 0.55)
+B = (K("bagru")[0], K("bagru")[1], 22); cam(89.35, B, 0.9)
+js += ring("br", "bagru", 2.0, r(89.6), color="#E8664A", until=r(97.0))
+js += label("b0", "bagru", "Bagru industrial belt", r(89.6), tier="major", until=r(97.0), dx=16, dy=-80)
+js += popups([("qb0", "factory", "bagru", r(90.4), "Industrial belt", TR), ("qb1", None, "bagru", r(91.9), "Bagru block printing", TL, "block.jpg", "Photo · Anildiggiwal, CC0", (470, 320))], r(97.0))
+js += chip("c9", "Heritage craft", "Hand block printing on textiles · Bagru", r(93.7), r(97.0))
+# → overview → Mahla … Dudu, roads to Phulera, Narena, Sambhar (the lake)
+cam(97.0, OVR, 0.7)
+D = (-60, 12, 62); cam(97.7, D, 0.9)
+for k, (key, lab, t, dx, dy) in enumerate([("mahla", "Mahla", 98.5, 16, -70), ("mokhampura", "Mokhampura", 99.2, 16, 20), ("dudu", "Dudu", 100.1, 16, 10)]):
+    js += label(f"d{k}", key, lab, r(t), tier="major" if key == "dudu" else "minor", until=None if key == "dudu" else r(116.0), dx=dx, dy=dy)
+for k, (rr, key, lab, t, dx, dy) in enumerate([("phulera", "phulera", "Phulera", 102.7, 16, -40), ("narena", "narena", "Narena", 103.6, 16, 20), ("sambhar", "sambhar", "Sambhar", 104.5, 16, -60)]):
+    js += sch(f"dr{k}", ROADS[rr], r(t) - 0.3, 0.7, color="#B8E07A", width=5, dash="1 0") + label(f"ds{k}", key, lab, r(t), until=r(116.0), dx=dx, dy=dy, amb=False)
+js += popup("qph", None, "phulera", r(102.8), r(104.5), "Dry port · Phulera", box=TR, img="dryport.jpg", sub="Image supplied", w=420, h=360)
+js += f'      tl.fromTo("#mp-Lsbl .tag", {{ scale: 1 }}, {{ scale: 1.25, duration: 0.4, yoyo: true, repeat: 1 }}, {r(104.6)});\n'
+fl = os.path.exists(f"{P}/assets/img/flamingos.jpg")
+js += popup("qd9", None if fl else "flamingos", km(26.93, 75.10), r(104.6), r(108.8), "Sambhar Lake · flamingos", box=BL, img="flamingos.jpg" if fl else None, sub="Photo" if fl else "Representative footage", w=470, h=320)
 for k, (txt, t) in enumerate([("◆ Warehouses", 108.9), ("◆ Highway services", 109.7), ("◆ Larger land parcels", 111.6), ("◆ Tourism-linked businesses", 112.9)]):
-    m.html.append(f'<div class="tag amb" id="m10-w{k}" style="left:48px;top:{1150 + k * 62 - 90}px;font-size:30px;padding:10px 18px">{txt}</div>')
-    js += SHOW(f"#m10-w{k}", rel(t, s))
-js += popups(m, [("q0", "trucks", "dudu", rel(108.9, s), "Warehouses & logistics", TR), ("q1", "hwypov", "dudu", rel(109.7, s), "Highway services", TL),
-                 ("q2", "fields", "dudu", rel(111.6, s), "Larger land parcels", TR), ("q3", "rental", "sambhar", rel(112.9, s), "Tourism-linked stays", TL)], rel(116.3, s))
-go(m, s, e, js, focus="dudu", note="Schematic · some positions approximate")
-
-# 11 · Bandar Sindri → Kishangarh (marble, airport) → Ajmer, Pushkar (116.4–126.6)
-s, e = 116.4, 126.6; m = Map("m11", -104, 42, 56).base(sring=False, nring=False, wall=False, core=False)
-rN = line(m, "rn", ROADS["nh48w"][9:], width=9); rP = line(m, "rp", [K("ajmer"), K("pushkar")], width=7)
-js = DR(rN, 0.2, 1.2)
-js += P_("p0", "bandarsindri", rel(116.8, s), m, "Bandar Sindri", dx=24, dy=-70) + P_("p1", "kishangarh", rel(118.1, s), m, "Kishangarh", dx=24, dy=-10)
-js += P_("p2", "kgairport", rel(120.8, s), m, "✈ Kishangarh Airport", dx=-30, dy=-80, right=True, amb=False)
-js += P_("p3", "ajmer", rel(123.5, s), m, "Ajmer", dx=24, dy=0) + DR(rP, rel(124.0, s), 0.6) + P_("p4", "pushkar", rel(124.2, s), m, "Pushkar", dx=-30, dy=20, right=True)
-js += SHOW(m.chip("c1", "Kishangarh", "Known as a marble trading &amp; processing hub"), rel(119.4, s))
-js += popups(m, [("q0", "marble", "kishangarh", rel(119.1, s), "Marble trade", TR), ("q1", "camels", "pushkar", rel(124.4, s), "Tourism · Pushkar", TL)], rel(126.5, s))
-go(m, s, e, js, focus="kishangarh")
-
-# 12 · proposed Kotputli–Kishangarh expressway: through traffic around Jaipur; interchanges, logistics (126.6–147.4)
-s, e = 126.6, 147.4; m = Map("m12", -28, -22, 175).base(sring=True, nring=False, wall=False)
-for r in ("nh48w", "delhiNH"): m.svg.append(f'<path d="{smooth(ROADS[r], False)}" style="fill:none;stroke:rgba(243,231,211,0.40);stroke-width:{4*m.u}"/>')
-js = SHOW(m.tag("t9", "Jaipur", "hawa", dx=20, dy=-20, size=30), 0.2) + P_("p0", "kotputli", rel(128.0, s), m, "Kotputli", dx=24, dy=-20) + P_("p1", "kishangarh", rel(128.7, s), m, "Kishangarh", dx=-30, dy=20, right=True)
-js += DR(line(m, "kk", ROADS["kk"], color="#F5B04A", width=9), rel(129.3, s), 2.4)
-js += SHOW(m.tag("t0", "Kotputli–Kishangarh Expressway · proposed", km(27.20, 75.45), dx=-330, dy=-110, amb=True, size=28), rel(129.6, s))
-js += SHOW(m.chip("c1", "Proposed · greenfield (as reported)", "≈181 km · ≈₹6,906 cr · bypasses Jaipur to the west", y=360), rel(130.4, s))
-m.html[-1] = m.html[-1].replace("right:64px", "right:330px")
-js += f'      tl.to("#m12-c1", {{ opacity: 0, duration: 0.3 }}, {rel(137.9, s)});\n'
-tr = line(m, "tr", [km(27.75, 76.25), K("kotputli"), km(27.45, 75.85), km(27.15, 75.55), K("jobner"), km(26.80, 75.15), K("kishangarh"), K("ajmer")], color="#7FC8F8", width=5)
-js += f'      tl.set("#m12-tr", {{ strokeDasharray: "0.04 0.04", opacity: 0 }}, 0);\n      tl.to("#m12-tr", {{ opacity: 1, duration: 0.4 }}, {rel(131.4, s)});\n      tl.fromTo("#m12-tr", {{ strokeDashoffset: 0.4 }}, {{ strokeDashoffset: 0, duration: 3.5, ease: "none", repeat: 1 }}, {rel(131.4, s)});\n'
-js += SHOW(m.tag("t1", "Delhi ↔ Ajmer through traffic", km(27.55, 75.95), dx=20, dy=10, size=28), rel(131.5, s))
-js += f'      tl.to(["#m12-rd", "#m12-rdt"], {{ opacity: 1, duration: 0.4 }}, {rel(135.4, s)});\n'
-m.html.append(f'<div class="tag" id="m12-rdt" style="left:{m.px(K("hawa"))[0] - 470:.0f}px;top:{m.px(K("hawa"))[1] + 60 - 90:.0f}px;font-size:28px;padding:8px 16px;opacity:0">Less pressure on existing highways</div>')
-m.svg.append(f'<circle id="m12-rd" cx="{K("hawa")[0]:.3f}" cy="{K("hawa")[1]:.3f}" r="{22*m.u*4:.3f}" style="fill:rgba(127,200,248,0.12);stroke:#7FC8F8;stroke-width:{3*m.u};opacity:0"/>')
+    OVL.append(f'<div class="tag amb" id="mp-dw{k}" style="left:48px;top:{1150 + k * 62 - 90}px;font-size:30px;padding:10px 18px;opacity:0">{txt}</div>')
+    js += f'      IN("#mp-dw{k}", {r(t)});\n      tl.to("#mp-dw{k}", {{ opacity: 0, duration: 0.3 }}, {r(116.0)});\n'
+js += popups([("qd0", "warehouse", "dudu", r(108.9), "Warehouses", TR), ("qd1", "hwypov", "dudu", r(109.7), "Highway services", TL),
+              ("qd2", "fields", "dudu", r(111.6), "Larger land parcels", TR), ("qd3", "rental", "sambhar", r(112.9), "Tourism-linked stays", TL)], r(116.0))
+# → overview → Bandar Sindri, Kishangarh (marble), airport, Ajmer, Pushkar
+cam(116.0, OVR, 0.6)
+KG = (-108, 42, 58); cam(116.6, KG, 0.9)
+js += label("k0", "bandarsindri", "Bandar Sindri", r(116.8), until=r(126.2), dx=16, dy=-70)
+js += f'      tl.fromTo("#mp-Lo3 .pd", {{ scale: 1 }}, {{ scale: 1.8, duration: 0.35, yoyo: true, repeat: 1 }}, {r(118.1)});\n'
+js += label("k2", "kgairport", "✈ Kishangarh Airport", r(120.8), until=r(126.2), dx=16, dy=-80, right=True, amb=False)
+js += f'      tl.fromTo(["#mp-Lo4 .pd", "#mp-Lo5 .pd"], {{ scale: 1 }}, {{ scale: 1.8, duration: 0.35, yoyo: true, repeat: 1, stagger: 0.6 }}, {r(123.5)});\n'
+js += chip("c11", "Kishangarh", "Known as a marble trading &amp; processing hub", r(119.4), r(126.2))
+mb = os.path.exists(f"{P}/assets/img/marble.jpg")
+js += popups([("qk0", None if mb else "marble", "kishangarh", r(119.1), "Marble quarry" if mb else "Marble trade", (560, 360)) + (("marble.jpg", "Image supplied", (470, 316)) if mb else ()),
+              ("qk1", "camels", "pushkar", r(124.4), "Tourism · Pushkar", TL)], r(126.2))
+# → wide view (face beat) → proposed Kotputli–Kishangarh expressway
+cam(126.2, WIDE, 0.6)
+js += label("x0", "kotputli", "Kotputli", r(128.0), tier="major", dx=16, dy=-20)
+js += sch("kk", ROADS["kk"], r(129.3), 2.4, color="#F5B04A", width=6, dash="14 8")
+js += label("x1", km(27.20, 75.45), "Kotputli–Kishangarh E-way · proposed", r(129.6), dx=-330, dy=-110, size=26)
+js += chip("c12a", "Proposed · greenfield (as reported)", "≈181 km · ≈₹6,906 cr · bypasses Jaipur to the west", r(130.4), r(137.9), y=360, right=330)
+SVG.append(f'<path id="mp-tr" d="{pd([km(27.75, 76.25), K("kotputli"), km(27.45, 75.85), km(27.15, 75.55), K("jobner"), km(26.80, 75.15), K("kishangarh"), K("ajmer")])}" pathLength="1" style="fill:none;stroke:#7FC8F8;stroke-width:4;stroke-dasharray:0.03 0.03;opacity:0"/>')
+js += f'      tl.to("#mp-tr", {{ opacity: 1, duration: 0.4 }}, {r(131.4)});\n      tl.fromTo("#mp-tr", {{ strokeDashoffset: 0.3 }}, {{ strokeDashoffset: 0, duration: 3.5, ease: "none", repeat: 1 }}, {r(131.4)});\n'
+js += label("x2", km(27.55, 75.95), "Delhi ↔ Ajmer through traffic", r(131.5), dx=16, dy=10, size=26, amb=False)
+SVG.append(f'<circle id="mp-rd" cx="{K("hawa")[0]*KM:.1f}" cy="{K("hawa")[1]*KM:.1f}" r="{14*KM}" style="fill:#7FC8F8;fill-opacity:0.12;stroke:#7FC8F8;stroke-width:3;opacity:0"/>')
+js += f'      tl.to("#mp-rd", {{ opacity: 1, duration: 0.4 }}, {r(135.4)});\n'
+js += label("x3", km(26.80, 75.95), "Less pressure on existing highways", r(135.5), until=r(141.0), dx=16, dy=40, size=26, amb=False)
 for k, p in enumerate([ROADS["kk"][1], ROADS["kk"][2], K("jobner"), ROADS["kk"][4]]):
-    js += ON1(m.exitmark(f"x{k}", p), rel(139.2, s) + 0.15 * k)
-js += OFF("#m12-rdt", rel(141.0, s))
-js += SHOW(m.chip("c2", "Designated interchanges", "Reported: 9 entry/exit points, incl. near Jobner", y=360), rel(139.4, s))
-m.html[-1] = m.html[-1].replace("right:64px", "right:330px")
-js += news(m, "n1", "Patrika", "Mar 2026", "Rajasthan to get 181km greenfield expressway passing through 5 districts, easing travel to Delhi", rel(127.6, s), rel(130.3, s))
-js += popups(m, [("q0", "trucks", K("jobner"), rel(141.2, s), "Logistics", BL), ("q1", "hwysun", K("jobner"), rel(143.4, s), "Trucks & warehouses", BL)], rel(147.2, s))
-go(m, s, e, js, focus="jobner", note="Schematic · proposed alignment approximate", last=True)
+    js += label(f"xi{k}", p, "", r(139.2) + 0.15 * k, tier="minor", dx=0, dy=0) if False else ""
+    SVG.append(f'<g id="mp-xi{k}" style="opacity:0"><circle cx="{p[0]*KM:.1f}" cy="{p[1]*KM:.1f}" r="22" style="fill:#120D0A;stroke:#F5B04A;stroke-width:4"/></g>')
+    js += f'      tl.to("#mp-xi{k}", {{ opacity: 1, duration: 0.3 }}, {r(139.2) + 0.15 * k:.3f});\n'
+js += chip("c12b", "Designated interchanges", "Reported: 9 entry/exit points, incl. near Jobner", r(139.4), r(147.2), y=360, right=330)
+js += news("n5", "Patrika", "Mar 2026", "Rajasthan to get 181km greenfield expressway passing through 5 districts, easing travel to Delhi", r(127.8), r(130.3))
+js += popups([("qx0", "warehouse", K("jobner"), r(141.2), "Warehouses", BL), ("qx1", "trucks", K("jobner"), r(143.4), "Trucks · logistics", BL)], r(147.2))
+# notes (bottom-right, screen space)
+for k, (a, b, txt) in enumerate([(2.3, 23.4, "Map: OpenStreetMap · some positions approximate"), (23.4, 31.3, "Schematic layout · reported scope"), (31.3, 47.1, "Map: OpenStreetMap"),
+                                  (47.1, 66.0, "Proposed alignment schematic, as reported"), (66.0, 126.2, "Map: OpenStreetMap · clips: representative footage"), (126.2, 147.4, "Proposed alignment approximate")]):
+    OVL.append(f'<div class="note" id="mp-nt{k}" style="top:{1290 - 90}px;left:auto;right:64px;font-size:26px;color:rgba(201,183,156,0.9);opacity:0">{txt}</div>')
+    js += f'      tl.to("#mp-nt{k}", {{ opacity: 1, duration: 0.3 }}, {max(0, r(a))});\n      tl.to("#mp-nt{k}", {{ opacity: 0, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
+# face beats: the whole map fades out and back
+for a, b in FACE:
+    js += f'      tl.to("#mp-all", {{ opacity: 0, duration: 0.3 }}, {r(a)});\n      tl.to("#mp-all", {{ opacity: 1, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
+
+v0 = OVR; s0 = sc(v0)
+world = (f'<div id="mp-W" style="position:absolute;left:0;top:0;--s:{s0:.5f};--cx:{v0[0]*KM:.2f};--cy:{v0[1]*KM:.2f};transform-origin:0 0;'
+         f'transform:translate(540px,785px) scale(var(--s)) translate(calc(var(--cx) * -1px),calc(var(--cy) * -1px))">{"".join(HTML)}</div>')
+import re as _re
+def _px(m): return f"stroke-width:calc({m.group(1)}px / var(--s))"
+def _dash(m):
+    v = m.group(1).split()
+    if v == ["1"] or "0.03" in v: return m.group(0)
+    return "stroke-dasharray:" + " ".join(f"calc({x}px / var(--s))" for x in v)
+SVGS = _re.sub(r"stroke-dasharray:([\d. ]+)", _dash, _re.sub(r"stroke-width:([\d.]+)", _px, "".join(SVG)))
+svg = (f'<svg style="position:absolute;left:0;top:0;width:1080px;height:1830px;overflow:hidden"><g id="mp-G" style="--s:{s0:.5f}" transform="translate(540 785) scale({s0:.5f}) translate({-v0[0]*KM:.2f} {-v0[1]*KM:.2f})">'
+       f'{SVGS}</g></svg>')
+css = ('<style>.lb { position:absolute; width:0; height:0; transform:scale(calc(1 / var(--s))); transform-origin:0 0; }'
+       ' .lb .pd { position:absolute; left:-11px; top:-11px; width:22px; height:22px; border-radius:50%; background:#F5B04A; box-shadow:0 0 0 4px rgba(245,176,74,0.3); }'
+       ' .lb .tag { white-space:nowrap; }</style>')
+scene("mp", R0, 147.4, css + f'<div id="mp-all" style="position:absolute;inset:0">{svg}{world}</div>' + "".join(OVL), cam_js(R0) + js)
 
 
 # ---------- chrome ----------
-SECT = [(2.45, "STRETCH 1", "200-ft Bypass → Bhankrota"), (23.4, "200-FT BYPASS", "Going signal-free"), (31.25, "MAHAPURA", "Southern Ring Road"),
-        (39.5, "WIDER NETWORK", "Link to Delhi–Mumbai E-way"), (47.5, "CHITROLI", "Northern Ring Rd · proposed"), (59.25, "DON'T MIX THEM UP", "Mahapura ≠ Chitroli"),
-        (66.85, "MAHINDRA WORLD CITY", "Employment anchor"), (77.6, "DEHMI KALAN", "Manipal University"), (88.4, "BAGRU", "Industry &amp; block printing"),
-        (97.5, "MAHLA → DUDU", "Highway belt"), (116.4, "KISHANGARH → AJMER", "Marble · airport · Pushkar"), (126.6, "PROPOSED", "Kotputli–Kishangarh E-way"), (147.4, "SHARE THIS", "One road, many demands")]
+SECT = [(2.3, "THE ROAD", "Jaipur → Ajmer · NH-48"), (4.6, "STRETCH 1", "200-ft Bypass → Bhankrota"), (23.4, "200-FT BYPASS", "Going signal-free"),
+        (32.35, "MAHAPURA", "Southern Ring Rd · existing"), (39.4, "WIDER NETWORK", "Link to Delhi–Mumbai E-way"), (47.9, "CHITROLI", "Northern Ring Rd · proposed"),
+        (59.25, "DON'T MIX THEM UP", "Mahapura ≠ Chitroli"), (67.5, "MAHINDRA WORLD CITY", "Employment anchor"), (77.7, "DEHMI KALAN", "Manipal University"),
+        (89.35, "BAGRU", "Industry &amp; block printing"), (97.7, "MAHLA → DUDU", "Highway belt · Sambhar"), (116.6, "KISHANGARH → AJMER", "Marble · airport · Pushkar"),
+        (127.75, "PROPOSED", "Kotputli–Kishangarh E-way"), (147.4, "SHARE THIS", "One road, many demands")]
 cards = [(f"hd-{k+1}", t, (SECT[k+1][0] if k + 1 < len(SECT) else VIDEO_END), c, h) for k, (t, c, h) in enumerate(SECT)]
 CALL = [("co-c", 149.0, VIDEO_END, "Call / WhatsApp 96721 19046")]
 hd_html = "".join(f'<div id="{i}" class="hd"><div class="hd-c">{c}</div><div class="hd-h">{h}</div></div>' for i, _, _, c, h in cards)
@@ -570,7 +711,7 @@ open(f"{P}/compositions/endcard.html", "w").write(f"""<template>
 </template>
 """)
 
-MIXKIT = ["Aerial shot of a busy avenue in the city", "Aerial view of a highway in a big city", "Traffic on a freeway", "Corporate and business buildings in the city", "Market shoppers", "Open office space", "Customers in a minimalist style restaurant", "Students walking on a university campus", "Students walking in a university", "Interior of a room with terrace", "Two coworkers talking and laughing", "Aerial view of a factory", "Trailers crossing a bridge over a scenic valley landscape", "Speedy point-of-view tour of a highway", "Traveling on the highway on a sunny day", "A road between a big green agriculture field", "Buildings under construction, aerial view", "Detailed texture of a smooth marble surface", "Camels walking in the desert"]
+MIXKIT = ["Aerial shot of a busy avenue in the city", "Aerial view of a highway in a big city", "Traffic on a freeway", "Corporate and business buildings in the city", "Market shoppers", "Open office space", "Customers in a minimalist style restaurant", "Students walking on a university campus", "Students walking in a university", "Interior of a room with terrace", "Two coworkers talking and laughing", "Aerial view of a factory", "Trailers crossing a bridge over a scenic valley landscape", "Speedy point-of-view tour of a highway", "Traveling on the highway on a sunny day", "A road between a big green agriculture field", "Buildings under construction, aerial view", "Detailed texture of a smooth marble surface", "Camels walking in the desert", "Group of flamingos on the shore of a lake", "Young worker doing inventory"]
 
 # ---------- credits roll ----------
 CR = {k: v for k, v in json.load(open(__file__.replace("build.py", "img/credits.json"))).items() if k in ('block',)}

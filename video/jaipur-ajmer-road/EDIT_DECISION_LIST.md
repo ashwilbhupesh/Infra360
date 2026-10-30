@@ -42,3 +42,21 @@ Captions follow the speaker word for word. Names are spelled correctly, checked 
 - No return promises.
 - Proposed projects are labelled "proposed" or "as reported", and alignments are labelled "approximate".
 - The closing card says opinions are the speaker's, this is not financial advice, and returns are not guaranteed.
+
+## Revision 2: realistic map, continuous camera, corrections
+Your feedback: use a more realistic map; make it easier to keep track of where we are; show your face after the poster; add Infosys and Deutsche Bank logos and real photos; fix the southern/northern ring road mix-up; zoom out to the whole road before each place; use a real Manipal photo, a real warehouse, Sambhar as a lake with flamingos, and marble quarry blocks rather than a single slab.
+
+- **Real map:** OpenStreetMap geometry (Overpass API) is drawn as the base: motorways and trunk roads, Jaipur's primary and secondary roads, railways, and Sambhar, Pushkar, Ana Sagar and Man Sagar lakes. Highlights use the real geometry of NH-48 (Jaipur Kishangarh Expressway / Ajmer Road), the Jaipur Outer Ring Road, the Jaipur–Bandikui Expressway (NE4C) and the Delhi–Mumbai Expressway. Proposed roads (Northern Ring Road, Kotputli–Kishangarh) remain schematic and are labelled so.
+- **One continuous camera:** the whole map runs as a single scene from 2.3 to 147.4 s. Before each new place it zooms out to the full Jaipur → Ajmer road, then zooms into the place. Labels keep a constant size, and places already covered stay as dots, with the key towns staying labelled.
+- **Speaker's face:** the poster shows from 0 to 1.15 s, then the speaker from 1.15 to 2.3 s. Short face beats follow at 31.45–32.35 ("Next, we have the Mahapura"), 88.55–89.35 ("Next, we have the Bagru") and 126.85–127.75 ("Now add the proposed"), plus the closing.
+- **Ring roads:**
+  - Mahapura is labelled with the existing southern ring road (the real ORR), which glows when he talks about it.
+  - Chitroli is labelled with the proposed northern ring road (dashed green), which glows when he talks about it.
+  - In the comparison, the southern card sits at the bottom and the northern card at the top, matching the map.
+- **New pictures:**
+  - Infosys logo (supplied)
+  - Deutsche Bank signage photo (supplied; the "AIM" watermark is cropped off)
+  - Manipal University Jaipur building (supplied)
+  - Marble quarry (supplied)
+  - Warehouse interior clip (Mixkit 4705, Free)
+  - Flamingos clip for Sambhar (Mixkit 4681, Free; labelled representative)

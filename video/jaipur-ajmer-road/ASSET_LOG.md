@@ -75,3 +75,19 @@ Positions are from OpenStreetMap (Nominatim) plus the earlier Jaipur place set. 
 Same music bed and SFX as the earlier reels (see the hospitality reel's ASSET_LOG).
 
 Clips in `project/assets/broll` are stored at 960 px wide (crf 26, no audio) to keep the repo small. The pop-ups show them at 480 px or less.
+
+## Revision 2 additions
+- **Images you supplied:**
+  - `img/logo_infosys.png` (Infosys logo, identification only)
+  - `img/deutsche.jpg` (Deutsche Bank signage photo; a third-party "AIM" watermark was cropped)
+  - `img/manipal.jpg` (Manipal University Jaipur building with logo)
+  - `img/marble.jpg` (marble quarry)
+
+  All are captioned "Image supplied" and are credited in the roll as supplied images.
+- **Mixkit Free (checked on each page, `data-license="videoFree"`):**
+  - 4705 "Young worker doing inventory" (`broll/warehouse.mp4`, warehouses)
+  - 4681 "Group of flamingos on the shore of a lake" (`broll/flamingos.mp4`, Sambhar, labelled "Representative footage")
+
+  Rejected as Restricted: every other flamingo and warehouse clip checked (10214, 9693, 45247, 11031, 47149, 32202, 45847, 24127, 23550, 39463, 23551, 45848, 47939).
+- **Map data:** OpenStreetMap via the Overpass API (maps.mail.ru mirror), in 16 tiles for major roads plus city, rail and lake queries. Fetched 2026-10-30. © OpenStreetMap contributors, ODbL. Credited on screen and in the roll.
+- **Not obtained:** photos of the 200-ft Bypass and Hirapura bus terminal. No free-licence photos were found, and Wikimedia rate-limited this session. Their pop-ups use labelled representative clips.
