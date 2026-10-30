@@ -25,9 +25,9 @@
 
   </style>
   <div id="root" data-composition-id="em" data-width="1080" data-height="1920">
-    <div id="em-host" class="host clip" data-start="0" data-duration="5.25"><div id="em-bg" class="ins"><div class="grain"></div></div></div>
-    <div id="em-vids"></div>
-    <div id="em-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div class="lbl" style="position:absolute;left:72px;top:250px;color:#E3A23B">Hotels also bring</div><div id="em-k0" style="position:absolute;left:72px;top:300px;width:300px;height:560px;border-radius:18px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="em-k0-v" class="clip" src="assets/broll/checkin.mp4" data-start="0" data-duration="5.25" muted playsinline style="position:absolute;left:50%;top:0;height:100%;width:auto;min-width:100%;transform:translateX(-50%);object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:12px 16px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:34px;line-height:1.1;color:#F3E7D3">Customers</div></div><div id="em-k1" style="position:absolute;left:390px;top:300px;width:300px;height:560px;border-radius:18px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="em-k1-v" class="clip" src="assets/broll/coworkers.mp4" data-start="0" data-duration="5.25" muted playsinline style="position:absolute;left:50%;top:0;height:100%;width:auto;min-width:100%;transform:translateX(-50%);object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:12px 16px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:34px;line-height:1.1;color:#F3E7D3">Employment</div></div><div id="em-k2" style="position:absolute;left:708px;top:300px;width:300px;height:560px;border-radius:18px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="em-k2-v" class="clip" src="assets/broll/present.mp4" data-start="0" data-duration="5.25" muted playsinline style="position:absolute;left:50%;top:0;height:100%;width:auto;min-width:100%;transform:translateX(-50%);object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:12px 16px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:34px;line-height:1.1;color:#F3E7D3">Supporting services</div></div><div class="note" style="top:250px;left:auto;right:72px;font-size:24px">Representative footage</div></div></div>
+    <div id="em-host" class="host clip" data-start="0" data-duration="4.8"><div id="em-bg" class="ins"><div class="grain"></div></div></div>
+    <div id="em-vids"><div class="panel" id="em-pw0"><video id="em-v0" class="clip" src="assets/broll/coworkers.mp4" data-start="0" data-duration="4.8" muted playsinline></video></div></div>
+    <div id="em-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div class="panel-fade"></div><div class="rep">Representative footage</div><div class="tag" id="em-t0" style="left:96px;top:560px">Customers</div><div class="tag amb" id="em-t1" style="left:96px;top:660px">Employment</div><div class="tag" id="em-t2" style="left:96px;top:760px">Supporting services</div></div></div>
   </div>
   <script>
     (function () {
@@ -35,11 +35,11 @@
       const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 16 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
       const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
       tl.fromTo(["#em-bg", "#em-vids", "#em-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
-      tl.fromTo("#em-vids", { scale: 1.04 }, { scale: 1.0, duration: 5.25, ease: "none" }, 0);
-      IN("#em-k0", 1.31, { scale: 0.94 }, { scale: 1 });
-      IN("#em-k1", 2.27, { scale: 0.94 }, { scale: 1 });
-      IN("#em-k2", 3.87, { scale: 0.94 }, { scale: 1 });
-      tl.to(["#em-bg", "#em-vids", "#em-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 4.97);
+      tl.fromTo("#em-vids", { scale: 1.04 }, { scale: 1.0, duration: 4.8, ease: "none" }, 0);
+      IN("#em-t0", 0.33);
+      IN("#em-t1", 2.49);
+      IN("#em-t2", 3.8);
+      tl.to(["#em-bg", "#em-vids", "#em-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 4.52);
       window.__timelines["em"] = tl;
     })();
   </script>

@@ -60,3 +60,34 @@ Numbers are shown as figures: 84 lakh, 2026, 20,000 crores, 16 acres, 2030.
 | 89.35–94.6 | Footage tiles: Customers · Employment · Supporting services |
 | 96.9–104.6 | Footage tiles: Destination weddings · Conferences · Luxury experiences · Business travel |
 | 121.4–130.4 | New 9 s scrolling credits roll listing every photo (title, author, licence), the logos, the footage, the quoted news sources and the OSM credit |
+
+## Revision 3 (map-first, faster)
+Your feedback: too many photos; go straight from the Golden Triangle to the three corridors; drop the 84-lakh-tourist section; make the hotel section faster, so the "where to invest" part comes sooner.
+
+### Talk-track cuts and speed (source-recording times)
+| Source | Speed | Note |
+|---|---|---|
+| 0.00–4.30 | 1.0× | Hook + Golden Triangle |
+| 4.30–13.10 | **cut** | 84 lakh tourists section |
+| 13.10–14.73 | 1.0× | "Watch these three corridors" |
+| 14.73–24.34 | 1.1× | Airport belt / Adani Airport City |
+| 24.34–35.47 | **cut** | IHG/Kimpton and the ₹20,000 cr six-airport lines |
+| 35.47–66.63 | 1.1× | Delhi Road, Achrol, Ajmer Road, Mahapura, where to invest |
+| 66.63–115.80 | 1.0× | Ripple effect, what's next, call to action |
+
+The talk track is 92.2 s (it was 121 s); with the closing card and credits the reel runs about 1:45. Lip-sync was checked by cross-correlating the audio (0 ms offset). Rebuild list: `project/segs.json` (start, end, speed).
+
+### Visuals (output times)
+| Time | Visual |
+|---|---|
+| 0.9–4.3 | Golden Triangle on India's relief map, plus a short strip of 4 Jaipur photos (Hawa Mahal, Amer Fort, Jal Mahal, Ghoomar) |
+| 4.3–5.95 | Map: the 3 corridors circled |
+| 5.95–14.65 | Airport belt map: airport pin, Adani "Airport City" badge, hospitality / retail / commercial arcs |
+| 14.65–31.05 | Delhi Road map: road draws; existing Fairmont, Le Méridien and Trident pinned; Achrol with IHG "InterContinental" badge (225 keys · 16 acres · early 2030); resort and wedding belt glows |
+| 31.05–42.95 | Ajmer Road map: Sheraton × Marriott badge (₹350 cr · 220 keys; the pin marks the corridor only, since the plot isn't public); Mahapura with Tata/Taj "Gateway" badge (161 keys) |
+| 42.95–58.9 | Where to invest: the 3 corridors circled, with what to watch for in each |
+| 58.9–65.6 | Visitor-spend map: arcs to Hotels / Restaurants / Transport / Shopping / Weddings |
+| 65.6–70.4 | One clip (coworkers) with tags: Customers · Employment · Supporting services |
+| 74.5–85.9 | Beyond-sightseeing map: destination weddings (Achrol), conferences (Sitapura), luxury experiences (Amer), business travel (airport); short gala inset; "Opportunity" chip |
+
+Removed: the tourist photo grid, the airport photo, the existing-hotel photos abroad, the news-headline cards and most footage tiles. Brand logos now sit on the map as small badges. Only the photos, logos and clips that are still used appear in the credits roll.

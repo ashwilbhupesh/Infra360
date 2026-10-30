@@ -1,8 +1,8 @@
 import sys, json, re, math
 P, WJ, PJ = sys.argv[1], sys.argv[2], sys.argv[3]
-VIDEO_END = 115.9
+VIDEO_END = 92.23
 ED_CARD = 5.5
-CRED = 9.0
+CRED = 7.0
 END = round(VIDEO_END + ED_CARD + CRED, 2)
 exec(open(__file__.replace("build.py", "base_part.py")).read())  # BASE, INSERTS, rel(), scene()
 
@@ -145,7 +145,7 @@ def foot(cid, a, b, src, tag, t, amb=True, extra="", js=""):
 
 
 ROADS["delhi"] = [K("hawa"), K("jalmahal"), K("amer"), K("kukas"), K("achrol"), km(27.25, 75.98)]
-HOT = json.load(open(__file__.replace("gen/build.py", "hotels.json")))
+HOT = json.load(open(__file__.replace("build.py", "hotels.json")))
 def HK(k): return km(HOT[k][0], HOT[k][1])
 IMG = "assets/img/"
 def logo(f, h=64, extra=""):
@@ -175,6 +175,8 @@ def tiles_scene(cid, s, e, kicker, items, cols=2, top=300, h=420, rep=True):
     if rep: body += '<div class="note" style="top:250px;left:auto;right:72px;font-size:24px">Representative footage</div>'
     scene(cid, s, e, body, "\n".join(f'      IN("#{cid}-k{k}", {round(max(0.05, t - s - 0.1), 2)}, {{ scale: 0.94 }}, {{ scale: 1 }});' for k, (_, _, t) in enumerate(items)))
 
+
+STRIP = "".join(photo(f"g0-s{k}", f + ".jpg", 72 + k * 237, 1190, 222, 160, cap) for k, (f, cap) in enumerate([("hawa", "Hawa Mahal"), ("amer", "Amer Fort"), ("jalmahal", "Jal Mahal"), ("ghoomar", "Ghoomar")]))
 # 0 · Golden Triangle on India's physical map (0.9–4.35); map bounds 37.5N–5N, 67E–99E (Module:Location map/data/India)
 s = 0.9
 IW, IH = 1200, round(1200 * 1615 / 1500)
@@ -193,130 +195,143 @@ def mid(a, b): return ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
 def gtag(i, txt, p, dx, dy, amb=False, size=30): return f'<div class="tag{" amb" if amb else ""}" id="g0-{i}" style="left:{p[0] + dx:.0f}px;top:{p[1] + dy:.0f}px;font-size:{size}px;padding:8px 16px">{txt}</div>'
 tri = (f'<svg style="position:absolute;left:0;top:0;width:1080px;height:1830px" viewBox="0 0 1080 1830"><path id="g0-t" class="draw" pathLength="1" d="M{J[0]:.1f} {J[1]:.1f} L{D[0]:.1f} {D[1]:.1f} L{A[0]:.1f} {A[1]:.1f} Z" style="fill:rgba(245,176,74,0.22);stroke:#E8664A;stroke-width:6"/>'
        + "".join(f'<circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="11" style="fill:#120D0A;stroke:#F5B04A;stroke-width:5"/>' for p in (J, D, A)) + "</svg>")
-scene("g0", s, 4.35, f'<div id="g0-z" style="position:absolute;left:0;top:0;width:1080px;height:1830px;transform-origin:540px 780px">'
+scene("g0", s, 4.3, f'<div id="g0-z" style="position:absolute;left:0;top:0;width:1080px;height:1830px;transform-origin:540px 780px">'
       f'<img src="{IMG}indiamap.png" style="position:absolute;left:{OX:.0f}px;top:{OY:.0f}px;width:{IW * GS:.0f}px;height:{IH * GS:.0f}px"/>{tri}</div>'
       + gtag("j", "Jaipur", J, -170, -20, True) + gtag("d", "Delhi", D, -50, -90, True) + gtag("a", "Agra", A, 24, -20, True)
       + gtag("e1", f"≈{dJD:.0f} km", mid(J, D), -190, -40) + gtag("e2", f"≈{dDA:.0f} km", mid(D, A), 30, -30) + gtag("e3", f"≈{dAJ:.0f} km", mid(A, J), -60, 30)
       + '<div class="tag amb" id="g0-g" style="left:72px;top:1060px;font-size:36px">India\'s Golden Triangle</div>'
-      + '<div class="note" style="top:1140px;font-size:24px;background:rgba(18,13,10,0.8);padding:6px 12px;border-radius:8px;color:#F3E7D3">Map: Milenioscuro, CC BY 4.0 · straight-line distances</div>',
+      + STRIP + '<div class="note" style="top:1135px;font-size:24px;background:rgba(18,13,10,0.8);padding:6px 12px;border-radius:8px;color:#F3E7D3">Map: Milenioscuro, CC BY 4.0 · straight-line distances</div>',
       '      tl.fromTo("#g0-z", { scale: 0.82 }, { scale: 1, duration: 3.4, ease: "power1.out" }, 0);\n' + DR("#g0-t", 0.5, 0.9)
-      + "".join(SHOW(f"#g0-{i}", t) for i, t in [("j", 0.6), ("d", 0.8), ("a", 1.0), ("e1", 1.3), ("e2", 1.4), ("e3", 1.5), ("g", 1.7)]))
+      + "".join(SHOW(f"#g0-{i}", t) for i, t in [("j", 0.6), ("d", 0.8), ("a", 1.0), ("e1", 1.3), ("e2", 1.4), ("e3", 1.5), ("g", 1.7)]) + "".join(f'      IN("#g0-s{k}", {round(2.0 + 0.15 * k, 2)}, {{ scale: 0.9 }}, {{ scale: 1 }});\n' for k in range(4)))
 
-# 1 · 84 lakh visits + Jaipur snapshots (4.35–13.2)
-s = 4.35
-SN1 = [("hawa", "Hawa Mahal"), ("amer", "Amer Fort"), ("jalmahal", "Jal Mahal"), ("ghoomar", "Ghoomar"), ("kalbelia", "Kalbelia"), ("block", "Bagru block print")]
-SN2 = [("pottery", "Blue pottery"), ("kathputli", "Kathputli"), ("patrika", "Patrika Gate")]
-grid = "".join(photo(f"st-p{k}", f + ".jpg", 72 + (k % 3) * 318, 640 + (k // 3) * 318, 300, 300, cap) for k, (f, cap) in enumerate(SN1))
-grid2 = "".join(photo(f"st-q{k}", f + ".jpg", 72 + k * 318, 640, 300, 618, cap) for k, (f, cap) in enumerate(SN2))
-scene("st", s, 13.2, '<div class="lbl" style="position:absolute;left:96px;top:250px;color:#E3A23B">Jaipur · Jan–Jun 2026</div>'
-      '<div id="st-n" class="serif" style="position:absolute;left:88px;top:290px;font-size:200px;line-height:1;color:#E3A23B">84 lakh</div>'
-      '<div id="st-t" style="position:absolute;left:96px;right:96px;top:500px;font-family:Inter,sans-serif;font-weight:700;font-size:38px;color:#F3E7D3">tourist visits · 81.5 L domestic + 2.56 L foreign</div>'
-      + f'<div id="st-g1">{grid}</div><div id="st-g2" style="opacity:0">{grid2}</div>'
-      '<div class="note" style="top:1275px;font-size:22px;white-space:normal;right:96px">Data: Rajasthan Tourism Dept (BOTT India) · Photos: Wikimedia Commons contributors (see credits)</div>',
-      f'      IN("#st-n", {rel(4.8, s)}, {{ scale: 0.94 }}, {{ scale: 1 }}); IN("#st-t", {rel(5.84, s)});\n'
-      + "".join(f'      IN("#st-p{k}", {round(rel(6.2, s) + 0.25 * k, 2)}, {{ scale: 0.9 }}, {{ scale: 1 }});\n' for k in range(6))
-      + f'      tl.to("#st-g1", {{ opacity: 0, duration: 0.3 }}, {rel(10.0, s)}); tl.to("#st-g2", {{ opacity: 1, duration: 0.3 }}, {rel(10.1, s)});\n'
-      + "".join(f'      IN("#st-q{k}", {round(rel(10.1, s) + 0.2 * k, 2)}, {{ scale: 0.92 }}, {{ scale: 1 }});\n' for k in range(3)))
 
-# 2 · three corridors (13.2–17.0)
-s = 13.2; m = Map("m1", -2, 2, 66).base(sring=False, nring=False)
+
+def badge(m, rid, at, logos, dx=20, dy=-110, h=40, label=None):
+    """Brand badge pinned to a map point: white pill with logo(s) and optional text."""
+    x, y = m.px(K(at) if isinstance(at, str) else at); x += dx; y += dy
+    inner = "".join(f'<img src="{IMG}{f}" style="height:{h}px;width:auto;display:block"/>' for f in logos)
+    lab = f'<span style="font-family:Inter,sans-serif;font-weight:800;font-size:28px;color:#1B140F">{label}</span>' if label else ""
+    w = 70 * len(logos) + (len(label) * 16 if label else 0) + 60
+    x = max(48, min(1080 - 48 - w, x))
+    m.html.append(f'<div id="{m.cid}-{rid}" style="position:absolute;left:{x:.0f}px;top:{y - 90:.0f}px;display:flex;gap:12px;align-items:center;padding:10px 16px;border-radius:14px;background:#FFFFFF;box-shadow:0 8px 24px rgba(0,0,0,0.5)">{inner}{lab}</div>')
+    return f"#{m.cid}-{rid}"
+def pin(m, rid, at, color="#F5B04A"):
+    p = K(at) if isinstance(at, str) else at; u = m.u
+    m.svg.append(f'<g id="{m.cid}-{rid}" style="opacity:0"><circle cx="{p[0]:.3f}" cy="{p[1]:.3f}" r="{22*u:.3f}" style="fill:none;stroke:{color};stroke-width:{4*u};filter:url(#{m.cid}-glow)"/>'
+                 f'<circle cx="{p[0]:.3f}" cy="{p[1]:.3f}" r="{9*u:.3f}" style="fill:{color}"/></g>')
+    return f"#{m.cid}-{rid}"
+def arc(m, rid, a, b, bend=0.25, color="#B8E07A"):
+    a = K(a) if isinstance(a, str) else a; b = K(b) if isinstance(b, str) else b
+    mx, my = (a[0] + b[0]) / 2 - (b[1] - a[1]) * bend, (a[1] + b[1]) / 2 + (b[0] - a[0]) * bend
+    m.svg.append(f'<path id="{m.cid}-{rid}" class="draw" pathLength="1" d="M{a[0]:.3f} {a[1]:.3f} Q{mx:.3f} {my:.3f} {b[0]:.3f} {b[1]:.3f}" style="fill:none;stroke:{color};stroke-width:{3*m.u};stroke-dasharray:1;filter:url(#{m.cid}-glow)"/>')
+    return f"#{m.cid}-{rid}"
+ON1 = lambda sel, t: f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.6, transformOrigin: "50% 50%" }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }}, {t});\n'
+OFF = lambda sel, t: f'      tl.to("{sel}", {{ opacity: 0, duration: 0.25 }}, {t});\n'
+ACH, KUK = K("achrol"), K("kukas")
+SHER = km(26.885, 75.720)   # Sheraton: on the Jaipur–Ajmer Highway per reports; exact plot not public
+
+# 1 · three corridors (4.3–5.95)
+s = 4.3; m = Map("m1", -2, 2, 66).base(sring=False, nring=False)
 cA = m.circle("ca", "airport", 4.5, "rgba(245,176,74,0.25)", "#F5B04A"); cD = m.circle("cd", km(27.08, 75.92), 6.0, "rgba(245,176,74,0.25)", "#F5B04A"); cM = m.circle("cm", "mahapura", 4.5, "rgba(245,176,74,0.25)", "#F5B04A")
-js = POP(cA, rel(13.84, s)) + POP(cD, rel(14.0, s)) + POP(cM, rel(14.16, s))
-js += SHOW(m.tag("t1", "1 · Airport belt", "airport", dx=40, dy=20, amb=True), rel(14.5, s))
-js += SHOW(m.tag("t2", "2 · Delhi Rd", km(27.08, 75.92), dx=-60, dy=80, amb=True), rel(14.3, s)) + SHOW(m.tag("t3", "3 · Ajmer Rd", "mahapura", dx=-150, dy=60, amb=True), rel(14.4, s))
-m.render(s, 17.0, js)
+js = POP(cA, 0.3) + POP(cD, 0.5) + POP(cM, 0.7)
+js += SHOW(m.tag("t1", "1 · Airport belt", "airport", dx=40, dy=20, amb=True), 0.4) + SHOW(m.tag("t2", "2 · Delhi Rd", km(27.08, 75.92), dx=-60, dy=80, amb=True), 0.6) + SHOW(m.tag("t3", "3 · Ajmer Rd", "mahapura", dx=-150, dy=60, amb=True), 0.8)
+m.render(s, 5.95, js)
 
-# 3 · airport belt: real airport photo + Adani logo (17.0–20.4), then hospitality / retail / commercial (20.4–24.4)
-s = 17.0
-scene("ap", s, 20.4, photo("ap-p", "airport.jpg", 72, 300, 936, 620, "Jaipur International Airport", "Photo: Chainwit., CC BY-SA 4.0")
-      + f'<div id="ap-l" style="position:absolute;left:72px;top:950px;display:flex;gap:18px;align-items:center">{logo("logo_adani.png", 56)}<div class="tag amb" style="position:static">Airport City programme</div></div>',
-      f'      IN("#ap-p", 0.1, {{ scale: 0.96 }}, {{ scale: 1 }}); IN("#ap-l", {rel(17.6, s)});')
-tiles_scene("ab", 20.4, 24.4, "Bringing together", [("checkin", "Hospitality", 21.4), ("mall", "Retail", 22.36), ("office", "Commercial", 23.24)], cols=3, h=560)
+# 2 · airport belt (5.95–14.65)
+s = 5.95; m = Map("ma", 0.5, 8, 24).base(sring=False, nring=False)
+for kk in ("malviya", "jagatpura", "sitapura"): m.dot(kk)
+cA = m.circle("ca", "airport", 3.2, "rgba(245,176,74,0.22)", "#F5B04A"); pA = pin(m, "pa", "airport")
+bA = badge(m, "ba", "airport", ["logo_adani.png"], dx=-80, dy=-150, label="Airport City")
+icons = [("Hospitality", km(26.836, 75.835), 11.99), ("Retail", km(26.815, 75.790), 12.87), ("Commercial", km(26.805, 75.830), 13.67)]
+arcs = [arc(m, f"r{k}", "airport", p) for k, (_, p, _) in enumerate(icons)]
+js = POP(cA, 0.2) + ON1(pA, 0.3) + SHOW(m.tag("t0", "Jaipur International Airport", "airport", dx=-200, dy=60, amb=True), 0.4)
+js += SHOW(m.tag("t2", "Malviya Nagar", "malviya", dx=20, dy=-30, size=26), 0.6) + SHOW(m.tag("t3", "Jagatpura", "jagatpura", dx=20, dy=-30, size=26), 0.7) + SHOW(m.tag("t4", "Sitapura", "sitapura", dx=20, dy=-10, size=26), 0.8)
+js += OFF("#ma-t2, #ma-t3, #ma-t4", rel(9.6, s)) + OFF("#ma-t0", rel(11.75, s))
+js += ON1(bA, rel(8.0, s)) + SHOW(m.chip("c1", "Adani Airport City programme", "Jaipur is one of six airports in phase one"), rel(9.9, s))
+for k, (txt, p, t) in enumerate(icons):
+    js += DR(arcs[k], rel(t, s) - 0.1, 0.4) + SHOW(m.tag(f"i{k}", "◆ " + txt, p, dx=-60, dy=20, amb=True, size=30), rel(t, s))
+m.render(s, 14.65, js)
 
-# 4 · IHG × Adani + Kimpton (24.4–29.6)
-s = 24.4
-scene("k1", s, 29.6, f'<div id="k1-l" style="position:absolute;left:72px;top:290px;display:flex;gap:16px;flex-wrap:wrap;align-items:center">{logo("logo_ihg.png", 54)}{logo("logo_adani.png", 46)}<div class="tag amb" style="position:static;font-size:32px">Kimpton</div></div>'
-      + photo("k1-p", "kimpton.jpg", 72, 430, 936, 470, "Kimpton Saint George, Toronto · existing hotel, not the Jaipur project", "Photo: Nick Number, CC BY 4.0")
-      + clipping("k1-c", "IHG", "14 May 2026", "IHG Hotels & Resorts signs landmark five-hotel deal with Adani Airport Holdings", top=930),
-      f'      IN("#k1-l", 0.1); IN("#k1-p", {rel(26.0, s)}, {{ scale: 0.96 }}, {{ scale: 1 }}); IN("#k1-c", {rel(25.3, s)}, {{ y: 40, rotation: -4 }}, {{ y: 0, rotation: -1.2 }});')
-
-# 5 · ₹20,000 cr (29.6–35.55)
-s = 29.6
-scene("k2", s, 35.55, f'<div id="k2-l" style="position:absolute;left:72px;top:290px">{logo("logo_adani.png", 54)}</div>'
-      + clipping("k2-c", "Business Standard", "June 2026", "Adani to invest ₹20k cr in six ‘airport city’ projects across 5 states", top=430, rot=1.0)
-      + '<div id="k2-f" style="position:absolute;left:72px;right:72px;top:800px">'
-      + "".join(f'<div class="row" id="k2-r{k}" style="position:relative;left:0;right:0;top:0;font-size:36px;height:76px"><b>&#8226;</b>{t}</div>' for k, t in enumerate(["Mumbai · Navi Mumbai · Ahmedabad", "Lucknow · Jaipur · Guwahati", "≈70% of it in the Mumbai region"]))
-      + '</div>',
-      f'      IN("#k2-l", 0.1); IN("#k2-c", 0.3, {{ y: 40, rotation: 4 }}, {{ y: 0, rotation: 1.0 }});\n' + "".join(f'      IN("#k2-r{k}", {round(rel(32.0, s) + 0.5 * k, 2)}, {{ x: -20, y: 0 }}, {{ x: 0 }});\n' for k in range(3)))
-
-# 6 · Delhi Road with existing hotels labelled (35.55–42.3)
-s = 35.55; m = Map("m3", 5, -10, 30).base(sring=False, nring=False)
-for kk in ("amer", "kukas", "achrol", "jalmahal"): m.dot(kk)
-for hk in ("fairmont", "lemeridien", "trident"): m.dot(HK(hk), color="#B8E07A")
+# 3 · Delhi Road: existing hotels + InterContinental Achrol (14.65–31.05)
+s = 14.65; m = Map("md", 5, -10, 30).base(sring=False, nring=False)
+for kk in ("amer", "jalmahal"): m.dot(kk)
 rD = m.road("rd", "delhi", width=9)
-cA = m.circle("ca", "achrol", 2.2, "rgba(245,176,74,0.25)", "#F5B04A")
-js = DR(rD, rel(36.24, s), 1.2) + SHOW(m.tag("t0", "DELHI ROAD (NH-48)", "achrol", dx=-420, dy=40, amb=True), rel(36.3, s))
-js += SHOW(m.tag("t1", "Amer Fort", "amer", dx=-30, dy=-10, size=26, right=True), rel(36.8, s)) + SHOW(m.tag("t2", "Jal Mahal", "jalmahal", dx=-30, dy=-10, size=26, right=True), rel(36.9, s))
-js += SHOW(m.tag("h1", "Fairmont Jaipur", HK("fairmont"), dx=24, dy=-40, size=28), rel(37.5, s)) + SHOW(m.tag("h2", "Le Méridien Jaipur", HK("lemeridien"), dx=24, dy=10, size=28), rel(37.8, s))
-js += SHOW(m.tag("h3", "Trident Jaipur", HK("trident"), dx=24, dy=-10, size=28), rel(38.1, s)) + SHOW(m.tag("t3", "Kukas", "kukas", dx=-30, dy=30, size=26, right=True), rel(38.4, s))
-js += POP(cA, rel(39.84, s)) + SHOW(m.tag("t4", "Achrol · InterContinental (planned)", "achrol", dx=-30, dy=-80, amb=True, right=True), rel(39.84, s))
-m.render(s, 42.3, js, note="Existing hotels: positions from OpenStreetMap")
+ex = [(pin(m, f"h{k}", HK(hk), "#B8E07A"), HK(hk), nm) for k, (hk, nm) in enumerate([("fairmont", "Fairmont Jaipur"), ("lemeridien", "Le Méridien Jaipur"), ("trident", "Trident Jaipur")])]
+pI = pin(m, "pi", "achrol"); cI = m.circle("ci", "achrol", 2.0, "rgba(245,176,74,0.22)", "#F5B04A")
+belt = smooth([km(26.955, 75.835), km(27.000, 75.870), km(27.060, 75.910), km(27.140, 75.965), km(27.150, 75.985), km(27.070, 75.935), km(27.010, 75.890), km(26.960, 75.855)])
+m.svg.insert(2, f'<path id="md-belt" d="{belt}" style="fill:rgba(160,220,120,0.22);stroke:#B8E07A;stroke-width:{3*m.u};opacity:0"/>')
+bI = badge(m, "bi", "achrol", ["logo_ihg.png"], dx=-330, dy=-60, label="InterContinental")
+js = DR(rD, rel(15.36, s), 1.2) + SHOW(m.tag("t0", "DELHI ROAD (NH-48)", KUK, dx=60, dy=60, amb=True), rel(15.4, s))
+js += SHOW(m.tag("t1", "Amer Fort", "amer", dx=-30, dy=-10, size=26, right=True), rel(15.9, s)) + SHOW(m.tag("t2", "Jal Mahal", "jalmahal", dx=-30, dy=-10, size=26, right=True), rel(16.0, s))
+for k, (p, pt, nm) in enumerate(ex):
+    js += ON1(p, rel(16.3, s) + 0.25 * k) + SHOW(m.tag(f"e{k}", nm, pt, dx=-30 if k < 2 else 24, dy=[-70, 20, -10][k], size=26, right=k < 2), rel(16.4, s) + 0.25 * k)
+js += POP(cI, rel(18.64, s)) + ON1(pI, rel(18.64, s)) + SHOW(m.tag("ta", "Achrol", "achrol", dx=24, dy=-10, amb=True), rel(18.7, s))
+js += ON1(bI, rel(19.37, s)) + SHOW(m.chip("c1", "Planned · IHG × Makson India Hospitality", "InterContinental Jaipur Achrol · 225 keys · 16 acres · early 2030"), rel(20.0, s))
+js += OFF("#md-c1", rel(27.3, s)) + f'      tl.to("#md-belt", {{ opacity: 1, duration: 0.5 }}, {rel(27.6, s)});\n'
+js += SHOW(m.chip("c2", "Already established", "Resort &amp; wedding corridor"), rel(28.0, s))
+m.render(s, 31.05, js, note="Existing hotels: positions from OpenStreetMap")
 
-# 7 · InterContinental Achrol (42.3–49.6)
-s = 42.3
-scene("ic", s, 49.6, f'<div id="ic-l" style="position:absolute;left:72px;top:290px;display:flex;gap:16px;align-items:center">{logo("logo_ihg.png", 54)}<div class="tag" style="position:static;font-size:30px">× Makson India Hospitality</div></div>'
-      + photo("ic-p", "intercontinental.jpg", 72, 430, 936, 470, "InterContinental Melbourne · existing hotel, not the Jaipur project", "Photo: IHG, CC BY-SA 4.0")
-      + clipping("ic-c", "IHG", "2026", "IHG inks deal for InterContinental Jaipur Achrol Resort", top=930, rot=-1.0)
-      + '<div id="ic-f" style="position:absolute;left:72px;top:1180px;display:flex;gap:14px"><div class="tag amb" style="position:static">225 keys</div><div class="tag amb" style="position:static">16 acres</div><div class="tag amb" style="position:static">Early 2030</div></div>',
-      f'      IN("#ic-l", 0.1); IN("#ic-p", 0.3, {{ scale: 0.96 }}, {{ scale: 1 }}); IN("#ic-c", {rel(43.6, s)}, {{ y: 40, rotation: -4 }}, {{ y: 0, rotation: -1.0 }});'
-      f' IN("#ic-f", {rel(46.72, s)});')
+# 4 · Ajmer Road: Sheraton + Gateway Mahapura (31.05–42.95)
+s = 31.05; m = Map("mj", -9.5, 5, 26).base(sring=True, nring=False)
+for kk in ("sodala", "vaishali"): m.dot(kk)
+rA = m.road("ra", "ajmer", width=9)
+pS = pin(m, "ps", SHER); pG = pin(m, "pg", "mahapura"); cG = m.circle("cg", "mahapura", 1.6, "rgba(245,176,74,0.22)", "#F5B04A")
+bS = badge(m, "bs", SHER, ["logo_sheraton.png", "logo_marriott.png"], dx=-40, dy=-170, h=46)
+bG = badge(m, "bgw", "mahapura", ["logo_tata.png", "logo_taj.png"], dx=-40, dy=60, h=46, label="Gateway")
+js = DR(rA, rel(31.5, s), 1.0) + SHOW(m.tag("t0", "AJMER ROAD (NH-48)", "sodala", dx=-40, dy=40, amb=True), rel(31.6, s))
+js += ON1(pS, rel(32.6, s)) + ON1(bS, rel(32.6, s)) + SHOW(m.chip("c1", "Planned · Manglam Group × Marriott", "Sheraton · ₹350 cr · 220 keys · Jaipur–Ajmer Hwy"), rel(33.9, s))
+js += OFF("#mj-c1", rel(37.2, s)) + POP(cG, rel(37.4, s)) + ON1(pG, rel(37.4, s)) + SHOW(m.tag("tm", "Mahapura", "mahapura", dx=-170, dy=-20, amb=True), rel(37.45, s))
+js += ON1(bG, rel(38.6, s)) + SHOW(m.chip("c2", "Planned · IHCL (Tata) × Shri Modi Group", "Gateway Mahapura · 161 keys · NH48"), rel(39.4, s))
+m.render(s, 42.95, js, note="Sheraton pin: corridor only, plot not public")
 
-# 8 · resort & wedding corridor (49.6–53.55)
-tiles_scene("rw", 49.6, 53.55, "Resort &amp; wedding corridor", [("resort", "Resorts", 49.8), ("wedding", "Weddings", 52.4)], cols=2, h=700)
-
-# 9 · Sheraton on Ajmer Road (53.55–60.3)
-s = 53.55
-scene("sh", s, 60.3, f'<div id="sh-l" style="position:absolute;left:72px;top:290px;display:flex;gap:16px;align-items:center">{logo("logo_sheraton.png", 70)}{logo("logo_marriott.png", 60)}'
-      '<div class="tag amb" style="position:static;font-size:30px">Manglam Group</div></div>'
-      + photo("sh-p", "sheraton.jpg", 72, 450, 936, 450, "Sheraton, Toronto · existing hotel, not the Jaipur project", "Photo: Chris Woodrich, CC BY-SA 4.0")
-      + clipping("sh-c", "Business Standard", "June 2026", "Manglam Group ties up with Marriott for ₹350 crore Sheraton hotel in Jaipur", top=930, rot=1.0)
-      + '<div id="sh-f" style="position:absolute;left:72px;top:1200px;display:flex;gap:14px"><div class="tag amb" style="position:static">220 keys</div><div class="tag amb" style="position:static">Jaipur–Ajmer Hwy</div></div>',
-      f'      IN("#sh-l", {rel(55.2, s)}); IN("#sh-p", {rel(57.52, s)}, {{ scale: 0.96 }}, {{ scale: 1 }}); IN("#sh-c", {rel(56.2, s)}, {{ y: 40, rotation: 4 }}, {{ y: 0, rotation: 1.0 }}); IN("#sh-f", {rel(58.6, s)});')
-
-# 10 · Gateway Mahapura by IHCL (Tata) (60.3–66.75)
-s = 60.3
-scene("gw", s, 66.75, f'<div id="gw-l" style="position:absolute;left:72px;top:290px;display:flex;gap:16px;align-items:center">{logo("logo_tata.png", 64)}{logo("logo_taj.png", 64)}'
-      '<div class="tag" style="position:static;font-size:30px">IHCL × Shri Modi Group</div></div>'
-      + photo("gw-p", "rambagh.jpg", 72, 450, 936, 450, "Rambagh Palace (Taj · IHCL), Jaipur · existing hotel", "Photo: Sunnya343, CC BY-SA 4.0")
-      + clipping("gw-c", "IHCL", "20 Nov 2025", "IHCL signs a Gateway in Mahapura, Jaipur", top=930, rot=-1.0)
-      + '<div id="gw-f" style="position:absolute;left:72px;top:1180px;display:flex;gap:14px"><div class="tag amb" style="position:static">161 keys</div><div class="tag amb" style="position:static">Mahapura · NH48</div></div>',
-      f'      IN("#gw-l", {rel(61.36, s)}); IN("#gw-p", 0.3, {{ scale: 0.96 }}, {{ scale: 1 }}); IN("#gw-c", {rel(63.9, s)}, {{ y: 40, rotation: -4 }}, {{ y: 0, rotation: -1.0 }}); IN("#gw-f", {rel(64.8, s)});')
-
-# 11 · opportunity map (69.6–74.5) then what to watch for (74.5–82.2)
-s = 69.6; m = Map("m5", -2, 2, 66).base(sring=False, nring=False)
+# 5 · where to invest (42.95–58.9)
+s = 42.95; m = Map("mo", -2, 2, 66).base(sring=False, nring=False)
 c1 = m.circle("c1", "airport", 4.5); c2 = m.circle("c2", km(27.08, 75.92), 6.0); c3 = m.circle("c3", "mahapura", 4.5)
-js = POP(c1, rel(70.02, s)) + SHOW(m.tag("t1", "Airport-connected neighbourhoods", "airport", dx=-120, dy=80, amb=True), rel(70.02, s))
-js += POP(c2, rel(71.94, s)) + SHOW(m.tag("t2", "Achrol–Kukas belt", km(27.08, 75.92), dx=-140, dy=90, amb=True), rel(71.94, s))
-js += POP(c3, rel(73.62, s)) + SHOW(m.tag("t3", "Mahapura", "mahapura", dx=-80, dy=70, amb=True), rel(73.62, s))
-m.render(s, 74.5, js, note="Speaker's view · not a guarantee")
-tiles_scene("op", 74.5, 82.2, "Watch for", [("office", "Commercial space", 74.66), ("rental", "Rental accommodation", 75.86), ("dining", "Businesses serving visitors", 77.54), ("coworkers", "…and employees", 79.54)], cols=2, h=440)
+js = POP(c1, rel(46.39, s)) + SHOW(m.tag("t1", "Airport-connected neighbourhoods", "airport", dx=-120, dy=70, amb=True), rel(46.39, s))
+js += POP(c2, rel(48.31, s)) + SHOW(m.tag("t2", "Achrol–Kukas belt", km(27.08, 75.92), dx=-140, dy=90, amb=True), rel(48.31, s))
+js += POP(c3, rel(49.92, s)) + SHOW(m.tag("t3", "Mahapura", "mahapura", dx=-80, dy=60, amb=True), rel(49.92, s))
+for k, (txt, t) in enumerate([("◆ Commercial space", 51.03), ("◆ Rental accommodation", 52.23), ("◆ Businesses serving visitors", 53.91), ("◆ …and hotel employees", 55.91)]):
+    js += SHOW(m.tag(f"w{k}", txt, (0, -30 + k * 7), dx=-300, dy=0, size=32), rel(t, s))
+m.render(s, 58.9, js, note="Speaker's view · not a guarantee")
 
-# 12 · where visitors spend (82.2–89.35)
-tiles_scene("sp", 82.2, 89.35, "Visitors spend across", [("corridor", "Hotels", 85.54), ("dining", "Restaurants", 86.18), ("traffic", "Transport", 87.06), ("shoppers", "Shopping", 87.86), ("gala", "Weddings", 88.58)], cols=2, h=290)
+# 6 · where visitors spend (58.9–65.6)
+s = 58.9; m = Map("ms", 0, 2, 50).base(sring=False, nring=False)
+spend = [("Hotels", HK("fairmont"), 61.91), ("Restaurants", K("cscheme") if False else km(26.906, 75.803), 62.55), ("Transport", K("airport"), 63.43), ("Shopping", K("hawa"), 64.23), ("Weddings", K("achrol"), 64.95)]
+hub = km(26.88, 75.80)
+arcs = [arc(m, f"a{k}", hub, p, 0.2) for k, (_, p, _) in enumerate(spend)]
+m.svg.append(f'<circle cx="{hub[0]:.3f}" cy="{hub[1]:.3f}" r="{14*m.u:.3f}" style="fill:#F5B04A"/>')
+js = SHOW(m.tag("hv", "Visitors", hub, dx=-150, dy=10, amb=True, size=34), 0.3)
+for k, (txt, p, t) in enumerate(spend):
+    js += DR(arcs[k], rel(t, s) - 0.15, 0.35) + SHOW(m.tag(f"s{k}", "◆ " + txt, p, dx=20, dy=-30, amb=True, size=32), rel(t, s))
+m.render(s, 65.6, js, note="Illustrative")
 
-# 13 · customers, employment, supporting services (89.35–94.6)
-tiles_scene("em", 89.35, 94.6, "Hotels also bring", [("checkin", "Customers", 90.76), ("coworkers", "Employment", 91.72), ("present", "Supporting services", 93.32)], cols=3, h=560)
+# 7 · hotels bring customers, employment, services (65.6–70.4) — footage clip
+scene("em", 65.6, 70.4, '<div class="panel-fade"></div><div class="rep">Representative footage</div>'
+      + "".join(f'<div class="tag{" amb" if k == 1 else ""}" id="em-t{k}" style="left:96px;top:{560 + k * 100}px">{t}</div>' for k, t in enumerate(["Customers", "Employment", "Supporting services"])),
+      "\n".join(f'      IN("#em-t{k}", {round(t - 65.6, 2)});' for k, t in enumerate([65.93, 68.09, 69.4])), [("coworkers", 0, 4.8)])
 
-# 14 · beyond sightseeing (96.9–104.6)
-tiles_scene("nx", 96.9, 104.6, "Beyond sightseeing", [("gala", "Destination weddings", 98.44), ("present", "Conferences", 99.8), ("pool", "Luxury experiences", 100.92), ("landing", "Business travel", 102.52)], cols=2, h=440)
+# 8 · beyond sightseeing on the map, with one wedding clip inset (74.5–85.9)
+s = 74.5; m = Map("mn", -1, 0, 60).base(sring=False, nring=False)
+uses = [("Destination weddings", K("achrol"), 74.81), ("Conferences", K("sitapura"), 76.17), ("Luxury experiences", K("amer"), 77.29), ("Business travel", K("airport"), 78.89)]
+ps = [pin(m, f"p{k}", p) for k, (_, p, _) in enumerate(uses)]
+cs = [m.circle("z1", "airport", 4.5), m.circle("z2", km(27.08, 75.92), 6.0), m.circle("z3", "mahapura", 4.5)]
+js = ""
+for k, (txt, p, t) in enumerate(uses):
+    js += ON1(ps[k], rel(t, s)) + SHOW(m.tag(f"u{k}", "◆ " + txt, p, dx=24, dy=-20, amb=True, size=32), rel(t, s))
+js += "".join(POP(c, rel(81.29, s) + 0.15 * k) for k, c in enumerate(cs))
+js += SHOW(m.chip("c1", "Opportunity", "For property owners &amp; entrepreneurs across these corridors"), rel(81.6, s))
+m.html.append('<div id="mn-v" style="position:absolute;left:600px;top:850px;width:400px;height:300px;border-radius:18px;overflow:hidden;border:3px solid #F5B04A;opacity:0">'
+              '<video id="mn-vv" class="clip" src="assets/broll/gala.mp4" data-start="0" data-duration="2.6" muted playsinline style="width:100%;height:100%;object-fit:cover"></video>'
+              '<div style="position:absolute;left:8px;bottom:6px;font-family:JetBrains Mono,monospace;font-size:16px;color:#fff;text-shadow:0 1px 3px #000">Representative footage</div></div>')
+js += f'      tl.fromTo("#mn-v", {{ opacity: 0, scale: 0.9 }}, {{ opacity: 1, scale: 1, duration: 0.3 }}, 0.1); tl.to("#mn-v", {{ opacity: 0, duration: 0.25 }}, 2.35);\n'
+m.render(s, 85.9, js)
 
 # ---------- chrome ----------
-SECT = [(10.0, "WHY JAIPUR", "Private investment is coming"), (13.2, "WATCH", "3 corridors"), (14.88, "CORRIDOR 1", "The airport belt"),
-        (35.55, "CORRIDOR 2", "Delhi Road · Achrol"), (53.55, "CORRIDOR 3", "Ajmer Road · Mahapura"), (66.75, "THE OPPORTUNITY", "Where it could emerge"),
-        (82.2, "THE RIPPLE EFFECT", "Visitors spend locally"), (89.35, "THE RIPPLE EFFECT", "Jobs · demand · services"), (94.6, "WHAT'S NEXT", "Beyond sightseeing"),
-        (104.6, "SPEAKER'S VIEW", "Opportunity · not a guarantee"), (109.8, "SAVE THIS", "Follow the developments")]
+SECT = [(4.3, "WATCH", "3 corridors"), (5.95, "CORRIDOR 1", "The airport belt"), (14.65, "CORRIDOR 2", "Delhi Road \u00b7 Achrol"), (31.05, "CORRIDOR 3", "Ajmer Road \u00b7 Mahapura"),
+        (42.95, "WHERE TO INVEST", "Where it could emerge"), (58.9, "THE RIPPLE EFFECT", "Visitors spend locally"), (65.6, "THE RIPPLE EFFECT", "Jobs \u00b7 demand \u00b7 services"),
+        (70.4, "WHAT'S NEXT", "Beyond sightseeing"), (81.2, "THE OPPORTUNITY", "Across these corridors"), (85.9, "SAVE THIS", "Follow the developments")]
 cards = [(f"hd-{k+1}", t, (SECT[k+1][0] if k + 1 < len(SECT) else VIDEO_END), c, h) for k, (t, c, h) in enumerate(SECT)]
-CALL = [("co-c", 112.5, VIDEO_END, "Call / WhatsApp 96721 19046")]
+CALL = [("co-c", 88.6, VIDEO_END, "Call / WhatsApp 96721 19046")]
 hd_html = "".join(f'<div id="{i}" class="hd"><div class="hd-c">{c}</div><div class="hd-h">{h}</div></div>' for i, _, _, c, h in cards)
 co_html = "".join(f'<div id="{i}" class="co">{t}</div>' for i, _, _, t in CALL)
 js = "".join(f"""
@@ -351,7 +366,7 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
       const tl = gsap.timeline({{ paused: true }});
       tl.fromTo("#op", {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }}, 0.12);
       tl.fromTo("#op-b", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.35 }}, 0.5);
-      tl.to("#op", {{ opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }}, 9.75);
+      tl.to("#op", {{ opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }}, 4.0);
       tl.fromTo("#pg", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3 }}, 6.16);
       tl.to("#pg", {{ opacity: 0, duration: 0.3 }}, 99.7);{"".join(f"""
       tl.fromTo("#pg-{k+1}", {{ backgroundColor: "rgba(27,20,15,0.55)" }}, {{ backgroundColor: "#E3A23B", duration: 0.3 }}, {t});""" for k, (t, _, _) in enumerate(SECT[:0]))}{js}
@@ -437,21 +452,18 @@ open(f"{P}/compositions/endcard.html", "w").write(f"""<template>
 </template>
 """)
 
-MIXKIT = ["Swiming pool in resort garden — ivz", "Two businessmen in suits reviewing some documents — m0de0n", "Aerial travel above a highway in the city", "A family checking in a luxury hotel — barselona_dreams",
-          "A man is presenting a business report — FrameStock", "Airplane landing in illuminated airport tracks — ivz", "Busy shopping mall time lapse — YanMednis", "Corridor of an elegant hotel — Ilya2k",
-          "Customers in a minimalist style restaurant", "Decorations on the ceiling of a wedding party", "Gala party seen from above a table", "Interior of a room with terrace", "Luxury swimming pool",
-          "Open office space", "Shoppers walking through a mall — Grey_Coast_Media", "Two coworkers talking and laughing"]
+MIXKIT = ["Two coworkers talking and laughing", "Gala party seen from above a table"]
 
 # ---------- credits roll ----------
-CR = json.load(open(__file__.replace("gen/build.py", "img/credits.json")))
+CR = {k: v for k, v in json.load(open(__file__.replace("build.py", "img/credits.json"))).items() if k in ('indiamap', 'hawa', 'amer', 'jalmahal', 'ghoomar', 'logo_adani', 'logo_ihg', 'logo_sheraton', 'logo_marriott', 'logo_tata', 'logo_taj')}
 lines = ["<b>Photos &amp; maps — Wikimedia Commons</b>"] + [f"{v['title'][5:]} — {v['artist']} — {v['license']}" for k, v in CR.items() if not k.startswith("logo_")]
 lines += ["<b>Logos</b> — trademarks of their owners, shown for identification only (Wikimedia Commons files)"] + [f"{v['title'][5:]}" for k, v in CR.items() if k.startswith("logo_")]
 lines += ["<b>Footage — Mixkit (Free licence)</b>"] + MIXKIT
-lines += ["<b>News</b> — headlines quoted from: IHG (May 2026) · Business Standard (Jun 2026) · IHCL (Nov 2025) · BOTT India / Rajasthan Tourism (2026) · Hotel News Resource",
+lines += ["<b>News</b> — IHG (2026) · Business Standard (Jun 2026) · IHCL (Nov 2025) · Hotel News Resource",
           "<b>Map data</b> © OpenStreetMap contributors (ODbL)"]
 roll = "".join(f'<div style="margin-bottom:12px">{l}</div>' for l in lines)
 scene("cr", round(VIDEO_END + ED_CARD, 2), END, f'<div class="lbl" style="position:absolute;left:72px;top:150px;color:#E3A23B">Credits</div><div style="position:absolute;left:72px;right:72px;top:220px;height:1250px;overflow:hidden"><div id="cr-r" style="position:absolute;left:0;right:0;top:40px;font-family:Inter,sans-serif;font-size:24px;line-height:1.3;color:#F3E7D3">{roll}</div></div>',
-      f'      tl.fromTo("#cr-r", {{ y: 0 }}, {{ y: -900, duration: {CRED - 1.2}, ease: "none" }}, 0.6);')
+      f'      tl.fromTo("#cr-r", {{ y: 0 }}, {{ y: -300, duration: {CRED - 1.2}, ease: "none" }}, 0.6);')
 
 # ---------- root ----------
 hosts = "\n".join(f'      <div id="{c}" class="scene" style="z-index: 4" data-composition-id="{c}" data-composition-src="compositions/{c}.html" data-start="{s}" data-duration="{d}" data-track-index="{1 + k % 2}" data-track-kind="graphics" data-width="1080" data-height="1920"></div>' for k, (c, s, d) in enumerate(INSERTS))

@@ -110,3 +110,12 @@ Positions are from OpenStreetMap (`osm_hotels.json`):
 
 ### Access note
 Wikimedia rate-limited, then blocked, this session's automated requests partway through ("robot policy"). Requests were stopped at that point. Every image used was downloaded once, before or between those limits.
+
+## Revision 3: assets still used
+Every source and licence is as logged above. No new assets were downloaded for this revision.
+- **Photos (Wikimedia Commons, credited in the roll):** hawa.jpg, amer.jpg, jalmahal.jpg, ghoomar.jpg (intro strip only), and indiamap.png (Milenioscuro, CC BY 4.0)
+- **Logos (identification only):** Adani, IHG, Sheraton, Marriott, Tata, Taj
+- **Footage (Mixkit Free):** mixkit-4872 (two coworkers) and mixkit-5227 (gala party), both labelled "Representative footage"
+- **Map positions:** OpenStreetMap (`osm_places.json`, `osm_hotels.json`)
+
+All other photos, clips and the news-headline cards from revision 2 are no longer in the video and were removed from `project/`.
