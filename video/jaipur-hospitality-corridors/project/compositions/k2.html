@@ -27,7 +27,7 @@
   <div id="root" data-composition-id="k2" data-width="1080" data-height="1920">
     <div id="k2-host" class="host clip" data-start="0" data-duration="5.95"><div id="k2-bg" class="ins"><div class="grain"></div></div></div>
     <div id="k2-vids"></div>
-    <div id="k2-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div class="lbl" style="position:absolute;left:96px;top:300px;color:#E3A23B">In the news · June 2026</div><div id="k2-h" class="serif" style="position:absolute;left:96px;right:96px;top:350px;font-size:76px;line-height:1.02;color:#F3E7D3">₹20,000 cr+ · phase one</div><div class="row" id="k2-r0" style="top:560px;font-size:38px"><b>&#8226;</b>Six airports, incl. Jaipur</div><div class="row" id="k2-r1" style="top:652px;font-size:38px"><b>&#8226;</b>Mumbai · Navi Mumbai · Ahmedabad</div><div class="row" id="k2-r2" style="top:744px;font-size:38px"><b>&#8226;</b>Lucknow · Jaipur · Guwahati</div><div class="row" id="k2-r3" style="top:836px;font-size:38px"><b>&#8226;</b>≈70% is in the Mumbai region</div><div class="note" style="top:938px;font-size:26px;white-space:normal;right:96px">Source: Business Standard / PTI, Free Press Journal, June 2026</div></div></div>
+    <div id="k2-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div id="k2-l" style="position:absolute;left:72px;top:290px"><div style="display:inline-flex;align-items:center;height:78px;padding:0 22px;border-radius:14px;background:#FFFFFF;"><img src="assets/img/logo_adani.png" style="height:54px;width:auto;display:block"/></div></div><div id="k2-c" style="position:absolute;left:100px;top:430px;width:880px;padding:26px 34px 22px;background:#F2EBDD;border-radius:6px;box-shadow:0 18px 40px rgba(0,0,0,0.45);transform:rotate(1.0deg);font-family:Instrument Serif,serif;color:#1B140F"><div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #1B140F;padding-bottom:8px;margin-bottom:14px"><span style="font-size:40px;font-weight:700;letter-spacing:0.02em">Business Standard</span><span style="font-family:JetBrains Mono,monospace;font-size:24px">June 2026</span></div><div style="font-size:52px;line-height:1.08">“Adani to invest ₹20k cr in six ‘airport city’ projects across 5 states”</div><div style="font-family:JetBrains Mono,monospace;font-size:20px;margin-top:12px;color:#5A4A3A">Headline quoted · Business Standard</div></div><div id="k2-f" style="position:absolute;left:72px;right:72px;top:800px"><div class="row" id="k2-r0" style="position:relative;left:0;right:0;top:0;font-size:36px;height:76px"><b>&#8226;</b>Mumbai · Navi Mumbai · Ahmedabad</div><div class="row" id="k2-r1" style="position:relative;left:0;right:0;top:0;font-size:36px;height:76px"><b>&#8226;</b>Lucknow · Jaipur · Guwahati</div><div class="row" id="k2-r2" style="position:relative;left:0;right:0;top:0;font-size:36px;height:76px"><b>&#8226;</b>≈70% of it in the Mumbai region</div></div></div></div>
   </div>
   <script>
     (function () {
@@ -36,11 +36,10 @@
       const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
       tl.fromTo(["#k2-bg", "#k2-vids", "#k2-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
       tl.fromTo("#k2-vids", { scale: 1.04 }, { scale: 1.0, duration: 5.95, ease: "none" }, 0);
-      IN("#k2-h", 0.1);
-      IN("#k2-r0", 1.4, { x: -20, y: 0 }, { x: 0 });
-      IN("#k2-r1", 2.0, { x: -20, y: 0 }, { x: 0 });
-      IN("#k2-r2", 2.6, { x: -20, y: 0 }, { x: 0 });
-      IN("#k2-r3", 3.4, { x: -20, y: 0 }, { x: 0 });
+      IN("#k2-l", 0.1); IN("#k2-c", 0.3, { y: 40, rotation: 4 }, { y: 0, rotation: 1.0 });
+      IN("#k2-r0", 2.4, { x: -20, y: 0 }, { x: 0 });
+      IN("#k2-r1", 2.9, { x: -20, y: 0 }, { x: 0 });
+      IN("#k2-r2", 3.4, { x: -20, y: 0 }, { x: 0 });
 
       tl.to(["#k2-bg", "#k2-vids", "#k2-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 5.67);
       window.__timelines["k2"] = tl;

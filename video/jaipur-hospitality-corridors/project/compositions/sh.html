@@ -24,21 +24,21 @@
     .row b { display: inline-flex; width: 50px; height: 50px; border-radius: 12px; border: 2px solid #E3A23B; align-items: center; justify-content: center; color: #E3A23B; font-size: 32px; }
 
   </style>
-  <div id="root" data-composition-id="f1" data-width="1080" data-height="1920">
-    <div id="f1-host" class="host clip" data-start="0" data-duration="3.95"><div id="f1-bg" class="ins"><div class="grain"></div></div></div>
-    <div id="f1-vids"><div class="panel" id="f1-pw0"><video id="f1-v0" class="clip" src="assets/broll/resort.mp4" data-start="0" data-duration="3.95" muted playsinline></video></div></div>
-    <div id="f1-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div class="panel-fade"></div><div class="rep">Representative footage</div><div class="tag amb" style="left:96px;top:760px" id="f1-t">Resort &amp; wedding corridor</div></div></div>
+  <div id="root" data-composition-id="sh" data-width="1080" data-height="1920">
+    <div id="sh-host" class="host clip" data-start="0" data-duration="6.75"><div id="sh-bg" class="ins"><div class="grain"></div></div></div>
+    <div id="sh-vids"></div>
+    <div id="sh-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div id="sh-l" style="position:absolute;left:72px;top:290px;display:flex;gap:16px;align-items:center"><div style="display:inline-flex;align-items:center;height:94px;padding:0 22px;border-radius:14px;background:#FFFFFF;"><img src="assets/img/logo_sheraton.png" style="height:70px;width:auto;display:block"/></div><div style="display:inline-flex;align-items:center;height:84px;padding:0 22px;border-radius:14px;background:#FFFFFF;"><img src="assets/img/logo_marriott.png" style="height:60px;width:auto;display:block"/></div><div class="tag amb" style="position:static;font-size:30px">Manglam Group</div></div><div id="sh-p" style="position:absolute;left:72px;top:450px;width:936px;height:450px;border-radius:16px;overflow:hidden;border:2px solid rgba(243,231,211,0.35);background:#1B140F"><img src="assets/img/sheraton.jpg" style="width:100%;height:100%;object-fit:cover;display:block"/><div style="position:absolute;left:0;right:0;bottom:0;padding:10px 14px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.9));font-family:Inter,sans-serif;font-weight:800;font-size:28px;line-height:1.1;color:#F3E7D3">Sheraton, Toronto · existing hotel, not the Jaipur project</div><div style="position:absolute;right:8px;top:6px;font-family:JetBrains Mono,monospace;font-size:16px;color:rgba(255,255,255,0.85);text-shadow:0 1px 3px #000">Photo: Chris Woodrich, CC BY-SA 4.0</div></div><div id="sh-c" style="position:absolute;left:100px;top:930px;width:880px;padding:26px 34px 22px;background:#F2EBDD;border-radius:6px;box-shadow:0 18px 40px rgba(0,0,0,0.45);transform:rotate(1.0deg);font-family:Instrument Serif,serif;color:#1B140F"><div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #1B140F;padding-bottom:8px;margin-bottom:14px"><span style="font-size:40px;font-weight:700;letter-spacing:0.02em">Business Standard</span><span style="font-family:JetBrains Mono,monospace;font-size:24px">June 2026</span></div><div style="font-size:52px;line-height:1.08">“Manglam Group ties up with Marriott for ₹350 crore Sheraton hotel in Jaipur”</div><div style="font-family:JetBrains Mono,monospace;font-size:20px;margin-top:12px;color:#5A4A3A">Headline quoted · Business Standard</div></div><div id="sh-f" style="position:absolute;left:72px;top:1200px;display:flex;gap:14px"><div class="tag amb" style="position:static">220 keys</div><div class="tag amb" style="position:static">Jaipur–Ajmer Hwy</div></div></div></div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
       const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 16 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
       const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
-      tl.fromTo(["#f1-bg", "#f1-vids", "#f1-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
-      tl.fromTo("#f1-vids", { scale: 1.04 }, { scale: 1.0, duration: 3.95, ease: "none" }, 0);
-      IN("#f1-t", 0.3);
-      tl.to(["#f1-bg", "#f1-vids", "#f1-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 3.67);
-      window.__timelines["f1"] = tl;
+      tl.fromTo(["#sh-bg", "#sh-vids", "#sh-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#sh-vids", { scale: 1.04 }, { scale: 1.0, duration: 6.75, ease: "none" }, 0);
+      IN("#sh-l", 1.65); IN("#sh-p", 3.97, { scale: 0.96 }, { scale: 1 }); IN("#sh-c", 2.65, { y: 40, rotation: 4 }, { y: 0, rotation: 1.0 }); IN("#sh-f", 5.05);
+      tl.to(["#sh-bg", "#sh-vids", "#sh-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 6.47);
+      window.__timelines["sh"] = tl;
     })();
   </script>
 </template>
