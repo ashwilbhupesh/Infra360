@@ -26,7 +26,7 @@ BASE = """
 INSERTS = []
 def rel(t, s): return round(t - s, 2)
 
-def scene(cid, start, end, body, js, videos=()):
+def scene(cid, start, end, body, js, videos=(), keep=False):
     dur = round(end - start, 2); INSERTS.append((cid, start, dur))
     vids = "".join(f'<div class="panel" id="{cid}-pw{k}"><video id="{cid}-v{k}" class="clip" src="assets/broll/{src}.mp4" data-start="{round(vs,2)}" data-duration="{round(vd,2)}" muted playsinline></video></div>' for k, (src, vs, vd) in enumerate(videos))
     html = f"""<template>
@@ -45,7 +45,7 @@ def scene(cid, start, end, body, js, videos=()):
       tl.fromTo(["#{cid}-bg", "#{cid}-vids", "#{cid}-fg"], {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3, ease: "power2.out" }}, 0);
       tl.fromTo("#{cid}-vids", {{ scale: 1.04 }}, {{ scale: 1.0, duration: {dur}, ease: "none" }}, 0);
 {js}
-      tl.to(["#{cid}-bg", "#{cid}-vids", "#{cid}-fg"], {{ opacity: 0, duration: 0.28, ease: "power2.in" }}, {round(dur - 0.28, 2)});
+{"" if keep else f'      tl.to(["#{cid}-bg", "#{cid}-vids", "#{cid}-fg"], {{ opacity: 0, duration: 0.28, ease: "power2.in" }}, {round(dur - 0.28, 2)});'}
       window.__timelines["{cid}"] = tl;
     }})();
   </script>

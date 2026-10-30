@@ -127,12 +127,12 @@ class Map:
         self.html.append(f'<div id="{self.cid}-{rid}" style="position:absolute;left:64px;right:64px;top:{y - 90}px;padding:16px 24px;border-radius:18px;background:rgba(18,13,10,0.94);border:1.5px solid #E3A23B">'
                          f'<div class="lbl" style="color:#E3A23B;font-size:26px">{kicker}</div><div style="font-family:Inter,sans-serif;font-weight:700;font-size:33px;line-height:1.2;color:#F3E7D3;margin-top:4px">{text}</div></div>')
         return f"#{self.cid}-{rid}"
-    def render(self, start, end, js, note="Schematic · positions: OpenStreetMap"):
+    def render(self, start, end, js, note="Schematic · positions: OpenStreetMap", keep=False):
         glow = f'<defs><filter id="{self.cid}-glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="{5*self.u:.3f}" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
         svg = f'<svg id="{self.cid}-map" style="position:absolute;left:0;top:{MT - 90}px;width:1080px;height:{MH}px" viewBox="{self.vx:.3f} {self.vy:.3f} {self.w:.3f} {self.h:.3f}">{glow}{"".join(self.svg)}</svg>'
         nt = f'<div class="note" style="top:{MT + MH - 90 - 40}px;left:auto;right:64px;font-size:26px;color:rgba(201,183,156,0.85)">{note}</div>' if note else ""
         scene(self.cid, start, end, svg + "".join(self.html) + nt,
-              f'      tl.fromTo("#{self.cid}-map", {{ scale: 1.0 }}, {{ scale: 1.04, duration: {round(end - start, 2)}, ease: "none", transformOrigin: "50% 50%" }}, 0);\n' + js)
+              f'      tl.fromTo("#{self.cid}-map", {{ scale: 1.0 }}, {{ scale: 1.04, duration: {round(end - start, 2)}, ease: "none", transformOrigin: "50% 50%" }}, 0);\n' + js, keep=keep)
 
 def POP(c, t): sel, r = c; return f'      tl.fromTo("{sel}", {{ attr: {{ r: 0 }} }}, {{ attr: {{ r: {r} }}, duration: 0.5, ease: "back.out(1.6)" }}, {t});\n'
 def SHOW(sel, t): return f'      IN("{sel}", {t});\n'
@@ -206,6 +206,7 @@ scene("g0", s, 4.3, f'<div id="g0-z" style="position:absolute;left:0;top:0;width
 
 
 
+
 def badge(m, rid, at, logos, dx=20, dy=-110, h=40, label=None):
     """Brand badge pinned to a map point: white pill with logo(s) and optional text."""
     x, y = m.px(K(at) if isinstance(at, str) else at); x += dx; y += dy
@@ -225,20 +226,44 @@ def arc(m, rid, a, b, bend=0.25, color="#B8E07A"):
     mx, my = (a[0] + b[0]) / 2 - (b[1] - a[1]) * bend, (a[1] + b[1]) / 2 + (b[0] - a[0]) * bend
     m.svg.append(f'<path id="{m.cid}-{rid}" class="draw" pathLength="1" d="M{a[0]:.3f} {a[1]:.3f} Q{mx:.3f} {my:.3f} {b[0]:.3f} {b[1]:.3f}" style="fill:none;stroke:{color};stroke-width:{3*m.u};stroke-dasharray:1;filter:url(#{m.cid}-glow)"/>')
     return f"#{m.cid}-{rid}"
+def popup(m, rid, src, at, t_on, t_off, cap, dx=-300, dy=-250, w=260, h=170):
+    """Small clip pop-up on the map, pointing at the labelled spot (representative footage)."""
+    p = K(at) if isinstance(at, str) else at; x, y = m.px(p)
+    bx = max(48, min(1080 - 48 - w, x + dx)); by = max(MT + 10, min(MT + MH - h - 60, y + dy))
+    ax, ay = min(max(x, bx + 20), bx + w - 20), (by + h if y > by + h else by)
+    m.html.append(f'<svg id="{m.cid}-{rid}l" data-layout-allow-overlap style="position:absolute;left:0;top:-90px;width:1080px;height:1920px;overflow:visible;opacity:0;pointer-events:none"><path d="M{ax:.0f} {ay:.0f} L{x:.0f} {y:.0f}" style="stroke:#F5B04A;stroke-width:3;fill:none"/></svg>'
+                  f'<div id="{m.cid}-{rid}" data-layout-allow-overlap style="position:absolute;left:{bx:.0f}px;top:{by - 90:.0f}px;width:{w}px;height:{h}px;border-radius:14px;overflow:hidden;border:3px solid #F5B04A;box-shadow:0 10px 28px rgba(0,0,0,0.6);background:#1B140F;opacity:0">'
+                  f'<video id="{m.cid}-{rid}v" class="clip" src="assets/broll/{src}.mp4" data-start="{max(0, round(t_on - 0.1, 2))}" data-duration="{round(t_off - t_on + 0.5, 2)}" muted playsinline style="width:100%;height:100%;object-fit:cover"></video>'
+                  f'<div style="position:absolute;left:0;right:0;bottom:0;padding:4px 10px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.9));font-family:Inter,sans-serif;font-weight:800;font-size:28px;color:#F3E7D3">{cap}</div></div>')
+    sel = f"#{m.cid}-{rid}"
+    return (f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.4, transformOrigin: "50% 100%" }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }}, {t_on});\n'
+            f'      tl.fromTo("{sel}l", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.2 }}, {t_on});\n'
+            f'      tl.to(["{sel}", "{sel}l"], {{ opacity: 0, scale: 0.85, duration: 0.25, ease: "power2.in" }}, {t_off});\n')
+def popups(m, items, end, **kw):
+    """items: (rid, src, at, t, cap, dx, dy); each pop-up stays until the next one appears."""
+    js = ""
+    for k, (rid, src, at, t, cap, dx, dy) in enumerate(items):
+        t_off = items[k + 1][3] + 0.1 if k + 1 < len(items) else end
+        js += popup(m, rid, src, at, t, t_off, cap, dx=dx, dy=dy, **kw)
+    return js
 ON1 = lambda sel, t: f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.6, transformOrigin: "50% 50%" }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }}, {t});\n'
 OFF = lambda sel, t: f'      tl.to("{sel}", {{ opacity: 0, duration: 0.25 }}, {t});\n'
 ACH, KUK = K("achrol"), K("kukas")
 SHER = km(26.885, 75.720)   # Sheraton: on the Jaipur–Ajmer Highway per reports; exact plot not public
 
-# 1 · three corridors (4.3–5.95)
+# 1 · three corridors (4.3–7.4): held through "The first is the airport belt", then zooms toward the airport
 s = 4.3; m = Map("m1", -2, 2, 66).base(sring=False, nring=False)
 cA = m.circle("ca", "airport", 4.5, "rgba(245,176,74,0.25)", "#F5B04A"); cD = m.circle("cd", km(27.08, 75.92), 6.0, "rgba(245,176,74,0.25)", "#F5B04A"); cM = m.circle("cm", "mahapura", 4.5, "rgba(245,176,74,0.25)", "#F5B04A")
-js = POP(cA, 0.3) + POP(cD, 0.5) + POP(cM, 0.7)
-js += SHOW(m.tag("t1", "1 · Airport belt", "airport", dx=40, dy=20, amb=True), 0.4) + SHOW(m.tag("t2", "2 · Delhi Rd", km(27.08, 75.92), dx=-60, dy=80, amb=True), 0.6) + SHOW(m.tag("t3", "3 · Ajmer Rd", "mahapura", dx=-150, dy=60, amb=True), 0.8)
-m.render(s, 5.95, js)
+js = POP(cA, rel(5.04, s)) + POP(cD, rel(5.04, s) + 0.12) + POP(cM, rel(5.04, s) + 0.24)
+js += SHOW(m.tag("t1", "1 · Airport belt", "airport", dx=40, dy=20, amb=True), rel(5.1, s)) + SHOW(m.tag("t2", "2 · Delhi Rd", km(27.08, 75.92), dx=-60, dy=80, amb=True), rel(5.1, s) + 0.12) + SHOW(m.tag("t3", "3 · Ajmer Rd", "mahapura", dx=-150, dy=60, amb=True), rel(5.1, s) + 0.24)
+ax, ay = m.px(K("airport"))
+js += f'      tl.to(["#m1-cd", "#m1-cm", "#m1-t2", "#m1-t3"], {{ opacity: 0.25, duration: 0.4 }}, {rel(6.5, s)});\n      tl.to("#m1-fg .note", {{ opacity: 0, duration: 0.2 }}, {rel(6.5, s)});\n'
+js += f'      tl.to("#m1-fg", {{ scale: 1.45, transformOrigin: "{ax:.0f}px {ay:.0f}px", duration: 1.1, ease: "power2.inOut" }}, {rel(6.5, s)});\n'
+js += f'      tl.to("#m1-fg", {{ opacity: 0, duration: 0.3 }}, {rel(7.25, s)});\n'
+m.render(s, 7.75, js, keep=True)   # no fade-out: the airport map fades in on top
 
-# 2 · airport belt (5.95–14.65)
-s = 5.95; m = Map("ma", 0.5, 8, 24).base(sring=False, nring=False)
+# 2 · airport belt (7.4–14.65)
+s = 7.4; m = Map("ma", 0.5, 8, 24).base(sring=False, nring=False)
 for kk in ("malviya", "jagatpura", "sitapura"): m.dot(kk)
 cA = m.circle("ca", "airport", 3.2, "rgba(245,176,74,0.22)", "#F5B04A"); pA = pin(m, "pa", "airport")
 bA = badge(m, "ba", "airport", ["logo_adani.png"], dx=-80, dy=-150, label="Airport City")
@@ -247,10 +272,11 @@ arcs = [arc(m, f"r{k}", "airport", p) for k, (_, p, _) in enumerate(icons)]
 js = POP(cA, 0.2) + ON1(pA, 0.3) + SHOW(m.tag("t0", "Jaipur International Airport", "airport", dx=-200, dy=60, amb=True), 0.4)
 js += SHOW(m.tag("t2", "Malviya Nagar", "malviya", dx=20, dy=-30, size=26), 0.6) + SHOW(m.tag("t3", "Jagatpura", "jagatpura", dx=20, dy=-30, size=26), 0.7) + SHOW(m.tag("t4", "Sitapura", "sitapura", dx=20, dy=-10, size=26), 0.8)
 js += OFF("#ma-t2, #ma-t3, #ma-t4", rel(9.6, s)) + OFF("#ma-t0", rel(11.75, s))
+js += popups(m, [("p0", "pool", icons[0][1], rel(11.99, s), "Hospitality", 60, -330), ("p1", "mall", icons[1][1], rel(12.87, s), "Retail", -330, -40), ("p2", "office", icons[2][1], rel(13.67, s), "Commercial", 300, -260)], rel(14.4, s))
 js += ON1(bA, rel(8.0, s)) + SHOW(m.chip("c1", "Adani Airport City programme", "Jaipur is one of six airports in phase one"), rel(9.9, s))
 for k, (txt, p, t) in enumerate(icons):
     js += DR(arcs[k], rel(t, s) - 0.1, 0.4) + SHOW(m.tag(f"i{k}", "◆ " + txt, p, dx=-60, dy=20, amb=True, size=30), rel(t, s))
-m.render(s, 14.65, js)
+m.render(s, 14.65, js, note="Schematic · clips: representative footage")
 
 # 3 · Delhi Road: existing hotels + InterContinental Achrol (14.65–31.05)
 s = 14.65; m = Map("md", 5, -10, 30).base(sring=False, nring=False)
@@ -294,21 +320,28 @@ for k, (txt, t) in enumerate([("◆ Commercial space", 51.03), ("◆ Rental acco
     js += SHOW(m.tag(f"w{k}", txt, (0, -30 + k * 7), dx=-300, dy=0, size=32), rel(t, s))
 m.render(s, 58.9, js, note="Speaker's view · not a guarantee")
 
-# 6 · where visitors spend (58.9–65.6)
+# 6 · where visitors spend, then what hotels bring (58.9–70.4), with small clip pop-ups
 s = 58.9; m = Map("ms", 0, 2, 50).base(sring=False, nring=False)
-spend = [("Hotels", HK("fairmont"), 61.91), ("Restaurants", K("cscheme") if False else km(26.906, 75.803), 62.55), ("Transport", K("airport"), 63.43), ("Shopping", K("hawa"), 64.23), ("Weddings", K("achrol"), 64.95)]
+spend = [("Hotels", HK("fairmont"), 61.91), ("Restaurants", km(26.906, 75.803), 62.55), ("Transport", K("airport"), 63.43), ("Shopping", K("hawa"), 64.23), ("Weddings", K("achrol"), 64.95)]
 hub = km(26.88, 75.80)
 arcs = [arc(m, f"a{k}", hub, p, 0.2) for k, (_, p, _) in enumerate(spend)]
 m.svg.append(f'<circle cx="{hub[0]:.3f}" cy="{hub[1]:.3f}" r="{14*m.u:.3f}" style="fill:#F5B04A"/>')
 js = SHOW(m.tag("hv", "Visitors", hub, dx=-150, dy=10, amb=True, size=34), 0.3)
 for k, (txt, p, t) in enumerate(spend):
     js += DR(arcs[k], rel(t, s) - 0.15, 0.35) + SHOW(m.tag(f"s{k}", "◆ " + txt, p, dx=20, dy=-30, amb=True, size=32), rel(t, s))
-m.render(s, 65.6, js, note="Illustrative")
-
-# 7 · hotels bring customers, employment, services (65.6–70.4) — footage clip
-scene("em", 65.6, 70.4, '<div class="panel-fade"></div><div class="rep">Representative footage</div>'
-      + "".join(f'<div class="tag{" amb" if k == 1 else ""}" id="em-t{k}" style="left:96px;top:{560 + k * 100}px">{t}</div>' for k, t in enumerate(["Customers", "Employment", "Supporting services"])),
-      "\n".join(f'      IN("#em-t{k}", {round(t - 65.6, 2)});' for k, t in enumerate([65.93, 68.09, 69.4])), [("coworkers", 0, 4.8)])
+js += popups(m, [("p0", "checkin", spend[0][1], rel(61.91, s), "Hotels", -330, 40), ("p1", "dining", spend[1][1], rel(62.55, s), "Restaurants", -330, 60),
+                 ("p2", "traffic", spend[2][1], rel(63.43, s), "Transport", 40, 40), ("p3", "shoppers", spend[3][1], rel(64.23, s), "Shopping", -330, -250),
+                 ("p4", "wedding", spend[4][1], rel(64.95, s), "Weddings", -330, 30)], rel(65.75, s))
+# what the hotels bring (65.6–70.4): visitor arcs fade, hotel point radiates to three needs
+H = HK("fairmont")
+js += f'      tl.to([{", ".join(chr(34) + a + chr(34) for a in arcs)}, "#ms-hv", "#ms-s1", "#ms-s2", "#ms-s3", "#ms-s4"], {{ opacity: 0.18, duration: 0.4 }}, {rel(65.6, s)});\n'
+needs = [("Customers", (H[0] - 13, H[1] + 13), 65.93, "mall"), ("Employment", (H[0] + 10, H[1] + 17), 68.09, "coworkers"), ("Supporting services", (H[0] - 16, H[1] + 25), 69.4, "rental")]
+narcs = [arc(m, f"n{k}", H, p, -0.2, "#F5B04A") for k, (_, p, _, _) in enumerate(needs)]
+for k, (txt, p, t, _) in enumerate(needs):
+    m.svg.append(f'<circle id="ms-nd{k}" cx="{p[0]:.3f}" cy="{p[1]:.3f}" r="{8*m.u:.3f}" style="fill:#F5B04A;opacity:0"/>')
+    js += DR(narcs[k], rel(t, s) - 0.2, 0.4) + ON(f"#ms-nd{k}", rel(t, s)) + SHOW(m.tag(f"n{k}", "◆ " + txt, p, dx=20, dy=-30, amb=True, size=32), rel(t, s))
+js += popups(m, [(f"q{k}", src, p, rel(t, s), txt, 30, 30) for k, (txt, p, t, src) in enumerate(needs)], rel(70.1, s))
+m.render(s, 70.4, js, note="Illustrative · clips: representative footage")
 
 # 8 · beyond sightseeing on the map, with one wedding clip inset (74.5–85.9)
 s = 74.5; m = Map("mn", -1, 0, 60).base(sring=False, nring=False)
@@ -320,14 +353,12 @@ for k, (txt, p, t) in enumerate(uses):
     js += ON1(ps[k], rel(t, s)) + SHOW(m.tag(f"u{k}", "◆ " + txt, p, dx=24, dy=-20, amb=True, size=32), rel(t, s))
 js += "".join(POP(c, rel(81.29, s) + 0.15 * k) for k, c in enumerate(cs))
 js += SHOW(m.chip("c1", "Opportunity", "For property owners &amp; entrepreneurs across these corridors"), rel(81.6, s))
-m.html.append('<div id="mn-v" style="position:absolute;left:600px;top:850px;width:400px;height:300px;border-radius:18px;overflow:hidden;border:3px solid #F5B04A;opacity:0">'
-              '<video id="mn-vv" class="clip" src="assets/broll/gala.mp4" data-start="0" data-duration="2.6" muted playsinline style="width:100%;height:100%;object-fit:cover"></video>'
-              '<div style="position:absolute;left:8px;bottom:6px;font-family:JetBrains Mono,monospace;font-size:16px;color:#fff;text-shadow:0 1px 3px #000">Representative footage</div></div>')
-js += f'      tl.fromTo("#mn-v", {{ opacity: 0, scale: 0.9 }}, {{ opacity: 1, scale: 1, duration: 0.3 }}, 0.1); tl.to("#mn-v", {{ opacity: 0, duration: 0.25 }}, 2.35);\n'
-m.render(s, 85.9, js)
+js += popups(m, [("q0", "wedding", uses[0][1], rel(74.81, s), "Weddings", -330, 30), ("q1", "present", uses[1][1], rel(76.17, s), "Conferences", -330, 30),
+                 ("q2", "resort", uses[2][1], rel(77.29, s), "Luxury", -330, 40), ("q3", "landing", uses[3][1], rel(78.89, s), "Business travel", -330, 40)], rel(80.6, s))
+m.render(s, 85.9, js, note="Schematic · clips: representative footage")
 
 # ---------- chrome ----------
-SECT = [(4.3, "WATCH", "3 corridors"), (5.95, "CORRIDOR 1", "The airport belt"), (14.65, "CORRIDOR 2", "Delhi Road \u00b7 Achrol"), (31.05, "CORRIDOR 3", "Ajmer Road \u00b7 Mahapura"),
+SECT = [(4.3, "WATCH", "3 corridors"), (6.05, "CORRIDOR 1", "The airport belt"), (14.65, "CORRIDOR 2", "Delhi Road \u00b7 Achrol"), (31.05, "CORRIDOR 3", "Ajmer Road \u00b7 Mahapura"),
         (42.95, "WHERE TO INVEST", "Where it could emerge"), (58.9, "THE RIPPLE EFFECT", "Visitors spend locally"), (65.6, "THE RIPPLE EFFECT", "Jobs \u00b7 demand \u00b7 services"),
         (70.4, "WHAT'S NEXT", "Beyond sightseeing"), (81.2, "THE OPPORTUNITY", "Across these corridors"), (85.9, "SAVE THIS", "Follow the developments")]
 cards = [(f"hd-{k+1}", t, (SECT[k+1][0] if k + 1 < len(SECT) else VIDEO_END), c, h) for k, (t, c, h) in enumerate(SECT)]
@@ -452,7 +483,7 @@ open(f"{P}/compositions/endcard.html", "w").write(f"""<template>
 </template>
 """)
 
-MIXKIT = ["Two coworkers talking and laughing", "Gala party seen from above a table"]
+MIXKIT = ["Luxury swimming pool", "Busy shopping mall time lapse", "Open office space", "A family checking in a luxury hotel", "Customers in a minimalist style restaurant", "Aerial travel above a highway in the city", "Shoppers walking through a mall", "Decorations on the ceiling of a wedding party", "Two coworkers talking and laughing", "Interior of a room with terrace", "A man is presenting a business report", "Swiming pool in resort garden", "Airplane landing in illuminated airport tracks"]
 
 # ---------- credits roll ----------
 CR = {k: v for k, v in json.load(open(__file__.replace("build.py", "img/credits.json"))).items() if k in ('indiamap', 'hawa', 'amer', 'jalmahal', 'ghoomar', 'logo_adani', 'logo_ihg', 'logo_sheraton', 'logo_marriott', 'logo_tata', 'logo_taj')}

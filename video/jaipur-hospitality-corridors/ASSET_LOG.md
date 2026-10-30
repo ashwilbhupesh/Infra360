@@ -119,3 +119,9 @@ Every source and licence is as logged above. No new assets were downloaded for t
 - **Map positions:** OpenStreetMap (`osm_places.json`, `osm_hotels.json`)
 
 All other photos, clips and the news-headline cards from revision 2 are no longer in the video and were removed from `project/`.
+
+## Revision 4: assets used
+- **Photos and logos:** same as revision 3
+- **Footage (Mixkit Free, logged above):** used as small map pop-ups, labelled "clips: representative footage"
+  - pool (4045), mall (31086), office (914), checkin (36736), dining (4385), traffic (41540), shoppers (25516), wedding (5213), coworkers (4872), rental (4029), present (22961), resort (6773), landing (7374)
+- gala (5227) is no longer used.

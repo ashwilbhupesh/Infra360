@@ -91,3 +91,15 @@ The talk track is 92.2 s (it was 121 s); with the closing card and credits the r
 | 74.5–85.9 | Beyond-sightseeing map: destination weddings (Achrol), conferences (Sitapura), luxury experiences (Amer), business travel (airport); short gala inset; "Opportunity" chip |
 
 Removed: the tourist photo grid, the airport photo, the existing-hotel photos abroad, the news-headline cards and most footage tiles. Brand logos now sit on the map as small badges. Only the photos, logos and clips that are still used appear in the credits roll.
+
+## Revision 4: smoother corridor intro, pop-ups on the maps
+Your feedback: the "watch out these three corridors" moment was too short and distracting; show a small pop-up on the map for each item labelled (retail, shopping, weddings, …).
+
+| Time | Change |
+|---|---|
+| 4.3–7.75 | The three-corridor map now holds through "The first is the airport belt". All three circles and labels pop on "three" (no staggered flashing). On "first" the Delhi and Ajmer corridors dim and the map zooms gently into the airport belt, then the airport map crossfades in. The "Corridor 1" heading now appears on "first". |
+| 7.4–14.65 | Small clip pop-ups pointing at each label: Hospitality (pool), Retail (mall), Commercial (office) |
+| 58.9–70.4 | The visitor-spend map continues through the "jobs · demand · services" lines; the full-screen coworkers clip is gone. Pop-ups: Hotels (check-in), Restaurants (dining), Transport (highway), Shopping (shoppers), Weddings (wedding décor); then Customers (mall), Employment (coworkers), Supporting services (hotel room), drawn as arcs from the hotel cluster. |
+| 74.5–85.9 | Pop-ups for Destination weddings, Conferences (presentation), Luxury experiences (resort pool), Business travel (landing). These replace the gala inset. |
+
+The pop-ups are 260×170 px. Each stays on screen until the next one appears, so no more than one or two show at a time, and the map notes read "clips: representative footage". All the clips were already logged as Mixkit Free; nothing new was downloaded.
