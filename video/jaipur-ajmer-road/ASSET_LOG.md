@@ -91,3 +91,4 @@ Clips in `project/assets/broll` are stored at 960 px wide (crf 26, no audio) to 
   Rejected as Restricted: every other flamingo and warehouse clip checked (10214, 9693, 45247, 11031, 47149, 32202, 45847, 24127, 23550, 39463, 23551, 45848, 47939).
 - **Map data:** OpenStreetMap via the Overpass API (maps.mail.ru mirror), in 16 tiles for major roads plus city, rail and lake queries. Fetched 2026-10-30. © OpenStreetMap contributors, ODbL. Credited on screen and in the roll.
 - **Not obtained:** photos of the 200-ft Bypass and Hirapura bus terminal. No free-licence photos were found, and Wikimedia rate-limited this session. Their pop-ups use labelled representative clips.
+- `img/newbusstand.jpg`: Jaipur's new bus stand (aerial). You supplied it; it's captioned "Image supplied".

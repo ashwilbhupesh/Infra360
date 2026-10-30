@@ -60,3 +60,7 @@ Your feedback: use a more realistic map; make it easier to keep track of where w
   - Marble quarry (supplied)
   - Warehouse interior clip (Mixkit 4705, Free)
   - Flamingos clip for Sambhar (Mixkit 4681, Free; labelled representative)
+
+### Revision 2 fixes
+- **15.9–21.1 s:** "The bus terminal adds a transport anchor" refers to Jaipur's **new bus stand near Westway Heights**, built to decongest the area. It now gets its own pin and a photo pop-up (your image), separate from the Hirapura terminal at the 200-ft Bypass. The position is approximate.
+- The connector roads to Phulera and Narena no longer show a dark centre line, and the map-credit line moved below the pop-ups.

@@ -316,7 +316,7 @@ def sch(rid, pts, t0, d, color="#B8E07A", width=6, dash="10 8"):
     pts = [K(p) if isinstance(p, str) else p for p in pts]
     SVG.append(f'<g id="mp-{rid}" style="opacity:0"><path d="{pd(pts)}" style="fill:none;stroke:{color};stroke-opacity:0.25;stroke-width:16;stroke-linecap:round"/>'
                f'<path class="dr" pathLength="1" d="{pd(pts)}" style="fill:none;stroke:{color};stroke-width:{width};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
-               (f'<path class="ds" d="{pd(pts)}" style="fill:none;stroke:#120D0A;stroke-width:{width + 1};stroke-dasharray:{dash};opacity:0"/>' if dash != "1 0" else "") + '</g>')
+               + (f'<path class="ds" d="{pd(pts)}" style="fill:none;stroke:#120D0A;stroke-width:{width + 1};stroke-dasharray:{dash};opacity:0"/>' if dash != "1 0" else "") + '</g>')
     return (f'      tl.set("#mp-{rid}", {{ opacity: 1 }}, {t0:.3f});\n      tl.fromTo("#mp-{rid} .dr", {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: {d:.3f}, ease: "power1.inOut" }}, {t0:.3f});\n'
             f'      tl.to("#mp-{rid} .ds", {{ opacity: 1, duration: 0.3 }}, {t0 + d:.3f});\n')
 LBL = {}
@@ -420,13 +420,16 @@ js += label("p1", "hirapura", "Hirapura bus terminal", r(4.9), until=r(30.4), dx
 js += label("p2", "keshopura", "Keshopura", r(6.5), until=r(30.4), dx=16, dy=-70)
 js += label("p3", "westway", "Westway Heights", r(7.7), until=r(30.4), dx=16, dy=-80)
 js += label("p4", "bhankrota", "Bhankrota", r(8.7), until=r(30.4), dx=16, dy=-80, right=True)
-js += label("p5", "vrb", "VRB Golden Tower · upcoming", r(12.2), until=r(23.3), dx=16, dy=20, size=26, amb=False)
+js += label("p5", "vrb", "VRB Golden Tower · upcoming", r(12.2), until=r(15.8), dx=16, dy=20, size=26, amb=False)
 js += label("p6", "pinkwest", "Manglam PinkWest", r(13.8), until=r(23.3), dx=16, dy=-20, size=26, amb=False)
 js += popup("q0", None, "hirapura", r(5.0), r(12.1), "Hirapura bus terminal", box=BR, img="busterminal.jpg", sub="Photo", w=400, h=300) if os.path.exists(f"{P}/assets/img/busterminal.jpg") else popup("q0", "freeway", "hirapura", r(5.0), r(12.1), "Bus terminal", box=BR)
 js += popup("pv", None, "vrb", r(12.3), r(16.9), "VRB Golden Tower", w=330, h=590, img="vrb.jpg", sub="Developer render · supplied", box=(700, 800))
 js += popup("pp", None, "pinkwest", r(13.9), r(20.9), "Manglam PinkWest", w=430, h=430, img="pinkwest.jpg", sub="Developer render · supplied", box=(48, 980))
 js += news("n1", "Construction World", "", "Manglam Group Launches Rs 1,000 Cr PinkWest in West Jaipur", r(14.6), r(17.0))
-js += popups([("q2", "freeway", "hirapura", r(17.0), "Transport anchor", BR), ("q3", "market", "pinkwest", r(21.2), "Shops", BL),
+NB = km(26.869, 75.694)   # new bus stand near Westway Heights (approximate position)
+js += label("nb", NB, "New bus stand", r(15.9), until=r(30.4), dx=90, dy=60, size=26)
+js += popup("q2", None, NB, r(16.0), r(21.1), "New bus stand", box=(700, 760), w=330, h=590, img="newbusstand.jpg", sub="Image supplied")
+js += popups([("q3", "market", "pinkwest", r(21.2), "Shops", BL),
               ("q4", "office", "vrb", r(21.8), "Offices", BR), ("q5", "dining", "westway", r(22.6), "Services", BL)], r(23.3))
 # 200-ft bypass junction (zoom further in)
 J = (K("hirapura")[0], K("hirapura")[1] + 0.2, 3.2); cam(23.4, J, 0.9)
@@ -562,7 +565,7 @@ js += popups([("qx0", "warehouse", K("jobner"), r(141.2), "Warehouses", BL), ("q
 # notes (bottom-right, screen space)
 for k, (a, b, txt) in enumerate([(2.3, 23.4, "Map: OpenStreetMap · some positions approximate"), (23.4, 31.3, "Schematic layout · reported scope"), (31.3, 47.1, "Map: OpenStreetMap"),
                                   (47.1, 66.0, "Proposed alignment schematic, as reported"), (66.0, 126.2, "Map: OpenStreetMap · clips: representative footage"), (126.2, 147.4, "Proposed alignment approximate")]):
-    OVL.append(f'<div class="note" id="mp-nt{k}" style="top:{1290 - 90}px;left:auto;right:64px;font-size:26px;color:rgba(201,183,156,0.9);opacity:0">{txt}</div>')
+    OVL.append(f'<div class="note" id="mp-nt{k}" style="top:{1398 - 90}px;left:auto;right:64px;font-size:24px;color:rgba(201,183,156,0.9);opacity:0">{txt}</div>')
     js += f'      tl.to("#mp-nt{k}", {{ opacity: 1, duration: 0.3 }}, {max(0, r(a))});\n      tl.to("#mp-nt{k}", {{ opacity: 0, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
 # face beats: the whole map fades out and back
 for a, b in FACE:
