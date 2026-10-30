@@ -207,6 +207,9 @@ scene("g0", s, 4.3, f'<div id="g0-z" style="position:absolute;left:0;top:0;width
 
 
 
+
+
+
 def badge(m, rid, at, logos, dx=20, dy=-110, h=40, label=None):
     """Brand badge pinned to a map point: white pill with logo(s) and optional text."""
     x, y = m.px(K(at) if isinstance(at, str) else at); x += dx; y += dy
@@ -226,25 +229,31 @@ def arc(m, rid, a, b, bend=0.25, color="#B8E07A"):
     mx, my = (a[0] + b[0]) / 2 - (b[1] - a[1]) * bend, (a[1] + b[1]) / 2 + (b[0] - a[0]) * bend
     m.svg.append(f'<path id="{m.cid}-{rid}" class="draw" pathLength="1" d="M{a[0]:.3f} {a[1]:.3f} Q{mx:.3f} {my:.3f} {b[0]:.3f} {b[1]:.3f}" style="fill:none;stroke:{color};stroke-width:{3*m.u};stroke-dasharray:1;filter:url(#{m.cid}-glow)"/>')
     return f"#{m.cid}-{rid}"
-def popup(m, rid, src, at, t_on, t_off, cap, dx=-300, dy=-250, w=260, h=170):
-    """Small clip pop-up on the map, pointing at the labelled spot (representative footage)."""
+def popup(m, rid, src, at, t_on, t_off, cap, dx=-300, dy=-250, w=400, h=260, img=None, sub=None, pos=None, box=None):
+    """Clip (or photo) pop-up on the map, with a leader line to the labelled spot."""
     p = K(at) if isinstance(at, str) else at; x, y = m.px(p)
-    bx = max(48, min(1080 - 48 - w, x + dx)); by = max(MT + 10, min(MT + MH - h - 60, y + dy))
+    bx = max(40, min(1080 - 40 - w, x + dx)); by = max(MT + 10, min(MT + MH - h - 60, y + dy))
     ax, ay = min(max(x, bx + 20), bx + w - 20), (by + h if y > by + h else by)
+    if box:
+        bx, by = box; ax = min(max(x, bx + 20), bx + w - 20); ay = by + h if y > by + h else (by if y < by else by + h / 2)
+        if by <= y <= by + h: ax = bx + w if x > bx + w else bx
+    if pos: bx, by = pos; ax, ay, x, y = 0, 0, 0, 0
+    media = (f'<img src="{IMG}{img}" style="width:100%;height:100%;object-fit:cover;display:block"/>' if img else
+             f'<video id="{m.cid}-{rid}v" class="clip" src="assets/broll/{src}.mp4" data-start="{max(0, round(t_on - 0.1, 2))}" data-duration="{round(t_off - t_on + 0.5, 2)}" muted playsinline style="width:100%;height:100%;object-fit:cover"></video>')
+    sb = f'<div style="font-weight:600;font-size:24px;color:#E8D9BF;margin-top:2px">{sub}</div>' if sub else ""
     m.html.append(f'<svg id="{m.cid}-{rid}l" data-layout-allow-overlap style="position:absolute;left:0;top:-90px;width:1080px;height:1920px;overflow:visible;opacity:0;pointer-events:none"><path d="M{ax:.0f} {ay:.0f} L{x:.0f} {y:.0f}" style="stroke:#F5B04A;stroke-width:3;fill:none"/></svg>'
-                  f'<div id="{m.cid}-{rid}" data-layout-allow-overlap style="position:absolute;left:{bx:.0f}px;top:{by - 90:.0f}px;width:{w}px;height:{h}px;border-radius:14px;overflow:hidden;border:3px solid #F5B04A;box-shadow:0 10px 28px rgba(0,0,0,0.6);background:#1B140F;opacity:0">'
-                  f'<video id="{m.cid}-{rid}v" class="clip" src="assets/broll/{src}.mp4" data-start="{max(0, round(t_on - 0.1, 2))}" data-duration="{round(t_off - t_on + 0.5, 2)}" muted playsinline style="width:100%;height:100%;object-fit:cover"></video>'
-                  f'<div style="position:absolute;left:0;right:0;bottom:0;padding:4px 10px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.9));font-family:Inter,sans-serif;font-weight:800;font-size:28px;color:#F3E7D3">{cap}</div></div>')
+                  f'<div id="{m.cid}-{rid}" data-layout-allow-overlap style="position:absolute;left:{bx:.0f}px;top:{by - 90:.0f}px;width:{w}px;height:{h}px;border-radius:16px;overflow:hidden;border:3px solid #F5B04A;box-shadow:0 12px 32px rgba(0,0,0,0.65);background:#1B140F;opacity:0">{media}'
+                  f'<div style="position:absolute;left:0;right:0;bottom:0;padding:26px 14px 8px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:32px;line-height:1.1;color:#F3E7D3">{cap}{sb}</div></div>')
     sel = f"#{m.cid}-{rid}"
-    return (f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.4, transformOrigin: "50% 100%" }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(1.8)" }}, {t_on});\n'
-            f'      tl.fromTo("{sel}l", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.2 }}, {t_on});\n'
-            f'      tl.to(["{sel}", "{sel}l"], {{ opacity: 0, scale: 0.85, duration: 0.25, ease: "power2.in" }}, {t_off});\n')
+    return (f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.6, transformOrigin: "50% 100%" }}, {{ opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }}, {t_on});\n'
+            f'      tl.fromTo("{sel}l", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.25 }}, {t_on});\n'
+            f'      tl.to(["{sel}", "{sel}l"], {{ opacity: 0, scale: 0.9, duration: 0.3, ease: "power2.in" }}, {t_off});\n')
 def popups(m, items, end, **kw):
     """items: (rid, src, at, t, cap, dx, dy); each pop-up stays until the next one appears."""
     js = ""
     for k, (rid, src, at, t, cap, dx, dy) in enumerate(items):
         t_off = items[k + 1][3] + 0.1 if k + 1 < len(items) else end
-        js += popup(m, rid, src, at, t, t_off, cap, dx=dx, dy=dy, **kw)
+        js += popup(m, rid, src, at, t, t_off, cap, box=dx, **kw) if isinstance(dx, tuple) else popup(m, rid, src, at, t, t_off, cap, dx=dx, dy=dy, **kw)
     return js
 ON1 = lambda sel, t: f'      tl.fromTo("{sel}", {{ opacity: 0, scale: 0.6, transformOrigin: "50% 50%" }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }}, {t});\n'
 OFF = lambda sel, t: f'      tl.to("{sel}", {{ opacity: 0, duration: 0.25 }}, {t});\n'
@@ -272,7 +281,7 @@ arcs = [arc(m, f"r{k}", "airport", p) for k, (_, p, _) in enumerate(icons)]
 js = POP(cA, 0.2) + ON1(pA, 0.3) + SHOW(m.tag("t0", "Jaipur International Airport", "airport", dx=-200, dy=60, amb=True), 0.4)
 js += SHOW(m.tag("t2", "Malviya Nagar", "malviya", dx=20, dy=-30, size=26), 0.6) + SHOW(m.tag("t3", "Jagatpura", "jagatpura", dx=20, dy=-30, size=26), 0.7) + SHOW(m.tag("t4", "Sitapura", "sitapura", dx=20, dy=-10, size=26), 0.8)
 js += OFF("#ma-t2, #ma-t3, #ma-t4", rel(9.6, s)) + OFF("#ma-t0", rel(11.75, s))
-js += popups(m, [("p0", "pool", icons[0][1], rel(11.99, s), "Hospitality", 60, -330), ("p1", "mall", icons[1][1], rel(12.87, s), "Retail", -330, -40), ("p2", "office", icons[2][1], rel(13.67, s), "Commercial", 300, -260)], rel(14.4, s))
+js += popups(m, [("p0", "pool", icons[0][1], rel(11.99, s), "Hospitality", (630, 400), 0), ("p1", "mall", icons[1][1], rel(12.87, s), "Retail", (40, 400), 0), ("p2", "office", icons[2][1], rel(13.67, s), "Commercial", (630, 400), 0)], rel(14.4, s))
 js += ON1(bA, rel(8.0, s)) + SHOW(m.chip("c1", "Adani Airport City programme", "Jaipur is one of six airports in phase one"), rel(9.9, s))
 for k, (txt, p, t) in enumerate(icons):
     js += DR(arcs[k], rel(t, s) - 0.1, 0.4) + SHOW(m.tag(f"i{k}", "◆ " + txt, p, dx=-60, dy=20, amb=True, size=30), rel(t, s))
@@ -293,6 +302,7 @@ for k, (p, pt, nm) in enumerate(ex):
     js += ON1(p, rel(16.3, s) + 0.25 * k) + SHOW(m.tag(f"e{k}", nm, pt, dx=-30 if k < 2 else 24, dy=[-70, 20, -10][k], size=26, right=k < 2), rel(16.4, s) + 0.25 * k)
 js += POP(cI, rel(18.64, s)) + ON1(pI, rel(18.64, s)) + SHOW(m.tag("ta", "Achrol", "achrol", dx=24, dy=-10, amb=True), rel(18.7, s))
 js += ON1(bI, rel(19.37, s)) + SHOW(m.chip("c1", "Planned · IHG × Makson India Hospitality", "InterContinental Jaipur Achrol · 225 keys · 16 acres · early 2030"), rel(20.0, s))
+js += popup(m, "ph", None, "achrol", rel(20.0, s), rel(27.2, s), "InterContinental Melbourne", box=(48, 400), w=480, h=330, img="intercontinental.jpg", sub="Existing hotel · not the Jaipur project")
 js += OFF("#md-c1", rel(27.3, s)) + f'      tl.to("#md-belt", {{ opacity: 1, duration: 0.5 }}, {rel(27.6, s)});\n'
 js += SHOW(m.chip("c2", "Already established", "Resort &amp; wedding corridor"), rel(28.0, s))
 m.render(s, 31.05, js, note="Existing hotels: positions from OpenStreetMap")
@@ -306,7 +316,9 @@ bS = badge(m, "bs", SHER, ["logo_sheraton.png", "logo_marriott.png"], dx=-40, dy
 bG = badge(m, "bgw", "mahapura", ["logo_tata.png", "logo_taj.png"], dx=-40, dy=60, h=46, label="Gateway")
 js = DR(rA, rel(31.5, s), 1.0) + SHOW(m.tag("t0", "AJMER ROAD (NH-48)", "sodala", dx=-40, dy=40, amb=True), rel(31.6, s))
 js += ON1(pS, rel(32.6, s)) + ON1(bS, rel(32.6, s)) + SHOW(m.chip("c1", "Planned · Manglam Group × Marriott", "Sheraton · ₹350 cr · 220 keys · Jaipur–Ajmer Hwy"), rel(33.9, s))
+js += popup(m, "ph1", None, SHER, rel(33.0, s), rel(37.15, s), "Sheraton (planned)", box=(48, 345), w=470, h=300, img="resort_still.jpg", sub="Representative resort image")
 js += OFF("#mj-c1", rel(37.2, s)) + POP(cG, rel(37.4, s)) + ON1(pG, rel(37.4, s)) + SHOW(m.tag("tm", "Mahapura", "mahapura", dx=-170, dy=-20, amb=True), rel(37.45, s))
+js += popup(m, "ph2", None, "mahapura", rel(39.0, s), rel(42.6, s), "Rambagh Palace, Jaipur", box=(48, 345), w=470, h=300, img="rambagh.jpg", sub="Existing IHCL (Taj) hotel · not Gateway")
 js += ON1(bG, rel(38.6, s)) + SHOW(m.chip("c2", "Planned · IHCL (Tata) × Shri Modi Group", "Gateway Mahapura · 161 keys · NH48"), rel(39.4, s))
 m.render(s, 42.95, js, note="Sheraton pin: corridor only, plot not public")
 
@@ -318,6 +330,8 @@ js += POP(c2, rel(48.31, s)) + SHOW(m.tag("t2", "Achrol–Kukas belt", km(27.08,
 js += POP(c3, rel(49.92, s)) + SHOW(m.tag("t3", "Mahapura", "mahapura", dx=-80, dy=60, amb=True), rel(49.92, s))
 for k, (txt, t) in enumerate([("◆ Commercial space", 51.03), ("◆ Rental accommodation", 52.23), ("◆ Businesses serving visitors", 53.91), ("◆ …and hotel employees", 55.91)]):
     js += SHOW(m.tag(f"w{k}", txt, (0, -30 + k * 7), dx=-300, dy=0, size=32), rel(t, s))
+js += popups(m, [("p0", "office", (0, -30), rel(51.03, s), "Commercial space", 0, 0), ("p1", "rental", (0, -23), rel(52.23, s), "Rental accommodation", 0, 0),
+                 ("p2", "dining", (0, -16), rel(53.91, s), "Businesses serving visitors", 0, 0), ("p3", "coworkers", (0, -9), rel(55.91, s), "Hotel employees", 0, 0)], rel(58.5, s), pos=(600, 760))
 m.render(s, 58.9, js, note="Speaker's view · not a guarantee")
 
 # 6 · where visitors spend, then what hotels bring (58.9–70.4), with small clip pop-ups
@@ -329,9 +343,9 @@ m.svg.append(f'<circle cx="{hub[0]:.3f}" cy="{hub[1]:.3f}" r="{14*m.u:.3f}" styl
 js = SHOW(m.tag("hv", "Visitors", hub, dx=-150, dy=10, amb=True, size=34), 0.3)
 for k, (txt, p, t) in enumerate(spend):
     js += DR(arcs[k], rel(t, s) - 0.15, 0.35) + SHOW(m.tag(f"s{k}", "◆ " + txt, p, dx=20, dy=-30, amb=True, size=32), rel(t, s))
-js += popups(m, [("p0", "checkin", spend[0][1], rel(61.91, s), "Hotels", -330, 40), ("p1", "dining", spend[1][1], rel(62.55, s), "Restaurants", -330, 60),
-                 ("p2", "traffic", spend[2][1], rel(63.43, s), "Transport", 40, 40), ("p3", "shoppers", spend[3][1], rel(64.23, s), "Shopping", -330, -250),
-                 ("p4", "wedding", spend[4][1], rel(64.95, s), "Weddings", -330, 30)], rel(65.75, s))
+js += popups(m, [("p0", "checkin", spend[0][1], rel(61.91, s), "Hotels", (48, 360), 0), ("p1", "dining", spend[1][1], rel(62.55, s), "Restaurants", (48, 1090), 0),
+                 ("p2", "traffic", spend[2][1], rel(63.43, s), "Transport", (48, 1090), 0), ("p3", "shoppers", spend[3][1], rel(64.23, s), "Shopping", (48, 360), 0),
+                 ("p4", "wedding", spend[4][1], rel(64.95, s), "Weddings", (48, 360), 0)], rel(65.75, s))
 # what the hotels bring (65.6–70.4): visitor arcs fade, hotel point radiates to three needs
 H = HK("fairmont")
 js += f'      tl.to([{", ".join(chr(34) + a + chr(34) for a in arcs)}, "#ms-hv", "#ms-s1", "#ms-s2", "#ms-s3", "#ms-s4"], {{ opacity: 0.18, duration: 0.4 }}, {rel(65.6, s)});\n'
@@ -340,7 +354,7 @@ narcs = [arc(m, f"n{k}", H, p, -0.2, "#F5B04A") for k, (_, p, _, _) in enumerate
 for k, (txt, p, t, _) in enumerate(needs):
     m.svg.append(f'<circle id="ms-nd{k}" cx="{p[0]:.3f}" cy="{p[1]:.3f}" r="{8*m.u:.3f}" style="fill:#F5B04A;opacity:0"/>')
     js += DR(narcs[k], rel(t, s) - 0.2, 0.4) + ON(f"#ms-nd{k}", rel(t, s)) + SHOW(m.tag(f"n{k}", "◆ " + txt, p, dx=20, dy=-30, amb=True, size=32), rel(t, s))
-js += popups(m, [(f"q{k}", src, p, rel(t, s), txt, 30, 30) for k, (txt, p, t, src) in enumerate(needs)], rel(70.1, s))
+js += popups(m, [(f"q{k}", src, p, rel(t, s), txt, bx, 0) for k, ((txt, p, t, src), bx) in enumerate(zip(needs, [(48, 360), (632, 1090), (48, 360)]))], rel(70.1, s))
 m.render(s, 70.4, js, note="Illustrative · clips: representative footage")
 
 # 8 · beyond sightseeing on the map, with one wedding clip inset (74.5–85.9)
@@ -353,8 +367,8 @@ for k, (txt, p, t) in enumerate(uses):
     js += ON1(ps[k], rel(t, s)) + SHOW(m.tag(f"u{k}", "◆ " + txt, p, dx=24, dy=-20, amb=True, size=32), rel(t, s))
 js += "".join(POP(c, rel(81.29, s) + 0.15 * k) for k, c in enumerate(cs))
 js += SHOW(m.chip("c1", "Opportunity", "For property owners &amp; entrepreneurs across these corridors"), rel(81.6, s))
-js += popups(m, [("q0", "wedding", uses[0][1], rel(74.81, s), "Weddings", -330, 30), ("q1", "present", uses[1][1], rel(76.17, s), "Conferences", -330, 30),
-                 ("q2", "resort", uses[2][1], rel(77.29, s), "Luxury", -330, 40), ("q3", "landing", uses[3][1], rel(78.89, s), "Business travel", -330, 40)], rel(80.6, s))
+js += popups(m, [("q0", "wedding", uses[0][1], rel(74.81, s), "Weddings", (48, 360), 0), ("q1", "present", uses[1][1], rel(76.17, s), "Conferences", (48, 1090), 0),
+                 ("q2", "resort", uses[2][1], rel(77.29, s), "Luxury experiences", (48, 360), 0), ("q3", "landing", uses[3][1], rel(78.89, s), "Business travel", (48, 1090), 0)], rel(80.6, s))
 m.render(s, 85.9, js, note="Schematic · clips: representative footage")
 
 # ---------- chrome ----------
@@ -486,7 +500,7 @@ open(f"{P}/compositions/endcard.html", "w").write(f"""<template>
 MIXKIT = ["Luxury swimming pool", "Busy shopping mall time lapse", "Open office space", "A family checking in a luxury hotel", "Customers in a minimalist style restaurant", "Aerial travel above a highway in the city", "Shoppers walking through a mall", "Decorations on the ceiling of a wedding party", "Two coworkers talking and laughing", "Interior of a room with terrace", "A man is presenting a business report", "Swiming pool in resort garden", "Airplane landing in illuminated airport tracks"]
 
 # ---------- credits roll ----------
-CR = {k: v for k, v in json.load(open(__file__.replace("build.py", "img/credits.json"))).items() if k in ('indiamap', 'hawa', 'amer', 'jalmahal', 'ghoomar', 'logo_adani', 'logo_ihg', 'logo_sheraton', 'logo_marriott', 'logo_tata', 'logo_taj')}
+CR = {k: v for k, v in json.load(open(__file__.replace("build.py", "img/credits.json"))).items() if k in ('indiamap', 'hawa', 'amer', 'jalmahal', 'ghoomar', 'intercontinental', 'rambagh', 'logo_adani', 'logo_ihg', 'logo_sheraton', 'logo_marriott', 'logo_tata', 'logo_taj')}
 lines = ["<b>Photos &amp; maps — Wikimedia Commons</b>"] + [f"{v['title'][5:]} — {v['artist']} — {v['license']}" for k, v in CR.items() if not k.startswith("logo_")]
 lines += ["<b>Logos</b> — trademarks of their owners, shown for identification only (Wikimedia Commons files)"] + [f"{v['title'][5:]}" for k, v in CR.items() if k.startswith("logo_")]
 lines += ["<b>Footage — Mixkit (Free licence)</b>"] + MIXKIT

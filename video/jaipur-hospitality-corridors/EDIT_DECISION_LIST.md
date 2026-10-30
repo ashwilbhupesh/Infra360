@@ -103,3 +103,14 @@ Your feedback: the "watch out these three corridors" moment was too short and di
 | 74.5–85.9 | Pop-ups for Destination weddings, Conferences (presentation), Luxury experiences (resort pool), Business travel (landing). These replace the gala inset. |
 
 The pop-ups are 260×170 px. Each stays on screen until the next one appears, so no more than one or two show at a time, and the map notes read "clips: representative footage". All the clips were already logged as Mixkit Free; nothing new was downloaded.
+
+## Revision 5: hotel photo pop-ups, bigger pop-ups
+Your feedback: show a realistic hotel picture when talking about Achrol, the Sheraton (Manglam) and the Tata Gateway; make all pop-ups big enough to read; add pop-ups for commercial space, rental and businesses serving visitors; keep the flow smooth.
+
+| Time | Change |
+|---|---|
+| 20.0–27.2 | Achrol: photo pop-up of **InterContinental Melbourne**, captioned "Existing hotel · not the Jaipur project". There is no picture of the planned Achrol resort. |
+| 33.0–37.15 | Ajmer Road: photo pop-up "**Sheraton (planned)**", captioned "Representative resort image". It's a still from the Mixkit resort clip. I couldn't get a free-licence photo of an actual Sheraton building in this session, because Wikimedia blocked the session's requests and Unsplash and Openverse refused or timed out. |
+| 39.0–42.6 | Mahapura: photo pop-up of **Rambagh Palace, Jaipur**, captioned "Existing IHCL (Taj) hotel · not Gateway" |
+| 51.0–58.5 | Where to invest: pop-ups for Commercial space (office), Rental accommodation (hotel room), Businesses serving visitors (restaurant) and Hotel employees (coworkers) |
+| All maps | Pop-ups are now 400×260 px with 32 px captions (photo pop-ups 470–480 px wide). They sit in clear areas of the map with a leader line to their spot, so they don't cover labels, badges or chips. |

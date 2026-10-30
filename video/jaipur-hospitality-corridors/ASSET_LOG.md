@@ -125,3 +125,10 @@ All other photos, clips and the news-headline cards from revision 2 are no longe
 - **Footage (Mixkit Free, logged above):** used as small map pop-ups, labelled "clips: representative footage"
   - pool (4045), mall (31086), office (914), checkin (36736), dining (4385), traffic (41540), shoppers (25516), wedding (5213), coworkers (4872), rental (4029), present (22961), resort (6773), landing (7374)
 - gala (5227) is no longer used.
+
+## Revision 5: assets added back or derived
+- `intercontinental.jpg`: InterContinental Melbourne, IHG, CC BY-SA 4.0 (Wikimedia Commons, logged in revision 2). Shown as "Existing hotel · not the Jaipur project".
+- `rambagh.jpg`: Rambagh Palace view from garden, Sunnya343, CC BY-SA 4.0 (Wikimedia Commons, logged in revision 2). Shown as "Existing IHCL (Taj) hotel · not Gateway".
+- `resort_still.jpg`: a frame taken at 2 s from Mixkit 6773, "Swiming pool in resort garden" (ivz, Mixkit Free, logged above). Shown as "Representative resort image" for the planned Sheraton.
+- Both Commons photos are listed in the credits roll.
+- **Not found:** a free-licence photo of an actual Sheraton hotel. Wikimedia had blocked the session's requests, Unsplash returned a bot check (not bypassed) and Openverse timed out. Nothing was used without a verified licence.
