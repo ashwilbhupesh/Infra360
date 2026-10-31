@@ -556,7 +556,7 @@ for k, (a, b, txt) in enumerate([(3.9, 25.3, "Map: OpenStreetMap"), (25.3, 76.35
     OVL.append(f'<div class="note" id="mp-nt{k}" style="top:{1398 - 90}px;left:auto;right:64px;font-size:24px;color:rgba(201,183,156,0.9);opacity:0">{txt}</div>')
     js += f'      tl.to("#mp-nt{k}", {{ opacity: 1, duration: 0.3 }}, {max(0, r(a))});\n      tl.to("#mp-nt{k}", {{ opacity: 0, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
 for a, b in FACE:
-    js += f'      tl.to("#mp-all", {{ opacity: 0, duration: 0.3 }}, {r(a)});\n      tl.to("#mp-all", {{ opacity: 1, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
+    js += f'      tl.to(["#mp-fg", "#mp-bg"], {{ opacity: 0, duration: 0.3 }}, {r(a)});\n      tl.to(["#mp-fg", "#mp-bg"], {{ opacity: 1, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
 v0 = OVR; s0 = sc(v0)
 world = (f'<div id="mp-W" style="position:absolute;left:0;top:0;--s:{s0:.5f};--cx:{v0[0]*KM:.2f};--cy:{v0[1]*KM:.2f};transform-origin:0 0;'
          f'transform:translate(540px,785px) scale(var(--s)) translate(calc(var(--cx) * -1px),calc(var(--cy) * -1px))">{"".join(HTML)}</div>')

@@ -5233,10 +5233,10 @@
       tl.to("#mp-nt1", { opacity: 0, duration: 0.3 }, 72.150);
       tl.to("#mp-nt2", { opacity: 1, duration: 0.3 }, 74.95);
       tl.to("#mp-nt2", { opacity: 0, duration: 0.3 }, 107.800);
-      tl.to("#mp-all", { opacity: 0, duration: 0.3 }, 11.4);
-      tl.to("#mp-all", { opacity: 1, duration: 0.3 }, 14.750);
-      tl.to("#mp-all", { opacity: 0, duration: 0.3 }, 72.45);
-      tl.to("#mp-all", { opacity: 1, duration: 0.3 }, 74.650);
+      tl.to(["#mp-fg", "#mp-bg"], { opacity: 0, duration: 0.3 }, 11.4);
+      tl.to(["#mp-fg", "#mp-bg"], { opacity: 1, duration: 0.3 }, 14.750);
+      tl.to(["#mp-fg", "#mp-bg"], { opacity: 0, duration: 0.3 }, 72.45);
+      tl.to(["#mp-fg", "#mp-bg"], { opacity: 1, duration: 0.3 }, 74.650);
 
       tl.to(["#mp-bg", "#mp-vids", "#mp-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 107.82);
       window.__timelines["mp"] = tl;
