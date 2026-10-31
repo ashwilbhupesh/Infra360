@@ -33,3 +33,4 @@ Not used: tigers_rajasthan.jpg (a Rajasthan Forest Department photo).
   - NH-48, NH-21 and the Jaipur Outer Ring Road
   - Place positions from Nominatim; Bhandarej and the link interchanges placed approximately
 - **Music and SFX:** same as the earlier reels.
+- `img/indiamap.png`: India relief location map by Milenioscuro, CC BY 4.0 (Wikimedia Commons, logged in the hospitality reel). Used for the India overview and credited on screen and in the roll.

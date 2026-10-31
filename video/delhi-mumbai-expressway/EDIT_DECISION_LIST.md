@@ -43,3 +43,7 @@ Captions follow the speaker word for word. Names are spelled correctly, checked 
 - Figures on screen (1,380 km, ₹98,233 cr, 67 km) come from the graphics you supplied.
 - "Access, not adjacency" is marked as the speaker's view.
 - The closing card says this is not financial advice and returns are not guaranteed.
+
+## Revision 2
+- **Full expressway:** the Delhi–Mumbai Expressway is now drawn continuously. A missing OpenStreetMap tile left a gap between Barodameo and Nuh; that stretch (`osm/majorx_dme_gap.json`) has been fetched.
+- **India map, 11.6–15.6 s:** a new scene where the camera zooms out from Delhi–Jaipur to all of India (relief map: Milenioscuro, CC BY 4.0). It draws the whole Delhi → Mumbai route, labels Delhi, Jaipur, Kota, Vadodara, Surat and Mumbai with "≈1,380 km", and shows the supplied route graphic. The route line is schematic. The face shot and the detailed map then continue as before.

@@ -456,8 +456,7 @@ js += popup("qa", "freeway", along(OLDNH or [ROADS["delhiNH"]], PL_["jaipur"], P
 js += route("dme", DMEW, PL_["sohna"], r(11.8), 2.4, color="#7FC8F8", width=6, halo=20)
 js += label("dm", along(DMEW, PL_["sohna"], PL_["smic"], 0.25), "Delhi–Mumbai Expressway", r(12.8), tier="major", dx=16, dy=-10, size=28)
 js += f'      tl.to(["#mp-old0"], {{ opacity: 0.35, duration: 0.5 }}, {r(13.4)});\n' if OLDNH else ""
-js += popups([("qb0", None, PL_["sohna"], r(11.9), "Delhi–Mumbai Expressway", TL, "aerial2.jpg", "Image supplied", WIDE),
-              ("qb1", None, PL_["sohna"], r(13.5), "1,380 km · ₹98,233 cr", TL, "ht_route.jpg", "Graphic: Ritesh Kumar · supplied", (400, 476))], r(15.2))
+# (B pop-ups moved into the India-map scene)
 # (face 15.3–18.95) · C · "Look at this map": Sohna → south through Alwar → Bandikui (19.0–25.3)
 js += ph("qc0", PL_["sohna"], r(19.0), r(20.2), "The alignment", TR, "alignment.jpg", "Image supplied", 400, 432)
 cam(19.3, (PL_["sohna"][0], PL_["sohna"][1] + 6, 48), 0.9)
@@ -575,6 +574,39 @@ css = ('<style>.lb { position:absolute; width:0; height:0; transform:scale(calc(
        ' .lb .tag { white-space:nowrap; }</style>')
 scene("mp", R0, MAP_END, css + f'<div id="mp-all" style="position:absolute;inset:0">{svg}{world}</div>' + "".join(OVL), cam_js(R0) + js)
 
+
+
+# ---------- India map (11.6–15.3): the whole Delhi–Mumbai Expressway ----------
+IW, IH = 1200, 1293                               # indiamap.png: bounds 37.5N–5N, 67E–99E
+GW = 1000; GX, GY = 40, 300 - 90                  # shown 1000 px wide; body is shifted down 90 px
+def ip(lat, lon): return (GX + (lon - 67.0) / 32.0 * GW, GY + (37.5 - lat) / 32.5 * IH * GW / IW)
+CITY = {"Delhi": (28.61, 77.21), "Jaipur": (26.92, 75.82), "Kota": (25.18, 75.83), "Vadodara": (22.31, 73.18), "Surat": (21.17, 72.83), "Mumbai": (19.08, 72.88)}
+RT = [(28.61, 77.21), (28.32, 77.08), (27.75, 76.95), (27.40, 76.88), (27.05, 76.62), (26.80, 76.50), (26.30, 76.32), (25.90, 76.10), (25.18, 75.95), (24.40, 75.50), (23.33, 75.04),
+      (22.84, 74.25), (22.70, 73.70), (22.31, 73.18), (21.70, 72.95), (21.17, 72.90), (20.20, 72.90), (19.30, 73.05), (19.08, 72.88)]
+rp = [ip(*q) for q in RT]
+dpath = smooth(rp, False)
+lk = [ip(26.92, 75.82), ip(26.98, 76.20), ip(27.05, 76.62)]
+jx, jy = ip(26.92, 75.82); dx_, dy_ = ip(28.61, 77.21)
+ox, oy = (jx + dx_) / 2, (jy + dy_) / 2
+tags = "".join(f'<div class="tag{" amb" if n in ("Delhi", "Jaipur", "Mumbai") else ""}" id="in-t{k}" style="left:{ip(*p)[0] + (16 if n != "Mumbai" else -170):.0f}px;top:{ip(*p)[1] - 24:.0f}px;font-size:{30 if n in ("Delhi", "Jaipur", "Mumbai") else 26}px;padding:8px 16px">{n}</div>'
+               + f'<div id="in-d{k}" style="position:absolute;left:{ip(*p)[0] - 10:.0f}px;top:{ip(*p)[1] - 10:.0f}px;width:20px;height:20px;border-radius:50%;background:#F5B04A;box-shadow:0 0 0 4px rgba(245,176,74,0.35)"></div>'
+               for k, (n, p) in enumerate(CITY.items()))
+body = (f'<div id="in-z" style="position:absolute;left:0;top:0;width:1080px;height:1830px;transform-origin:{ox:.0f}px {oy:.0f}px">'
+        f'<img src="{IMG}indiamap.png" style="position:absolute;left:{GX}px;top:{GY}px;width:{GW}px;height:auto;opacity:0.9"/>'
+        f'<svg style="position:absolute;left:0;top:0;width:1080px;height:1830px;overflow:visible"><path id="in-r" pathLength="1" d="{dpath}" style="fill:none;stroke:#1E7FD0;stroke-width:13;filter:drop-shadow(0 0 6px rgba(30,127,208,0.8));stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+        f'<path id="in-l" pathLength="1" d="{smooth(lk, False)}" style="fill:none;stroke:#F5B04A;stroke-width:7;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/></svg>'
+        f'{tags}</div>'
+        f'<div class="tag amb" id="in-k" style="left:560px;top:{ip(23.6, 75.0)[1]:.0f}px;font-size:34px;padding:12px 20px">Delhi → Mumbai · ≈1,380 km</div>'
+        f'<div id="in-p" style="position:absolute;left:660px;top:{830 - 90}px;width:370px;height:440px;border-radius:16px;overflow:hidden;border:3px solid #F5B04A;box-shadow:0 12px 32px rgba(0,0,0,0.65);opacity:0">'
+        f'<img src="{IMG}ht_route.jpg" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;left:0;right:0;bottom:0;padding:22px 12px 8px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:28px;color:#F3E7D3">Route graphic<div style="font-weight:600;font-size:22px;color:#E8D9BF">Graphic: Ritesh Kumar · supplied</div></div></div>'
+        f'<div class="note" style="top:{1398 - 90}px;left:auto;right:64px;font-size:24px;color:rgba(201,183,156,0.9)">Map: Milenioscuro, CC BY 4.0 · route schematic</div>')
+ijs = (f'      tl.fromTo("#in-z", {{ scale: 4.2 }}, {{ scale: 1, duration: 1.3, ease: "power2.inOut" }}, 0);\n'
+       f'      tl.fromTo("#in-r", {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: 1.6, ease: "power1.inOut" }}, 1.0);\n'
+       f'      tl.fromTo("#in-l", {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: 0.5 }}, 2.2);\n'
+       + "".join(f'      IN("#in-t{k}", {0.4 if n in ("Delhi", "Jaipur") else 1.2 + 0.18 * k:.2f});\n' for k, n in enumerate(CITY))
+       + '      IN("#in-k", 2.0);\n'
+       + '      tl.fromTo("#in-p", { opacity: 0, scale: 0.6, transformOrigin: "50% 100%" }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 2.3);\n')
+scene("in", 11.6, 15.6, body, ijs)
 
 # ---------- chrome ----------
 SECT = [(3.9, "THE PROBLEM", "Close on the map, far by road"), (11.6, "THE FIX", "Delhi–Mumbai Expressway"), (19.0, "THE ROUTE", "Sohna → Alwar → Bandikui"),
@@ -704,7 +736,7 @@ open(f"{P}/compositions/endcard.html", "w").write(f"""<template>
 MIXKIT = ["Traffic on a freeway", "Corporate and business buildings in the city", "Market shoppers"]
 
 # ---------- credits roll ----------
-CR = {k: v for k, v in json.load(open(__file__.replace("build.py", "img/credits.json"))).items() if k in ('hawa',)}
+CR = {k: v for k, v in json.load(open(__file__.replace("build.py", "img/credits.json"))).items() if k in ('hawa', 'indiamap')}
 lines = ["<b>Photos &amp; maps — Wikimedia Commons</b>"] + [f"{v['title'][5:]} — {v['artist']} — {v['license']}" for k, v in CR.items() if not k.startswith("logo_")]
 lines += ["<b>Images supplied by Ashwil Bhupesh</b> — expressway aerials and interchange photos; route graphics (Delhi–Mumbai Expressway graphic by Ritesh Kumar; Bandikui–Jaipur graphic; alignment map); Google Maps views; Chand Baori; Sariska and Ranthambore; wedding; highway hotels; warehouse"]
 lines += ["<b>Footage — Mixkit (Free licence)</b>"] + MIXKIT
