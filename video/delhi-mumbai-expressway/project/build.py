@@ -427,7 +427,7 @@ LINKI = {"bhedoli": along(LINK, IC["bandikui"], PL_["geela"], 0.18), "khurikurd"
          "sundarpura": along(LINK, IC["bandikui"], PL_["geela"], 0.68), "geela": near_on(LINK, PL_["geela"])}
 
 OVR = (68, -40, 300); CUR[0] = OVR       # the whole corridor: Delhi → Sawai Madhopur
-R0 = 3.9; MAP_END = 112.0
+R0 = 1.4; MAP_END = 112.0
 def r(t): return round(t - R0, 3)
 FACE = [(15.3, 18.95), (76.35, 78.85)]
 def ph(rid, at, t0, t1, cap, box, img, sub, w=400, h=280): return popup(rid, None, at, t0, t1, cap, box=box, w=w, h=h, img=img, sub=sub)
@@ -437,7 +437,7 @@ def xm(rid, p, t, n=None):
 PT = (330, 445); WIDE = (470, 280); SQ = (430, 430)
 
 # ---------- 0 · poster (0–1.15): aerial expressway + route, fully formed on frame 0 ----------
-scene("cv", 0, 1.15,
+scene("cv", 0, 0.8,
       f'<div class="ins" style="position:absolute;inset:0"></div><img src="{IMG}aerial1.jpg" style="position:absolute;left:0;top:-90px;width:1080px;height:1100px;object-fit:cover"/>'
       '<div style="position:absolute;left:0;right:0;top:-90px;height:1100px;background:linear-gradient(180deg,rgba(18,13,10,0.55) 0%,rgba(18,13,10,0.15) 35%,rgba(18,13,10,0.75) 75%,#120D0A 100%)"></div>'
       '<div style="position:absolute;left:70px;right:70px;top:150px;font-family:Inter,sans-serif;font-weight:900;font-size:120px;line-height:0.95;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,0.7)">DELHI–<br>MUMBAI<br><span style="color:#F5B04A">EXPRESSWAY</span></div>'
@@ -446,6 +446,18 @@ scene("cv", 0, 1.15,
       '<div class="note" style="top:1130px;left:76px;font-size:22px;color:rgba(243,231,211,0.8)">Photo supplied</div>', "", fade_in=False)
 
 js = ""
+# hook (1.4–3.9): the whole expressway flows down from Delhi, the Jaipur link lights up, ends pulse
+HOOKV = (75, -55, 340); CUR[0] = HOOKV; cam(3.85, OVR, 0.6)
+js += route("hk", DMEW, PL_["sohna"], r(1.5), 1.6, color="#7FC8F8", width=7, halo=24)
+js += route("hl", LINK, PL_["bandikui"], r(2.4), 0.8, color="#F5B04A", width=7, halo=22)
+SVG.append(f'<path id="mp-cmt" pathLength="1" d="{pd([PL_["delhi"], PL_["sohna"], IC["alwar"], IC["bandikui"], IC["dausa"], IC["lalsot"], IC["smadhopur"], km(25.70, 76.10)])}" style="fill:none;stroke:#FFFFFF;stroke-width:10;stroke-linecap:round;opacity:0;filter:drop-shadow(0 0 8px #7FC8F8)"/>')
+js += f'      tl.set("#mp-cmt", {{ strokeDasharray: "0.08 0.92" }}, 0);\n      tl.to("#mp-cmt", {{ opacity: 1, duration: 0.2 }}, {r(2.0)});\n'
+js += f'      tl.fromTo("#mp-cmt", {{ strokeDashoffset: 0.08 }}, {{ strokeDashoffset: -0.92, duration: 0.9, ease: "none", repeat: 1 }}, {r(2.0)});\n      tl.to("#mp-cmt", {{ opacity: 0, duration: 0.3 }}, {r(3.7)});\n'
+for rid, at, t, txt, dy, rt, col in [("hd", PL_["delhi"], 1.5, "DELHI", -70, True, "#7FC8F8"), ("hj", PL_["jaipur"], 2.6, "JAIPUR", -70, True, "#F5B04A"), ("hm", IC["smadhopur"], 3.0, "→ MUMBAI", 30, False, "#7FC8F8")]:
+    js += ring(rid + "r", at, 9, r(t), color=col, until=r(3.85))
+    js += f'      tl.fromTo("#mp-{rid}r", {{ attr: {{ r: {9 * KM} }} }}, {{ attr: {{ r: {15 * KM} }}, duration: 0.4, yoyo: true, repeat: 1, immediateRender: false }}, {r(t) + 0.6:.3f});\n'
+    js += label(rid, at, txt, r(t), until=r(3.8), dx=18, dy=dy, right=rt, size=40)
+js += f'      tl.to([{", ".join(chr(34) + "#mp-hk" + str(k) + chr(34) for k in range(len(DMEW)))}, {", ".join(chr(34) + "#mp-hl" + str(k) + chr(34) for k in range(len(LINK)))}], {{ opacity: 0, duration: 0.35 }}, {r(3.75)});\n'
 # A · Delhi and Jaipur, the crowded NH-48 (3.9–11.6)
 js += label("dl", PL_["delhi"], "Delhi NCR", r(5.0), tier="major", dx=16, dy=-30, size=32)
 js += label("jp", PL_["jaipur"], "Jaipur", r(4.3), tier="major", dx=16, dy=-30, right=True, size=32)
@@ -557,7 +569,7 @@ for k, (a, b, txt) in enumerate([(3.9, 25.3, "Map: OpenStreetMap"), (25.3, 76.35
     js += f'      tl.to("#mp-nt{k}", {{ opacity: 1, duration: 0.3 }}, {max(0, r(a))});\n      tl.to("#mp-nt{k}", {{ opacity: 0, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
 for a, b in FACE:
     js += f'      tl.to(["#mp-fg", "#mp-bg"], {{ opacity: 0, duration: 0.3 }}, {r(a)});\n      tl.to(["#mp-fg", "#mp-bg"], {{ opacity: 1, duration: 0.3 }}, {r(b) - 0.3:.3f});\n'
-v0 = OVR; s0 = sc(v0)
+v0 = CAMS[0][2] if CAMS else OVR; s0 = sc(v0)
 world = (f'<div id="mp-W" style="position:absolute;left:0;top:0;--s:{s0:.5f};--cx:{v0[0]*KM:.2f};--cy:{v0[1]*KM:.2f};transform-origin:0 0;'
          f'transform:translate(540px,785px) scale(var(--s)) translate(calc(var(--cx) * -1px),calc(var(--cy) * -1px))">{"".join(HTML)}</div>')
 import re as _re
@@ -640,6 +652,7 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="{VIDEO_END}">
+      <div id="op" style="opacity:0"><div id="op-a">DELHI–JAIPUR–MUMBAI</div><div id="op-b">WHAT TO WATCH</div></div>
       
       <div id="pg">{"".join(f'<i id="pg-{k+1}"></i>' for k in range(0))}</div>
       {hd_html}{co_html}
@@ -648,6 +661,8 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   <script>
     (function () {{
       const tl = gsap.timeline({{ paused: true }});
+      tl.fromTo("#op", {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }}, 1.45);
+      tl.to("#op", {{ opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }}, 3.85);
       tl.fromTo("#pg", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3 }}, 6.16);
       tl.to("#pg", {{ opacity: 0, duration: 0.3 }}, 112.0);{"".join(f"""
       tl.fromTo("#pg-{k+1}", {{ backgroundColor: "rgba(27,20,15,0.55)" }}, {{ backgroundColor: "#E3A23B", duration: 0.3 }}, {t});""" for k, (t, _, _) in enumerate(SECT[:0]))}{js}

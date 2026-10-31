@@ -25,7 +25,7 @@
 
   </style>
   <div id="root" data-composition-id="cv" data-width="1080" data-height="1920">
-    <div id="cv-host" class="host clip" data-start="0" data-duration="1.15"><div id="cv-bg" class="ins"><div class="grain"></div></div></div>
+    <div id="cv-host" class="host clip" data-start="0" data-duration="0.8"><div id="cv-bg" class="ins"><div class="grain"></div></div></div>
     <div id="cv-vids"></div>
     <div id="cv-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div class="ins" style="position:absolute;inset:0"></div><img src="assets/img/aerial1.jpg" style="position:absolute;left:0;top:-90px;width:1080px;height:1100px;object-fit:cover"/><div style="position:absolute;left:0;right:0;top:-90px;height:1100px;background:linear-gradient(180deg,rgba(18,13,10,0.55) 0%,rgba(18,13,10,0.15) 35%,rgba(18,13,10,0.75) 75%,#120D0A 100%)"></div><div style="position:absolute;left:70px;right:70px;top:150px;font-family:Inter,sans-serif;font-weight:900;font-size:120px;line-height:0.95;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,0.7)">DELHI–<br>MUMBAI<br><span style="color:#F5B04A">EXPRESSWAY</span></div><div style="position:absolute;left:76px;right:70px;top:560px;font-family:Inter,sans-serif;font-weight:800;font-size:56px;line-height:1.1;color:#F3E7D3;text-shadow:0 4px 20px rgba(0,0,0,0.8)">How it plugs Jaipur in</div><div style="position:absolute;left:76px;top:1040px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,0.92);border:2px solid #E3A23B;font-family:Inter,sans-serif;font-weight:800;font-size:40px;color:#F3E7D3">4 exits · 67 km link · Bagrana</div><div class="note" style="top:1130px;left:76px;font-size:22px;color:rgba(243,231,211,0.8)">Photo supplied</div></div></div>
   </div>
@@ -35,9 +35,9 @@
       const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 16 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
       const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
 
-      tl.fromTo("#cv-vids", { scale: 1.04 }, { scale: 1.0, duration: 1.15, ease: "none" }, 0);
+      tl.fromTo("#cv-vids", { scale: 1.04 }, { scale: 1.0, duration: 0.8, ease: "none" }, 0);
 
-      tl.to(["#cv-bg", "#cv-vids", "#cv-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 0.87);
+      tl.to(["#cv-bg", "#cv-vids", "#cv-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 0.52);
       window.__timelines["cv"] = tl;
     })();
   </script>

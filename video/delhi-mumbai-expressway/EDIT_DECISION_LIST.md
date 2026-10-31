@@ -48,3 +48,11 @@ Captions follow the speaker word for word. Names are spelled correctly, checked 
 - **Full expressway:** the Delhi–Mumbai Expressway is now drawn continuously. A missing OpenStreetMap tile left a gap between Barodameo and Nuh; that stretch (`osm/majorx_dme_gap.json`) has been fetched.
 - **India map, 11.6–15.6 s:** a new scene where the camera zooms out from Delhi–Jaipur to all of India (relief map: Milenioscuro, CC BY 4.0). It draws the whole Delhi → Mumbai route, labels Delhi, Jaipur, Kota, Vadodara, Surat and Mumbai with "≈1,380 km", and shows the supplied route graphic. The route line is schematic. The face shot and the detailed map then continue as before.
 - **Face beats (15.3–18.95 s and 76.35–78.85 s):** the map's dark background now fades out along with the map, so your face shows instead of a blank screen.
+
+## Revision 3: Ring Road–style hook
+| Time | What's on screen |
+|---|---|
+| 0–0.8 s | Poster (still the thumbnail frame) |
+| 0.8–1.4 s | Speaker |
+| 1.4–3.9 s | "DELHI–JAIPUR–MUMBAI / WHAT TO WATCH" hook. The whole expressway draws down from Delhi with a light pulse flowing along it, and the Jaipur–Bandikui link lights up in amber. The **DELHI**, **JAIPUR** and **→ MUMBAI** ends pulse. |
+| 3.9 s onward | Zooms out to the corridor map, and the rest is unchanged |
