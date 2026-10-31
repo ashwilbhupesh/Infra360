@@ -386,7 +386,7 @@ def logo_badge(rid, at, files, t_on, t_off, dx=0, dy=60, h=54, text=None):
     return f'      tl.fromTo("#mp-{rid}", {{ opacity: 0, scale: 0.6 }}, {{ opacity: 1, scale: 1, duration: 0.35, ease: "back.out(2)" }}, {t_on:.3f});\n      tl.to("#mp-{rid}", {{ opacity: 0, duration: 0.3 }}, {t_off:.3f});\n'
 NOTES = []
 def note(t_on, t_off, text): NOTES.append((t_on, t_off, text)); return ""
-R0 = 2.3                      # the map composition starts here (after the poster + a beat of the speaker's face)
+R0 = 1.4                      # the map composition starts here (after the poster + a beat of the speaker's face)
 def r(t): return round(t - R0, 3)
 FACE = [(31.45, 32.35), (88.55, 89.35), (126.85, 127.75)]   # short face breaks inside the map run
 
@@ -404,18 +404,26 @@ for k, (key, lab, dx, dy) in enumerate([("hirapura", "JAIPUR", -40, 40), ("bagru
 cv.html.append('<div style="position:absolute;left:70px;right:70px;top:250px;font-family:Inter,sans-serif;font-weight:900;font-size:170px;line-height:0.92;letter-spacing:-0.01em;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,0.6)">AJMER<br><span style="color:#F5B04A">ROAD</span></div>'
                '<div style="position:absolute;left:76px;right:70px;top:620px;font-family:Inter,sans-serif;font-weight:800;font-size:52px;line-height:1.1;color:#F3E7D3">Jaipur → Ajmer<br>every stretch, decoded</div>'
                '<div style="position:absolute;left:76px;top:1210px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,0.92);border:2px solid #E3A23B;font-family:Inter,sans-serif;font-weight:800;font-size:40px;color:#F3E7D3">NH-48 · 9 stretches · 2 new expressways</div>')
-cv.render(0, 1.15, "", note="Map data © OpenStreetMap contributors", keep=False, fade_in=False)
+cv.render(0, 0.8, "", note="Map data © OpenStreetMap contributors", keep=False, fade_in=False)
 
 # ---------- the map run (2.3 → 147.4) ----------
 js = ""
 # overview: the whole road draws, key towns appear
-js += route("nh", NH48 or [ROADS["nh48w"]], "hirapura", r(2.45), 1.6, width=7, halo=20)
-for k, (key, lab, t, dx, dy, right) in enumerate([("hirapura", "Jaipur", 2.6, 16, -60, True), ("bagru", "Bagru", 2.9, 16, 10, False), ("dudu", "Dudu", 3.1, 16, 10, False),
-                                                   ("kishangarh", "Kishangarh", 3.3, 16, 10, False), ("ajmer", "Ajmer", 3.5, 16, 10, False), ("pushkar", "Pushkar", 3.6, 16, -60, False)]):
+js += route("nh", NH48 or [ROADS["nh48w"]], "hirapura", r(1.5), 2.0, width=8, halo=24)
+# hook: the whole road flows Jaipur → Ajmer, both ends highlighted
+SVG.append(f'<path id="mp-cmt" pathLength="1" d="{pd(ROADS["nh48w"])}" style="fill:none;stroke:#FFF4D6;stroke-width:10;stroke-linecap:round;opacity:0;filter:drop-shadow(0 0 8px #F5B04A)"/>')
+js += f'      tl.set("#mp-cmt", {{ strokeDasharray: "0.08 0.92" }}, 0);\n      tl.to("#mp-cmt", {{ opacity: 1, duration: 0.2 }}, {r(2.0)});\n'
+js += f'      tl.fromTo("#mp-cmt", {{ strokeDashoffset: 0.08 }}, {{ strokeDashoffset: -0.92, duration: 1.1, ease: "none", repeat: 1 }}, {r(2.0)});\n      tl.to("#mp-cmt", {{ opacity: 0, duration: 0.3 }}, {r(4.2)});\n'
+for rid, at, t, txt, dx, rt in [("hj", "hirapura", 1.5, "JAIPUR END", 18, True), ("ha", "ajmer", 3.2, "AJMER END", 18, False)]:
+    js += ring(rid + "r", at, 4.5, r(t), until=r(4.3))
+    js += f'      tl.fromTo("#mp-{rid}r", {{ attr: {{ r: {4.5 * KM} }} }}, {{ attr: {{ r: {7.5 * KM} }}, duration: 0.45, yoyo: true, repeat: 3, immediateRender: false }}, {r(t) + 0.6:.3f});\n'
+    js += label(rid, at, txt, r(t), until=r(4.2), dx=dx, dy=-70 if rt else 30, right=rt, size=40)
+for k, (key, lab, t, dx, dy, right) in enumerate([("hirapura", "Jaipur", 4.2, 16, -60, True), ("bagru", "Bagru", 2.9, 16, 10, False), ("dudu", "Dudu", 3.1, 16, 10, False),
+                                                   ("kishangarh", "Kishangarh", 3.3, 16, 10, False), ("ajmer", "Ajmer", 4.2, 16, 10, False), ("pushkar", "Pushkar", 3.6, 16, -60, False)]):
     js += label(f"o{k}", key, lab, r(t), tier="major", dx=dx, dy=dy, right=right, size=28)
 js += label("sbl", km(26.95, 75.08), "Sambhar Lake", r(3.7), tier="major", amb=False, size=26, dx=16, dy=-60)
 # stretch 1 (zoom in)
-S1 = (-12, 5.4, 10); cam(3.8, S1, 1.1)
+S1 = (-12, 5.4, 10); cam(4.3, S1, 1.0)
 js += label("p1", "hirapura", "Hirapura bus terminal", r(4.9), until=r(30.4), dx=16, dy=10, size=28)
 js += label("p2", "keshopura", "Keshopura", r(6.5), until=r(30.4), dx=16, dy=-70)
 js += label("p3", "westway", "Westway Heights", r(7.7), until=r(30.4), dx=16, dy=-80)
@@ -590,7 +598,7 @@ scene("mp", R0, 147.4, css + f'<div id="mp-all" style="position:absolute;inset:0
 
 
 # ---------- chrome ----------
-SECT = [(2.3, "THE ROAD", "Jaipur → Ajmer · NH-48"), (4.6, "STRETCH 1", "200-ft Bypass → Bhankrota"), (23.4, "200-FT BYPASS", "Going signal-free"),
+SECT = [(4.6, "STRETCH 1", "200-ft Bypass → Bhankrota"), (23.4, "200-FT BYPASS", "Going signal-free"),
         (32.35, "MAHAPURA", "Southern Ring Rd · existing"), (39.4, "WIDER NETWORK", "Link to Delhi–Mumbai E-way"), (47.9, "CHITROLI", "Northern Ring Rd · proposed"),
         (59.25, "DON'T MIX THEM UP", "Mahapura ≠ Chitroli"), (67.5, "MAHINDRA WORLD CITY", "Employment anchor"), (77.7, "DEHMI KALAN", "Manipal University"),
         (89.35, "BAGRU", "Industry &amp; block printing"), (97.7, "MAHLA → DUDU", "Highway belt · Sambhar"), (116.6, "KISHANGARH → AJMER", "Marble · airport · Pushkar"),
@@ -621,6 +629,7 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="{VIDEO_END}">
+      <div id="op" style="opacity:0"><div id="op-a">AJMER ROAD</div><div id="op-b">WHAT TO WATCH</div></div>
       
       <div id="pg">{"".join(f'<i id="pg-{k+1}"></i>' for k in range(0))}</div>
       {hd_html}{co_html}
@@ -629,6 +638,8 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   <script>
     (function () {{
       const tl = gsap.timeline({{ paused: true }});
+      tl.fromTo("#op", {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }}, 1.45);
+      tl.to("#op", {{ opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }}, 4.3);
       tl.fromTo("#pg", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3 }}, 6.16);
       tl.to("#pg", {{ opacity: 0, duration: 0.3 }}, 150.0);{"".join(f"""
       tl.fromTo("#pg-{k+1}", {{ backgroundColor: "rgba(27,20,15,0.55)" }}, {{ backgroundColor: "#E3A23B", duration: 0.3 }}, {t});""" for k, (t, _, _) in enumerate(SECT[:0]))}{js}

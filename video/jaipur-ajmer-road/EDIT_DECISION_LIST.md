@@ -64,3 +64,11 @@ Your feedback: use a more realistic map; make it easier to keep track of where w
 ### Revision 2 fixes
 - **15.9–21.1 s:** "The bus terminal adds a transport anchor" refers to Jaipur's **new bus stand near Westway Heights**, built to decongest the area. It now gets its own pin and a photo pop-up (your image), separate from the Hirapura terminal at the 200-ft Bypass. The position is approximate.
 - The connector roads to Phulera and Narena no longer show a dark centre line, and the map-credit line moved below the pop-ups.
+
+### Revision 3: Ring Road–style hook
+| Time | What's on screen |
+|---|---|
+| 0–0.8 s | Poster (still the thumbnail frame) |
+| 0.8–1.4 s | Speaker |
+| 1.4–4.3 s | "AJMER ROAD / WHAT TO WATCH" hook, as in the Ring Road reel. The whole NH-48 draws from the Jaipur end to the Ajmer end, with a light pulse flowing along it and pulsing rings on the **JAIPUR END** and **AJMER END** labels. |
+| 4.3 s onward | The map zooms into the 200-ft Bypass, and everything after that is unchanged |

@@ -35,72 +35,71 @@
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="153.55">
+      <div id="op" style="opacity:0"><div id="op-a">AJMER ROAD</div><div id="op-b">WHAT TO WATCH</div></div>
       
       <div id="pg"></div>
-      <div id="hd-1" class="hd"><div class="hd-c">THE ROAD</div><div class="hd-h">Jaipur → Ajmer · NH-48</div></div><div id="hd-2" class="hd"><div class="hd-c">STRETCH 1</div><div class="hd-h">200-ft Bypass → Bhankrota</div></div><div id="hd-3" class="hd"><div class="hd-c">200-FT BYPASS</div><div class="hd-h">Going signal-free</div></div><div id="hd-4" class="hd"><div class="hd-c">MAHAPURA</div><div class="hd-h">Southern Ring Rd · existing</div></div><div id="hd-5" class="hd"><div class="hd-c">WIDER NETWORK</div><div class="hd-h">Link to Delhi–Mumbai E-way</div></div><div id="hd-6" class="hd"><div class="hd-c">CHITROLI</div><div class="hd-h">Northern Ring Rd · proposed</div></div><div id="hd-7" class="hd"><div class="hd-c">DON'T MIX THEM UP</div><div class="hd-h">Mahapura ≠ Chitroli</div></div><div id="hd-8" class="hd"><div class="hd-c">MAHINDRA WORLD CITY</div><div class="hd-h">Employment anchor</div></div><div id="hd-9" class="hd"><div class="hd-c">DEHMI KALAN</div><div class="hd-h">Manipal University</div></div><div id="hd-10" class="hd"><div class="hd-c">BAGRU</div><div class="hd-h">Industry &amp; block printing</div></div><div id="hd-11" class="hd"><div class="hd-c">MAHLA → DUDU</div><div class="hd-h">Highway belt · Sambhar</div></div><div id="hd-12" class="hd"><div class="hd-c">KISHANGARH → AJMER</div><div class="hd-h">Marble · airport · Pushkar</div></div><div id="hd-13" class="hd"><div class="hd-c">PROPOSED</div><div class="hd-h">Kotputli–Kishangarh E-way</div></div><div id="hd-14" class="hd"><div class="hd-c">SHARE THIS</div><div class="hd-h">One road, many demands</div></div><div id="co-c" class="co">Call / WhatsApp 96721 19046</div>
+      <div id="hd-1" class="hd"><div class="hd-c">STRETCH 1</div><div class="hd-h">200-ft Bypass → Bhankrota</div></div><div id="hd-2" class="hd"><div class="hd-c">200-FT BYPASS</div><div class="hd-h">Going signal-free</div></div><div id="hd-3" class="hd"><div class="hd-c">MAHAPURA</div><div class="hd-h">Southern Ring Rd · existing</div></div><div id="hd-4" class="hd"><div class="hd-c">WIDER NETWORK</div><div class="hd-h">Link to Delhi–Mumbai E-way</div></div><div id="hd-5" class="hd"><div class="hd-c">CHITROLI</div><div class="hd-h">Northern Ring Rd · proposed</div></div><div id="hd-6" class="hd"><div class="hd-c">DON'T MIX THEM UP</div><div class="hd-h">Mahapura ≠ Chitroli</div></div><div id="hd-7" class="hd"><div class="hd-c">MAHINDRA WORLD CITY</div><div class="hd-h">Employment anchor</div></div><div id="hd-8" class="hd"><div class="hd-c">DEHMI KALAN</div><div class="hd-h">Manipal University</div></div><div id="hd-9" class="hd"><div class="hd-c">BAGRU</div><div class="hd-h">Industry &amp; block printing</div></div><div id="hd-10" class="hd"><div class="hd-c">MAHLA → DUDU</div><div class="hd-h">Highway belt · Sambhar</div></div><div id="hd-11" class="hd"><div class="hd-c">KISHANGARH → AJMER</div><div class="hd-h">Marble · airport · Pushkar</div></div><div id="hd-12" class="hd"><div class="hd-c">PROPOSED</div><div class="hd-h">Kotputli–Kishangarh E-way</div></div><div id="hd-13" class="hd"><div class="hd-c">SHARE THIS</div><div class="hd-h">One road, many demands</div></div><div id="co-c" class="co">Call / WhatsApp 96721 19046</div>
     </div>
   </div>
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#op", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.45);
+      tl.to("#op", { opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }, 4.3);
       tl.fromTo("#pg", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 6.16);
       tl.to("#pg", { opacity: 0, duration: 0.3 }, 150.0);
-      tl.fromTo("#hd-1", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 2.3);
-      tl.fromTo("#hd-1 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 2.3);
-      tl.fromTo("#hd-1 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 2.36);
-      tl.to("#hd-1", { opacity: 0, duration: 0.2, ease: "power2.in" }, 4.4);
-      tl.fromTo("#hd-2", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 4.6);
-      tl.fromTo("#hd-2 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 4.6);
-      tl.fromTo("#hd-2 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 4.659999999999999);
-      tl.to("#hd-2", { opacity: 0, duration: 0.2, ease: "power2.in" }, 23.2);
-      tl.fromTo("#hd-3", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 23.4);
-      tl.fromTo("#hd-3 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 23.4);
-      tl.fromTo("#hd-3 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 23.459999999999997);
-      tl.to("#hd-3", { opacity: 0, duration: 0.2, ease: "power2.in" }, 32.15);
-      tl.fromTo("#hd-4", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 32.35);
-      tl.fromTo("#hd-4 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 32.35);
-      tl.fromTo("#hd-4 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 32.410000000000004);
-      tl.to("#hd-4", { opacity: 0, duration: 0.2, ease: "power2.in" }, 39.2);
-      tl.fromTo("#hd-5", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 39.4);
-      tl.fromTo("#hd-5 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 39.4);
-      tl.fromTo("#hd-5 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 39.46);
-      tl.to("#hd-5", { opacity: 0, duration: 0.2, ease: "power2.in" }, 47.7);
-      tl.fromTo("#hd-6", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 47.9);
-      tl.fromTo("#hd-6 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 47.9);
-      tl.fromTo("#hd-6 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 47.96);
-      tl.to("#hd-6", { opacity: 0, duration: 0.2, ease: "power2.in" }, 59.05);
-      tl.fromTo("#hd-7", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 59.25);
-      tl.fromTo("#hd-7 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 59.25);
-      tl.fromTo("#hd-7 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 59.31);
-      tl.to("#hd-7", { opacity: 0, duration: 0.2, ease: "power2.in" }, 67.3);
-      tl.fromTo("#hd-8", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 67.5);
-      tl.fromTo("#hd-8 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 67.5);
-      tl.fromTo("#hd-8 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 67.56);
-      tl.to("#hd-8", { opacity: 0, duration: 0.2, ease: "power2.in" }, 77.5);
-      tl.fromTo("#hd-9", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 77.7);
-      tl.fromTo("#hd-9 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 77.7);
-      tl.fromTo("#hd-9 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 77.76);
-      tl.to("#hd-9", { opacity: 0, duration: 0.2, ease: "power2.in" }, 89.15);
-      tl.fromTo("#hd-10", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 89.35);
-      tl.fromTo("#hd-10 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 89.35);
-      tl.fromTo("#hd-10 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 89.41);
-      tl.to("#hd-10", { opacity: 0, duration: 0.2, ease: "power2.in" }, 97.5);
-      tl.fromTo("#hd-11", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 97.7);
-      tl.fromTo("#hd-11 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 97.7);
-      tl.fromTo("#hd-11 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 97.76);
-      tl.to("#hd-11", { opacity: 0, duration: 0.2, ease: "power2.in" }, 116.4);
-      tl.fromTo("#hd-12", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 116.6);
-      tl.fromTo("#hd-12 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 116.6);
-      tl.fromTo("#hd-12 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 116.66);
-      tl.to("#hd-12", { opacity: 0, duration: 0.2, ease: "power2.in" }, 127.55);
-      tl.fromTo("#hd-13", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 127.75);
-      tl.fromTo("#hd-13 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 127.75);
-      tl.fromTo("#hd-13 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 127.81);
-      tl.to("#hd-13", { opacity: 0, duration: 0.2, ease: "power2.in" }, 147.2);
-      tl.fromTo("#hd-14", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 147.4);
-      tl.fromTo("#hd-14 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 147.4);
-      tl.fromTo("#hd-14 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 147.46);
-      tl.to("#hd-14", { opacity: 0, duration: 0.2, ease: "power2.in" }, 153.35);
+      tl.fromTo("#hd-1", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 4.6);
+      tl.fromTo("#hd-1 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 4.6);
+      tl.fromTo("#hd-1 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 4.659999999999999);
+      tl.to("#hd-1", { opacity: 0, duration: 0.2, ease: "power2.in" }, 23.2);
+      tl.fromTo("#hd-2", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 23.4);
+      tl.fromTo("#hd-2 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 23.4);
+      tl.fromTo("#hd-2 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 23.459999999999997);
+      tl.to("#hd-2", { opacity: 0, duration: 0.2, ease: "power2.in" }, 32.15);
+      tl.fromTo("#hd-3", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 32.35);
+      tl.fromTo("#hd-3 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 32.35);
+      tl.fromTo("#hd-3 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 32.410000000000004);
+      tl.to("#hd-3", { opacity: 0, duration: 0.2, ease: "power2.in" }, 39.2);
+      tl.fromTo("#hd-4", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 39.4);
+      tl.fromTo("#hd-4 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 39.4);
+      tl.fromTo("#hd-4 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 39.46);
+      tl.to("#hd-4", { opacity: 0, duration: 0.2, ease: "power2.in" }, 47.7);
+      tl.fromTo("#hd-5", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 47.9);
+      tl.fromTo("#hd-5 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 47.9);
+      tl.fromTo("#hd-5 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 47.96);
+      tl.to("#hd-5", { opacity: 0, duration: 0.2, ease: "power2.in" }, 59.05);
+      tl.fromTo("#hd-6", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 59.25);
+      tl.fromTo("#hd-6 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 59.25);
+      tl.fromTo("#hd-6 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 59.31);
+      tl.to("#hd-6", { opacity: 0, duration: 0.2, ease: "power2.in" }, 67.3);
+      tl.fromTo("#hd-7", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 67.5);
+      tl.fromTo("#hd-7 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 67.5);
+      tl.fromTo("#hd-7 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 67.56);
+      tl.to("#hd-7", { opacity: 0, duration: 0.2, ease: "power2.in" }, 77.5);
+      tl.fromTo("#hd-8", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 77.7);
+      tl.fromTo("#hd-8 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 77.7);
+      tl.fromTo("#hd-8 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 77.76);
+      tl.to("#hd-8", { opacity: 0, duration: 0.2, ease: "power2.in" }, 89.15);
+      tl.fromTo("#hd-9", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 89.35);
+      tl.fromTo("#hd-9 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 89.35);
+      tl.fromTo("#hd-9 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 89.41);
+      tl.to("#hd-9", { opacity: 0, duration: 0.2, ease: "power2.in" }, 97.5);
+      tl.fromTo("#hd-10", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 97.7);
+      tl.fromTo("#hd-10 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 97.7);
+      tl.fromTo("#hd-10 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 97.76);
+      tl.to("#hd-10", { opacity: 0, duration: 0.2, ease: "power2.in" }, 116.4);
+      tl.fromTo("#hd-11", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 116.6);
+      tl.fromTo("#hd-11 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 116.6);
+      tl.fromTo("#hd-11 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 116.66);
+      tl.to("#hd-11", { opacity: 0, duration: 0.2, ease: "power2.in" }, 127.55);
+      tl.fromTo("#hd-12", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 127.75);
+      tl.fromTo("#hd-12 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 127.75);
+      tl.fromTo("#hd-12 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 127.81);
+      tl.to("#hd-12", { opacity: 0, duration: 0.2, ease: "power2.in" }, 147.2);
+      tl.fromTo("#hd-13", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 147.4);
+      tl.fromTo("#hd-13 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 147.4);
+      tl.fromTo("#hd-13 .hd-h", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 147.46);
+      tl.to("#hd-13", { opacity: 0, duration: 0.2, ease: "power2.in" }, 153.35);
       tl.fromTo("#co-c", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.35, ease: "power3.out" }, 149.0);
       tl.to("#co-c", { opacity: 0, duration: 0.2 }, 153.35);
       window.__timelines["chrome"] = tl;
