@@ -178,7 +178,7 @@ def tiles_scene(cid, s, e, kicker, items, cols=2, top=300, h=420, rep=True):
 
 STRIP = "".join(photo(f"g0-s{k}", f + ".jpg", 72 + k * 237, 1190, 222, 160, cap) for k, (f, cap) in enumerate([("hawa", "Hawa Mahal"), ("amer", "Amer Fort"), ("jalmahal", "Jal Mahal"), ("ghoomar", "Ghoomar")]))
 # 0 · Golden Triangle on India's physical map (0.9–4.35); map bounds 37.5N–5N, 67E–99E (Module:Location map/data/India)
-s = 0.9
+s = 1.4
 IW, IH = 1200, round(1200 * 1615 / 1500)
 def ipx(lat, lon): return ((lon - 67.0) / 32.0 * IW, (37.5 - lat) / 32.5 * IH)
 PJ, PD, PA = ipx(26.924, 75.827), ipx(28.6139, 77.2090), ipx(27.1753, 78.0098)
@@ -193,7 +193,9 @@ def sp(p): return (OX + p[0] * GS, OY + p[1] * GS)
 J, D, A = sp(PJ), sp(PD), sp(PA)
 def mid(a, b): return ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
 def gtag(i, txt, p, dx, dy, amb=False, size=30): return f'<div class="tag{" amb" if amb else ""}" id="g0-{i}" style="left:{p[0] + dx:.0f}px;top:{p[1] + dy:.0f}px;font-size:{size}px;padding:8px 16px">{txt}</div>'
-tri = (f'<svg style="position:absolute;left:0;top:0;width:1080px;height:1830px" viewBox="0 0 1080 1830"><path id="g0-t" class="draw" pathLength="1" d="M{J[0]:.1f} {J[1]:.1f} L{D[0]:.1f} {D[1]:.1f} L{A[0]:.1f} {A[1]:.1f} Z" style="fill:rgba(245,176,74,0.22);stroke:#E8664A;stroke-width:6"/>'
+tri = (f'<svg style="position:absolute;left:0;top:0;width:1080px;height:1830px" viewBox="0 0 1080 1830"><path id="g0-t" class="draw" pathLength="1" d="M{J[0]:.1f} {J[1]:.1f} L{D[0]:.1f} {D[1]:.1f} L{A[0]:.1f} {A[1]:.1f} Z" style="fill:rgba(245,176,74,0.35);stroke:#E8664A;stroke-width:8"/>'
+       + f'<path id="g0-c" pathLength="1" d="M{J[0]:.1f} {J[1]:.1f} L{D[0]:.1f} {D[1]:.1f} L{A[0]:.1f} {A[1]:.1f} Z" style="fill:none;stroke:#FFFFFF;stroke-width:14;stroke-linecap:round;stroke-dasharray:0.14 0.86;opacity:0;filter:drop-shadow(0 0 10px #F5B04A) drop-shadow(0 0 4px #F5B04A)"/>'
+       + "".join(f'<circle id="g0-r{k}" cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="26" style="fill:rgba(245,176,74,0.28);stroke:#F5B04A;stroke-width:6;opacity:0"/>' for k, p in enumerate((J, D, A)))
        + "".join(f'<circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="11" style="fill:#120D0A;stroke:#F5B04A;stroke-width:5"/>' for p in (J, D, A)) + "</svg>")
 scene("g0", s, 4.3, f'<div id="g0-z" style="position:absolute;left:0;top:0;width:1080px;height:1830px;transform-origin:540px 780px">'
       f'<img src="{IMG}indiamap.png" style="position:absolute;left:{OX:.0f}px;top:{OY:.0f}px;width:{IW * GS:.0f}px;height:{IH * GS:.0f}px"/>{tri}</div>'
@@ -201,14 +203,23 @@ scene("g0", s, 4.3, f'<div id="g0-z" style="position:absolute;left:0;top:0;width
       + gtag("e1", f"≈{dJD:.0f} km", mid(J, D), -190, -40) + gtag("e2", f"≈{dDA:.0f} km", mid(D, A), 30, -30) + gtag("e3", f"≈{dAJ:.0f} km", mid(A, J), -60, 30)
       + '<div class="tag amb" id="g0-g" style="left:72px;top:1060px;font-size:36px">India\'s Golden Triangle</div>'
       + STRIP + '<div class="note" style="top:1135px;font-size:24px;background:rgba(18,13,10,0.8);padding:6px 12px;border-radius:8px;color:#F3E7D3">Map: Milenioscuro, CC BY 4.0 · straight-line distances</div>',
-      '      tl.fromTo("#g0-z", { scale: 0.82 }, { scale: 1, duration: 3.4, ease: "power1.out" }, 0);\n' + DR("#g0-t", 0.5, 0.9)
-      + "".join(SHOW(f"#g0-{i}", t) for i, t in [("j", 0.6), ("d", 0.8), ("a", 1.0), ("e1", 1.3), ("e2", 1.4), ("e3", 1.5), ("g", 1.7)]) + "".join(f'      IN("#g0-s{k}", {round(2.0 + 0.15 * k, 2)}, {{ scale: 0.9 }}, {{ scale: 1 }});\n' for k in range(4)))
+      '      tl.fromTo("#g0-z", { scale: 0.82 }, { scale: 1, duration: 2.9, ease: "power1.out" }, 0);\n' + DR("#g0-t", 0.2, 0.8)
+      + '      tl.to("#g0-c", { opacity: 1, duration: 0.2 }, 0.9);\n      tl.fromTo("#g0-c", { strokeDashoffset: 0.14 }, { strokeDashoffset: -0.86, duration: 0.85, ease: "none", repeat: 1 }, 0.9);\n      tl.to("#g0-c", { opacity: 0, duration: 0.3 }, 2.6);\n'
+      + "".join(f'      tl.fromTo("#g0-r{k}", {{ opacity: 0, attr: {{ r: 16 }} }}, {{ opacity: 1, attr: {{ r: 64 }}, duration: 0.45, yoyo: true, repeat: 3, ease: "sine.inOut" }}, {0.35 + 0.2 * k:.2f});\n' for k in range(3))
+      + "".join(SHOW(f"#g0-{i}", t) for i, t in [("j", 0.35), ("d", 0.55), ("a", 0.75), ("e1", 1.0), ("e2", 1.1), ("e3", 1.2), ("g", 1.4)]) + "".join(f'      IN("#g0-s{k}", {round(1.6 + 0.15 * k, 2)}, {{ scale: 0.9 }}, {{ scale: 1 }});\n' for k in range(4)))
 
 
 
 
 
 
+scene("cv", 0, 0.8,
+      f'<div class="ins" style="position:absolute;inset:0"></div><img src="{IMG}rambagh.jpg" style="position:absolute;left:0;top:-90px;width:1080px;height:1100px;object-fit:cover"/>'
+      '<div style="position:absolute;left:0;right:0;top:-90px;height:1100px;background:linear-gradient(180deg,rgba(18,13,10,0.6) 0%,rgba(18,13,10,0.15) 40%,rgba(18,13,10,0.8) 78%,#120D0A 100%)"></div>'
+      '<div style="position:absolute;left:70px;right:70px;top:150px;font-family:Inter,sans-serif;font-weight:900;font-size:128px;line-height:0.95;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,0.7)">JAIPUR<br><span style="color:#F5B04A">HOTEL BOOM</span></div>'
+      '<div style="position:absolute;left:76px;right:70px;top:440px;font-family:Inter,sans-serif;font-weight:800;font-size:56px;line-height:1.1;color:#F3E7D3;text-shadow:0 4px 20px rgba(0,0,0,0.8)">3 corridors to watch</div>'
+      '<div style="position:absolute;left:76px;top:1040px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,0.92);border:2px solid #E3A23B;font-family:Inter,sans-serif;font-weight:800;font-size:40px;color:#F3E7D3">IHG · Marriott · Taj · Adani</div>'
+      '<div class="note" style="top:1130px;left:76px;font-size:22px;color:rgba(243,231,211,0.8)">Rambagh Palace, Jaipur · Sunnya343, CC BY-SA 4.0</div>', "", fade_in=False)
 
 def badge(m, rid, at, logos, dx=20, dy=-110, h=40, label=None):
     """Brand badge pinned to a map point: white pill with logo(s) and optional text."""
@@ -401,7 +412,7 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="{VIDEO_END}">
-      <div id="op"><div id="op-a">JAIPUR HOSPITALITY BOOM</div><div id="op-b">3 CORRIDORS TO WATCH</div></div>
+      <div id="op" style="opacity:0"><div id="op-a">JAIPUR HOSPITALITY BOOM</div><div id="op-b">3 CORRIDORS TO WATCH</div></div>
       <div id="pg">{"".join(f'<i id="pg-{k+1}"></i>' for k in range(0))}</div>
       {hd_html}{co_html}
     </div>
@@ -409,8 +420,8 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   <script>
     (function () {{
       const tl = gsap.timeline({{ paused: true }});
-      tl.fromTo("#op", {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }}, 0.12);
-      tl.fromTo("#op-b", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.35 }}, 0.5);
+      tl.fromTo("#op", {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }}, 1.45);
+      tl.fromTo("#op-b", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.35 }}, 1.6);
       tl.to("#op", {{ opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }}, 4.0);
       tl.fromTo("#pg", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3 }}, 6.16);
       tl.to("#pg", {{ opacity: 0, duration: 0.3 }}, 99.7);{"".join(f"""

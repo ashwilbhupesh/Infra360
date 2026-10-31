@@ -114,3 +114,11 @@ Your feedback: show a realistic hotel picture when talking about Achrol, the She
 | 39.0–42.6 | Mahapura: photo pop-up of **Rambagh Palace, Jaipur**, captioned "Existing IHCL (Taj) hotel · not Gateway" |
 | 51.0–58.5 | Where to invest: pop-ups for Commercial space (office), Rental accommodation (hotel room), Businesses serving visitors (restaurant) and Hotel employees (coworkers) |
 | All maps | Pop-ups are now 400×260 px with 32 px captions (photo pop-ups 470–480 px wide). They sit in clear areas of the map with a leader line to their spot, so they don't cover labels, badges or chips. |
+
+## Revision 6: Ring Road–style hook
+| Time | What's on screen |
+|---|---|
+| 0–0.8 s | **Poster / thumbnail:** "JAIPUR HOTEL BOOM · 3 corridors to watch" over Rambagh Palace (Sunnya343, CC BY-SA 4.0), with an "IHG · Marriott · Taj · Adani" chip |
+| 0.8–1.4 s | Speaker |
+| 1.4–4.3 s | The "JAIPUR HOSPITALITY BOOM / 3 CORRIDORS TO WATCH" headline over the Golden Triangle. A light pulse runs around the triangle, and Jaipur, Delhi and Agra pulse with rings. The photo strip follows. |
+| 4.3 s onward | Unchanged |

@@ -26,7 +26,7 @@ BASE = """
 INSERTS = []
 def rel(t, s): return round(t - s, 2)
 
-def scene(cid, start, end, body, js, videos=(), keep=False):
+def scene(cid, start, end, body, js, videos=(), keep=False, fade_in=True):
     dur = round(end - start, 2); INSERTS.append((cid, start, dur))
     vids = "".join(f'<div class="panel" id="{cid}-pw{k}"><video id="{cid}-v{k}" class="clip" src="assets/broll/{src}.mp4" data-start="{round(vs,2)}" data-duration="{round(vd,2)}" muted playsinline></video></div>' for k, (src, vs, vd) in enumerate(videos))
     html = f"""<template>
@@ -42,7 +42,7 @@ def scene(cid, start, end, body, js, videos=(), keep=False):
       const tl = gsap.timeline({{ paused: true }});
       const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({{ opacity: 0, y: 16 }}, f || {{}}), Object.assign({{ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }}, to || {{}}), t);
       const DRAW = (sel, t, d) => tl.fromTo(sel, {{ strokeDashoffset: 1 }}, {{ strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }}, t);
-      tl.fromTo(["#{cid}-bg", "#{cid}-vids", "#{cid}-fg"], {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3, ease: "power2.out" }}, 0);
+{"" if not fade_in else f'      tl.fromTo(["#{cid}-bg", "#{cid}-vids", "#{cid}-fg"], {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3, ease: "power2.out" }}, 0);'}
       tl.fromTo("#{cid}-vids", {{ scale: 1.04 }}, {{ scale: 1.0, duration: {dur}, ease: "none" }}, 0);
 {js}
 {"" if keep else f'      tl.to(["#{cid}-bg", "#{cid}-vids", "#{cid}-fg"], {{ opacity: 0, duration: 0.28, ease: "power2.in" }}, {round(dur - 0.28, 2)});'}

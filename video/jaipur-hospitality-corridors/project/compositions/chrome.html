@@ -35,7 +35,7 @@
   </style>
   <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
     <div id="chrome-host" class="host clip" data-start="0" data-duration="92.23">
-      <div id="op"><div id="op-a">JAIPUR HOSPITALITY BOOM</div><div id="op-b">3 CORRIDORS TO WATCH</div></div>
+      <div id="op" style="opacity:0"><div id="op-a">JAIPUR HOSPITALITY BOOM</div><div id="op-b">3 CORRIDORS TO WATCH</div></div>
       <div id="pg"></div>
       <div id="hd-1" class="hd"><div class="hd-c">WATCH</div><div class="hd-h">3 corridors</div></div><div id="hd-2" class="hd"><div class="hd-c">CORRIDOR 1</div><div class="hd-h">The airport belt</div></div><div id="hd-3" class="hd"><div class="hd-c">CORRIDOR 2</div><div class="hd-h">Delhi Road · Achrol</div></div><div id="hd-4" class="hd"><div class="hd-c">CORRIDOR 3</div><div class="hd-h">Ajmer Road · Mahapura</div></div><div id="hd-5" class="hd"><div class="hd-c">WHERE TO INVEST</div><div class="hd-h">Where it could emerge</div></div><div id="hd-6" class="hd"><div class="hd-c">THE RIPPLE EFFECT</div><div class="hd-h">Visitors spend locally</div></div><div id="hd-7" class="hd"><div class="hd-c">THE RIPPLE EFFECT</div><div class="hd-h">Jobs · demand · services</div></div><div id="hd-8" class="hd"><div class="hd-c">WHAT'S NEXT</div><div class="hd-h">Beyond sightseeing</div></div><div id="hd-9" class="hd"><div class="hd-c">THE OPPORTUNITY</div><div class="hd-h">Across these corridors</div></div><div id="hd-10" class="hd"><div class="hd-c">SAVE THIS</div><div class="hd-h">Follow the developments</div></div><div id="co-c" class="co">Call / WhatsApp 96721 19046</div>
     </div>
@@ -43,8 +43,8 @@
   <script>
     (function () {
       const tl = gsap.timeline({ paused: true });
-      tl.fromTo("#op", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.45, ease: "power3.out" }, 0.12);
-      tl.fromTo("#op-b", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 0.5);
+      tl.fromTo("#op", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.45);
+      tl.fromTo("#op-b", { opacity: 0 }, { opacity: 1, duration: 0.35 }, 1.6);
       tl.to("#op", { opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }, 4.0);
       tl.fromTo("#pg", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 6.16);
       tl.to("#pg", { opacity: 0, duration: 0.3 }, 99.7);
