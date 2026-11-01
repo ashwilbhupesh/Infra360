@@ -213,13 +213,6 @@ scene("g0", s, 4.3, f'<div id="g0-z" style="position:absolute;left:0;top:0;width
 
 
 
-scene("cv", 0, 0.8,
-      f'<div class="ins" style="position:absolute;inset:0"></div><img src="{IMG}rambagh.jpg" style="position:absolute;left:0;top:-90px;width:1080px;height:1100px;object-fit:cover"/>'
-      '<div style="position:absolute;left:0;right:0;top:-90px;height:1100px;background:linear-gradient(180deg,rgba(18,13,10,0.6) 0%,rgba(18,13,10,0.15) 40%,rgba(18,13,10,0.8) 78%,#120D0A 100%)"></div>'
-      '<div style="position:absolute;left:70px;right:70px;top:150px;font-family:Inter,sans-serif;font-weight:900;font-size:128px;line-height:0.95;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,0.7)">JAIPUR<br><span style="color:#F5B04A">HOTEL BOOM</span></div>'
-      '<div style="position:absolute;left:76px;right:70px;top:440px;font-family:Inter,sans-serif;font-weight:800;font-size:56px;line-height:1.1;color:#F3E7D3;text-shadow:0 4px 20px rgba(0,0,0,0.8)">3 corridors to watch</div>'
-      '<div style="position:absolute;left:76px;top:1040px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,0.92);border:2px solid #E3A23B;font-family:Inter,sans-serif;font-weight:800;font-size:40px;color:#F3E7D3">IHG · Marriott · Taj · Adani</div>'
-      '<div class="note" style="top:1130px;left:76px;font-size:22px;color:rgba(243,231,211,0.8)">Rambagh Palace, Jaipur · Sunnya343, CC BY-SA 4.0</div>', "", fade_in=False)
 
 def badge(m, rid, at, logos, dx=20, dy=-110, h=40, label=None):
     """Brand badge pinned to a map point: white pill with logo(s) and optional text."""
@@ -420,8 +413,8 @@ open(f"{P}/compositions/chrome.html", "w").write(f"""<template>
   <script>
     (function () {{
       const tl = gsap.timeline({{ paused: true }});
-      tl.fromTo("#op", {{ opacity: 0, y: 20 }}, {{ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }}, 1.45);
-      tl.fromTo("#op-b", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.35 }}, 1.6);
+      tl.set("#op", {{ opacity: 1 }}, 0);
+      tl.fromTo("#op-b", {{ opacity: 0.35 }}, {{ opacity: 1, duration: 0.3 }}, 0.2);
       tl.to("#op", {{ opacity: 0, y: -10, duration: 0.25, ease: "power2.in" }}, 4.0);
       tl.fromTo("#pg", {{ opacity: 0 }}, {{ opacity: 1, duration: 0.3 }}, 6.16);
       tl.to("#pg", {{ opacity: 0, duration: 0.3 }}, 99.7);{"".join(f"""

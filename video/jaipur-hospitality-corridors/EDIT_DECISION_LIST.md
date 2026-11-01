@@ -122,3 +122,8 @@ Your feedback: show a realistic hotel picture when talking about Achrol, the She
 | 0.8–1.4 s | Speaker |
 | 1.4–4.3 s | The "JAIPUR HOSPITALITY BOOM / 3 CORRIDORS TO WATCH" headline over the Golden Triangle. A light pulse runs around the triangle, and Jaipur, Delhi and Agra pulse with rings. The photo strip follows. |
 | 4.3 s onward | Unchanged |
+
+## Revision 7: face-first opening for the repost
+- **New opening:** the video now starts on the speaker with "JAIPUR HOSPITALITY BOOM / 3 CORRIDORS TO WATCH" on screen from frame 0, as the Ring Road reel does. The Golden Triangle pulse still runs from 1.4 to 4.3 s.
+- **Poster:** removed from the video. It is now `cover_frame.jpg`, to upload as the Instagram cover (Edit cover → Add from camera roll).
+- **Reason:** a static first frame can look like a photo in the feed, so viewers may scroll past.
