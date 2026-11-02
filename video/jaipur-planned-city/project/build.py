@@ -220,6 +220,7 @@ def label(i, p, text, t, until, dx=0, dy=-70, big=False, small=False):
     J.append(f'tl.fromTo("#{i}", {{opacity:0, y:10}}, {{opacity:1, y:0, duration:0.35}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:0.25}}, {until:.2f});')
 def photo(i, src, cap, credit, t, until, x=60, y=1090, w=460, h=330):
     if x < 520 and y + h > 1000: w = min(w, 540); x = 1080 - 60 - w
+    if y + h > 1265: y = 1265 - h
     PHR.append((t, until, x, y, x + w, y + h))
     H.append(f'<div class="ph" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"><img src="assets/img/{src}"/><div class="pc">{cap}<em>{credit}</em></div></div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:0.7}}, {{opacity:1, scale:1, duration:0.4, ease:"back.out(1.6)"}}, {t:.2f}); tl.to("#{i}", {{opacity:0, scale:0.9, duration:0.3}}, {until:.2f});')
@@ -326,8 +327,8 @@ photo("pmirza", "mirza.jpg", "Sir Mirza Ismail", "Image supplied", cue("mirza") 
 chip("cmirza", "MI ROAD = MIRZA ISMAIL ROAD", "Named after Sir Mirza Ismail · Jaipur's Prime Minister, 1942–46", cue("mirza") - 0.1, T["malviya"] - 0.1, y=300)
 for k in range(len(RING)): draw(f"#ring{k}", T["ring"], 1.6)
 for k in range(len(METRO)): draw(f"#met{k}", T["metro"], 1.2)
-label("lring", (CW[0] + 120, CW[1] + 640), "Ring Road", T["ring"] + 0.3, T["send"] - 0.2, dx=0, dy=0)
-label("lmet", L["mansarovar"], "Metro · Pink Line", T["metro"] + 0.2, T["send"] - 0.2, dx=40, dy=-130)
+label("lring", (CW[0] + 120, CW[1] + 640), "Ring Road", T["ring"] + 0.3, T["send"] - 0.2, dx=60, dy=150)
+label("lmet", L["mansarovar"], "Metro · Pink Line", T["metro"] + 0.2, T["send"] - 0.2, dx=40, dy=70)
 photo("pmet", "metro.jpg", "Jaipur Metro · Badi Chaupar station", "Sam2905 · CC BY-SA 4.0", T["metro"], T["later"] + 1.5, x=560)
 cam(T["later"] - 0.1, (CW[0], CW[1] - 80), 2100, 2.6, "power1.inOut")
 chip("cplan", "300 YEARS LATER", "Still growing on a plan", T["later"], T["send"] - 0.2, y=300)
@@ -368,9 +369,9 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 .chip b{display:block;font:700 24px "JetBrains Mono",monospace;letter-spacing:.16em;color:#FFE03A;margin-bottom:6px}
 #hook{position:absolute;left:0;right:0;top:230px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif;text-shadow:0 4px 0 #000,0 0 24px rgba(0,0,0,.9)}
 #hook b{display:block;font-weight:900;font-size:80px;color:#fff;line-height:1}#hook span{display:block;margin-top:10px;font-weight:900;font-size:60px;color:#FFE03A}
-.cp{position:absolute;left:60px;right:60px;top:1500px;text-align:center;opacity:0;font:900 72px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 18px rgba(0,0,0,.95),0 0 4px #000}
+.cp{position:absolute;left:60px;right:60px;top:1340px;text-align:center;opacity:0;font:900 72px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 18px rgba(0,0,0,.95),0 0 4px #000}
 .cp .em{color:#FFE03A}
-#share{position:absolute;left:0;right:0;top:1180px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font:900 40px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
+#share{position:absolute;left:0;right:0;top:1060px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font:900 40px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
 #share svg{background:#FFB000;border-radius:50%;padding:14px;box-shadow:0 0 0 10px rgba(255,176,0,.3)}
 #credit{position:absolute;left:40px;right:40px;bottom:120px;text-align:center;font:500 20px "JetBrains Mono",monospace;color:rgba(255,255,255,.75);text-shadow:0 1px 3px #000}"""
 fonts = '<style>@font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument-serif-latin-400-normal.woff2)}</style>'

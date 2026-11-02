@@ -9,6 +9,8 @@
 
 - Amer circle + "FROM · Amer Fort" now appear at "capital" (9.0 s); supplied Vastu mandala pops up at "ancient Vastu Shastra"; architect chip shows dates 1693–1751.
 
+- Instagram safe zone: captions moved up from y 1500 to y 1340 so they clear the account name and caption bar. Low photo pop-ups are lifted (they now end by y 1265), the share icon moved to y 1060, and the Metro and Ring Road labels were moved below the captions.
+
 ## Caption fixes (spoken → shown)
 Savai→Sawai (+"Jai", flag: may not be audible), Amay→Amer, Vidyadar→Vidyadhar, "ancient wood. Vastu"→"ancient Vastu", white→wide, chopper→Chaupar, buddy→Badi, choty→Choti, See Scheme→C-Scheme, nineteen forties→1940s, Midjasma→Mirza Ismail, Malviynagar→Malviya Nagar, Javanagar→Jawahar Nagar, Vidyadanagar→Vidyadhar Nagar, Jepur's/Jappo→Jaipur, Wall City→Walled City.
 
