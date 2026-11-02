@@ -7,6 +7,8 @@
 - Added "by Mirza Ismail" (spoken) → chip "MI ROAD = MIRZA ISMAIL ROAD · Jaipur's Prime Minister, 1942–46" + supplied portrait.
 - Colony circles enlarged (r 85, pulsing). Ending: zoomed map + "COMMENT BELOW · Which area do you live in?" + share icon.
 
+- Amer circle + "FROM · Amer Fort" now appear at "capital" (9.0 s); supplied Vastu mandala pops up at "ancient Vastu Shastra"; architect chip shows dates 1693–1751.
+
 ## Caption fixes (spoken → shown)
 Savai→Sawai (+"Jai", flag: may not be audible), Amay→Amer, Vidyadar→Vidyadhar, "ancient wood. Vastu"→"ancient Vastu", white→wide, chopper→Chaupar, buddy→Badi, choty→Choti, See Scheme→C-Scheme, nineteen forties→1940s, Midjasma→Mirza Ismail, Malviynagar→Malviya Nagar, Javanagar→Jawahar Nagar, Vidyadanagar→Vidyadhar Nagar, Jepur's/Jappo→Jaipur, Wall City→Walled City.
 
