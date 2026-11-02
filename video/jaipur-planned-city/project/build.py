@@ -46,7 +46,7 @@ def cue(*seq, after=0.0):
         if all(i + k < len(words) and re.sub(r"[^\w]", "", words[i + k]["t"].lower()).startswith(seq[k]) for k in range(len(seq))): return w["s"]
     raise KeyError(seq)
 
-EM = {"designed", "1727,", "amer", "vidyadhar", "bhattacharya.", "nine", "mandala.", "palace", "roads.", "chaupars:", "wall,", "seven", "pink", "1876,", "2019,",
+EM = {"designed", "1727,", "amer", "vidyadhar", "bhattacharya.", "nine", "mandala.", "palace", "roads.", "chaupar:", "chaupar,", "badi", "choti", "mirza", "ismail.", "wall,", "seven", "pink", "1876,", "2019,",
       "unesco", "heritage", "c-scheme", "mi", "malviya", "jawahar", "mansarovar,", "ring", "metro.", "300", "plan.", "jaipur", "jaipur."}
 def glen(g): return len(" ".join(w["t"] for w in g))
 groups, cur = [], []
@@ -211,11 +211,16 @@ def scr(p, t):
     return (540 + (p[0] - c[0]) * s, 960 + (p[1] - c[1]) * s)
 def draw(sel, t, d=1.0): J.append(f'tl.fromTo("{sel}", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:{d}, ease:"power1.inOut"}}, {t:.2f});')
 def on(sel, t, d=0.4, op=1): J.append(f'tl.to("{sel}", {{opacity:{op}, duration:{d}}}, {t:.2f});')
+PHR = []
 def label(i, p, text, t, until, dx=0, dy=-70, big=False, small=False):
     x, y = scr(p, t + 1.7)
     H.append(f'<div class="lab{" big" if big else ""}{" small" if small else ""}" id="{i}" style="left:{x + dx:.0f}px;top:{y + dy:.0f}px">{text}</div>')
+    _fs = 64 if big else 28 if small else 40
+    PHR.append((t, until, x + dx, y + dy, x + dx + len(re.sub("<[^>]+>", "", text)) * _fs * 0.58, y + dy + _fs * (2.2 if "<em>" in text else 1.3)))
     J.append(f'tl.fromTo("#{i}", {{opacity:0, y:10}}, {{opacity:1, y:0, duration:0.35}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:0.25}}, {until:.2f});')
 def photo(i, src, cap, credit, t, until, x=60, y=1090, w=460, h=330):
+    if x < 520 and y + h > 1000: w = min(w, 540); x = 1080 - 60 - w
+    PHR.append((t, until, x, y, x + w, y + h))
     H.append(f'<div class="ph" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"><img src="assets/img/{src}"/><div class="pc">{cap}<em>{credit}</em></div></div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:0.7}}, {{opacity:1, scale:1, duration:0.4, ease:"back.out(1.6)"}}, {t:.2f}); tl.to("#{i}", {{opacity:0, scale:0.9, duration:0.3}}, {until:.2f});')
 def chip(i, kick, text, t, until, y=300):
@@ -226,18 +231,19 @@ T = {k: cue(*v) for k, v in {
     "designed": ("jaipur", "was", "designed"), "in1727": ("in", "1727"), "amer": ("amer",), "gave": ("and", "he", "gave"), "vidyadhar": ("vidyadhar", "bhattacharya"),
     "vastu": ("vidyadhar", "used"), "nine": ("nine",), "each": ("each", "block"), "palace": ("the", "palace"), "roads": ("then", "the", "roads"),
     "three": ("three", "wide"), "crossed": ("crossed",), "meet": ("where", "they", "meet"), "badi": ("badi",), "choti": ("choti",), "water": ("water",),
-    "wall": ("all", "of", "it"), "seven": ("seven",), "y1876": ("and", "in", "1876"), "pink": ("pink", "to"), "pinkcity": ("pink", "city"),
-    "unesco": ("in", "2019"), "didnt": ("and", "the", "planning", "didnt"), "cscheme": ("cscheme",), "malviya": ("then", "malviya"), "jawahar": ("jawahar",),
-    "vidnagar": ("and", "vidyadhar", "nagar"), "named": ("named",), "mansarovar": ("then", "mansarovar"), "today": ("and", "today"), "ring": ("ring", "road"),
+    "wall": ("all", "of"), "seven": ("seven",), "y1876": ("and", "in", "1876"), "pink": ("pink", "to"), "pinkcity": ("pink", "city"),
+    "unesco": ("in", "2019"), "didnt": ("and", "the", "planning", "didnt"), "cscheme": ("cscheme",), "malviya": ("malviya",), "jawahar": ("jawahar",),
+    "vidnagar": ("and", "vidyadhar", "nagar"), "named": ("named",), "mansarovar": ("mansarovar",), "today": ("and", "today"), "ring": ("ring", "road"),
     "metro": ("metro",), "later": ("300", "years", "later"), "send": ("send", "this")}.items()}
 # face slots (your recording shows through): opening line, closing CTA
-FACE = [(0.0, T["designed"] - 0.05), (T["send"] - 0.15, END)]
+O = cue("300") - 0.1
+FACE = [(0.0, O), (T["send"] - 0.15, END)]
 
 # 0 · opening: face, then the walled city from above with the grid drawing
 cam(0, WC, WW * 1.6, 0.01)
-J.append(f'tl.fromTo("#world", {{attr:{{viewBox:"{vb(WC, WW * 1.6)}"}}}}, {{attr:{{viewBox:"{vb(GC, GW)}"}}, duration:{T["in1727"] - T["designed"]:.2f}, ease:"power1.out"}}, {T["designed"]:.2f});')
-on("#city", T["designed"] + 0.2, 0.8, 0.9)
-for k in range(len(CELLS)): J.append(f'tl.to("#cell{k}", {{opacity:1, duration:0.2}}, {T["designed"] + 0.35 + 0.11 * k:.2f});')
+J.append(f'tl.fromTo("#world", {{attr:{{viewBox:"{vb(WC, WW * 1.6)}"}}}}, {{attr:{{viewBox:"{vb(GC, GW)}"}}, duration:{T["in1727"] - O:.2f}, ease:"power1.out"}}, {O:.2f});')
+on("#city", O + 0.2, 0.8, 0.9)
+for k in range(len(CELLS)): J.append(f'tl.to("#cell{k}", {{opacity:1, duration:0.2}}, {O + 0.35 + 0.11 * k:.2f});')
 J.append(f'tl.to("[id^=cell]", {{opacity:0, duration:0.4}}, {T["in1727"] - 0.3:.2f});')
 # 1 · 1727: wide view Amer → plains
 mid = ((L["amer"][0] + WC[0]) / 2, (L["amer"][1] + WC[1]) / 2)
@@ -253,7 +259,7 @@ J.append(f'tl.fromTo("#amerflow", {{strokeDashoffset:0}}, {{strokeDashoffset:-1,
 J.append(f'tl.fromTo("#newzone", {{opacity:0}}, {{opacity:1, duration:0.5}}, {T["amer"] + 1.4:.2f}); tl.to("#newzone", {{fillOpacity:0.5, duration:0.4, yoyo:true, repeat:5, immediateRender:false}}, {T["amer"] + 1.9:.2f});')
 J.append(f'tl.to(["#amerarrow", "#amerhead", "#amerflow", "#amerhalo", "#amerzone", "#newzone"], {{opacity:0, duration:0.4}}, {T["vastu"] - 0.2:.2f});')
 label("lnew", (_ax1[0], _ax1[1] + 60), "TO · new capital Jaipur", T["amer"] + 1.4, T["vastu"] - 0.2, dx=-180, dy=40)
-photo("poldplan", "oldplan.jpg", "The original plan", "Image supplied", T["designed"] + 0.3, T["in1727"] - 0.2, x=60, y=1080, w=600, h=350)
+photo("poldplan", "oldplan.jpg", "The original plan", "Image supplied", O + 0.3, T["in1727"] - 0.2, x=60, y=1080, w=600, h=350)
 photo("pjai", "jaisingh.jpg", "Sawai Jai Singh II", "c. 1725 · British Museum · public domain", T["in1727"] + 0.6, T["amer"] - 0.1, x=560, w=400, h=380, y=1060)
 photo("pamer", "amer.jpg", "Amer Fort · the old capital", "A.Savin · FAL", T["amer"], T["vidyadhar"] - 0.4, x=600, y=280, w=420, h=280)
 photo("paer", "aerial_jaipur.jpg", "His city, from above", "Image supplied", T["vidyadhar"] - 0.2, T["vastu"] + 0.3, x=600, y=430, w=420, h=500)
@@ -315,24 +321,30 @@ for key, tk, text, dec in [("cscheme", "cscheme", "C-Scheme · MI Road", "1940s"
                            ("vidyadhar", "vidnagar", "Vidyadhar Nagar", "named after the architect"), ("mansarovar", "mansarovar", "Mansarovar", "")]:
     on(f"#{key}d", T[tk]); J.append(f'tl.fromTo("#{key}d", {{attr:{{r:20}}}}, {{attr:{{r:85}}, duration:0.6, ease:"back.out(1.6)"}}, {T[tk]:.2f}); tl.to("#{key}d", {{attr:{{r:72}}, duration:0.7, ease:"sine.inOut", repeat:3, yoyo:true}}, {T[tk]+0.6:.2f});')
     label(f"l{key}", L[key], text + (f"<em>{dec}</em>" if dec else ""), T[tk] + 0.05, T["later"] - 0.2, dx=-90, dy=-150)
+photo("pmirza", "mirza.jpg", "Sir Mirza Ismail", "Image supplied", cue("mirza") - 0.05, T["malviya"] + 0.4, x=680, y=560, w=340, h=470)
+chip("cmirza", "MI ROAD = MIRZA ISMAIL ROAD", "Named after Sir Mirza Ismail · Jaipur's Prime Minister, 1942–46", cue("mirza") - 0.1, T["malviya"] - 0.1, y=300)
 for k in range(len(RING)): draw(f"#ring{k}", T["ring"], 1.6)
 for k in range(len(METRO)): draw(f"#met{k}", T["metro"], 1.2)
 label("lring", (CW[0] + 120, CW[1] + 640), "Ring Road", T["ring"] + 0.3, T["send"] - 0.2, dx=0, dy=0)
-label("lmet", L["mansarovar"], "Metro · Pink Line", T["metro"] + 0.2, T["send"] - 0.2, dx=40, dy=40)
+label("lmet", L["mansarovar"], "Metro · Pink Line", T["metro"] + 0.2, T["send"] - 0.2, dx=40, dy=-130)
 photo("pmet", "metro.jpg", "Jaipur Metro · Badi Chaupar station", "Sam2905 · CC BY-SA 4.0", T["metro"], T["later"] + 1.5, x=560)
 cam(T["later"] - 0.1, (CW[0], CW[1] - 80), 2100, 2.6, "power1.inOut")
 chip("cplan", "300 YEARS LATER", "Still growing on a plan", T["later"], T["send"] - 0.2, y=300)
 
-# face slots + map layer visibility
-for a, b in FACE:
-    J.append(f'tl.set("#maplayer", {{opacity:0}}, {a:.2f});')
-    if b < END: J.append(f'tl.to("#maplayer", {{opacity:1, duration:0.35}}, {b:.2f});')
-H.append('<div id="share"><svg viewBox="0 0 24 24" width="78" height="78"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round"/></svg><span>Send to a Jaipur lover</span></div>')
+# face: full screen only at the opening line; after that his voice continues over the map
+a0 = FACE[0][1]
+J.append(f'tl.set("#maplayer", {{opacity:0}}, 0); tl.set("#maplayer", {{opacity:1}}, {a0:.2f});')
+J.append(f'tl.fromTo("#avatar", {{opacity:1, scale:1}}, {{opacity:0, scale:1.08, duration:0.6, ease:"power2.in"}}, {a0:.2f});')
+J.append(f'tl.fromTo("#maplayer", {{scale:1.06}}, {{scale:1, duration:0.9, ease:"power2.out"}}, {a0:.2f});')
+cam(T["send"] - 0.3, (CW[0], CW[1] - 220), 1650, 2.2, "power1.inOut")
+chip("ccta", "COMMENT BELOW", "Which area do you live in?", T["send"] - 0.1, END, y=300)
+H2 = []
+H2.append('<div id="share"><svg viewBox="0 0 24 24" width="78" height="78"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round"/></svg><span>Send to a Jaipur lover</span></div>')
 J.append(f'tl.fromTo("#share", {{opacity:0, scale:0.6}}, {{opacity:1, scale:1, duration:0.4, ease:"back.out(2)"}}, {T["send"] + 0.2:.2f}); tl.fromTo("#share svg", {{scale:1}}, {{scale:1.18, duration:0.45, yoyo:true, repeat:5}}, {T["send"] + 0.7:.2f});')
-H.append('<div id="hook"><b>JAIPUR WAS DESIGNED</b><span>— in 1727 —</span></div>')
+H2.append('<div id="hook"><b>JAIPUR WAS DESIGNED</b><span>— in 1727 —</span></div>')
 J.append(f'tl.set("#hook", {{opacity:1}}, 0); tl.to("#hook", {{opacity:0, duration:0.3}}, {T["in1727"] - 0.3:.2f});')
 H.append('<div id="credit">Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0) · Map data © OpenStreetMap · plan: supplied diagram fitted to OSM streets</div>')
-J.append(f'tl.set("#credit", {{opacity:0}}, 0); tl.to("#credit", {{opacity:1, duration:0.3}}, {T["designed"]:.2f}); tl.to("#credit", {{opacity:0, duration:0.3}}, {T["send"] - 0.3:.2f});')
+J.append(f'tl.set("#credit", {{opacity:0}}, 0); tl.to("#credit", {{opacity:1, duration:0.3}}, {O:.2f}); tl.to("#credit", {{opacity:0, duration:0.3}}, {T["send"] - 0.3:.2f});')
 
 # captions (architect style: big white bold, heavy shadow)
 cap_html = "".join(f'<div class="cp" id="cp{gi}">' + " ".join(f'<span class="{"em" if w["t"].lower() in EM else ""}">{w["t"]}</span>' for w in g) + '</div>' for gi, (a, b, g) in enumerate(caps))
@@ -345,7 +357,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #root{position:relative;width:1080px;height:1920px;overflow:hidden}#avatar{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}
 #facePH{position:absolute;inset:0;background:radial-gradient(80% 60% at 50% 40%,#2a3442,#0b0d10);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;font-family:Inter,Arial,sans-serif;color:#9fb0c4}
 #facePH div{font-size:120px}#facePH b{font-size:56px;color:#fff;letter-spacing:.08em}#facePH span{font-size:32px}
-#maplayer{position:absolute;inset:0}#world{position:absolute;inset:0;width:1080px;height:1920px}
+#maplayer{position:absolute;inset:0}#cutwrap{position:absolute;left:-90px;top:910px;width:454px;height:806px;opacity:0;-webkit-mask-image:linear-gradient(180deg,#000 78%,transparent 99%);mask-image:linear-gradient(180deg,#000 78%,transparent 99%);filter:drop-shadow(0 0 18px rgba(0,0,0,.55))}#cutout{width:454px;height:806px;display:block}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .lab{position:absolute;opacity:0;font-family:Inter,Arial,sans-serif;font-weight:900;font-size:40px;color:#fff;white-space:nowrap;text-shadow:0 3px 0 #000,0 0 16px rgba(0,0,0,.9)}
 .lab.small{font-size:28px}.lab.big{font-size:64px;color:#FFE03A}.lab em{display:block;font-style:normal;font-weight:700;font-size:28px;color:#FFE03A}
 .ph{position:absolute;opacity:0;border-radius:18px;overflow:hidden;border:4px solid #FFE03A;box-shadow:0 14px 40px rgba(0,0,0,.6);background:#111}
@@ -354,18 +366,19 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 .chip{position:absolute;left:60px;right:60px;opacity:0;padding:18px 26px;border-radius:18px;background:rgba(10,12,16,.82);border-left:8px solid #FFE03A;font:800 40px/1.15 Inter,Arial,sans-serif;color:#fff}
 .chip b{display:block;font:700 24px "JetBrains Mono",monospace;letter-spacing:.16em;color:#FFE03A;margin-bottom:6px}
 #hook{position:absolute;left:0;right:0;top:230px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif;text-shadow:0 4px 0 #000,0 0 24px rgba(0,0,0,.9)}
-#hook b{display:block;font-weight:900;font-size:92px;color:#fff;line-height:1}#hook span{display:block;margin-top:10px;font-weight:900;font-size:60px;color:#FFE03A}
+#hook b{display:block;font-weight:900;font-size:80px;color:#fff;line-height:1}#hook span{display:block;margin-top:10px;font-weight:900;font-size:60px;color:#FFE03A}
 .cp{position:absolute;left:60px;right:60px;top:1500px;text-align:center;opacity:0;font:900 72px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 18px rgba(0,0,0,.95),0 0 4px #000}
 .cp .em{color:#FFE03A}
-#share{position:absolute;left:0;right:0;top:1180px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font:900 40px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
+#share{position:absolute;left:0;right:0;top:1180px;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font:900 40px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
 #share svg{background:#FFB000;border-radius:50%;padding:14px;box-shadow:0 0 0 10px rgba(255,176,0,.3)}
 #credit{position:absolute;left:40px;right:40px;bottom:120px;text-align:center;font:500 20px "JetBrains Mono",monospace;color:rgba(255,255,255,.75);text-shadow:0 1px 3px #000}"""
 fonts = '<style>@font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument-serif-latin-400-normal.woff2)}</style>'
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script>{fonts}<style>{CSS}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{END}" data-width="1080" data-height="1920" data-fps="30">
-{face}
 <div id="maplayer"><svg id="world" viewBox="{vb(WC, WW * 1.6)}" preserveAspectRatio="xMidYMid slice">{"".join(S)}</svg>{"".join(H)}</div>
+{face}
+{"".join(H2)}
 {cap_html}
 <audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="{0.2 if os.path.exists(P + '/assets/avatar.mp4') else 0.55}" data-fade-in="1.0" data-fade-out="2.0"></audio>
 </div><script>
