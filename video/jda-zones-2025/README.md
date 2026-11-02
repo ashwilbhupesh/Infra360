@@ -1,5 +1,16 @@
 # JDA zones 2025: "Jaipur is now bigger than Goa"
-`JDA_Zones_2025.mp4` (1080×1920, 68 s, about −16 LUFS, no voice-over). It is a text-led story with music and SFX. The on-screen story lines are in `JDA_Zones_2025.srt`.
+`JDA_Zones_2025.mp4` (1080×1920, 99.6 s, −16 LUFS, lip-sync offset 0 ms). It has Ashwil's voice-over and verbatim captions (`JDA_Zones_2025.srt`).
+
+**Cover:** `cover_frame.jpg` is a sleek editorial cover (it is also frame 0 of the video, 0–0.55 s): a dark satellite image, the JDA region drawn in a fine gold line, the serif headline "Jaipur, redrawn.", and "27 zones · 5,994 sq km · now larger than Goa".
+
+**Edits:**
+- Ashwil's face is shown only for the opening line "Jaipur is now bigger than Goa…", which then dissolves into the map.
+- Every beat is cued to his words. The outer zones light up as each town is named; Mozmabad (not spoken) lights up together with Dudu.
+- The approval card was softened to "Check the scheme's approval" (the spoken line stays verbatim in the captions).
+
+**Caption fixes:** GD→JDA, Pithfirajnagar→Prithviraj Nagar, "Add the map"→"Add them up", Telhi→Delhi, "Jaipurino"→"Jaipur you know", "2 kilometers"→"2 sq km", the town names (Shahpura, Jalsoo, Dudu, Phagi, Madhorajpura, Chaksu, Bassi, Toonga), JDNR→"JDA now", "90"→"90-A", Jagarpura→Jagatpura, Vishali→Vaishali.
+
+## Earlier text-only version (beats below were retimed to the voice)
 
 ## Story beats
 | Time (s) | Beat |
