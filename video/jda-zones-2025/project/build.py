@@ -148,8 +148,23 @@ H.append('<div id="bars"><b>AREA · SQ KM</b>'
          '<div class="br"><i>JDA region</i><s style="width:100%"></s><u>5,994</u></div>'
          '<div class="br"><i>Goa (state)</i><s style="width:61.8%"></s><u>3,702</u></div>'
          '<div class="br"><i>Delhi (NCT)</i><s style="width:24.8%"></s><u>1,484</u></div></div>')
-J.append(f'tl.fromTo("#bars", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.35}}, {K["add"] + .2:.2f}); tl.from("#bars s", {{scaleX:0, transformOrigin:"0 50%", duration:.8, stagger:.25, ease:"power3.out"}}, {K["add"] + .4:.2f}); tl.to("#bars", {{opacity:0, duration:.3}}, {K["know"] - .3:.2f});')
-J.append(f'tl.to("#bars .br:nth-child(4)", {{scale:1.06, duration:.3, yoyo:true, repeat:3}}, {K["four"] + .4:.2f}); tl.to("#bars .br:nth-child(3)", {{scale:1.06, duration:.3, yoyo:true, repeat:3}}, {K["four"] + 2.0:.2f});')
+J.append(f'tl.fromTo("#bars", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.35}}, {K["add"] + .2:.2f}); tl.from("#bars s", {{scaleX:0, transformOrigin:"0 50%", duration:.8, stagger:.25, ease:"power3.out"}}, {K["add"] + .4:.2f}); tl.to("#bars", {{opacity:0, duration:.3}}, {K["four"] - .15:.2f});')
+# true-scale overlays: Delhi ×4 and Goa, projected into this map (km → world px at Jaipur's latitude)
+OUTL = json.load(open("outlines_km.json")); PXKM = 256 * 2 ** 11 / 360 / (111.32 * math.cos(math.radians(26.9)))
+def shape(nm, at): return ["M" + " L".join(f"{at[0] + x * PXKM:.1f} {at[1] + y * PXKM:.1f}" for x, y in r) + " Z" for r in OUTL[nm]]
+DOFF = [(-365, -390), (365, -390), (-365, 390), (365, 390)]
+for i, (dx, dy) in enumerate(DOFF):
+    at = (RC[0] + dx + 39, RC[1] + dy + 80 - 23)
+    S.append(f'<path id="delhi{i}" d="{" ".join(shape("delhi", at))}" style="fill:#4FC3F7;fill-opacity:.45;stroke:#fff;stroke-width:5;opacity:0"/>')
+    J.append(f'tl.fromTo("#delhi{i}", {{opacity:0}}, {{opacity:1, duration:.25}}, {K["four"] + .05 + .3 * i:.2f}); tl.to("#delhi{i}", {{opacity:0, duration:.3}}, {cue("bigger", after=K["four"]) - .1:.2f});')
+    sfx("pop", K["four"] + .05 + .3 * i, .3)
+for k in ALL: zon(k, K["four"], .12, .3)
+label("ldelhi", (RC[0], RC[1] + 80), "<span class='y'>4×</span> DELHI", K["four"] + 1.0, cue("bigger", after=K["four"]) - .05, at=K["four"], cls="big2")
+S.append(f'<path id="goa" d="{" ".join(shape("goa", (RC[0] - 129, RC[1] + 152)))}" style="fill:#FF9F43;fill-opacity:.5;stroke:#fff;stroke-width:5;opacity:0"/>')
+TG = cue("bigger", after=K["four"])
+J.append(f'tl.fromTo("#goa", {{opacity:0}}, {{opacity:1, duration:.35}}, {TG:.2f}); tl.to("#goa", {{opacity:0, duration:.3}}, {K["know"] - .1:.2f});')
+label("lgoa", (RC[0], RC[1] + 60), "GOA<br/><span class='y'>3,702 sq km</span>", TG + .3, K["know"] - .05, at=TG, cls="big2")
+sfx("whoosh-short", TG, .35)
 sfx("whoosh", K["add"], 0.3)
 
 # B5 · the core
@@ -157,7 +172,13 @@ cam(K["know"], CC, CWID * 1.9, 1.8)
 J.append(f'tl.to("#hi", {{opacity:1, duration:.8}}, {K["know"] + .2:.2f});')
 for k in ALL:
     if k not in CORE: zon(k, K["know"], 0.12, .5)
-for k in CORE: zon(k, K["know"] + .3, .8, .4); num(k, K["know"] + 1.0, 1, .3)
+for k in CORE: zon(k, K["know"] + .3, .45, .4); num(k, K["know"] + 1.0, 1, .3)
+T19 = cue("1", "to", "9"); TPRN = cue("plus", "prithviraj", after=T19)
+for i, k in enumerate(["1", "2", "3", "4", "5", "6", "7", "8", "9"]):
+    t = T19 - .1 + 0.11 * i
+    J.append(f'tl.to("#z{k}", {{fill:"#FFE03A", fillOpacity:.85, stroke:"#FFE03A", strokeWidth:3, duration:.18}}, {t:.2f}); tl.to("#z{k}", {{fill:"{ZONES[k]["col"]}", fillOpacity:.55, stroke:"#fff", strokeWidth:1.2, duration:.4}}, {t + .9:.2f});')
+    sfx("click-soft", t, .3)
+J.append(f'tl.to(["#zPRNN", "#zPRNS"], {{fillOpacity:.9, fill:"#FFE03A", stroke:"#FFE03A", strokeWidth:3, duration:.2, yoyo:true, repeat:3}}, {TPRN + .2:.2f});')
 J.append(f'tl.to("#z3", {{fillOpacity:1, duration:.35, yoyo:true, repeat:5}}, {K["z3"]:.2f});')
 for k in CORE:
     if k != "3": zon(k, K["z3"], .3, .3)
@@ -194,8 +215,10 @@ J.append(f'tl.to("#pnews img", {{scale:1.9, x:90, y:-330, duration:1.2, ease:"po
 J.append(f'tl.to("#dim", {{opacity:.6, duration:.5}}, {K["why"]:.2f});')
 sfx("impact-bass-1", K["why"], 0.4)
 chip("w1", "① APPROVAL", "Check the scheme's approval — roads, layout &amp; patta", K["one"], K["two"])
-photo("pscheme", "scheme.jpg", "An approved scheme layout", "Image supplied · branding cropped", K["one"] + .3, K["two"], x=190, y=470, w=700, h=780)
+photo("pscheme", "scheme.jpg", "An approved scheme layout", "Image supplied · branding cropped", K["one"] + .3, cue("patta") - .2, x=190, y=470, w=700, h=780)
+photo("psite", "siteplan.jpg", "JDA site plan · approved scheme", "Riyasat Town, Chaksu · Zone 14 · image supplied", cue("patta") - .1, K["two"], x=170, y=440, w=740, h=1000, fit="contain")
 chip("w2", "② CONVERSION", "Farm land needs 90-A conversion before you can build", K["two"], K["three"])
+photo("p90a", "ninety_a.jpg", "Why 90-A matters", "Image supplied", cue("90a") - .3, K["three"], x=210, y=440, w=660, h=880)
 chip("w3", "③ RULES", "Setbacks, FAR &amp; height depend on your zone &amp; the master plan", K["three"], K["test"])
 for t in (K["one"], K["two"], K["three"]): sfx("whoosh-short", t, 0.3)
 
@@ -247,7 +270,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 .ph img{width:100%;height:100%;display:block}.pc{position:absolute;left:0;right:0;bottom:0;padding:40px 20px 12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.88));font:900 46px Inter,Arial,sans-serif;color:#fff}
 .pc em{display:block;font-style:normal;font-weight:600;font-size:22px;color:#ddd;margin-top:4px}
 .lab{position:absolute;opacity:0;transform-origin:50% 50%;translate:-50% -50%;font:900 38px/1.05 Inter,Arial,sans-serif;color:#fff;text-align:center;white-space:nowrap;text-shadow:0 3px 0 #000,0 0 14px rgba(0,0,0,.95)}
-.lab.big{font-size:64px;color:#FFE03A;translate:-50% -170%}.lab.sm{font-size:30px}
+.lab.big2{font-size:66px;line-height:1}.lab.big{font-size:64px;color:#FFE03A;translate:-50% -170%}.lab.sm{font-size:30px}
 #count{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif;text-shadow:0 6px 0 #000,0 0 30px rgba(0,0,0,.9)}
 #count span{display:block;font-weight:900;font-size:230px;line-height:1;color:#FFE03A}#count em{display:block;font-style:normal;font:700 40px "JetBrains Mono",monospace;letter-spacing:.3em;color:#fff}
 #bars{position:absolute;left:60px;right:60px;top:250px;opacity:0;padding:26px 30px;border-radius:22px;background:rgba(10,12,16,.88);font-family:Inter,Arial,sans-serif;color:#fff}

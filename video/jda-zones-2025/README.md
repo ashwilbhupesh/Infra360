@@ -8,6 +8,12 @@
 - Every beat is cued to his words. The outer zones light up as each town is named; Mozmabad (not spoken) lights up together with Dudu.
 - The approval card was softened to "Check the scheme's approval" (the spoken line stays verbatim in the captions).
 
+**Round 2:**
+- At "four times Delhi", 4 true-scale Delhi NCT outlines (OSM relation 1942586, 1,477 sq km measured) tile across the JDA region.
+- At "bigger than all of Goa", a true-scale Goa outline (OSM, 3,633 sq km measured) is laid over it. Both are projected in km at Jaipur's latitude.
+- Zones 1–9 flash yellow one by one at "1 to 9", and the PRN zones flash at "Prithviraj Nagar".
+- The JDA site plan (Riyasat Town, Chaksu, Zone 14; supplied) appears at "patta", and the supplied 90-A graphic at "90-A conversion".
+
 **Caption fixes:** GD→JDA, Pithfirajnagar→Prithviraj Nagar, "Add the map"→"Add them up", Telhi→Delhi, "Jaipurino"→"Jaipur you know", "2 kilometers"→"2 sq km", the town names (Shahpura, Jalsoo, Dudu, Phagi, Madhorajpura, Chaksu, Bassi, Toonga), JDNR→"JDA now", "90"→"90-A", Jagarpura→Jagatpura, Vishali→Vaishali.
 
 ## Earlier text-only version (beats below were retimed to the voice)
