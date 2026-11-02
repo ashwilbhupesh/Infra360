@@ -1,0 +1,46 @@
+# JDA zones 2025: "Jaipur is now bigger than Goa"
+`JDA_Zones_2025.mp4` (1080×1920, 68 s, about −16 LUFS, no voice-over). It is a text-led story with music and SFX. The on-screen story lines are in `JDA_Zones_2025.srt`.
+
+## Story beats
+| Time (s) | Beat |
+|---|---|
+| 0–3.2 | Hook "JAIPUR IS NOW BIGGER THAN GOA". The region outline draws on and the zones flash. "Your plot's zone may have changed." |
+| 3.2 | JDA office order dated 10 Oct 2025, with the JDA building photo. |
+| 6.6 | "Before: 14 zones", shown on the old zone map. |
+| 9.6 | Counter goes 14→27 while the zones pop in one by one, centre outwards. "25 zones + Prithviraj Nagar North & South." |
+| 16.4 | Area bars: JDA region 5,994 sq km (the sum of the official table), Goa 3,702, Delhi NCT 1,484. "4× Delhi." |
+| 23 | Zoom to the core: "Zones 1–9 + PRN". Zone 3 is 2 sq km. |
+| 30 | Zone 13 (Amer & Jamwaramgarh) is the biggest at 596 sq km. |
+| 34 | The new frontier: zones 15–25 light up with their tehsil names. |
+| 41.5 | Dainik Bhaskar clipping: Master Plan 2047, 272 villages could join. |
+| 45.5 | "Why should you care?" ① approval (with a scheme layout), ② 90-A conversion, ③ zone and master-plan rules. |
+| 56.6 | Quiz: "Jagatpura / Vaishali Nagar / Mansarovar / Tonk Road → Zone ?" |
+| 63 | Call to action: "Comment your area — I'll tell you your zone", plus the share icon "Send to someone buying a plot". |
+
+## How the map was made
+- **Fitting the zone map:** the official JDA map (office order dated 10.10.2025) was fitted to Web-Mercator. An affine fit was seeded from town points and then optimised (`fit.py`) by matching the map's highways to OSM motorway and trunk lines. Expect an error of roughly 1–2 km.
+- **Zone shapes:** each zone was extracted by colour segmentation (`zones2.py`). The measured areas of the outer zones match the official table to within about 5%. Zones 3 and PRN N were traced by hand.
+- **Labels:** zone boundaries are shown as approximate, and the on-screen credit says so.
+
+## Assets
+| Asset | Source |
+|---|---|
+| Satellite | Sentinel-2 cloudless 2016 by EOX (CC BY 4.0). The 2016 layer was chosen because its licence allows commercial use; later layers are NC. |
+| Zone maps (2025 and old) | JDA, supplied by Ashwil |
+| JDA building, Bhaskar clipping, Jagatpura, Vaishali Nagar, Tonk Road | Image supplied |
+| Mansarovar | Pacific Jaipur, supplied; labelled on screen as a rendering |
+| Scheme layout | Supplied. Cropped to remove the developer logo, RERA number and QR code. |
+| Music | Original synthesized pad, same as the earlier reels |
+| SFX | Bundled with HyperFrames (Pixabay Content License) |
+| Fonts | Inter and JetBrains Mono (OFL) |
+
+## Not used
+- Composite "Jagatpura" image: Hawa Mahal was pasted next to a metro station.
+- "Vidyadhar Nagar" photo: it is actually the University of Rajasthan.
+- Jodhpur JDA plot plan: it is not from Jaipur.
+- PinkWalk rendering.
+
+## Fact-check before posting
+- Goa area 3,702 sq km and Delhi area 1,484 sq km (standard official figures).
+- "Before: 14 zones" comes from the old supplied map.
+- The 272-village figure is attributed to Dainik Bhaskar's report.
