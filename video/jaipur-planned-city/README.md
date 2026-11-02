@@ -34,3 +34,13 @@ This draft is timed to the script at an estimated speaking pace, with a "YOUR VI
 - **Founding and design:** 1727, Sawai Jai Singh II and Vidyadhar Bhattacharya, the nine-square Vastu layout and the chaupars. Sources: Wikipedia (History of Jaipur; Vidyadhar Bhattacharya) and jaipurworldheritage.com.
 - **Pink in 1876 and UNESCO in 2019:** commonly cited. Check before posting.
 - **Street width:** no width figure is used, because none could be verified.
+
+## Revision 3: supplied plans fitted to the map
+- **Chowkris:** the 9 chowkri boundaries come from your plan diagram, fitted to OpenStreetMap streets (Chandpole, the chaupars, the southern gates, Suraj Pol). The Sarhad/Gangapol boundary is snapped to Amer Road. Your plan is also shown faded over the satellite image (`plan_overlay.png`).
+- **Gates:** positions come from OpenStreetMap; Ganga Pol and Dhruv Pol come from your gate map, georeferenced to within about 20–65 m.
+- **UNESCO boundary:** traced from your georeferenced World Heritage boundary map.
+- **Your images:**
+  - Choti Chaupar aerial
+  - Badi Chaupar
+  - the historic plan (`oldplan.jpg`)
+- **Wall outline:** a yellow outline of the walled city draws as the wall and gates are mentioned.

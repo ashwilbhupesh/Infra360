@@ -108,8 +108,36 @@ def uv(p): return ((p[0] - O[0]) * E[0] + (p[1] - O[1]) * E[1], (p[0] - O[0]) * 
 def xy(u, v): return (O[0] + E[0] * u + N[0] * v, O[1] + E[1] * u + N[1] * v)
 US = [0, uv(G["choti"])[0], uv(G["badi"])[0], ln]
 VS0 = uv(G["sanganeri"])[1]; VS = [VS0, 0, -VS0, -2 * VS0]          # south wall, main bazaar, two rows north
-CELLS = [[xy(US[c], VS[r + 1]), xy(US[c + 1], VS[r + 1]), xy(US[c + 1], VS[r]), xy(US[c], VS[r])] for r in (2, 1, 0) for c in range(3)]
-QUAD = [xy(0, VS[0]), xy(ln, VS[0]), xy(ln, VS[3]), xy(0, VS[3])]
+# ---- the real plan: the 8 chowkris (districts) from the supplied plan diagram, pinned to the real streets ----
+PX_X = [37, 202, 282, 359, 510, 700]
+U_X = [0, uv(G["choti"])[0], uv(G["newgate"])[0], uv(G["badi"])[0], uv(G["ghat"])[0], ln]
+VSOUTH = sum(uv(G[k])[1] for k in ("sanganeri", "ajmeri", "newgate", "ghat")) / 4
+def interp(x, xs, ys):
+    for k in range(len(xs) - 1):
+        if x <= xs[k + 1] or k == len(xs) - 2:
+            t = (x - xs[k]) / (xs[k + 1] - xs[k]); return ys[k] + t * (ys[k + 1] - ys[k])
+def pm(x, y):  # plan-diagram pixel → world
+    return xy(interp(x, PX_X, U_X), (y - 282) / (396 - 282) * VSOUTH)
+DIST_PX = {
+ "Purani Basti": [(37,281),(37,220),(50,200),(75,165),(135,128),(160,140),(165,153),(200,155),(202,281)],
+ "Topkhana Desh": [(37,283),(202,283),(202,395),(37,395)],
+ "Modikhana": [(202,283),(282,283),(282,395),(202,395)],
+ "Visheshraji": [(282,283),(359,283),(359,395),(282,395)],
+ "Ghat": [(359,283),(513,283),(513,395),(359,395)],
+ "Topkhana Hazuri": [(513,283),(695,283),(695,352),(708,352),(708,395),(513,395)],
+ "Ramchandraji": [(364,170),(513,170),(513,281),(364,281)],
+ "Gangapol": [(362,170),(410,75),(445,75),(445,47),(500,47),(500,22),(532,22),(532,52),(513,55),(513,170)],
+ "Sarhad · City Palace": [(178,75),(410,75),(362,170),(362,281),(202,281),(202,155),(178,153)]}
+DNAMES = list(DIST_PX)
+CELLS = [[pm(*p) for p in DIST_PX[n]] for n in DNAMES]
+# snap the Sarhad / Gangapol boundary to the real Amer Road (OSM), via the Hawa Mahal road corner
+_C1 = pm(362, 170); _A0 = (816.25, 672.6); _AMER = [(830.0, 615.0), (838.75, 587.5)]
+_gi = DNAMES.index("Gangapol"); _si = DNAMES.index("Sarhad · City Palace")
+CELLS[_gi] = [_A0] + _AMER + [pm(*p) for p in DIST_PX["Gangapol"][2:]]
+CELLS[_si] = [pm(178, 75)] + _AMER[::-1] + [_A0, _C1] + [pm(*p) for p in DIST_PX["Sarhad · City Palace"][3:]]
+_gx = json.load(open("gates_extra.json")); L["zorawar"] = tuple(_gx["zorawar"]); L["gangapol"] = tuple(_gx["gangapol"])   # from the supplied gate map, georeferenced (±20–65 m)
+DCEN = [(sum(p[0] for p in c) / len(c), sum(p[1] for p in c) / len(c)) for c in CELLS]
+QUAD = [pm(37,395), pm(708,395), pm(708,283), pm(520,283), pm(520,55), pm(532,52), pm(532,22), pm(500,22), pm(445,75), pm(178,75), pm(165,153), pm(135,128), pm(75,165), pm(37,220)]
 GXS = [p[0] for c in CELLS for p in c]; GYS = [p[1] for c in CELLS for p in c]
 GC = ((min(GXS) + max(GXS)) / 2, (min(GYS) + max(GYS)) / 2); GW = (max(GXS) - min(GXS)) * 1.1
 
@@ -121,6 +149,8 @@ S.append('<rect id="dim" x="-1024" y="-1024" width="3584" height="3584" style="f
 bp = "".join(pd(b, True) for b in BLD if len(b) > 2)
 S.append(f'<g id="city" style="opacity:0"><path id="bldp" d="{bp}" style="fill:#d9c9ae;fill-opacity:.82;stroke:#7d6b55;stroke-width:0.06"/>'
          + "".join(f'<path d="{pd(p)}" style="fill:none;stroke:#f2ead9;stroke-opacity:.55;stroke-width:{0.5 if t.get("highway") in ("residential","unclassified","living_street") else 1.3}"/>' for t, p in ROADS) + "</g>")
+_bx = [float(v) for v in open("plan_overlay_box.txt").read().split()]
+S.append(f'<image id="planimg" href="assets/img/plan_overlay.png" x="{_bx[0]:.1f}" y="{_bx[1]:.1f}" width="{_bx[2]:.1f}" height="{_bx[3]:.1f}" preserveAspectRatio="none" style="opacity:0"/>')
 S.append(f'<path id="pink" d="{pd(QUAD, True)}" style="fill:#ff5fa2;fill-opacity:0;stroke:none"/>')
 Y = "#FFE03A"
 def ypath(i, pts, w=6, close=False, cls="dr", vw=None):
@@ -132,6 +162,7 @@ for k, c in enumerate(CELLS):
 for k, p in enumerate(EW): S.append(ypath(f"ew{k}", p, 9, vw=WW * 0.8))
 for k, p in enumerate(NS): S.append(ypath(f"ns{k}", p, 9, vw=WW * 0.8))
 for k, p in enumerate(WALL): S.append(ypath(f"wall{k}", p, 7, vw=WW * 1.15))
+S.append(ypath("outline", QUAD, 9, close=True, vw=GW))
 for k, p in enumerate(MIR): S.append(ypath(f"mi{k}", p, 7, vw=1550))
 for k, p in enumerate(METRO): S.append(f'<path id="met{k}" class="dr" pathLength="1" d="{pd(p)}" style="fill:none;stroke:#ff4fa0;stroke-width:{7*2100/1080:.1f};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
 # ring road (from the earlier reel's OSM data, if present)
@@ -146,6 +177,13 @@ for k in ("badi", "choti"): disc(k + "d", L[k], 9)
 disc("palaced", L["palace"], 16, "#FFB000")
 for k in ("cscheme", "malviya", "jawahar", "vidyadhar", "mansarovar"): disc(k + "d", L[k], 34)
 disc("hawad", L["hawa"], 6)
+GATES = ("chandpole", "ajmeri", "sanganeri", "ghat", "surajpole", "gangapol", "zorawar", "newgate")
+for g in GATES: disc(g + "gd", L[g], 5, "#FF5A5A")
+# UNESCO World Heritage Site boundary, traced from the supplied georeferenced map (graticule: 75°49′ = x399, 75°51′ = x798; 26°56′ = y797, 26°55′ = y1005)
+def wh(x, y): return ptc(26 + 55 / 60 - (y - 1076) / 226 / 60, 75 + 49 / 60 + (x - 406) / 202 / 60)   # calibrated: scale bar 122 px/km; Chand Pol, Sanganeri, Ghat Gate, Suraj Pol on the line
+WHS = [wh(*p) for p in [(277,1018),(277,1038),(298,1040),(705,1133),(704,1141),(740,1152),(742,1138),(720,1128),(740,1028),(622,1004),(624,895),(642,893),(645,822),(676,824),(678,808),(622,800),(620,818),(522,804),(520,788),(556,782),(560,725),(528,738),(518,745),(470,770),(440,792),(400,812),(350,836),(322,858),(314,880),(310,893),(305,935),(298,940),(300,1018)]]
+S[:] = [s if not s.startswith('<path id="pink"') else f'<path id="pink" d="{pd(WHS, True)}" style="fill:#ff5fa2;fill-opacity:0;stroke:none"/>' for s in S]
+S.append(f'<path id="whs" class="dr" pathLength="1" d="{pd(WHS, True)}" style="fill:#E0312B;fill-opacity:0;stroke:#E0312B;stroke-width:{8 * GW * 1.02 / 1080:.2f};stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
 
 # ---------------- camera (viewBox) ----------------
 AR = 1920 / 1080
@@ -164,9 +202,9 @@ def scr(p, t):
     return (540 + (p[0] - c[0]) * s, 960 + (p[1] - c[1]) * s)
 def draw(sel, t, d=1.0): J.append(f'tl.fromTo("{sel}", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:{d}, ease:"power1.inOut"}}, {t:.2f});')
 def on(sel, t, d=0.4, op=1): J.append(f'tl.to("{sel}", {{opacity:{op}, duration:{d}}}, {t:.2f});')
-def label(i, p, text, t, until, dx=0, dy=-70, big=False):
+def label(i, p, text, t, until, dx=0, dy=-70, big=False, small=False):
     x, y = scr(p, t + 1.7)
-    H.append(f'<div class="lab{" big" if big else ""}" id="{i}" style="left:{x + dx:.0f}px;top:{y + dy:.0f}px">{text}</div>')
+    H.append(f'<div class="lab{" big" if big else ""}{" small" if small else ""}" id="{i}" style="left:{x + dx:.0f}px;top:{y + dy:.0f}px">{text}</div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, y:10}}, {{opacity:1, y:0, duration:0.35}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:0.25}}, {until:.2f});')
 def photo(i, src, cap, credit, t, until, x=60, y=1090, w=460, h=330):
     H.append(f'<div class="ph" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"><img src="assets/img/{src}"/><div class="pc">{cap}<em>{credit}</em></div></div>')
@@ -190,7 +228,7 @@ FACE = [(0.0, T["designed"] - 0.05), (T["send"] - 0.15, END)]
 cam(0, WC, WW * 1.6, 0.01)
 J.append(f'tl.fromTo("#world", {{attr:{{viewBox:"{vb(WC, WW * 1.6)}"}}}}, {{attr:{{viewBox:"{vb(GC, GW)}"}}, duration:{T["in1727"] - T["designed"]:.2f}, ease:"power1.out"}}, {T["designed"]:.2f});')
 on("#city", T["designed"] + 0.2, 0.8, 0.9)
-for k in range(9): J.append(f'tl.to("#cell{k}", {{opacity:1, duration:0.2}}, {T["designed"] + 0.35 + 0.11 * k:.2f});')
+for k in range(len(CELLS)): J.append(f'tl.to("#cell{k}", {{opacity:1, duration:0.2}}, {T["designed"] + 0.35 + 0.11 * k:.2f});')
 J.append(f'tl.to("[id^=cell]", {{opacity:0, duration:0.4}}, {T["in1727"] - 0.3:.2f});')
 # 1 · 1727: wide view Amer → plains
 mid = ((L["amer"][0] + WC[0]) / 2, (L["amer"][1] + WC[1]) / 2)
@@ -201,6 +239,7 @@ label("lamer", L["amer"], "Amer Fort", T["amer"], T["vastu"] - 0.2, dx=30, dy=-3
 draw("#amerarrow", T["amer"] + 0.2, 1.4)
 J.append(f'tl.to("#amerarrow", {{opacity:0, duration:0.4}}, {T["vastu"] - 0.2:.2f});')
 label("lnew", L["palace"], "New capital · Jaipur", T["amer"] + 1.3, T["vastu"] - 0.2, dx=30, dy=0)
+photo("poldplan", "oldplan.jpg", "The original plan", "Image supplied", T["designed"] + 0.3, T["in1727"] - 0.2, x=60, y=1080, w=600, h=350)
 photo("pjai", "jaisingh.jpg", "Sawai Jai Singh II", "c. 1725 · British Museum · public domain", T["in1727"] + 0.6, T["amer"] - 0.1, x=560, w=400, h=380, y=1060)
 photo("pamer", "amer.jpg", "Amer Fort · the old capital", "A.Savin · FAL", T["amer"], T["vastu"] - 0.2, x=60)
 chip("cvid", "THE ARCHITECT", "Vidyadhar Bhattacharya · from Bengal", T["vidyadhar"] - 0.3, T["vastu"] - 0.2, y=300)
@@ -208,39 +247,49 @@ chip("cking", "THE VISIONARY", "Maharaja Sawai Jai Singh II", T["in1727"] + 0.5,
 # 2 · the nine-square grid over the real city
 cam(T["vastu"] - 0.1, GC, GW, 1.4)
 on("#city", T["vastu"], 0.7, 0.95); on("#dim", T["vastu"], 0.7, 0.25)
-for k in range(9):
-    J.append(f'tl.fromTo("#cell{k}", {{opacity:0, fillOpacity:0}}, {{opacity:1, fillOpacity:0.16, duration:0.3}}, {T["nine"] + 0.12 * k:.2f});')
-PCELL = min(range(9), key=lambda k: math.hypot(sum(p[0] for p in CELLS[k]) / 4 - L["palace"][0], sum(p[1] for p in CELLS[k]) / 4 - L["palace"][1]))
+for k in range(len(CELLS)):
+    J.append(f'tl.fromTo("#cell{k}", {{opacity:0, fillOpacity:0}}, {{opacity:1, fillOpacity:0.16, duration:0.3}}, {T["each"] + 0.28 * k:.2f});')
+    OFFS = {"Purani Basti": (0, 0), "Topkhana Desh": (0, 10), "Modikhana": (0, -50), "Visheshraji": (0, 40), "Ghat": (0, 0), "Topkhana Hazuri": (-30, 0), "Ramchandraji": (0, 0), "Gangapol": (0, 0), "Sarhad · City Palace": (-40, -40)}
+    ox, oy = OFFS[DNAMES[k]]
+    label(f"ld{k}", DCEN[k], DNAMES[k], T["each"] + 0.28 * k, T["roads"], dx=ox - len(DNAMES[k]) * 7.5, dy=oy - 16, small=True)
+J.append(f'tl.to("#planimg", {{opacity:0.9, duration:0.6}}, {T["nine"]:.2f}); tl.to("#planimg", {{opacity:0, duration:0.5}}, {T["each"] + 0.2:.2f});')
+PCELL = DNAMES.index("Sarhad · City Palace") if True else min(range(9), key=lambda k: math.hypot(sum(p[0] for p in CELLS[k]) / 4 - L["palace"][0], sum(p[1] for p in CELLS[k]) / 4 - L["palace"][1]))
 J.append(f'tl.to("#cell{PCELL}", {{fillOpacity:0.45, duration:0.4}}, {T["palace"]:.2f});')
 on("#palaced", T["palace"], 0.4)
-chip("cvastu", "VASTU SHASTRA", "Nine squares · like a mandala", T["nine"] - 0.2, T["roads"] - 0.2, y=300)
-label("lpal", L["palace"], "City Palace", T["palace"] + 0.1, T["roads"], dx=-40, dy=-90, big=True)
-photo("pold", "oldpalace.jpg", "Jaipur in the 1800s", "Bourne &amp; Shepherd · public domain", T["each"], T["palace"] - 0.1, x=560)
-photo("ppal", "citypalace.jpg", "City Palace · Chandra Mahal", "Jakub Hałun · CC BY-SA 4.0", T["palace"], T["roads"] - 0.1, x=60)
+chip("cvastu", "VASTU SHASTRA · THE CHOWKRIS", "Nine squares · like a mandala", T["nine"] - 0.2, T["each"] - 0.1, y=300)
+label("lpal", L["palace"], "City Palace", T["palace"] + 0.1, T["roads"], dx=-140, dy=10, big=True)
+photo("pold", "oldpalace.jpg", "Jaipur in the 1800s", "Bourne &amp; Shepherd · public domain", T["each"], T["palace"] - 0.1, x=560, y=300, w=440, h=300)
+photo("ppal", "citypalace.jpg", "City Palace · Chandra Mahal", "Jakub Hałun · CC BY-SA 4.0", T["palace"], T["roads"] - 0.1, x=60, y=300, w=440, h=300)
 J.append(f'tl.to("[id^=cell]", {{opacity:0, duration:0.4}}, {T["roads"]:.2f}); tl.to("#palaced", {{opacity:0, duration:0.3}}, {T["roads"]:.2f});')
 # 3 · streets and chaupars
 for k in range(len(EW)): draw(f"#ew{k}", T["three"] + 0.05 * k, 1.4)
 for k in range(len(NS)): draw(f"#ns{k}", T["crossed"] + 0.06 * k, 1.2)
-cam(T["meet"] - 0.1, ((L["badi"][0] + L["choti"][0]) / 2, (L["badi"][1] + L["choti"][1]) / 2 + 10), WW * 0.62, 1.3)
+cam(T["meet"] - 0.1, ((L["badi"][0] + L["choti"][0]) / 2, (L["badi"][1] + L["choti"][1]) / 2 - 45), WW * 0.62, 1.3)
 for k in ("badi", "choti"):
     on(f"#{k}d", T[k]); J.append(f'tl.fromTo("#{k}d", {{attr:{{r:6}}}}, {{attr:{{r:18}}, duration:0.5, yoyo:true, repeat:3}}, {T[k]:.2f});')
 label("lbadi", L["badi"], "Badi Chaupar", T["badi"], T["wall"] - 0.2, dx=-60, dy=60)
 label("lchoti", L["choti"], "Choti Chaupar", T["choti"], T["wall"] - 0.2, dx=-80, dy=60)
-photo("pbadi", "badichaupar.jpg", "Badi Chaupar today", "Raki_Man · CC BY 3.0", T["badi"], T["water"] - 0.3, x=560)
-photo("phawa", "hawa.jpg", "Hawa Mahal · at Badi Chaupar", "Marcin Białek · CC BY-SA 4.0", T["water"] - 0.3, T["wall"] - 0.1, x=60)
+photo("pchoti", "choti_aerial.jpg", "Choti Chaupar from above", "Image supplied", T["choti"] - 0.3, T["wall"] - 0.1, x=60, y=280, w=360, h=450)
+photo("pbadi", "badi_supplied.jpg", "Badi Chaupar today", "Image supplied", T["badi"], T["water"] - 0.2, x=450, y=280, w=570, h=380)
+photo("phawa", "hawa.jpg", "Hawa Mahal · beside Badi Chaupar", "Marcin Białek · CC BY-SA 4.0", T["water"] - 0.2, T["wall"] - 0.1, x=450, y=280, w=570, h=380)
 # 4 · walls, gates, pink
 cam(T["wall"] - 0.1, GC, GW * 1.02, 1.2)
 J.append(f'tl.to("[id^=badi], [id^=choti]", {{opacity:0, duration:0.3}}, {T["wall"]:.2f});')
 for k in range(len(WALL)): draw(f"#wall{k}", T["wall"] + 0.2, 1.6)
-for k, (g, nm) in enumerate([("chandpole", "Chandpole"), ("surajpole", "Surajpole"), ("ajmeri", "Ajmeri Gate"), ("sanganeri", "Sanganeri Gate"), ("ghat", "Ghat Gate"), ("newgate", "New Gate")]):
-    label(f"lg{k}", L[g], nm, T["seven"] + 0.18 * k, T["unesco"] - 0.2, dx=-150 if g == "newgate" else -60, dy=60 if g == "newgate" else (-60 if k % 2 else 20))
+draw("#outline", T["wall"] + 0.1, 2.2); J.append(f'tl.to("#outline", {{opacity:0, duration:0.4}}, {T["didnt"]:.2f});')
+for k, (g, nm) in enumerate([("chandpole", "Chand Pol"), ("ajmeri", "Kishan Pol · Ajmeri"), ("sanganeri", "Shiv Pol · Sanganeri"), ("ghat", "Ghat Gate"), ("surajpole", "Suraj Pol"),
+                             ("gangapol", "Ganga Pol"), ("zorawar", "Dhruv Pol · Zorawar Singh"), ("newgate", "New Gate · added later")]):
+    label(f"lg{k}", L[g], nm, T["seven"] + 0.18 * k, T["unesco"] - 0.2, dx=-150 if g == "newgate" else -60, dy=60 if g == "newgate" else (-70 if k % 2 else 20), small=True)
+for k, g in enumerate(GATES):
+    J.append(f'tl.fromTo("#{g}gd", {{opacity:0, attr:{{r:2}}}}, {{opacity:1, attr:{{r:12}}, duration:0.4, ease:"back.out(2)"}}, {T["seven"] + 0.18 * k:.2f}); tl.to("#{g}gd", {{opacity:0, duration:0.3}}, {T["didnt"]:.2f});')
+J.append(f'tl.fromTo("#whs", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:1.6, ease:"power1.inOut"}}, {T["unesco"] + 0.2:.2f}); tl.to("#whs", {{fillOpacity:0.18, duration:0.5}}, {T["unesco"] + 1.8:.2f}); tl.to("#whs", {{opacity:0, duration:0.4}}, {T["didnt"]:.2f});')
 J.append(f'tl.to("#pink", {{fillOpacity:0.42, duration:1.2}}, {T["pink"]:.2f}); tl.to("#bldp", {{fill:"#f1a6bd", duration:1.2}}, {T["pink"]:.2f});')
 photo("pgate", "chandpole.jpg", "Chandpole Gate", "Ameer P F · CC BY-SA 4.0", T["seven"] + 0.2, T["y1876"] - 0.1, x=580, y=320, w=420, h=300)
 photo("ppink", "patrika.jpg", "The Pink City", "Patrika Gate · Iloveplantsforever · CC0", T["pinkcity"] - 0.3, T["unesco"] - 0.1, x=60)
-photo("pjm", "jantar.jpg", "Jantar Mantar · also UNESCO-listed", "Jakub Hałun · CC BY-SA 4.0", T["unesco"] + 0.3, T["didnt"] - 0.1, x=560)
+photo("pjm", "jantar.jpg", "Jantar Mantar · also UNESCO-listed", "Jakub Hałun · CC BY-SA 4.0", T["unesco"] + 0.3, T["didnt"] - 0.1, x=60, y=1100, w=420, h=300)
 chip("c1876", "1876", "Painted pink to welcome the Prince of Wales", T["y1876"] + 0.2, T["unesco"] - 0.2, y=300)
 # 5 · UNESCO
-chip("cun", "UNESCO WORLD HERITAGE · 2019", "Jaipur City, Rajasthan — recognised for its planning", T["unesco"], T["didnt"] - 0.1, y=300)
+chip("cun", "UNESCO WORLD HERITAGE · 2019", "The red line: the protected walled city", T["unesco"], T["didnt"] - 0.1, y=300)
 J.append(f'tl.fromTo("#pink", {{fillOpacity:0.42}}, {{fillOpacity:0.65, duration:0.5, yoyo:true, repeat:3, immediateRender:false}}, {T["unesco"] + 0.3:.2f});')
 # 6 · the city kept planning
 CW = (WC[0] - 160, WC[1] + 260)
@@ -267,7 +316,7 @@ H.append('<div id="share"><svg viewBox="0 0 24 24" width="78" height="78"><path 
 J.append(f'tl.fromTo("#share", {{opacity:0, scale:0.6}}, {{opacity:1, scale:1, duration:0.4, ease:"back.out(2)"}}, {T["send"] + 0.2:.2f}); tl.fromTo("#share svg", {{scale:1}}, {{scale:1.18, duration:0.45, yoyo:true, repeat:5}}, {T["send"] + 0.7:.2f});')
 H.append('<div id="hook"><b>JAIPUR WAS DESIGNED</b><span>— in 1727 —</span></div>')
 J.append(f'tl.set("#hook", {{opacity:1}}, 0); tl.to("#hook", {{opacity:0, duration:0.3}}, {T["in1727"] - 0.3:.2f});')
-H.append('<div id="credit">Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0) · Map data © OpenStreetMap · grid schematic</div>')
+H.append('<div id="credit">Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0) · Map data © OpenStreetMap · plan: supplied diagram fitted to OSM streets</div>')
 J.append(f'tl.set("#credit", {{opacity:0}}, 0); tl.to("#credit", {{opacity:1, duration:0.3}}, {T["designed"]:.2f}); tl.to("#credit", {{opacity:0, duration:0.3}}, {T["send"] - 0.3:.2f});')
 
 # captions (architect style: big white bold, heavy shadow)
@@ -283,7 +332,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #facePH div{font-size:120px}#facePH b{font-size:56px;color:#fff;letter-spacing:.08em}#facePH span{font-size:32px}
 #maplayer{position:absolute;inset:0}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .lab{position:absolute;opacity:0;font-family:Inter,Arial,sans-serif;font-weight:900;font-size:40px;color:#fff;white-space:nowrap;text-shadow:0 3px 0 #000,0 0 16px rgba(0,0,0,.9)}
-.lab.big{font-size:64px;color:#FFE03A}.lab em{display:block;font-style:normal;font-weight:700;font-size:28px;color:#FFE03A}
+.lab.small{font-size:28px}.lab.big{font-size:64px;color:#FFE03A}.lab em{display:block;font-style:normal;font-weight:700;font-size:28px;color:#FFE03A}
 .ph{position:absolute;opacity:0;border-radius:18px;overflow:hidden;border:4px solid #FFE03A;box-shadow:0 14px 40px rgba(0,0,0,.6);background:#111}
 .ph img{width:100%;height:100%;object-fit:cover}.pc{position:absolute;left:0;right:0;bottom:0;padding:28px 14px 8px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85));font:800 30px Inter,Arial,sans-serif;color:#fff}
 .pc em{display:block;font-style:normal;font-weight:600;font-size:20px;color:#ddd}
