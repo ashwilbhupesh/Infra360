@@ -83,8 +83,7 @@ def chip(i, kick, text, t, until, y=250, col="#FF8A1F"):
     J.append(f'tl.fromTo("#{i}", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.35, ease:"power3.out"}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:.25}}, {until - .25:.2f});')
 def photo(i, src, cap, credit, t, until, x=60, y=420, w=960, h=600, fit="cover"):
     H.append(f'<div class="ph" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"><img src="assets/img/{src}" style="object-fit:{fit}"/><div class="pc">{cap}<em>{credit}</em></div></div>')
-    J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.7, rotation:-2}}, {{opacity:1, scale:1, rotation:0, duration:.45, ease:"back.out(1.6)"}}, {t:.2f}); tl.to("#{i}", {{opacity:0, scale:.92, duration:.3}}, {until - .3:.2f});')
-    sfx("pop", t, .3)
+    J.append(f'tl.fromTo("#{i}", {{opacity:0, y:14}}, {{opacity:.96, y:0, duration:.5, ease:"power2.out"}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:.35}}, {until - .35:.2f});')
 Y, E = '<span class="y">', '</span>'; O_, E2 = '<span class="o">', '</span>'
 
 # world layers
@@ -126,9 +125,9 @@ J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(CALL, WALL * 1.25)}"}}}}, 0);'
 H.append('<div id="ss"><span><svg viewBox="0 0 24 24" width="40" height="40"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>SAVE this map</span>'
          '<span><svg viewBox="0 0 24 24" width="40" height="40"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2.4;stroke-linejoin:round"/></svg>SHARE it</span></div>')
 J.append('tl.fromTo("#ss", {opacity:0, y:-30}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 0.6); tl.to("#ss span", {scale:1.08, duration:.3, yoyo:true, repeat:3, stagger:.15}, 1.1); tl.to("#ss", {opacity:0, duration:.3}, 4.4);')
-H.append('<div id="hook"><b><span id="crore">0</span></b><em>CRORE · 41 KM OF NEW METRO</em></div>')
-J.append('tl.fromTo("#hook", {opacity:0, scale:1.2}, {opacity:1, scale:1, duration:.35, ease:"back.out(2)"}, 0.7); tl.to("#hook", {opacity:0, duration:.3}, 3.9);')
-J.append('const cr={v:0}; tl.to(cr, {v:13037, duration:1.3, ease:"power2.out", onUpdate:()=>{document.getElementById("crore").textContent="₹"+Math.round(cr.v).toLocaleString("en-IN")}}, 0.8);')
+H.append('<div id="hook"><em>LET&rsquo;S STUDY</em><b>THE JAIPUR<br/><span class="o">METRO</span></b></div>')
+J.append('tl.fromTo("#hook", {opacity:0, scale:1.15}, {opacity:1, scale:1, duration:.4, ease:"back.out(2)"}, 0.7); tl.to("#hook", {opacity:0, duration:.3}, 3.9);')
+J.append('tl.to(["#pink","#pinkglow"], {strokeDashoffset:0, duration:1.6, ease:"power2.inOut"}, 0.8); tl.to(["#pink","#pinkglow"], {opacity:0, duration:.4}, 3.6); tl.set(["#pink","#pinkglow"], {strokeDashoffset:1}, 4.0); tl.set(["#pink","#pinkglow"], {opacity:1}, 4.1);')
 J.append('tl.to(["#orange","#orglow"], {strokeDashoffset:0, duration:2.2, ease:"power2.inOut"}, 0.9); tl.to(["#orange","#orglow"], {opacity:0, duration:.4}, 3.7); tl.set(["#orange","#orglow"], {strokeDashoffset:1}, 4.2); tl.set(["#orange","#orglow"], {opacity:1}, 4.3);')
 story("s0", f"Is the new metro coming {Y}near YOU?{E}", 1.2, 3.9)
 sfx("impact-bass-1", 0.7, .5); sfx("riser", 0.9, .3)
@@ -142,12 +141,13 @@ for k, (nm, s, p) in enumerate(PS):
 chip("c1", "PHASE 1 · PINK LINE", "Mansarovar → Badi Chaupar · 11 stations · ~12 km", 4.2, 11.4, col="#FF5FA2")
 story("s1", f"Today, Jaipur has {Y}ONE{E} metro line.", 4.0, 7.2)
 story("s2", f"Opened {Y}2015{E} · extended underground {Y}2020{E}", 7.2, 11.4)
-photo("ptrain", "train.jpg", "Pink Line today", "Image supplied", 8.2, 11.3, x=60, y=420, w=960, h=520)
+photo("ptrain", "train.jpg", "Pink Line today", "Image supplied", 8.2, 11.3, x=690, y=1000, w=340, h=200)
 
 # 11.4 · approval
 J.append('tl.to("[id^=ps] text", {opacity:0, duration:.3}, 11.3);')
 cam(11.3, CALL, WALL, 1.6)
-photo("pdd", "ddnews.jpg", "8 April 2026", "DD News · screenshot supplied", 11.6, 15.2, x=150, y=330, w=780, h=870, fit="contain")
+photo("pdd", "ddnews.jpg", "8 April 2026", "DD News · screenshot supplied", 11.6, 15.2, x=700, y=410, w=330, h=370)
+chip("cfig", "UNION CABINET · 8 APRIL 2026", "Phase 2: ₹13,037 crore · 41 km", 11.6, 15.2, y=250, col="#FF8A1F")
 story("s3", f"Then, April 2026: {O_}Phase 2 approved.{E2}", 11.6, 15.2)
 sfx("whoosh", 11.4, .35)
 
@@ -170,11 +170,11 @@ story("s4", f"It starts at {O_}Prahladpura{E2}, Sitapura", 15.4, 17.6)
 chip("c3", "FIRST STRETCH", "Prahladpura → Pinjrapole Gaushala · ~12 km · 10 stations", 19.6, at("B2 Bypass"))
 story("s5", f"Then straight up {O_}Tonk Road{E2}", 17.6, at("B2 Bypass") - 0.6)
 story("s6", f"Past the {Y}airport{E}", at("B2 Bypass") - 0.6, at("Gandhi Nagar"))
-photo("pair", "airport.jpg", "Jaipur International Airport", "Image supplied", at("Sanganer"), at("Mahaveer Nagar"), x=440, y=250, w=580, h=380)
+photo("pair", "airport.jpg", "Jaipur International Airport", "Image supplied", at("Sanganer"), at("Mahaveer Nagar"), x=50, y=420, w=330, h=215)
 story("s7", f"Gandhi Nagar · Tonk Phatak · {Y}Rambagh{E}", at("Gandhi Nagar"), at("SMS Hospital") - 0.2)
-photo("pram", "rambagh.jpg", "Rambagh Palace · by Rambagh Circle", "Image supplied", at("Rambagh Circle") - 0.3, at("SMS Hospital") - 0.25, x=440, y=250, w=580, h=330)
+photo("pram", "rambagh.jpg", "Rambagh Palace · by Rambagh Circle", "Image supplied", at("Rambagh Circle") - 0.3, at("SMS Hospital") - 0.25, x=50, y=420, w=330, h=215)
 story("s8", f"{Y}SMS Hospital{E}", at("SMS Hospital") - 0.2, at("Govt Hostel"))
-photo("psms", "sms.jpg", "SMS Hospital", "Image supplied", at("SMS Hospital") - 0.2, at("Govt Hostel") + 0.4, x=500, y=250, w=520, h=340)
+photo("psms", "sms.jpg", "SMS Hospital", "Image supplied", at("SMS Hospital") - 0.2, at("Govt Hostel") + 0.4, x=50, y=420, w=330, h=215)
 J.append(f'tl.fromTo("#xring", {{opacity:0, attr:{{r:10}}}}, {{opacity:1, attr:{{r:26}}, duration:.5, yoyo:true, repeat:5}}, {at("Govt Hostel"):.2f}); tl.to("#pink", {{opacity:1, duration:.2}}, {at("Govt Hostel"):.2f});')
 story("s9", f"Meets the {Y}Pink Line{E} downtown", at("Govt Hostel"), at("Subhash Nagar"))
 story("s10", f"Then up {O_}Sikar Road{E2} → Todi Mod", at("Subhash Nagar"), 33.4)
@@ -190,7 +190,7 @@ H.append('<div id="stats"><div><b>41</b><i>km</i></div><div><b>~36</b><i>station
 J.append('tl.fromTo("#stats", {opacity:0, y:-20}, {opacity:1, y:0, duration:.35}, 33.3); tl.from("#stats div", {scale:.5, opacity:0, duration:.35, stagger:.18, ease:"back.out(2)"}, 33.4); tl.to("#stats", {opacity:0, duration:.3}, 38.5);')
 story("s11", f"North ↔ South. {O_}Sitapura to Sikar Road.{E2}", 33.4, 36.0)
 story("s12", f"Target: around {Y}2031{E}", 36.0, 38.6)
-photo("pcon", "construction.jpg", "Metro piling work", "Image supplied", 36.0, 38.6, x=560, y=560, w=440, h=580)
+photo("pcon", "construction.jpg", "Metro piling work", "Image supplied", 36.0, 38.6, x=50, y=1000, w=250, h=310)
 
 # 38.6 · why it matters: walking-distance rings
 for k in range(len(OS)): J.append(f'tl.fromTo("#ring{k}", {{opacity:0, attr:{{r:10}}}}, {{opacity:1, attr:{{r:58}}, duration:.5, ease:"back.out(1.6)"}}, {38.7 + 0.05 * k:.2f});')
@@ -243,15 +243,15 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #root{position:relative;width:1080px;height:1920px;overflow:hidden}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .y{color:#FFE03A}.o{color:#FF9B3D}
 .st{position:absolute;left:50px;right:50px;top:1330px;text-align:center;opacity:0;font:900 70px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 20px rgba(0,0,0,.95),0 0 4px #000}
-#hook{position:absolute;left:0;right:0;top:470px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif;text-shadow:0 6px 0 #000,0 0 30px rgba(0,0,0,.9)}
-#hook b{display:block;font-weight:900;font-size:170px;line-height:1;color:#FF9B3D;letter-spacing:-.02em}#hook em{display:block;margin-top:14px;font-style:normal;font:800 44px Inter,Arial,sans-serif;color:#fff;letter-spacing:.04em}
+#hook{position:absolute;left:0;right:0;top:400px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif;text-shadow:0 6px 0 #000,0 0 30px rgba(0,0,0,.9)}
+#hook b{display:block;font-weight:900;font-size:130px;line-height:.95;color:#fff;letter-spacing:-.01em}#hook em{display:block;margin-bottom:14px;font-style:normal;font:800 46px "JetBrains Mono",monospace;color:#FFE03A;letter-spacing:.2em}
 #ss{position:absolute;left:0;right:0;top:250px;display:flex;justify-content:center;gap:22px;opacity:0}
 #ss span{display:flex;align-items:center;gap:12px;padding:14px 24px;border-radius:40px;background:rgba(8,12,20,.85);border:2px solid rgba(255,255,255,.25);font:900 36px Inter,Arial,sans-serif;color:#fff}
 .chip{position:absolute;left:60px;right:60px;opacity:0;padding:20px 28px;border-radius:20px;background:rgba(8,12,20,.88);border-left:10px solid #FF8A1F;font:800 40px/1.15 Inter,Arial,sans-serif;color:#fff}
 .chip b{display:block;font:700 26px "JetBrains Mono",monospace;letter-spacing:.16em;margin-bottom:6px}
-.ph{position:absolute;opacity:0;border-radius:22px;overflow:hidden;border:5px solid #FF8A1F;box-shadow:0 18px 50px rgba(0,0,0,.7);background:#111}
-.ph img{width:100%;height:100%;display:block}.pc{position:absolute;left:0;right:0;bottom:0;padding:40px 20px 12px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.88));font:900 40px Inter,Arial,sans-serif;color:#fff}
-.pc em{display:block;font-style:normal;font-weight:600;font-size:22px;color:#ddd;margin-top:4px}
+.ph{position:absolute;opacity:0;border-radius:16px;overflow:hidden;border:2px solid rgba(255,255,255,.55);box-shadow:0 18px 50px rgba(0,0,0,.7);background:#111}
+.ph img{width:100%;height:100%;display:block}.pc{position:absolute;left:0;right:0;bottom:0;padding:26px 12px 8px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.88));font:800 26px Inter,Arial,sans-serif;color:#fff}
+.pc em{display:block;font-style:normal;font-weight:600;font-size:17px;color:#ddd;margin-top:4px}
 #stats{position:absolute;left:50px;right:50px;top:250px;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;opacity:0}
 #stats div{padding:18px 8px;border-radius:18px;background:rgba(8,12,20,.88);border:2px solid #FF8A1F;text-align:center;font-family:Inter,Arial,sans-serif}
 #stats b{display:block;font-weight:900;font-size:50px;color:#FF9B3D}#stats i{display:block;font-style:normal;font:700 22px "JetBrains Mono",monospace;letter-spacing:.12em;color:#fff;text-transform:uppercase}
