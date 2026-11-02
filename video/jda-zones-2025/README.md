@@ -8,6 +8,11 @@
 - Every beat is cued to his words. The outer zones light up as each town is named; Mozmabad (not spoken) lights up together with Dudu.
 - The approval card was softened to "Check the scheme's approval" (the spoken line stays verbatim in the captions).
 
+**Round 3:**
+- Cut the line "and your plot zone may have just changed" (original recording 2.70–5.45 s). The avatar is now three segments: 0.35–2.70, 5.45–35.50 and 42.20–106.6 s, 96.8 s in total.
+- Music: `music_tune.mp3` is an original piano-pop groove composed in code (`music/compose.py`, D major, 100 BPM, I–V–vi–IV). It is fully owned, with no licence restrictions. Volume 0.22 under the voice.
+- Cover redone in the Ajmer Road style: dark brown background with a dot grid, "JDA / ZONES" in cream and amber, the region in a glowing amber outline with town tags, and a "14 → 27 zones · 5,994 sq km" pill.
+
 **Round 2:**
 - At "four times Delhi", 4 true-scale Delhi NCT outlines (OSM relation 1942586, 1,477 sq km measured) tile across the JDA region.
 - At "bigger than all of Goa", a true-scale Goa outline (OSM, 3,633 sq km measured) is laid over it. Both are projected in km at Jaipur's latitude.

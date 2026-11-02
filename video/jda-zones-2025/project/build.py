@@ -106,9 +106,22 @@ FACE_END = K["oct"] - 0.15
 
 # 0 · cover thumbnail (0–0.55), then face full-screen for the opening line
 H2 = []
-H2.append('<div id="cover"><div id="cvmap"></div><div id="cvk">JDA · OFFICE ORDER · 10.10.2025</div>'
-          '<div id="cvtxt"><b>Jaipur,<br/><i>redrawn.</i></b><p>27 zones &nbsp;·&nbsp; 5,994 sq km<br/>now larger than Goa</p></div>'
-          '<div id="cvfoot"><s></s>ASHWILLPOWER</div></div>')
+ra_ = np.array(REGION); bx0, by0 = ra_.min(0); bx1, by1 = ra_.max(0)
+CVS = min(700 / (bx1 - bx0), 700 / (by1 - by0)); CVX, CVY = 1040 - (bx1 - bx0) * CVS, 760
+def cvp(p): return (CVX + (p[0] - bx0) * CVS, CVY + (p[1] - by0) * CVS)
+def cvd(pts): return "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in map(cvp, pts)) + " Z"
+cvsvg = "".join(f'<path d="{cvd(z["poly"])}" style="fill:{"rgba(243,231,211,.13)" if k in CORE else "none"};stroke:rgba(243,231,211,.28);stroke-width:1.5"/>' for k, z in ZONES.items())
+cvsvg += f'<path d="{cvd(REGION)}" style="fill:rgba(245,176,74,.06);stroke:#F5B04A;stroke-width:7;stroke-linejoin:round;filter:url(#cvglow)"/>'
+tags = ""
+for k, lab, dx, dy in [("15", "SHAHPURA", -60, -30), ("16", "CHOMU", -150, -20), ("20", "DUDU", -40, -10), ("21", "PHAGI", -60, 10), ("23", "CHAKSU", -40, 30), ("24", "BASSI", -20, 0)]:
+    x, y = cvp(ZONES[k]["ctr"]); cvsvg += f'<circle cx="{x:.1f}" cy="{y:.1f}" r="7" style="fill:#F5B04A"/>'
+    tags += f'<div class="cvtag" style="left:{min(900, max(40, x + dx)):.0f}px;top:{y + dy + 14:.0f}px">{lab}</div>'
+x, y = cvp(CC); tags += f'<div class="cvtag hot" style="left:{x - 95:.0f}px;top:{y - 70:.0f}px">JAIPUR</div>'
+H2.append('<div id="cover"><svg id="cvgrid" width="1080" height="1920"><defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="rgba(243,231,211,.07)"/></pattern>'
+          '<filter id="cvglow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
+          f'<rect width="1080" height="1920" fill="url(#dots)"/>{cvsvg}</svg>'
+          '<div id="cvt">JDA<br/><span>ZONES</span></div><div id="cvs">Jaipur, redrawn.<br/>now bigger than Goa</div>'
+          f'{tags}<div id="cvpill">14 → 27 zones · 5,994 sq km</div></div>')
 J.append('tl.set("#cover", {opacity:1}, 0); tl.to("#cover", {opacity:0, duration:.25}, 0.55);')
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(RC, RW * 1.6)}"}}}}, 0);')
 J.append(f'tl.set("#maplayer", {{opacity:0}}, 0); tl.set("#maplayer", {{opacity:1}}, {FACE_END:.2f});')
@@ -259,7 +272,7 @@ H.append('<div id="brand">ASHWILLPOWER · JAIPUR REAL ESTATE</div>')
 H.append('<div id="credit">Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0) · Zones: JDA office order 10.10.2025 map, fitted to OSM highways (approx.)</div>')
 
 CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0d10}
-#root{position:relative;width:1080px;height:1920px;overflow:hidden}#avatar{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}#maplayer{position:absolute;inset:0}.cp{position:absolute;left:50px;right:50px;top:1500px;text-align:center;opacity:0;font:900 72px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 18px rgba(0,0,0,.95),0 0 4px #000}#cover{position:absolute;inset:0;opacity:0;background:#060709;overflow:hidden}#cvmap{position:absolute;inset:0;background:url(assets/img/cover_map.jpg) center/cover}#cvk{position:absolute;left:0;right:0;top:150px;text-align:center;font:500 24px "JetBrains Mono",monospace;letter-spacing:.32em;color:#E8C77A}#cvtxt{position:absolute;left:80px;right:80px;bottom:240px;text-align:left}#cvtxt b{display:block;font:400 168px/0.92 "Instrument Serif",Georgia,serif;color:#F5F1E8;letter-spacing:-.01em}#cvtxt i{font-style:italic;color:#E8C77A}#cvtxt p{margin-top:34px;padding-top:26px;border-top:1px solid rgba(232,199,122,.6);font:400 40px/1.35 Inter,Arial,sans-serif;color:rgba(245,241,232,.88)}#cvfoot{position:absolute;left:80px;bottom:120px;display:flex;align-items:center;gap:18px;font:500 22px "JetBrains Mono",monospace;letter-spacing:.34em;color:rgba(245,241,232,.7)}#cvfoot s{display:block;width:60px;height:1px;background:#E8C77A}#world{position:absolute;inset:0;width:1080px;height:1920px}
+#root{position:relative;width:1080px;height:1920px;overflow:hidden}#avatar{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}#maplayer{position:absolute;inset:0}.cp{position:absolute;left:50px;right:50px;top:1500px;text-align:center;opacity:0;font:900 72px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 18px rgba(0,0,0,.95),0 0 4px #000}#cover{position:absolute;inset:0;opacity:0;overflow:hidden;background:radial-gradient(120% 80% at 70% 35%,#2B2016 0%,#1B140F 55%,#120d09 100%)}#cvgrid{position:absolute;inset:0}#cvt{position:absolute;left:70px;right:70px;top:250px;font:900 170px/0.92 Inter,sans-serif;letter-spacing:-0.01em;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,.6)}#cvt span{color:#F5B04A}#cvs{position:absolute;left:76px;right:70px;top:620px;font:800 52px/1.1 Inter,sans-serif;color:#F3E7D3}.cvtag{position:absolute;padding:8px 16px;border-radius:12px;background:rgba(40,26,12,.92);border:2px solid #E3A23B;font:800 30px Inter,sans-serif;color:#F3E7D3;white-space:nowrap}.cvtag.hot{background:#F5B04A;color:#1B140F;border-color:#F5B04A;font-size:34px}#cvpill{position:absolute;left:76px;top:1560px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,.92);border:2px solid #E3A23B;font:800 40px Inter,sans-serif;color:#F3E7D3}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .y{color:#FFE03A}
 .st{position:absolute;left:50px;right:50px;top:1470px;text-align:center;opacity:0;font:900 74px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 20px rgba(0,0,0,.95),0 0 4px #000}
 #hook{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif;text-shadow:0 5px 0 #000,0 0 26px rgba(0,0,0,.9)}
@@ -289,7 +302,7 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><met
 <div id="maplayer"><svg id="world" viewBox="{vb(RC, RW * 1.6)}" preserveAspectRatio="xMidYMid slice">{"".join(S)}</svg>
 {"".join(H)}</div>
 {"".join(H2)}
-<audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.18" data-fade-in="0.5" data-fade-out="2.0"></audio>
+<audio id="music" class="clip" src="assets/music_tune.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.22" data-fade-in="0.5" data-fade-out="2.0"></audio>
 {"".join(SFX)}
 </div><script>
 const tl = gsap.timeline({{ paused: true }});
