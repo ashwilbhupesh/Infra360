@@ -156,7 +156,16 @@ Y = "#FFE03A"
 def ypath(i, pts, w=6, close=False, cls="dr", vw=None):
     w = w * (vw or WW * 1.08) / 1080
     return f'<path id="{i}" class="{cls}" pathLength="1" d="{pd(pts, close)}" style="fill:none;stroke:{Y};stroke-width:{w:.2f};stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 3px rgba(0,0,0,.6))"/>'
-S.append(ypath("amerarrow", [L["amer"], ((L["amer"][0] + L["palace"][0]) / 2 + 30, (L["amer"][1] + L["palace"][1]) / 2), L["palace"]], 8, vw=1500))
+_ax0, _ax1 = L["amer"], (WC[0], WC[1] - 40)
+_amid = ((_ax0[0] + _ax1[0]) / 2 + 40, (_ax0[1] + _ax1[1]) / 2)
+_u = 1500 / 1080
+S.append(f'<circle id="amerzone" cx="{_ax0[0]:.1f}" cy="{_ax0[1]:.1f}" r="{60*_u:.1f}" style="fill:#FFE03A;fill-opacity:.25;stroke:#FFE03A;stroke-width:{5*_u:.1f};opacity:0"/>')
+S.append(f'<path id="newzone" d="{pd(QUAD, True)}" style="fill:#FFE03A;fill-opacity:.28;stroke:#FFE03A;stroke-width:{6*_u:.1f};stroke-linejoin:round;opacity:0"/>')
+S.append(f'<path id="amerhalo" d="M{_ax0[0]:.1f} {_ax0[1]:.1f} Q{_amid[0]:.1f} {_amid[1]:.1f} {_ax1[0]:.1f} {_ax1[1]:.1f}" style="fill:none;stroke:#000;stroke-opacity:.45;stroke-width:{26*_u:.1f};stroke-linecap:round;opacity:0"/>')
+S.append(f'<path id="amerarrow" class="dr" pathLength="1" d="M{_ax0[0]:.1f} {_ax0[1]:.1f} Q{_amid[0]:.1f} {_amid[1]:.1f} {_ax1[0]:.1f} {_ax1[1]:.1f}" style="fill:none;stroke:#FFE03A;stroke-width:{16*_u:.1f};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
+S.append(f'<path id="amerflow" pathLength="1" d="M{_ax0[0]:.1f} {_ax0[1]:.1f} Q{_amid[0]:.1f} {_amid[1]:.1f} {_ax1[0]:.1f} {_ax1[1]:.1f}" style="fill:none;stroke:#1a1300;stroke-width:{7*_u:.1f};stroke-linecap:round;stroke-dasharray:0.03 0.07;opacity:0"/>')
+_ang = math.degrees(math.atan2(_ax1[1] - _amid[1], _ax1[0] - _amid[0]))
+S.append(f'<g id="amerhead" style="opacity:0" transform="translate({_ax1[0]:.1f} {_ax1[1]:.1f}) rotate({_ang:.1f})"><path d="M{8*_u:.1f} 0 L{-40*_u:.1f} {-28*_u:.1f} L{-40*_u:.1f} {28*_u:.1f} Z" style="fill:#FFE03A;stroke:#000;stroke-opacity:.5;stroke-width:{2*_u:.1f}"/></g>')
 for k, c in enumerate(CELLS):
     S.append(f'<path id="cell{k}" d="{pd(c, True)}" style="fill:{Y};fill-opacity:0;stroke:{Y};stroke-width:5;vector-effect:non-scaling-stroke;opacity:0"/>')
 for k, p in enumerate(EW): S.append(ypath(f"ew{k}", p, 9, vw=WW * 0.8))
@@ -234,14 +243,19 @@ J.append(f'tl.to("[id^=cell]", {{opacity:0, duration:0.4}}, {T["in1727"] - 0.3:.
 mid = ((L["amer"][0] + WC[0]) / 2, (L["amer"][1] + WC[1]) / 2)
 cam(T["in1727"] - 0.2, mid, 1500, 1.6)
 on("#city", T["in1727"] - 0.2, 0.6, 0)
-label("lyear", (mid[0] - 300, mid[1] - 330), "1727", T["in1727"] + 0.2, T["vastu"] - 0.2, big=True)
-label("lamer", L["amer"], "Amer Fort", T["amer"], T["vastu"] - 0.2, dx=30, dy=-30)
-draw("#amerarrow", T["amer"] + 0.2, 1.4)
-J.append(f'tl.to("#amerarrow", {{opacity:0, duration:0.4}}, {T["vastu"] - 0.2:.2f});')
-label("lnew", L["palace"], "New capital · Jaipur", T["amer"] + 1.3, T["vastu"] - 0.2, dx=30, dy=0)
+label("lyear", (mid[0] - 420, mid[1] - 470), "1727", T["in1727"] + 0.2, T["vastu"] - 0.2, big=True)
+label("lamer", L["amer"], "FROM · Amer Fort", T["amer"] - 0.3, T["vastu"] - 0.2, dx=60, dy=-30)
+J.append(f'tl.fromTo("#amerzone", {{opacity:0, attr:{{r:10}}}}, {{opacity:1, attr:{{r:{60*_u:.1f}}}, duration:0.5, ease:"back.out(2)"}}, {T["amer"] - 0.3:.2f}); tl.to("#amerzone", {{fillOpacity:0.5, duration:0.4, yoyo:true, repeat:5, immediateRender:false}}, {T["amer"] + 0.2:.2f});')
+J.append(f'tl.to("#amerhalo", {{opacity:1, duration:0.3}}, {T["amer"] + 0.2:.2f});')
+draw("#amerarrow", T["amer"] + 0.2, 1.3)
+J.append(f'tl.to("#amerhead", {{opacity:1, duration:0.25}}, {T["amer"] + 1.4:.2f}); tl.to("#amerflow", {{opacity:0.8, duration:0.3}}, {T["amer"] + 1.5:.2f});')
+J.append(f'tl.fromTo("#amerflow", {{strokeDashoffset:0}}, {{strokeDashoffset:-1, duration:1.2, ease:"none", repeat:4}}, {T["amer"] + 1.5:.2f});')
+J.append(f'tl.fromTo("#newzone", {{opacity:0}}, {{opacity:1, duration:0.5}}, {T["amer"] + 1.4:.2f}); tl.to("#newzone", {{fillOpacity:0.5, duration:0.4, yoyo:true, repeat:5, immediateRender:false}}, {T["amer"] + 1.9:.2f});')
+J.append(f'tl.to(["#amerarrow", "#amerhead", "#amerflow", "#amerhalo", "#amerzone", "#newzone"], {{opacity:0, duration:0.4}}, {T["vastu"] - 0.2:.2f});')
+label("lnew", (_ax1[0], _ax1[1] + 60), "TO · new capital Jaipur", T["amer"] + 1.4, T["vastu"] - 0.2, dx=-180, dy=40)
 photo("poldplan", "oldplan.jpg", "The original plan", "Image supplied", T["designed"] + 0.3, T["in1727"] - 0.2, x=60, y=1080, w=600, h=350)
 photo("pjai", "jaisingh.jpg", "Sawai Jai Singh II", "c. 1725 · British Museum · public domain", T["in1727"] + 0.6, T["amer"] - 0.1, x=560, w=400, h=380, y=1060)
-photo("pamer", "amer.jpg", "Amer Fort · the old capital", "A.Savin · FAL", T["amer"], T["vastu"] - 0.2, x=60)
+photo("pamer", "amer.jpg", "Amer Fort · the old capital", "A.Savin · FAL", T["amer"], T["vidyadhar"] - 0.4, x=600, y=280, w=420, h=280)
 chip("cvid", "THE ARCHITECT", "Vidyadhar Bhattacharya · from Bengal", T["vidyadhar"] - 0.3, T["vastu"] - 0.2, y=300)
 chip("cking", "THE VISIONARY", "Maharaja Sawai Jai Singh II", T["in1727"] + 0.5, T["gave"] - 0.1, y=300)
 # 2 · the nine-square grid over the real city
