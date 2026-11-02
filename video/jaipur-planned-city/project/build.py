@@ -290,7 +290,7 @@ photo("phawa", "hawa.jpg", "Hawa Mahal · beside Badi Chaupar", "Marcin Białek 
 # 4 · walls, gates, pink
 cam(T["wall"] - 0.1, GC, GW * 1.02, 1.2)
 J.append(f'tl.to("[id^=badi], [id^=choti]", {{opacity:0, duration:0.3}}, {T["wall"]:.2f});')
-for k in range(len(WALL)): draw(f"#wall{k}", T["wall"] + 0.2, 1.6)
+# (hill-fort wall pieces from OSM are not drawn; the walled-city outline is used instead)
 draw("#outline", T["wall"] + 0.1, 2.2); J.append(f'tl.to("#outline", {{opacity:0, duration:0.4}}, {T["didnt"]:.2f});')
 for k, (g, nm) in enumerate([("chandpole", "Chand Pol"), ("ajmeri", "Kishan Pol · Ajmeri"), ("sanganeri", "Shiv Pol · Sanganeri"), ("ghat", "Ghat Gate"), ("surajpole", "Suraj Pol"),
                              ("gangapol", "Ganga Pol"), ("zorawar", "Dhruv Pol · Zorawar Singh"), ("newgate", "New Gate · added later")]):
