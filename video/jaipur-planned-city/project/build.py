@@ -180,11 +180,11 @@ for e in elems("/home/user/Infra360/video/jaipur-ajmer-road/project/osm/major_26
     t = e.get("tags", {})
     if t.get("ref") == "ORR" or "outer ring road" in (t.get("name") or "").lower(): RING.append(geom(e))
 for k, p in enumerate(RING): S.append(f'<path id="ring{k}" class="dr" pathLength="1" d="{pd(p)}" style="fill:none;stroke:{Y};stroke-width:{6*2100/1080:.1f};stroke-dasharray:1;stroke-dashoffset:1"/>')
-def disc(i, at, r, col=Y):
-    S.append(f'<circle id="{i}" cx="{at[0]:.1f}" cy="{at[1]:.1f}" r="{r}" style="fill:{col};fill-opacity:.55;stroke:{col};stroke-width:4;vector-effect:non-scaling-stroke;opacity:0"/>')
+def disc(i, at, r, col=Y, fo=.55, sw=4):
+    S.append(f'<circle id="{i}" cx="{at[0]:.1f}" cy="{at[1]:.1f}" r="{r}" style="fill:{col};fill-opacity:{fo};stroke:{col};stroke-width:{sw};vector-effect:non-scaling-stroke;opacity:0"/>')
 for k in ("badi", "choti"): disc(k + "d", L[k], 9)
 disc("palaced", L["palace"], 16, "#FFB000")
-for k in ("cscheme", "malviya", "jawahar", "vidyadhar", "mansarovar"): disc(k + "d", L[k], 34)
+for k in ("cscheme", "malviya", "jawahar", "vidyadhar", "mansarovar"): disc(k + "d", L[k], 85, fo=.35, sw=7)
 disc("hawad", L["hawa"], 6)
 GATES = ("chandpole", "ajmeri", "sanganeri", "ghat", "surajpole", "gangapol", "zorawar", "newgate")
 for g in GATES: disc(g + "gd", L[g], 5, "#FF5A5A")
@@ -313,8 +313,8 @@ on("#city", T["didnt"] + 0.4, 0.6, 0.5); on("#dim", T["didnt"], 0.6, 0.15)
 for k in range(len(MIR)): draw(f"#mi{k}", T["cscheme"] + 0.1, 1.0)
 for key, tk, text, dec in [("cscheme", "cscheme", "C-Scheme · MI Road", "1940s"), ("malviya", "malviya", "Malviya Nagar", ""), ("jawahar", "jawahar", "Jawahar Nagar", ""),
                            ("vidyadhar", "vidnagar", "Vidyadhar Nagar", "named after the architect"), ("mansarovar", "mansarovar", "Mansarovar", "")]:
-    on(f"#{key}d", T[tk]); J.append(f'tl.fromTo("#{key}d", {{attr:{{r:10}}}}, {{attr:{{r:34}}, duration:0.6, ease:"back.out(1.6)"}}, {T[tk]:.2f});')
-    label(f"l{key}", L[key], text + (f"<em>{dec}</em>" if dec else ""), T[tk] + 0.05, T["later"] - 0.2, dx=-90, dy=-110)
+    on(f"#{key}d", T[tk]); J.append(f'tl.fromTo("#{key}d", {{attr:{{r:20}}}}, {{attr:{{r:85}}, duration:0.6, ease:"back.out(1.6)"}}, {T[tk]:.2f}); tl.to("#{key}d", {{attr:{{r:72}}, duration:0.7, ease:"sine.inOut", repeat:3, yoyo:true}}, {T[tk]+0.6:.2f});')
+    label(f"l{key}", L[key], text + (f"<em>{dec}</em>" if dec else ""), T[tk] + 0.05, T["later"] - 0.2, dx=-90, dy=-150)
 for k in range(len(RING)): draw(f"#ring{k}", T["ring"], 1.6)
 for k in range(len(METRO)): draw(f"#met{k}", T["metro"], 1.2)
 label("lring", (CW[0] + 120, CW[1] + 640), "Ring Road", T["ring"] + 0.3, T["send"] - 0.2, dx=0, dy=0)
