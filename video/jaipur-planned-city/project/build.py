@@ -10,7 +10,7 @@ def wp(lat, lon):
 # ---------------- script → caption timings (estimated until the real recording arrives) ----------------
 WORDS_JSON = "words.json"
 SCRIPT = [
- "Most cities just grew.", "Jaipur was designed — on paper — almost 300 years ago.",
+ "Jaipur was designed 300 years ago — on paper.",
  "In 1727, Maharaja Sawai Jai Singh II decided to move his capital down from Amer fort.",
  "And he gave the job to a young architect from Bengal — Vidyadhar Bhattacharya.",
  "Vidyadhar used the ancient Vastu Shastra — a grid of nine squares, like a mandala.",
