@@ -16,6 +16,17 @@ This draft is timed to the script at an estimated speaking pace, with a "YOUR VI
   - Amer Fort: A.Savin, FAL
 
   Both are logged in the hospitality reel and credited on screen.
+- **Photos added in revision 2 (Wikimedia Commons, downloaded 2026-11-02, credited on screen):**
+  - `jaisingh.jpg`: 1 Maharaja Sawai Jai Singh II ca 1725 Jaipur. British museum.jpg — Unknown artistUnknown artist — Public domain
+  - `citypalace.jpg`: Chandra Mahal, City Palace, Jaipur, 20191218 0951 9043.jpg — Jakub Hałun — CC BY-SA 4.0
+  - `jantar.jpg`: 20191218 Jantar Mantar, Jaipur 0906 8983 DxO.jpg — Jakub Hałun — CC BY-SA 4.0
+  - `chandpole.jpg`: Chandpole gate.jpg — Ameer P F — CC BY-SA 4.0
+  - `badichaupar.jpg`: Badi Chaupar, Jaipur, Rajasthan, India - panoramio.jpg — Raki_Man — CC BY 3.0
+  - `oldpalace.jpg`: The Indur Mahal -Chandra Mahal- from the garden, Jeypore.jpg — Bourne and Shepherd — Public domain
+  - `metro.jpg`: Badi Chaupar metro station (Jaipur).jpg — Sam2905 — CC BY-SA 4.0
+  - `patrika.jpg`: Patrika Gate Jaipur 2025 — Iloveplantsforever — CC0
+
+**Grid (revision 2):** fitted to the real streets. It uses the main bazaar axis from Chandpole to Suraj Pol and the cross streets through Choti and Badi Chaupar (OSM positions). The northern rows are extrapolated, so the grid is schematic.
 - **Schematic elements:** the 3×3 Vastu grid and the pink walled-city wash are illustrative, and the on-screen credit says "grid schematic".
 - **Music:** the same bed as the earlier reels.
 

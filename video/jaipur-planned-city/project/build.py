@@ -97,24 +97,21 @@ def hull(pts):
         up.append(p)
     return lo[:-1] + up[:-1]
 WH = hull(allw)
-QUAD = [ptc(26.9150, 75.8085), ptc(26.9112, 75.8442), ptc(26.9352, 75.8462), ptc(26.9388, 75.8098)]   # SW, SE, NE, NW (approx.)
 wx = [p[0] for p in allw]; wy = [p[1] for p in allw]
 WC = ((min(wx) + max(wx)) / 2, (min(wy) + max(wy)) / 2); WW = max(wx) - min(wx)
-# 3×3 grid (schematic), rotated to the city's ~15° tilt, fitted to the core between Chandpole and Surajpole
-ang = math.atan2(L["surajpole"][1] - L["chandpole"][1], L["surajpole"][0] - L["chandpole"][0])
-gw = math.hypot(L["surajpole"][0] - L["chandpole"][0], L["surajpole"][1] - L["chandpole"][1]) * 0.98
-gc = ((L["chandpole"][0] + L["surajpole"][0]) / 2, (L["chandpole"][1] + L["surajpole"][1]) / 2 - 2)
-gh = gw * 0.62
-def gp(u, v):  # bilinear inside the walled-city quad
-    a, bq, c, d = QUAD; s, t = u / 3, v / 3
-    top = (d[0] + (c[0] - d[0]) * s, d[1] + (c[1] - d[1]) * s); bot = (a[0] + (bq[0] - a[0]) * s, a[1] + (bq[1] - a[1]) * s)
-    return (top[0] + (bot[0] - top[0]) * t, top[1] + (bot[1] - top[1]) * t)
-def _old_gp(u, v):
-    ux, uy = math.cos(ang), math.sin(ang); vx, vy = -math.sin(ang), math.cos(ang)
-    a = (u / 3 - 0.5) * gw; b = (v / 3 - 0.5) * gh * 3 / 3 * 1.0
-    b = (v / 3 - 0.5) * gh * 1.5
-    return (gc[0] + ux * a + vx * b, gc[1] + uy * a + vy * b)
-CELLS = [[gp(c, r), gp(c + 1, r), gp(c + 1, r + 1), gp(c, r + 1)] for r in range(3) for c in range(3)]
+# ---- the plan, fitted to the real streets (OSM): main bazaar axis Chandpole → Suraj Pol, cross streets at the chaupars ----
+G = {"chandpole": ptc(26.92656, 75.80791), "surajpole": ptc(26.91916, 75.84494), "choti": ptc(26.92470, 75.81850), "badi": ptc(26.92275, 75.82670),
+     "sanganeri": ptc(26.91587, 75.82480), "ajmeri": ptc(26.91710, 75.81649), "newgate": ptc(26.91615, 75.82022), "ghat": ptc(26.91357, 75.83281)}
+for k in ("choti", "badi", "chandpole", "surajpole", "sanganeri", "ajmeri", "newgate", "ghat"): L[k] = G[k]
+O = G["chandpole"]; ex, ey = G["surajpole"][0] - O[0], G["surajpole"][1] - O[1]; ln = math.hypot(ex, ey); E = (ex / ln, ey / ln); N = (E[1], -E[0])
+def uv(p): return ((p[0] - O[0]) * E[0] + (p[1] - O[1]) * E[1], (p[0] - O[0]) * N[0] + (p[1] - O[1]) * N[1])
+def xy(u, v): return (O[0] + E[0] * u + N[0] * v, O[1] + E[1] * u + N[1] * v)
+US = [0, uv(G["choti"])[0], uv(G["badi"])[0], ln]
+VS0 = uv(G["sanganeri"])[1]; VS = [VS0, 0, -VS0, -2 * VS0]          # south wall, main bazaar, two rows north
+CELLS = [[xy(US[c], VS[r + 1]), xy(US[c + 1], VS[r + 1]), xy(US[c + 1], VS[r]), xy(US[c], VS[r])] for r in (2, 1, 0) for c in range(3)]
+QUAD = [xy(0, VS[0]), xy(ln, VS[0]), xy(ln, VS[3]), xy(0, VS[3])]
+GXS = [p[0] for c in CELLS for p in c]; GYS = [p[1] for c in CELLS for p in c]
+GC = ((min(GXS) + max(GXS)) / 2, (min(GYS) + max(GYS)) / 2); GW = (max(GXS) - min(GXS)) * 1.1
 
 # ---------------- SVG world ----------------
 S = []
@@ -171,7 +168,7 @@ def label(i, p, text, t, until, dx=0, dy=-70, big=False):
     x, y = scr(p, t + 1.7)
     H.append(f'<div class="lab{" big" if big else ""}" id="{i}" style="left:{x + dx:.0f}px;top:{y + dy:.0f}px">{text}</div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, y:10}}, {{opacity:1, y:0, duration:0.35}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:0.25}}, {until:.2f});')
-def photo(i, src, cap, credit, t, until, x=60, y=330, w=470, h=330):
+def photo(i, src, cap, credit, t, until, x=60, y=1090, w=460, h=330):
     H.append(f'<div class="ph" id="{i}" style="left:{x}px;top:{y}px;width:{w}px;height:{h}px"><img src="assets/img/{src}"/><div class="pc">{cap}<em>{credit}</em></div></div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:0.7}}, {{opacity:1, scale:1, duration:0.4, ease:"back.out(1.6)"}}, {t:.2f}); tl.to("#{i}", {{opacity:0, scale:0.9, duration:0.3}}, {until:.2f});')
 def chip(i, kick, text, t, until, y=300):
@@ -191,7 +188,7 @@ FACE = [(0.0, T["designed"] - 0.05), (T["send"] - 0.15, END)]
 
 # 0 · opening: face, then the walled city from above with the grid drawing
 cam(0, WC, WW * 1.6, 0.01)
-J.append(f'tl.fromTo("#world", {{attr:{{viewBox:"{vb(WC, WW * 1.6)}"}}}}, {{attr:{{viewBox:"{vb(WC, WW * 1.05)}"}}, duration:{T["in1727"] - T["designed"]:.2f}, ease:"power1.out"}}, {T["designed"]:.2f});')
+J.append(f'tl.fromTo("#world", {{attr:{{viewBox:"{vb(WC, WW * 1.6)}"}}}}, {{attr:{{viewBox:"{vb(GC, GW)}"}}, duration:{T["in1727"] - T["designed"]:.2f}, ease:"power1.out"}}, {T["designed"]:.2f});')
 on("#city", T["designed"] + 0.2, 0.8, 0.9)
 for k in range(9): J.append(f'tl.to("#cell{k}", {{opacity:1, duration:0.2}}, {T["designed"] + 0.35 + 0.11 * k:.2f});')
 J.append(f'tl.to("[id^=cell]", {{opacity:0, duration:0.4}}, {T["in1727"] - 0.3:.2f});')
@@ -204,18 +201,22 @@ label("lamer", L["amer"], "Amer Fort", T["amer"], T["vastu"] - 0.2, dx=30, dy=-3
 draw("#amerarrow", T["amer"] + 0.2, 1.4)
 J.append(f'tl.to("#amerarrow", {{opacity:0, duration:0.4}}, {T["vastu"] - 0.2:.2f});')
 label("lnew", L["palace"], "New capital · Jaipur", T["amer"] + 1.3, T["vastu"] - 0.2, dx=30, dy=0)
-photo("pamer", "amer.jpg", "Amer Fort", "A.Savin · FAL", T["amer"] - 0.2, T["gave"] + 0.2, x=550, y=330)
+photo("pjai", "jaisingh.jpg", "Sawai Jai Singh II", "c. 1725 · British Museum · public domain", T["in1727"] + 0.6, T["amer"] - 0.1, x=560, w=400, h=380, y=1060)
+photo("pamer", "amer.jpg", "Amer Fort · the old capital", "A.Savin · FAL", T["amer"], T["vastu"] - 0.2, x=60)
 chip("cvid", "THE ARCHITECT", "Vidyadhar Bhattacharya · from Bengal", T["vidyadhar"] - 0.3, T["vastu"] - 0.2, y=300)
 chip("cking", "THE VISIONARY", "Maharaja Sawai Jai Singh II", T["in1727"] + 0.5, T["gave"] - 0.1, y=300)
 # 2 · the nine-square grid over the real city
-cam(T["vastu"] - 0.1, WC, WW * 1.08, 1.4)
+cam(T["vastu"] - 0.1, GC, GW, 1.4)
 on("#city", T["vastu"], 0.7, 0.95); on("#dim", T["vastu"], 0.7, 0.25)
 for k in range(9):
     J.append(f'tl.fromTo("#cell{k}", {{opacity:0, fillOpacity:0}}, {{opacity:1, fillOpacity:0.16, duration:0.3}}, {T["nine"] + 0.12 * k:.2f});')
-J.append(f'tl.to("#cell4", {{fillOpacity:0.45, duration:0.4}}, {T["palace"]:.2f});')
+PCELL = min(range(9), key=lambda k: math.hypot(sum(p[0] for p in CELLS[k]) / 4 - L["palace"][0], sum(p[1] for p in CELLS[k]) / 4 - L["palace"][1]))
+J.append(f'tl.to("#cell{PCELL}", {{fillOpacity:0.45, duration:0.4}}, {T["palace"]:.2f});')
 on("#palaced", T["palace"], 0.4)
 chip("cvastu", "VASTU SHASTRA", "Nine squares · like a mandala", T["nine"] - 0.2, T["roads"] - 0.2, y=300)
 label("lpal", L["palace"], "City Palace", T["palace"] + 0.1, T["roads"], dx=-40, dy=-90, big=True)
+photo("pold", "oldpalace.jpg", "Jaipur in the 1800s", "Bourne &amp; Shepherd · public domain", T["each"], T["palace"] - 0.1, x=560)
+photo("ppal", "citypalace.jpg", "City Palace · Chandra Mahal", "Jakub Hałun · CC BY-SA 4.0", T["palace"], T["roads"] - 0.1, x=60)
 J.append(f'tl.to("[id^=cell]", {{opacity:0, duration:0.4}}, {T["roads"]:.2f}); tl.to("#palaced", {{opacity:0, duration:0.3}}, {T["roads"]:.2f});')
 # 3 · streets and chaupars
 for k in range(len(EW)): draw(f"#ew{k}", T["three"] + 0.05 * k, 1.4)
@@ -225,14 +226,18 @@ for k in ("badi", "choti"):
     on(f"#{k}d", T[k]); J.append(f'tl.fromTo("#{k}d", {{attr:{{r:6}}}}, {{attr:{{r:18}}, duration:0.5, yoyo:true, repeat:3}}, {T[k]:.2f});')
 label("lbadi", L["badi"], "Badi Chaupar", T["badi"], T["wall"] - 0.2, dx=-60, dy=60)
 label("lchoti", L["choti"], "Choti Chaupar", T["choti"], T["wall"] - 0.2, dx=-80, dy=60)
-photo("phawa", "hawa.jpg", "Hawa Mahal · next to Badi Chaupar", "Marcin Białek · CC BY-SA 4.0", T["water"] - 0.4, T["wall"] - 0.1, x=540, y=330)
+photo("pbadi", "badichaupar.jpg", "Badi Chaupar today", "Raki_Man · CC BY 3.0", T["badi"], T["water"] - 0.3, x=560)
+photo("phawa", "hawa.jpg", "Hawa Mahal · at Badi Chaupar", "Marcin Białek · CC BY-SA 4.0", T["water"] - 0.3, T["wall"] - 0.1, x=60)
 # 4 · walls, gates, pink
-cam(T["wall"] - 0.1, WC, WW * 1.15, 1.2)
+cam(T["wall"] - 0.1, GC, GW * 1.02, 1.2)
 J.append(f'tl.to("[id^=badi], [id^=choti]", {{opacity:0, duration:0.3}}, {T["wall"]:.2f});')
 for k in range(len(WALL)): draw(f"#wall{k}", T["wall"] + 0.2, 1.6)
 for k, (g, nm) in enumerate([("chandpole", "Chandpole"), ("surajpole", "Surajpole"), ("ajmeri", "Ajmeri Gate"), ("sanganeri", "Sanganeri Gate"), ("ghat", "Ghat Gate"), ("newgate", "New Gate")]):
-    label(f"lg{k}", L[g], nm, T["seven"] + 0.18 * k, T["unesco"] - 0.2, dx=-60, dy=-60 if k % 2 else 20)
+    label(f"lg{k}", L[g], nm, T["seven"] + 0.18 * k, T["unesco"] - 0.2, dx=-150 if g == "newgate" else -60, dy=60 if g == "newgate" else (-60 if k % 2 else 20))
 J.append(f'tl.to("#pink", {{fillOpacity:0.42, duration:1.2}}, {T["pink"]:.2f}); tl.to("#bldp", {{fill:"#f1a6bd", duration:1.2}}, {T["pink"]:.2f});')
+photo("pgate", "chandpole.jpg", "Chandpole Gate", "Ameer P F · CC BY-SA 4.0", T["seven"] + 0.2, T["y1876"] - 0.1, x=580, y=320, w=420, h=300)
+photo("ppink", "patrika.jpg", "The Pink City", "Patrika Gate · Iloveplantsforever · CC0", T["pinkcity"] - 0.3, T["unesco"] - 0.1, x=60)
+photo("pjm", "jantar.jpg", "Jantar Mantar · also UNESCO-listed", "Jakub Hałun · CC BY-SA 4.0", T["unesco"] + 0.3, T["didnt"] - 0.1, x=560)
 chip("c1876", "1876", "Painted pink to welcome the Prince of Wales", T["y1876"] + 0.2, T["unesco"] - 0.2, y=300)
 # 5 · UNESCO
 chip("cun", "UNESCO WORLD HERITAGE · 2019", "Jaipur City, Rajasthan — recognised for its planning", T["unesco"], T["didnt"] - 0.1, y=300)
@@ -250,6 +255,7 @@ for k in range(len(RING)): draw(f"#ring{k}", T["ring"], 1.6)
 for k in range(len(METRO)): draw(f"#met{k}", T["metro"], 1.2)
 label("lring", (CW[0] + 120, CW[1] + 640), "Ring Road", T["ring"] + 0.3, T["send"] - 0.2, dx=0, dy=0)
 label("lmet", L["mansarovar"], "Metro · Pink Line", T["metro"] + 0.2, T["send"] - 0.2, dx=40, dy=40)
+photo("pmet", "metro.jpg", "Jaipur Metro · Badi Chaupar station", "Sam2905 · CC BY-SA 4.0", T["metro"], T["later"] + 1.5, x=560)
 cam(T["later"] - 0.1, (CW[0], CW[1] - 80), 2100, 2.6, "power1.inOut")
 chip("cplan", "300 YEARS LATER", "Still growing on a plan", T["later"], T["send"] - 0.2, y=300)
 
@@ -285,9 +291,9 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 .chip b{display:block;font:700 24px "JetBrains Mono",monospace;letter-spacing:.16em;color:#FFE03A;margin-bottom:6px}
 #hook{position:absolute;left:0;right:0;top:230px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif;text-shadow:0 4px 0 #000,0 0 24px rgba(0,0,0,.9)}
 #hook b{display:block;font-weight:900;font-size:92px;color:#fff;line-height:1}#hook span{display:block;margin-top:10px;font-weight:900;font-size:60px;color:#FFE03A}
-.cp{position:absolute;left:60px;right:60px;top:1250px;text-align:center;opacity:0;font:900 72px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 18px rgba(0,0,0,.95),0 0 4px #000}
+.cp{position:absolute;left:60px;right:60px;top:1500px;text-align:center;opacity:0;font:900 72px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 18px rgba(0,0,0,.95),0 0 4px #000}
 .cp .em{color:#FFE03A}
-#share{position:absolute;left:0;right:0;top:1520px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font:900 40px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
+#share{position:absolute;left:0;right:0;top:1180px;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0;font:900 40px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
 #share svg{background:#FFB000;border-radius:50%;padding:14px;box-shadow:0 0 0 10px rgba(255,176,0,.3)}
 #credit{position:absolute;left:40px;right:40px;bottom:120px;text-align:center;font:500 20px "JetBrains Mono",monospace;color:rgba(255,255,255,.75);text-shadow:0 1px 3px #000}"""
 fonts = '<style>@font-face{font-family:"Instrument Serif";src:url(assets/fonts/instrument-serif-latin-400-normal.woff2)}</style>'
