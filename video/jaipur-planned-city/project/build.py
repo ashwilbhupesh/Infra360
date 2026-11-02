@@ -256,6 +256,7 @@ label("lnew", (_ax1[0], _ax1[1] + 60), "TO · new capital Jaipur", T["amer"] + 1
 photo("poldplan", "oldplan.jpg", "The original plan", "Image supplied", T["designed"] + 0.3, T["in1727"] - 0.2, x=60, y=1080, w=600, h=350)
 photo("pjai", "jaisingh.jpg", "Sawai Jai Singh II", "c. 1725 · British Museum · public domain", T["in1727"] + 0.6, T["amer"] - 0.1, x=560, w=400, h=380, y=1060)
 photo("pamer", "amer.jpg", "Amer Fort · the old capital", "A.Savin · FAL", T["amer"], T["vidyadhar"] - 0.4, x=600, y=280, w=420, h=280)
+photo("paer", "aerial_jaipur.jpg", "His city, from above", "Image supplied", T["vidyadhar"] - 0.2, T["vastu"] + 0.3, x=600, y=430, w=420, h=500)
 chip("cvid", "THE ARCHITECT", "Vidyadhar Bhattacharya · from Bengal", T["vidyadhar"] - 0.3, T["vastu"] - 0.2, y=300)
 chip("cking", "THE VISIONARY", "Maharaja Sawai Jai Singh II", T["in1727"] + 0.5, T["gave"] - 0.1, y=300)
 # 2 · the nine-square grid over the real city
