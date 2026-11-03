@@ -20,6 +20,12 @@ Text sits on translucent dark boxes for readability, and the fine print is kept 
 - Removed the old-photos montage and the city time-lapse (too much, too fast).
 - Area scans are now 4 s each, Jagatpura 7 s: slower 1.4 s wipe, then price, then multiplier, one at a time. Runtime is 67.7 s.
 
+## Revision 3
+- Hook: "UP TO 1,000× · Jaipur land prices in 35 years" over the city slider. The cover matches.
+- Removed the Jagatpura 150-gaj / ₹1 crore plot story; every area gets the same 4 s scan.
+- Removed the highlight circle. Runtime is 64.7 s.
+- "35 years" rather than "30" because the data runs 1989/1990 → 2024/2026. "Up to" because the area multipliers range from about 350× to 1,200×.
+
 ## Prices
 Supplied by Ashwil (ranges compiled with ChatGPT). The video shows the **mid-points** of each range:
 

@@ -18,7 +18,7 @@ Y, E = '<span class="y">', '</span>'
 
 # ---------- 0 · cover (whole city) ----------
 H.append('<div id="cover"><svg width="1080" height="1920" style="position:absolute;inset:0"><defs><pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="rgba(243,231,211,.07)"/></pattern></defs><rect width="1080" height="1920" fill="url(#dots)"/></svg>'
-         '<div id="cvt">JAIPUR<br/><span>1989 → 2024</span></div><div id="cvs">Land that cost ₹50 a gaj<br/>now costs ₹50,000+</div>'
+         '<div id="cvt"><small style="display:block;font-size:56px;color:#F3E7D3">UP TO</small>1,000×<br/><span>IN 35 YEARS</span></div><div id="cvs">Jaipur land prices<br/>1989 → 2024, from space</div>'
          '<div id="cvimg"><img src="assets/img/city_1989.jpg"/><div id="cvb"><img src="assets/img/city_2025.jpg"/></div><i></i><b class="l">1989</b><b class="r">2024</b></div>'
          '<div id="cvpill">Real satellite · 10 areas · prices then &amp; now</div></div>')
 J.append('tl.set("#cover", {opacity:1}, 0); tl.to("#cover", {opacity:0, duration:.25}, 0.55);')
@@ -34,6 +34,8 @@ J.append('tl.fromTo("#hl89", {opacity:0}, {opacity:1, duration:.3}, 0.8); tl.to(
 H.append('<div id="ss"><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>SAVE this</span>'
          '<span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2.4;stroke-linejoin:round"/></svg>SHARE it</span></div>')
 J.append('tl.fromTo("#ss", {opacity:0, y:-30}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 0.6); tl.to("#ss span", {scale:1.08, duration:.3, yoyo:true, repeat:3, stagger:.15}, 1.0); tl.to("#ss", {opacity:0, duration:.3}, 2.5);')
+H.append('<div id="hh"><i class="up">UP TO</i><b>1,000×</b><i>Jaipur land prices in 35 years</i></div>')
+J.append('tl.fromTo("#hh", {opacity:0, scale:1.6}, {opacity:1, scale:1, duration:.45, ease:"back.out(2)"}, 0.6); tl.to("#hh", {opacity:0, duration:.3}, 5.3);')
 txt("t0", f"Jaipur from space, {Y}1989.{E}", 0.9, 2.6)
 txt("t0b", f"Same city. {Y}35 years apart.{E}", 2.7, 5.4)
 H.append('<div id="hprice"><b id="hp">₹50 – 300</b><i>PER GAJ · 1990</i></div>')
@@ -45,17 +47,17 @@ sfx("impact-bass-1", 0.55, .5); sfx("whoosh", 2.6, .35); sfx("whoosh", 5.4, .35)
 TEND = 8.9
 
 # ---------- 4 · ten areas, wipe 1989 -> 2024 with rates ----------
-TA, DA, DJ = TEND + .1, 4.0, 7.0
+TA, DA, DJ = TEND + .1, 4.0, 4.0
 DUR = [DJ] + [DA] * (len(A) - 1); STARTS = [TA + sum(DUR[:k]) for k in range(len(A))]
 txt("ta", f"Now, {Y}area by area.{E}", TEND, TA + 1.4)
 for k, a in enumerate(A):
-    t = STARTS[k]; d = DUR[k]; u = t + d + .25; W0 = 3.4 if k == 0 else 1.0
+    t = STARTS[k]; d = DUR[k]; u = t + d + .25; W0 = 1.0
     H.append(f'<div class="full" id="b{k}"><img src="assets/img/a_{a["k"]}_1989.jpg"/></div><div class="full" id="n{k}"><img src="assets/img/a_{a["k"]}_2024.jpg"/></div>')
     J.append(f'tl.fromTo("#b{k}", {{opacity:0}}, {{opacity:1, duration:.25}}, {t:.2f}); tl.to("#b{k}", {{opacity:0, duration:.25}}, {u:.2f});')
     J.append(f'tl.set("#n{k}", {{opacity:1, clipPath:"inset(0 0 0 100%)"}}, {t:.2f}); tl.to("#n{k}", {{clipPath:"inset(0 0 0 0%)", duration:1.4, ease:"power2.inOut"}}, {t + W0:.2f}); tl.to("#n{k}", {{opacity:0, duration:.25}}, {u:.2f}); tl.set("#n{k}", {{opacity:0}}, 0);')
     J.append(f'tl.fromTo(["#b{k} img","#n{k} img"], {{scale:1.0}}, {{scale:1.07, duration:{d + .3:.2f}, ease:"none"}}, {t:.2f});')
     J.append(f'tl.set("#aline", {{x:1080, opacity:1}}, {t + W0:.2f}); tl.to("#aline", {{x:0, duration:1.4, ease:"power2.inOut"}}, {t + W0:.2f}); tl.set("#aline", {{opacity:0}}, {t + W0 + 1.41:.2f});')
-    if k:
+    if False:
         J.append(f'tl.fromTo("#ring", {{opacity:0, scale:.4}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {t + .15:.2f}); tl.to("#ring", {{opacity:0, duration:.2}}, {t + d - .1:.2f});')
     m = a["p1"] / a["p0"]
     H.append(f'<div class="atag" id="at{k}"><b>{a["name"]}</b><span>1989 <i>→</i> 2024</span></div>')
@@ -64,27 +66,9 @@ for k, a in enumerate(A):
     show(f"at{k}", t, t + d, .2)
     J.append(f'tl.fromTo("#am{k}", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2.5)"}}, {t + W0 + 1.7:.2f}); tl.to("#am{k}", {{opacity:0, duration:.2}}, {t + d - .05:.2f});')
     sfx("whoosh-short", t + W0, .28); sfx("pop", t + W0 + 1.7, .25)
-# Jagatpura: the 150-gaj plot story (₹10,000 in 1990 -> ~₹1.17 crore today)
-tj = STARTS[0]
-H.append('<div id="plot"><svg viewBox="0 0 600 520" width="600" height="520">'
-         '<rect x="120" y="70" width="300" height="400" rx="6" style="fill:rgba(255,224,58,.10);stroke:#FFE03A;stroke-width:6;stroke-dasharray:18 12"/>'
-         '<line x1="120" y1="40" x2="420" y2="40" style="stroke:#fff;stroke-width:3"/><text x="270" y="28" text-anchor="middle" style="font:800 30px Inter;fill:#fff">30 ft</text>'
-         '<line x1="455" y1="70" x2="455" y2="470" style="stroke:#fff;stroke-width:3"/><text x="470" y="278" style="font:800 30px Inter;fill:#fff">45 ft</text>'
-         '<g id="house" style="opacity:0"><path d="M170 300 L270 210 L370 300 Z" style="fill:#FF8A1F"/><rect x="190" y="300" width="160" height="130" style="fill:#F3E7D3"/><rect x="250" y="355" width="40" height="75" style="fill:#8a5a2b"/><rect x="205" y="320" width="34" height="30" style="fill:#5aa9e6"/><rect x="301" y="320" width="34" height="30" style="fill:#5aa9e6"/></g>'
-         '<text id="gaj" x="270" y="280" text-anchor="middle" style="font:900 64px Inter;fill:#FFE03A">150 GAJ</text>'
-         '</svg><div id="tag"><b id="hm">₹10,000</b><i id="tagsub">PRICE · 1990</i></div></div>')
-J.append(f'tl.fromTo("#plot", {{opacity:0, scale:.5, rotation:-6}}, {{opacity:1, scale:1, rotation:0, duration:.5, ease:"back.out(1.8)"}}, {tj + .4:.2f}); tl.to("#plot", {{opacity:0, scale:.9, duration:.3}}, {tj + 3.3:.2f});')
-J.append(f'tl.fromTo("#plot rect:first-child", {{strokeDashoffset:0}}, {{strokeDashoffset:-120, duration:3, ease:"none"}}, {tj + .4:.2f});')
-J.append(f'tl.to("#gaj", {{opacity:0, duration:.3}}, {tj + 1.6:.2f}); tl.fromTo("#house", {{opacity:0, scale:.2, transformOrigin:"270px 430px"}}, {{opacity:1, scale:1, duration:.6, ease:"back.out(2)"}}, {tj + 1.7:.2f});')
-J.append(f'tl.fromTo("#tag", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.35, ease:"back.out(2)"}}, {tj + .6:.2f});')
-J.append(f'const hm={{v:10000}}; tl.to(hm, {{v:11700000, duration:1.2, ease:"power3.in", onUpdate:()=>{{const v=hm.v; document.getElementById("hm").textContent = v>=1e7 ? "₹"+(v/1e7).toFixed(2)+" crore" : v>=1e5 ? "₹"+(v/1e5).toFixed(1)+" lakh" : "₹"+Math.round(v).toLocaleString("en-IN")}}}}, {tj + 1.5:.2f});')
-J.append(f'tl.call(()=>{{document.getElementById("tagsub").textContent="SAME PLOT · TODAY (APPROX.)"}}, null, {tj + 2.7:.2f}); tl.fromTo("#tag", {{scale:1}}, {{scale:1.15, duration:.25, yoyo:true, repeat:1}}, {tj + 2.7:.2f});')
-H.append('<div id="notes">' + "".join(f'<i style="bottom:{k*18}px"></i>' for k in range(12)) + '</div>')
-J.append(f'tl.fromTo("#notes", {{opacity:0}}, {{opacity:1, duration:.2}}, {tj + 1.5:.2f}); tl.from("#notes i", {{y:-500, opacity:0, duration:.35, stagger:.1, ease:"bounce.out"}}, {tj + 1.5:.2f}); tl.to("#notes", {{opacity:0, duration:.3}}, {tj + 3.3:.2f});')
-txt("tj0", f"In 1990, {Y}₹10,000{E} bought a {Y}150-gaj plot{E} here.", tj + 1.4, tj + 3.3)
 J.append(f'tl.set("#am0", {{top:1060}}, 0);')
-H.append('<div id="ring"><i></i></div>')
-J.append(f'tl.fromTo("#ring i", {{scale:1, opacity:.8}}, {{scale:1.5, opacity:0, duration:1, repeat:{int((sum(DUR)) // 1)}, ease:"power1.out"}}, {TA:.2f}); tl.set("#ring", {{opacity:0}}, 0);')
+
+pass  # J.append(f'tl.fromTo("#ring i", {{scale:1, opacity:.8}}, {{scale:1.5, opacity:0, duration:1, repeat:{int((sum(DUR)) // 1)}, ease:"power1.out"}}, {TA:.2f}); tl.set("#ring", {{opacity:0}}, 0);')
 H.append('<div id="aline"></div><div class="yl" id="yl89">1989</div><div class="yl r" id="yl24">2024</div>')
 TB = TA + sum(DUR)
 show("yl89", TA, TB, .25); show("yl24", TA + .55, TB, .25)
@@ -141,6 +125,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #ss{position:absolute;left:0;right:0;top:250px;display:flex;justify-content:center;gap:22px;opacity:0}
 #ss span{display:flex;align-items:center;gap:12px;padding:14px 24px;border-radius:40px;background:rgba(8,12,20,.85);border:2px solid rgba(255,255,255,.25);font:900 36px Inter,Arial,sans-serif;color:#fff}
 .ytag{position:absolute;left:60px;top:1220px;opacity:0;padding:10px 20px;border-radius:12px;background:rgba(8,12,20,.8);font:800 30px "JetBrains Mono",monospace;letter-spacing:.12em;color:#fff}.ytag span{color:#FFE03A}
+#hh{position:absolute;left:0;right:0;top:560px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif}#hh b{display:inline-block;padding:0 36px 10px;border-radius:30px;background:rgba(6,8,12,.6);font-weight:900;font-size:200px;line-height:1.05;color:#FFE03A;text-shadow:0 6px 0 #000}#hh i.up{margin:0 auto 10px!important;color:#FFE03A}#hh i{display:table;margin:12px auto 0;padding:8px 20px;border-radius:14px;background:rgba(6,8,12,.75);font:800 40px Inter;font-style:normal;color:#fff}
 #hline b{position:absolute;left:-34px;top:930px;width:74px;height:74px;border-radius:50%;background:#fff;color:#111;font:900 40px/74px Inter;text-align:center}
 .yl2{position:absolute;left:40px;top:430px;opacity:0;padding:10px 22px;border-radius:14px;background:rgba(6,8,12,.75);font:900 54px Inter;color:#fff}.yl2.r{left:auto;right:40px;color:#FFE03A}
 #hline,#aline{position:absolute;top:0;left:0;width:6px;height:1920px;background:#fff;box-shadow:0 0 24px #fff;opacity:0}
@@ -183,12 +168,12 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #tag i{display:table!important;margin:8px auto 0;padding:5px 14px;border-radius:10px;background:rgba(6,8,12,.75)}
 #cover{position:absolute;inset:0;opacity:0;overflow:hidden;background:radial-gradient(120% 80% at 70% 40%,#2B2016 0%,#1B140F 55%,#120d09 100%)}
 #cvt{position:absolute;left:70px;right:70px;top:200px;font:900 140px/0.95 Inter,sans-serif;letter-spacing:-0.01em;color:#F3E7D3;text-shadow:0 8px 40px rgba(0,0,0,.6)}#cvt span{color:#F5B04A}
-#cvs{position:absolute;left:76px;top:500px;font:800 52px/1.12 Inter,sans-serif;color:#F3E7D3}
-#cvimg{position:absolute;left:76px;right:76px;top:680px;height:820px;border-radius:24px;overflow:hidden;border:3px solid #E3A23B;box-shadow:0 0 40px rgba(245,176,74,.35)}
-#cvimg>img,#cvb img{position:absolute;inset:0;width:928px;height:820px;object-fit:cover}#cvb{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
+#cvs{position:absolute;left:76px;top:575px;font:800 52px/1.12 Inter,sans-serif;color:#F3E7D3}
+#cvimg{position:absolute;left:76px;right:76px;top:760px;height:760px;border-radius:24px;overflow:hidden;border:3px solid #E3A23B;box-shadow:0 0 40px rgba(245,176,74,.35)}
+#cvimg>img,#cvb img{position:absolute;inset:0;width:928px;height:760px;object-fit:cover}#cvb{position:absolute;inset:0;clip-path:inset(0 0 0 50%)}
 #cvimg i{position:absolute;left:50%;top:0;bottom:0;width:5px;margin-left:-2px;background:#fff;box-shadow:0 0 16px #fff}
 #cvimg b{position:absolute;top:18px;padding:6px 14px;border-radius:10px;background:rgba(27,20,15,.9);border:2px solid #E3A23B;font:800 30px Inter,sans-serif;color:#F3E7D3}#cvimg b.l{left:18px}#cvimg b.r{right:18px;background:#F5B04A;color:#1B140F}
-#cvpill{position:absolute;left:76px;top:1560px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,.92);border:2px solid #E3A23B;font:800 40px Inter,sans-serif;color:#F3E7D3}"""
+#cvpill{position:absolute;left:76px;top:1570px;padding:12px 22px;border-radius:14px;background:rgba(60,38,14,.92);border:2px solid #E3A23B;font:800 40px Inter,sans-serif;color:#F3E7D3}"""
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script><style>{CSS}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{END}" data-width="1080" data-height="1920" data-fps="30">
