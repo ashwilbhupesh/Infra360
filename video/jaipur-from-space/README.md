@@ -15,6 +15,11 @@
 
 Text sits on translucent dark boxes for readability, and the fine print is kept clear of the captions.
 
+## Revision 2 (slower, focused)
+- Hook: a whole-Jaipur slider. 1989 full screen (0.5 s) → the slider stops at the middle showing 1989 | 2024 side by side (2.6–5.4 s) → full 2024 with the price flip ₹50–300 → ₹40,000–1.5 lakh per gaj and "Up to ~1,200× more" (to 8.9 s).
+- Removed the old-photos montage and the city time-lapse (too much, too fast).
+- Area scans are now 4 s each, Jagatpura 7 s: slower 1.4 s wipe, then price, then multiplier, one at a time. Runtime is 67.7 s.
+
 ## Prices
 Supplied by Ashwil (ranges compiled with ChatGPT). The video shows the **mid-points** of each range:
 
