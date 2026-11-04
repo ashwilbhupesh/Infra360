@@ -1,11 +1,13 @@
 """3D sample: Jaipur terrain (Copernicus DEM, Sentinel-2 drape) with price-multiplier bars rising per area and a drone camera path."""
 import json
 M = json.load(open("proj/assets/meta.json"))
-END = 54.0
+END = 64.2
 # three areas the camera visits (index into areas)
 import math
 TOUR = sorted(range(len(M['areas'])), key=lambda i: -M['areas'][i]['v'])  # geographic: south (Sitapura) -> north (Sikar Road)
-T3 = 8.0; TS = 12.6; DS = 3.1; TO = TS + DS * len(TOUR)
+STOPN = {'sitapura':19.32,'pratap':26.04,'jagatpura':28.52,'malviya':33.44,'mansarovar':35.76,'ajmer':40.08,'vaishali':42.72,'jhotwara':45.08,'vidyadhar':47.16,'sikar':49.40}
+STOPS = [STOPN[M['areas'][i]['k']] for i in TOUR]
+T3 = 15.3; TS = STOPS[0]; DS = 3.1; TO = 52.2; FACE_END = 5.15
 HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script>
 <style>*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#05070b}
@@ -25,7 +27,7 @@ HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name
 #h24{clip-path:inset(0 0 0 100%)}#hline{position:absolute;top:0;left:0;width:6px;height:1920px;background:#fff;box-shadow:0 0 24px #fff;opacity:0}#hline b{position:absolute;left:-34px;top:930px;width:74px;height:74px;border-radius:50%;background:#fff;color:#111;font:900 40px/74px Inter;text-align:center}
 .yl2{position:absolute;left:40px;top:430px;opacity:0;padding:10px 22px;border-radius:14px;background:rgba(6,8,12,.75);font:900 54px Inter;color:#fff}.yl2.r{left:auto;right:40px;color:#FFE03A}
 #ss{position:absolute;left:0;right:0;top:250px;display:flex;justify-content:center;gap:22px;opacity:0}#ss span{display:flex;align-items:center;gap:12px;padding:14px 24px;border-radius:40px;background:rgba(8,12,20,.85);border:2px solid rgba(255,255,255,.25);font:900 36px Inter,Arial,sans-serif;color:#fff}
-#hh{position:absolute;left:0;right:0;top:560px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif}#hh b{display:inline-block;padding:0 36px 10px;border-radius:30px;background:rgba(6,8,12,.6);font-weight:900;font-size:200px;line-height:1.05;color:#FFE03A;text-shadow:0 6px 0 #000}#hh i{display:table;margin:12px auto 0;padding:8px 20px;border-radius:14px;background:rgba(6,8,12,.75);font:800 40px Inter;font-style:normal;color:#fff}#hh i.up{margin:0 auto 10px;color:#FFE03A}
+#hh{position:absolute;left:0;right:0;top:330px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif}#hh b{display:inline-block;padding:0 36px 10px;border-radius:30px;background:rgba(6,8,12,.6);font-weight:900;font-size:130px;line-height:1.05;color:#5CF08A;text-shadow:0 6px 0 #000}#hh i{display:table;margin:12px auto 0;padding:8px 20px;border-radius:14px;background:rgba(6,8,12,.75);font:800 40px Inter;font-style:normal;color:#fff}#hh i.up{margin:0 auto 10px;color:#FFE03A}
 #hprice{position:absolute;left:0;right:0;top:600px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif}#hprice b{display:inline-block;padding:0 30px 6px;border-radius:28px;background:rgba(6,8,12,.6);font-weight:900;font-size:110px;color:#FFE03A;text-shadow:0 6px 0 #000}#hprice i{display:table;margin:8px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:800 30px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.14em;color:#fff}
 #rank{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0}#rank i{display:table;margin:0 auto 8px;padding:4px 14px;border-radius:10px;background:rgba(6,8,12,.75);font:800 24px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.16em;color:#fff}#rank b{display:inline-block;padding:6px 30px;border-radius:22px;background:#2FD47A;font:900 64px Inter;color:#06210f;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .st{position:absolute;left:50px;right:50px;top:1330px;text-align:center;opacity:0}.st>span{display:inline-block;padding:14px 28px 16px;border-radius:24px;background:rgba(6,8,12,.66);font:900 64px/1.1 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000}.st small{display:block;margin-top:8px;font:800 46px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
@@ -42,15 +44,16 @@ HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name
 <div id="root" data-composition-id="main" data-start="0" data-duration="__END__" data-width="1080" data-height="1920" data-fps="30">
 <canvas id="gl" width="1080" height="1920" style="opacity:0"></canvas>
 <div id="labels"></div>
-<div id="hook">__HOOK__</div>
+<video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="__END__" data-track-index="0" playsinline data-has-audio="true" data-volume="1" style="position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover"></video>
+<div id="hook">__HOOK__</div>__TOPS__
 <div id="brand">ASHWILLPOWER · JAIPUR REAL ESTATE</div>
 <div id="rank"><i>SOUTH → NORTH</i><b id="rk">1 / 10</b></div>
 __CAPS__
 <div id="fine">Approx. rates · 1990–95 historical estimates · 2026 indicative listing rates · multipliers are calculated estimates, not verified investment returns · past growth ≠ future returns</div>
 <div id="cta"><span><svg viewBox="0 0 24 24" width="56" height="56"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>Save it · check back in 10 years</span><span><svg viewBox="0 0 24 24" width="56" height="56"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round"/></svg>Send to someone buying land</span></div>
 <div id="credits"><b>CREDITS, SOURCES &amp; REFERENCES</b><p>MagicBricks (2026 Residential Plot Trends) · Housing.com (Jaipur Property Rates) · Rajasthan Registration &amp; Stamps Department (DLC Rates) · Rajasthan GIS Portal · Kapil Raisinghani (historical land-price account)</p><p>Terrain: Copernicus DEM GLO-30 (height ×4) · Imagery: contains modified Copernicus Sentinel-2 data (2024) · Landsat 5/9 courtesy NASA/USGS</p><b>DISCLAIMER</b><p>1990–1995 prices are historical estimates; 2026 prices are indicative market rates based on property listings. Appreciation multipliers are calculated estimates, not verified investment returns.</p><i>ASHWILLPOWER · JAIPUR REAL ESTATE</i></div>
-<div id="cover"><div id="cvt"><small>UP TO</small>1,000×<br/><span>IN 35 YEARS</span></div><div id="cvs">Jaipur land prices · in 3D</div><div id="cvimg"><img src="assets/city_1989.jpg"/><div id="cvb"><img src="assets/city_2025.jpg"/></div><i></i><b class="l">1989</b><b class="r">2024</b></div><div id="cvpill">10 areas · ranked by price jump</div></div>
-<audio id="music" class="clip" src="assets/music_tune.mp3" data-start="0" data-duration="__END__" data-track-index="10" data-volume="0.8" data-fade-in="0.3" data-fade-out="2"></audio>
+<div id="cover"><div id="cvt"><small>UP TO</small>1,000×<br/><span>IN 35 YEARS</span></div><div id="cvs">Jaipur land prices · in 3D</div><div id="cvimg"><img src="assets/city_1989.jpg"/><div id="cvb"><img src="assets/city_2025.jpg"/></div><i></i><b class="l">1989</b><b class="r">2024</b></div><div id="cvpill">10 areas · south → north · in 3D</div></div>
+<audio id="music" class="clip" src="assets/music_tune.mp3" data-start="0" data-duration="__END__" data-track-index="10" data-volume="0.16" data-fade-in="0.3" data-fade-out="2"></audio>
 </div>
 <script>__TL__</script>
 <script type="module">
@@ -112,15 +115,15 @@ window.__hf = window.__hf || {}; window.__hf.buildReady = window.__hf.buildReady
 
 // camera keys: [time, camPos(u,v,height), target(u,v,height)]
 const A = i => M.areas[i];
-const T3 = __T3__, TS = __TS__, DS = __DS__, TO = __TO__;
+const T3 = __T3__, TS = __TS__, DS = __DS__, TO = __TO__, STOPS = __STOPS__;
 const keys = [
   [0.0, [.50, .56, 560], [.50, .50, 0]],
   [T3, [.50, .58, 540], [.50, .50, 0]],
   [T3 + 2.4, [.52, 1.05, 260], [.47, .52, 0]],
-  [TS - .5, [.50, .98, 220], [.47, .50, 0]],
+  [TS - .9, [.50, .98, 220], [.47, .50, 0]],
 ];
-TOUR.forEach((i, n) => { const a = A(i), t = TS + DS * n, sx = 1;
-  keys.push([t + .9, [a.u + .09 * sx, a.v + .29, 112], [a.u, a.v - .02, 20]]); keys.push([t + DS - .05, [a.u + .03 * sx, a.v + .26, 100], [a.u, a.v - .02, 22]]); });
+TOUR.forEach((i, n) => { const a = A(i), t = STOPS[n], nx = n + 1 < STOPS.length ? STOPS[n + 1] : TO;
+  keys.push([t - .05, [a.u + .09, a.v + .29, 112], [a.u, a.v - .02, 20]]); keys.push([nx - .85, [a.u + .03, a.v + .26, 100], [a.u, a.v - .02, 22]]); });
 keys.push([TO + 1.6, [.50, 1.0, 240], [.47, .50, 0]]);
 keys.push([END, [.50, 1.02, 250], [.47, .50, 0]]);
 const sm = x => x * x * (3 - 2 * x);
@@ -136,7 +139,7 @@ function renderAt(t){
   if (!H || t < T3 - .3) return;
   const [p, q] = camAt(t);
   camera.position.set(wx(p[0]), p[2], wz(p[1])); camera.lookAt(wx(q[0]), q[2], wz(q[1])); camera.updateMatrixWorld(true);
-  const focus = (t >= TS + .6 && t < TO + .5) ? TOUR[Math.min(TOUR.length - 1, Math.floor((t - TS - .6) / DS))] : -1;
+  let fi = -1; for (let n = 0; n < STOPS.length; n++) if (t >= STOPS[n] - .1) fi = n; const focus = (fi >= 0 && t < TO + .3) ? TOUR[fi] : -1;
   bars.forEach((b, j) => {
     const g = Math.min(1, Math.max(0, (t - T3 - 1.6 - j * .2) / 1.1)); const e = 1 - Math.pow(1 - g, 3);
     b.bar.scale.y = Math.max(.001, b.h * e); b.bar.material.emissiveIntensity = (focus === j ? .6 : .25) + .08 * Math.sin(t * 4 + j);
@@ -152,55 +155,61 @@ window.addEventListener("hf-seek", e => { if (H) renderAt(e.detail.time); else e
 ready.then(() => renderAt(0));
 </script></body></html>"""
 
-# ------------- 2D timeline (hook, captions, rank, CTA) -------------
+# ------------- 2D timeline (face hook, slider, captions, counter, CTA) -------------
 J=[]; CAPS=[]
-def cap(i, html, a, b):
-    CAPS.append(f'<div class="st" id="{i}"><span>{html}</span></div>')
-    J.append(f'tl.fromTo("#{i}",{{opacity:0,y:20,scale:.95}},{{opacity:1,y:0,scale:1,duration:.28,ease:"back.out(2)"}},{a:.2f}); tl.to("#{i}",{{opacity:0,duration:.18}},{b - .18:.2f});')
+def cap(i, html, a, b, top=None):
+    CAPS.append(f'<div class="st" id="{i}"' + (f' style="top:{top}px"' if top else '') + f'><span>{html}</span></div>')
+    J.append(f'tl.fromTo("#{i}",{{opacity:0,y:16,scale:.96}},{{opacity:1,y:0,scale:1,duration:.2,ease:"back.out(2)"}},{a:.2f}); tl.to("#{i}",{{opacity:0,duration:.12}},{b - .12:.2f});')
 Y='<span class="y">'; E='</span>'
 HOOK=('<div class="full" id="h89"><img src="assets/city_1989.jpg"/></div><div class="full" id="h24"><img src="assets/city_2025.jpg"/></div><div id="hline"><b>⟷</b></div>'
-      '<div class="yl2" id="hl89">1989</div><div class="yl2 r" id="hl24">2024</div>'
-      '<div id="ss"><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>SAVE this</span><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2.4;stroke-linejoin:round"/></svg>SHARE it</span></div>'
-      '<div id="hh"><i class="up">UP TO</i><b>1,000×</b><i>Jaipur land prices in 35 years</i></div><div id="hprice"><b id="hp">₹50 – 300</b><i id="hpi">PER GAJ · 1990</i></div>')
+      '<div class="yl2" id="hl89">1989</div><div class="yl2 r" id="hl24">2024</div><div id="hprice"><b id="hp">₹50 – 300</b><i id="hpi">PER GAJ · 1990</i></div>')
+TOPS=('<div id="ss"><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>SAVE this</span><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2.4;stroke-linejoin:round"/></svg>SHARE it</span></div>'
+      '<div id="hh"><i class="up">UP TO</i><b>1,000×</b><i>Jaipur land · 35 years</i></div>')
+F=FACE_END
 J += ['tl.set("#cover",{opacity:1},0); tl.to("#cover",{opacity:0,duration:.25},0.55);',
-      'tl.fromTo("#h89 img,#h24 img",{scale:1},{scale:1.07,duration:7.6,ease:"none"},0.4);',
-      'tl.to("#h24",{clipPath:"inset(0 0 0 50%)",duration:1.4,ease:"power2.inOut"},2.4); tl.to("#h24",{clipPath:"inset(0 0 0 0%)",duration:1.3,ease:"power2.inOut"},4.9);',
-      'tl.set("#hline",{x:1080},0); tl.set("#hline",{opacity:1},2.4); tl.to("#hline",{x:540,duration:1.4,ease:"power2.inOut"},2.4); tl.to("#hline",{x:0,duration:1.3,ease:"power2.inOut"},4.9); tl.to("#hline",{opacity:0,duration:.2},6.2);',
-      'tl.fromTo("#hl89",{opacity:0},{opacity:1,duration:.3},0.8); tl.to("#hl89",{opacity:0,duration:.3},5.6); tl.fromTo("#hl24",{opacity:0},{opacity:1,duration:.3},3.2); tl.to("#hl24",{opacity:0,duration:.3},7.6);',
-      'tl.fromTo("#ss",{opacity:0,y:-30},{opacity:1,y:0,duration:.35,ease:"back.out(2)"},0.6); tl.to("#ss span",{scale:1.08,duration:.3,yoyo:true,repeat:3,stagger:.15},1.0); tl.to("#ss",{opacity:0,duration:.3},2.3);',
-      'tl.fromTo("#hh",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.45,ease:"back.out(2)"},0.6); tl.to("#hh",{opacity:0,duration:.3},4.8);',
-      'tl.fromTo("#hprice",{opacity:0,scale:.6},{opacity:1,scale:1,duration:.4,ease:"back.out(2)"},4.9); tl.to("#hprice",{opacity:0,duration:.3},7.7);',
-      'tl.call(()=>{document.getElementById("hp").textContent="₹50 – 300";document.getElementById("hpi").textContent="PER GAJ · 1990"},null,4.8);',
-      'tl.call(()=>{document.getElementById("hp").textContent="₹40,000 – 1.5 lakh";document.getElementById("hpi").textContent="PER GAJ · TODAY"},null,6.2); tl.fromTo("#hp",{scale:1.35},{scale:1,duration:.5,ease:"back.out(2)"},6.2);',
+      f'tl.set("#hook",{{opacity:0}},0); tl.set("#hook",{{opacity:1}},{F:.2f}); tl.fromTo("#avatar",{{opacity:1}},{{opacity:0,duration:.01}},{F + .05:.2f});',
+      f'tl.fromTo("#h89 img,#h24 img",{{scale:1}},{{scale:1.07,duration:{T3 - F:.2f},ease:"none"}},{F:.2f});',
+      'tl.to("#h24",{clipPath:"inset(0 0 0 50%)",duration:1.0,ease:"power2.inOut"},7.6); tl.to("#h24",{clipPath:"inset(0 0 0 0%)",duration:1.0,ease:"power2.inOut"},9.6);',
+      'tl.set("#hline",{x:1080},0); tl.set("#hline",{opacity:1},7.6); tl.to("#hline",{x:540,duration:1.0,ease:"power2.inOut"},7.6); tl.to("#hline",{x:0,duration:1.0,ease:"power2.inOut"},9.6); tl.to("#hline",{opacity:0,duration:.2},10.6);',
+      f'tl.fromTo("#hl89",{{opacity:0}},{{opacity:1,duration:.3}},{F + .2:.2f}); tl.to("#hl89",{{opacity:0,duration:.3}},10.2); tl.fromTo("#hl24",{{opacity:0}},{{opacity:1,duration:.3}},8.2); tl.to("#hl24",{{opacity:0,duration:.3}},{T3:.2f});',
+      'tl.fromTo("#ss",{opacity:0,y:-30},{opacity:1,y:0,duration:.35,ease:"back.out(2)"},0.6); tl.to("#ss span",{scale:1.08,duration:.3,yoyo:true,repeat:3,stagger:.15},1.0); tl.to("#ss",{opacity:0,duration:.3},5.0);',
+      'tl.fromTo("#hh",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.45,ease:"back.out(2)"},1.4); tl.to("#hh",{opacity:0,duration:.3},5.0);',
+      'tl.fromTo("#hprice",{opacity:0,scale:.6},{opacity:1,scale:1,duration:.4,ease:"back.out(2)"},9.9); tl.to("#hprice",{opacity:0,duration:.3},15.2);',
+      'tl.call(()=>{document.getElementById("hp").textContent="₹50 – 300";document.getElementById("hpi").textContent="PER GAJ · 1990"},null,9.8);',
+      'tl.call(()=>{document.getElementById("hp").textContent="₹40,000 – 1.5 lakh";document.getElementById("hpi").textContent="PER GAJ · TODAY"},null,12.48); tl.fromTo("#hp",{scale:1.35},{scale:1,duration:.5,ease:"back.out(2)"},12.48);',
       f'tl.to("#gl",{{opacity:1,duration:.01}},{T3 - .3:.2f}); tl.to("#hook",{{opacity:0,duration:.9,ease:"power1.in"}},{T3:.2f});']
-cap("c0", f"Jaipur from space, {Y}1989{E}", 0.9, 2.4)
-cap("c1", f"Same city. {Y}35 years apart.{E}", 2.5, 4.9)
-cap("c2", f"Land prices per gaj, {Y}then vs now{E}", 6.2, T3)
-cap("c3", f"Now let's see it {Y}in 3D{E}", T3 + .1, T3 + 2.4)
-cap("c4", f"Taller bar = {Y}bigger price jump{E} · south → north", T3 + 2.4, TS + .4)
+cap("v0", f"Jaipur has offered {Y}up to 1,000×{E}", .24, 2.3, top=1490)
+cap("v1", f"return in land in the {Y}last 35 years{E}", 2.32, 5.15, top=1490)
+cap("v2", f"This is Jaipur in {Y}1989{E}", 5.28, 7.62)
+cap("v3", f"and this is {Y}today.{E}", 7.68, 9.15)
+cap("v4", f"Back then: {Y}₹50 to ₹300{E} a gaj", 9.2, 12.42)
+cap("v5", f"Today: {Y}₹40,000 to ₹1.5 lakh{E}", 12.48, 15.32)
+cap("v6", f"Now watch it {Y}in 3D{E}", 15.4, 17.18)
+cap("v7", f"The taller the bar, {Y}the bigger the jump{E}", 17.24, 19.28)
 for n, i in enumerate(TOUR):
-    a = M['areas'][i]; m = a['p1'] / a['p0']; t = TS + DS * n
+    a = M['areas'][i]; m = a['p1'] / a['p0']; t = STOPS[n]; nx = STOPS[n + 1] if n + 1 < len(STOPS) else TO
     mm = f"~{round(m, -2) if m >= 1000 else round(m, -1):,.0f}×"
     f = lambda v: f"₹{v / 100000:g} lakh" if v >= 100000 else f"₹{v:,}"
-    cap(f"a{n}", f"{a['name'].split(' ·')[0]}: {Y}{mm}{E}<small>{f(a['p0'])} → {f(a['p1'])} per sq yd</small>", t + .7, t + DS + .55)
-    J.append(f'tl.call(()=>{{document.getElementById("rk").textContent="{n + 1} / {len(TOUR)}"}},null,{t + .55:.2f}); tl.fromTo("#rank b",{{scale:1.5}},{{scale:1,duration:.35,ease:"back.out(2.5)"}},{t + .6:.2f});')
-J.append(f'tl.fromTo("#rank",{{opacity:0}},{{opacity:1,duration:.3}},{TS + .5:.2f}); tl.to("#rank",{{opacity:0,duration:.3}},{TO + .5:.2f});')
-J.append(f'tl.fromTo("#fine",{{opacity:0}},{{opacity:1,duration:.3}},4.9); tl.to("#fine",{{opacity:0,duration:.3}},{TO + .5:.2f});')
-cap("e0", f"Where's the {Y}next 1,000×?{E}", TO + .6, END - 4.6)
-cap("e1", "Comment your area 👇", TO + 2.0, END - 4.6)
-J.append(f'tl.set("#e1",{{top:1460}},0);')
-J.append(f'tl.fromTo("#cta",{{opacity:0,y:20}},{{opacity:1,y:0,duration:.4}},{TO + 1.2:.2f}); tl.to("#cta svg",{{scale:1.15,duration:.4,yoyo:true,repeat:5}},{TO + 1.7:.2f}); tl.to("#cta",{{opacity:0,duration:.3}},{END - 4.8:.2f});')
-J.append(f'tl.fromTo("#credits",{{opacity:0}},{{opacity:1,duration:.4}},{END - 4.5:.2f});')
-J.append(f'tl.to("#brand",{{opacity:0,duration:.3}},{END - 4.5:.2f});')
+    cap(f"a{n}", f"{a['name'].split(' ·')[0]}: {Y}{mm}{E}<small>{f(a['p0'])} → {f(a['p1'])} per sq yd</small>", t, nx - .02)
+    J.append(f'tl.call(()=>{{document.getElementById("rk").textContent="{n + 1} / {len(TOUR)}"}},null,{t - .05:.2f}); tl.fromTo("#rank b",{{scale:1.5}},{{scale:1,duration:.35,ease:"back.out(2.5)"}},{t:.2f});')
+J.append(f'tl.fromTo("#rank",{{opacity:0}},{{opacity:1,duration:.3}},{TS - .1:.2f}); tl.to("#rank",{{opacity:0,duration:.3}},{TO:.2f});')
+J.append(f'tl.fromTo("#fine",{{opacity:0}},{{opacity:1,duration:.3}},9.9); tl.to("#fine",{{opacity:0,duration:.3}},{TO:.2f});')
+cap("e0", f"Which area is going to be {Y}the next 1,000×?{E}", 52.29, 54.65)
+cap("e1", "Comment below 👇", 54.69, 55.45)
+cap("e2", f"Save this &amp; {Y}send it{E} to someone planning to buy land", 55.49, 58.57)
+cap("e3", f"Don't get late.", 58.61, 59.75)
+J.append(f'tl.fromTo("#cta",{{opacity:0,y:20}},{{opacity:1,y:0,duration:.4}},54.6); tl.to("#cta svg",{{scale:1.15,duration:.4,yoyo:true,repeat:5}},55.1); tl.to("#cta",{{opacity:0,duration:.3}},59.7);')
+J.append(f'tl.fromTo("#credits",{{opacity:0}},{{opacity:1,duration:.4}},59.8);')
+J.append(f'tl.to("#brand",{{opacity:0,duration:.3}},59.8);')
 SFX=[]
-def sfx(n,t,v=.35): SFX.append(f'<audio class="clip" src="assets/sfx/{n}.mp3" data-start="{t:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v}"></audio>')
-sfx("impact-bass-1",.55,.5); sfx("whoosh",2.4,.35); sfx("whoosh",4.9,.35); sfx("ping",6.2,.4); sfx("riser",T3-1,.3); sfx("whoosh",T3,.4)
-for j in range(len(TOUR)): sfx("click-soft",T3+1.6+.2*j,.2)
-for n in range(len(TOUR)): sfx("whoosh-short",TS+DS*n+.1,.3); sfx("pop",TS+DS*n+.6,.3)
-sfx("impact-bass-1",TS+DS*(len(TOUR)-1)+.6,.4); sfx("sparkle",TO+.6,.35)
+def sfx(n,t,v=.25): SFX.append(f'<audio class="clip" src="assets/sfx/{n}.mp3" data-start="{t:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v}"></audio>')
+sfx("impact-bass-1",1.4,.35); sfx("whoosh",7.6,.25); sfx("ping",12.48,.25); sfx("whoosh",T3,.3)
+for j in range(len(TOUR)): sfx("click-soft",T3+1.6+.2*j,.15)
+for n in range(len(TOUR)): sfx("whoosh-short",STOPS[n]-.8,.2)
+sfx("sparkle",52.29,.25)
 TL = 'const tl = gsap.timeline({ paused: true });\n' + "\n".join(J) + '\nwindow.__timelines = window.__timelines || {}; window.__timelines["main"] = tl;'
-HTML = HTML.replace("__HOOK__", HOOK).replace("__CAPS__", "".join(CAPS)).replace("__TL__", TL).replace('<audio id="music"', "".join(SFX) + '<audio id="music"')
-HTML = HTML.replace("__T3__", str(T3)).replace("__TS__", str(TS)).replace("__DS__", str(DS)).replace("__TO__", str(TO))
+HTML = HTML.replace("__HOOK__", HOOK).replace("__TOPS__", TOPS).replace("__CAPS__", "".join(CAPS)).replace("__TL__", TL).replace('<audio id="music"', "".join(SFX) + '<audio id="music"')
+HTML = HTML.replace("__T3__", str(T3)).replace("__TS__", str(TS)).replace("__DS__", str(DS)).replace("__TO__", str(TO)).replace("__STOPS__", json.dumps(STOPS))
 html = HTML.replace("__META__", json.dumps(M)).replace("__TOUR__", json.dumps(TOUR)).replace("__END__", str(END))
 open("reel/index.html", "w").write(html)
 print("ok", END, TOUR, TO)

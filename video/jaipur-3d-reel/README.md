@@ -1,6 +1,15 @@
 # Jaipur 3D land prices: countdown reel
 `Jaipur_3D_Land_Prices.mp4`: 1080×1920, 54 s, text-led with captions and music. `cover_frame.jpg` is the Instagram cover.
 
+## Voice version
+`Jaipur_3D_Land_Prices_VOICE.mp4` (64.2 s) uses Ashwil's English voice-over.
+- Face shows for the hook (0–5.15 s) under the "UP TO 1,000×" badge.
+- Every 3D stop is timed to the moment the area is named.
+- Cut the duplicate "Which area is the next 1000x?" (52.2–55.15 s of the original).
+- The Jagatpura line was replaced with the re-recorded take (₹65 → ₹77,500 · 1,200×), at 1.06× speed to fit its slot.
+- Captions are spoken words with names corrected.
+- The hook says "has offered up to 1,000× return", kept as recorded at Ashwil's request; the disclaimer stays on screen.
+
 ## Revision 2
 - The tour now runs geographically south → north (Sitapura, Pratap Nagar, Jagatpura, Malviya Nagar, Mansarovar, Ajmer Road, Vaishali, Jhotwara, Vidyadhar Nagar, Sikar Road) with a "SOUTH → NORTH · n/10" counter.
 - Bars, rings, counter and highlights are green; darker green means a bigger jump.
