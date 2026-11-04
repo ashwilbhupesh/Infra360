@@ -4,7 +4,7 @@ M = json.load(open("proj/assets/meta.json"))
 END = 54.0
 # three areas the camera visits (index into areas)
 import math
-TOUR = sorted(range(len(M['areas'])), key=lambda i: M['areas'][i]['p1'] / M['areas'][i]['p0'])  # countdown: smallest jump first
+TOUR = sorted(range(len(M['areas'])), key=lambda i: -M['areas'][i]['v'])  # geographic: south (Sitapura) -> north (Sikar Road)
 T3 = 8.0; TS = 12.6; DS = 3.1; TO = TS + DS * len(TOUR)
 HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script>
@@ -12,11 +12,11 @@ HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name
 #root{position:relative;width:1080px;height:1920px;overflow:hidden}#gl{position:absolute;inset:0;width:1080px;height:1920px}
 .lb{position:absolute;left:0;top:0;transform:translate(-50%,-100%);opacity:0;text-align:center;white-space:nowrap;font-family:Inter,Arial,sans-serif}
 .lb b{display:block;padding:6px 16px;border-radius:14px 14px 0 0;background:rgba(6,8,12,.78);font-weight:900;font-size:34px;color:#fff}
-.lb span{display:block;padding:2px 16px 8px;border-radius:0 0 14px 14px;background:rgba(6,8,12,.78);font-weight:900;font-size:44px;color:#FFE03A}
-.lb.hot b{font-size:46px}.lb.hot span{font-size:64px}.lb.hot i{display:block;margin-top:6px;padding:4px 12px;border-radius:10px;background:rgba(6,8,12,.8);font:700 26px "JetBrains Mono",monospace;font-style:normal;color:#fff}
+.lb span{display:block;padding:2px 16px 8px;border-radius:0 0 14px 14px;background:rgba(6,8,12,.78);font-weight:900;font-size:44px;color:#5CF08A}
+.lb.hot b{font-size:46px}.lb.hot span{font-size:64px}.lb.hot i{display:block;margin-top:6px;padding:6px 14px;border-radius:12px;background:rgba(6,8,12,.8);font:800 36px Inter,Arial,sans-serif;font-style:normal;color:#fff}
 .lb i{display:none}
 .st{position:absolute;left:50px;right:50px;top:1330px;text-align:center;opacity:0}.st>span{display:inline-block;padding:14px 28px 16px;border-radius:24px;background:rgba(6,8,12,.62);font:900 66px/1.1 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000}
-.y{color:#FFE03A}
+.y{color:#5CF08A}
 #brand{position:absolute;left:0;right:0;top:150px;text-align:center;font:700 24px "JetBrains Mono",monospace;letter-spacing:.2em;color:rgba(255,255,255,.85);text-shadow:0 2px 6px #000}
 #tag3d{position:absolute;left:0;right:0;top:230px;text-align:center;opacity:0}#tag3d span{display:inline-block;padding:10px 22px;border-radius:14px;background:rgba(6,8,12,.75);font:800 30px "JetBrains Mono",monospace;letter-spacing:.14em;color:#FFE03A}
 #fine{position:absolute;left:50px;right:50px;bottom:250px;text-align:center;font:500 20px/1.35 "JetBrains Mono",monospace;color:rgba(255,255,255,.8);padding:10px 16px;border-radius:14px;background:rgba(6,8,12,.7)}
@@ -27,8 +27,8 @@ HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name
 #ss{position:absolute;left:0;right:0;top:250px;display:flex;justify-content:center;gap:22px;opacity:0}#ss span{display:flex;align-items:center;gap:12px;padding:14px 24px;border-radius:40px;background:rgba(8,12,20,.85);border:2px solid rgba(255,255,255,.25);font:900 36px Inter,Arial,sans-serif;color:#fff}
 #hh{position:absolute;left:0;right:0;top:560px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif}#hh b{display:inline-block;padding:0 36px 10px;border-radius:30px;background:rgba(6,8,12,.6);font-weight:900;font-size:200px;line-height:1.05;color:#FFE03A;text-shadow:0 6px 0 #000}#hh i{display:table;margin:12px auto 0;padding:8px 20px;border-radius:14px;background:rgba(6,8,12,.75);font:800 40px Inter;font-style:normal;color:#fff}#hh i.up{margin:0 auto 10px;color:#FFE03A}
 #hprice{position:absolute;left:0;right:0;top:600px;text-align:center;opacity:0;font-family:Inter,Arial,sans-serif}#hprice b{display:inline-block;padding:0 30px 6px;border-radius:28px;background:rgba(6,8,12,.6);font-weight:900;font-size:110px;color:#FFE03A;text-shadow:0 6px 0 #000}#hprice i{display:table;margin:8px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:800 30px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.14em;color:#fff}
-#rank{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0}#rank b{display:inline-block;padding:6px 30px;border-radius:22px;background:#FFE03A;font:900 76px Inter;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-.st{position:absolute;left:50px;right:50px;top:1330px;text-align:center;opacity:0}.st>span{display:inline-block;padding:14px 28px 16px;border-radius:24px;background:rgba(6,8,12,.66);font:900 64px/1.1 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000}.st small{display:block;margin-top:6px;font:700 30px "JetBrains Mono",monospace;color:#fff;text-shadow:none}
+#rank{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0}#rank i{display:table;margin:0 auto 8px;padding:4px 14px;border-radius:10px;background:rgba(6,8,12,.75);font:800 24px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.16em;color:#fff}#rank b{display:inline-block;padding:6px 30px;border-radius:22px;background:#2FD47A;font:900 64px Inter;color:#06210f;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.st{position:absolute;left:50px;right:50px;top:1330px;text-align:center;opacity:0}.st>span{display:inline-block;padding:14px 28px 16px;border-radius:24px;background:rgba(6,8,12,.66);font:900 64px/1.1 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000}.st small{display:block;margin-top:8px;font:800 46px Inter,Arial,sans-serif;color:#fff;text-shadow:0 3px 0 #000}
 #fine{position:absolute;left:50px;right:50px;top:1575px;text-align:center;font:500 20px/1.35 "JetBrains Mono",monospace;color:rgba(255,255,255,.82);padding:10px 16px;border-radius:14px;background:rgba(6,8,12,.72);opacity:0}
 #cta{position:absolute;left:60px;right:60px;top:1010px;display:flex;flex-direction:column;gap:20px;opacity:0}#cta span{display:flex;align-items:center;gap:20px;padding:18px 26px;border-radius:20px;background:rgba(8,12,20,.86);border:2px solid rgba(255,255,255,.2);font:900 40px Inter,Arial,sans-serif;color:#fff}
 #credits{position:absolute;inset:0;opacity:0;background:#0b0d10;padding:300px 80px 0;font-family:Inter,Arial,sans-serif;color:#ddd}#credits b{display:block;margin:34px 0 14px;font:700 28px "JetBrains Mono",monospace;letter-spacing:.16em;color:#FFE03A}#credits p{font-size:32px;line-height:1.45;margin-bottom:18px}#credits i{display:block;margin-top:60px;font:700 26px "JetBrains Mono",monospace;letter-spacing:.2em;color:#fff;font-style:normal}
@@ -44,7 +44,7 @@ HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name
 <div id="labels"></div>
 <div id="hook">__HOOK__</div>
 <div id="brand">ASHWILLPOWER · JAIPUR REAL ESTATE</div>
-<div id="rank"><b id="rk">#10</b></div>
+<div id="rank"><i>SOUTH → NORTH</i><b id="rk">1 / 10</b></div>
 __CAPS__
 <div id="fine">Approx. rates · 1990–95 historical estimates · 2026 indicative listing rates · multipliers are calculated estimates, not verified investment returns · past growth ≠ future returns</div>
 <div id="cta"><span><svg viewBox="0 0 24 24" width="56" height="56"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>Save it · check back in 10 years</span><span><svg viewBox="0 0 24 24" width="56" height="56"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round"/></svg>Send to someone buying land</span></div>
@@ -96,7 +96,7 @@ const ready = (async () => {
   M.areas.forEach((a, k) => {
     const m = a.p1 / a.p0, h = 6 + m / 1200 * 42, base = hAt(a.u, a.v);
     const g = new THREE.CylinderGeometry(3.2, 3.2, 1, 40); g.translate(0, .5, 0);
-    const col = new THREE.Color().setHSL(0.12 - 0.11 * Math.min(1, m / 1200), .95, .5);
+    const kk = Math.min(1, m / 1200); const col = new THREE.Color().setHSL(0.27 + 0.10 * kk, .8, .58 - .2 * kk);
     const mat = new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: .3, roughness: .4, metalness: .1 });
     const bar = new THREE.Mesh(g, mat); bar.position.set(wx(a.u), base, wz(a.v)); bar.scale.y = .001; scene.add(bar);
     const ring = new THREE.Mesh(new THREE.RingGeometry(3.2, 4.6, 48), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: .8, side: THREE.DoubleSide }));
@@ -119,7 +119,7 @@ const keys = [
   [T3 + 2.4, [.52, 1.05, 260], [.47, .52, 0]],
   [TS - .5, [.50, .98, 220], [.47, .50, 0]],
 ];
-TOUR.forEach((i, n) => { const a = A(i), t = TS + DS * n, sx = (n % 2 ? -1 : 1);
+TOUR.forEach((i, n) => { const a = A(i), t = TS + DS * n, sx = 1;
   keys.push([t + .9, [a.u + .09 * sx, a.v + .29, 112], [a.u, a.v - .02, 20]]); keys.push([t + DS - .05, [a.u + .03 * sx, a.v + .26, 100], [a.u, a.v - .02, 22]]); });
 keys.push([TO + 1.6, [.50, 1.0, 240], [.47, .50, 0]]);
 keys.push([END, [.50, 1.02, 250], [.47, .50, 0]]);
@@ -143,7 +143,7 @@ function renderAt(t){
     b.ring.material.opacity = .25 + .55 * e; const s = 1 + .25 * Math.sin(t * 3 + j); b.ring.scale.set(s, s, s);
     v3.set(b.bar.position.x, b.base + b.h * e + 2, b.bar.position.z).project(camera);
     const d = labels[j], vis = e > .6 && v3.z < 1 && Math.abs(v3.x) < .8 && v3.y < .78 && v3.y > -.2 && t < TO + .5;
-    d.style.left = ((v3.x + 1) / 2 * 1080).toFixed(1) + "px"; d.style.top = Math.max(focus === j ? 560 : 300, (1 - v3.y) / 2 * 1920).toFixed(1) + "px";
+    d.style.left = ((v3.x + 1) / 2 * 1080).toFixed(1) + "px"; d.style.top = Math.max(focus === j ? 650 : 300, (1 - v3.y) / 2 * 1920).toFixed(1) + "px";
     d.style.opacity = vis ? (focus < 0 || focus === j ? 1 : 0) : 0; d.classList.toggle("hot", focus === j);
   });
   renderer.render(scene, camera);
@@ -177,13 +177,13 @@ cap("c0", f"Jaipur from space, {Y}1989{E}", 0.9, 2.4)
 cap("c1", f"Same city. {Y}35 years apart.{E}", 2.5, 4.9)
 cap("c2", f"Land prices per gaj, {Y}then vs now{E}", 6.2, T3)
 cap("c3", f"Now let's see it {Y}in 3D{E}", T3 + .1, T3 + 2.4)
-cap("c4", f"Each bar = how much {Y}land prices jumped{E}", T3 + 2.4, TS + .4)
+cap("c4", f"Taller bar = {Y}bigger price jump{E} · south → north", T3 + 2.4, TS + .4)
 for n, i in enumerate(TOUR):
     a = M['areas'][i]; m = a['p1'] / a['p0']; t = TS + DS * n
     mm = f"~{round(m, -2) if m >= 1000 else round(m, -1):,.0f}×"
     f = lambda v: f"₹{v / 100000:g} lakh" if v >= 100000 else f"₹{v:,}"
     cap(f"a{n}", f"{a['name'].split(' ·')[0]}: {Y}{mm}{E}<small>{f(a['p0'])} → {f(a['p1'])} per sq yd</small>", t + .7, t + DS + .55)
-    J.append(f'tl.call(()=>{{document.getElementById("rk").textContent="#{len(TOUR) - n}"}},null,{t + .55:.2f}); tl.fromTo("#rank b",{{scale:1.5}},{{scale:1,duration:.35,ease:"back.out(2.5)"}},{t + .6:.2f});')
+    J.append(f'tl.call(()=>{{document.getElementById("rk").textContent="{n + 1} / {len(TOUR)}"}},null,{t + .55:.2f}); tl.fromTo("#rank b",{{scale:1.5}},{{scale:1,duration:.35,ease:"back.out(2.5)"}},{t + .6:.2f});')
 J.append(f'tl.fromTo("#rank",{{opacity:0}},{{opacity:1,duration:.3}},{TS + .5:.2f}); tl.to("#rank",{{opacity:0,duration:.3}},{TO + .5:.2f});')
 J.append(f'tl.fromTo("#fine",{{opacity:0}},{{opacity:1,duration:.3}},4.9); tl.to("#fine",{{opacity:0,duration:.3}},{TO + .5:.2f});')
 cap("e0", f"Where's the {Y}next 1,000×?{E}", TO + .6, END - 4.6)

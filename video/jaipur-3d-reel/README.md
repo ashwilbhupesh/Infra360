@@ -1,6 +1,12 @@
 # Jaipur 3D land prices: countdown reel
 `Jaipur_3D_Land_Prices.mp4`: 1080×1920, 54 s, text-led with captions and music. `cover_frame.jpg` is the Instagram cover.
 
+## Revision 2
+- The tour now runs geographically south → north (Sitapura, Pratap Nagar, Jagatpura, Malviya Nagar, Mansarovar, Ajmer Road, Vaishali, Jhotwara, Vidyadhar Nagar, Sikar Road) with a "SOUTH → NORTH · n/10" counter.
+- Bars, rings, counter and highlights are green; darker green means a bigger jump.
+- Price lines are larger: 46 px in the caption, 36 px in the bar label.
+- Hinglish voice-over script provided in chat.
+
 ## Flow
 | Time (s) | Beat |
 |---|---|
