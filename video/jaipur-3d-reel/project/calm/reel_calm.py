@@ -7,7 +7,7 @@ import math
 TOUR = sorted(range(len(M['areas'])), key=lambda i: -M['areas'][i]['v'])  # geographic: south (Sitapura) -> north (Sikar Road)
 STOPN = {'sitapura':19.38,'pratap':24.03,'jagatpura':26.67,'malviya':31.47,'mansarovar':33.55,'ajmer':37.40,'vaishali':39.56,'jhotwara':42.60,'vidyadhar':45.00,'sikar':47.80}
 STOPS = [STOPN[M['areas'][i]['k']] for i in TOUR]
-T3 = 15.85; TS = STOPS[0]; DS = 3.1; TO = 53.0; FACE_END = 5.6
+T3 = 15.85; TS = STOPS[0]; DS = 3.1; TO = 53.0; FACE_END = 2.0
 HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script>
 <style>*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#05070b}
@@ -23,6 +23,7 @@ HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name
 #tag3d{position:absolute;left:0;right:0;top:230px;text-align:center;opacity:0}#tag3d span{display:inline-block;padding:10px 22px;border-radius:14px;background:rgba(6,8,12,.75);font:800 30px "JetBrains Mono",monospace;letter-spacing:.14em;color:#FFE03A}
 #fine{position:absolute;left:50px;right:50px;bottom:250px;text-align:center;font:500 20px/1.35 "JetBrains Mono",monospace;color:rgba(255,255,255,.8);padding:10px 16px;border-radius:14px;background:rgba(6,8,12,.7)}
 #credit_x{position:absolute;left:40px;right:40px;bottom:90px;text-align:center;font:500 18px "JetBrains Mono",monospace;color:rgba(255,255,255,.65);text-shadow:0 1px 3px #000}
+#pre .bgb{filter:blur(18px) brightness(.45);transform:scale(1.1)}#card{position:absolute;inset:0;transform-origin:540px 840px;transform:scale(.8);border-radius:30px;overflow:hidden;box-shadow:0 0 0 4px #5CF08A,0 30px 80px rgba(0,0,0,.7)}#card>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}#pins{position:absolute;inset:0}.pin b{font-size:34px!important}.pin{position:absolute;opacity:0}.pin i{position:absolute;left:-11px;top:-11px;width:22px;height:22px;border-radius:50%;background:#5CF08A;border:3px solid #111;box-shadow:0 0 14px #5CF08A}.pin b{position:absolute;left:18px;top:-22px;padding:4px 12px;border-radius:9px;background:rgba(8,12,20,.88);border:2px solid #5CF08A;font:800 28px Inter;color:#fff;white-space:nowrap}.pin b.r{left:auto;right:18px}
 #hook{position:absolute;inset:0;overflow:hidden}#hook .full{position:absolute;inset:0}#hook .full img{width:100%;height:100%;object-fit:cover;display:block}
 #h24{clip-path:inset(0 0 0 100%)}#hline{position:absolute;top:0;left:0;width:6px;height:1920px;background:#fff;box-shadow:0 0 24px #fff;opacity:0}#hline b{position:absolute;left:-34px;top:930px;width:74px;height:74px;border-radius:50%;background:#fff;color:#111;font:900 40px/74px Inter;text-align:center}
 .yl2{position:absolute;left:40px;top:430px;opacity:0;padding:10px 22px;border-radius:14px;background:rgba(6,8,12,.75);font:900 54px Inter;color:#fff}.yl2.r{left:auto;right:40px;color:#FFE03A}
@@ -162,24 +163,35 @@ def cap(i, html, a, b, top=None):
     J.append(f'tl.fromTo("#{i}",{{opacity:0,y:16,scale:.96}},{{opacity:1,y:0,scale:1,duration:.2,ease:"back.out(2)"}},{a:.2f}); tl.to("#{i}",{{opacity:0,duration:.12}},{b - .12:.2f});')
 Y='<span class="y">'; E='</span>'
 HOOK=('<div class="full" id="h89"><img src="assets/city_1989.jpg"/></div><div class="full" id="h24"><img src="assets/city_2025.jpg"/></div><div id="hline"><b>⟷</b></div>'
-      '<div class="yl2" id="hl89">1989</div><div class="yl2 r" id="hl24">2024</div><div id="hprice"><b id="hp">₹50 – 300</b><i id="hpi">PER GAJ · 1990</i></div>')
+      '<div class="full" id="pre"><img class="bgb" src="assets/city_2025.jpg"/><div id="card"><img src="assets/city_2025.jpg"/><div id="pins"><div class="pin" id="pq0" style="left:853px;top:1336px"><i></i><b class="r">Jagatpura <span class="y">~1,200×</span></b></div><div class="pin" id="pq1" style="left:343px;top:1131px"><i></i><b class="r">Mansarovar <span class="y">~570×</span></b></div><div class="pin" id="pq2" style="left:212px;top:792px"><i></i><b class="">Vaishali Nagar <span class="y">~580×</span></b></div><div class="pin" id="pq3" style="left:770px;top:1607px"><i></i><b class="r">Sitapura <span class="y">~1,200×</span></b></div><div class="pin" id="pq4" style="left:645px;top:1482px"><i></i><b class="">Pratap Nagar <span class="y">~790×</span></b></div><div class="pin" id="pq5" style="left:199px;top:572px"><i></i><b class="">Jhotwara <span class="y">~350×</span></b></div><div class="pin" id="pq6" style="left:60px;top:1039px"><i></i><b class="">Ajmer Road <span class="y">~710×</span></b></div><div class="pin" id="pq7" style="left:424px;top:501px"><i></i><b class="">Vidyadhar Nagar <span class="y">~620×</span></b></div><div class="pin" id="pq8" style="left:367px;top:331px"><i></i><b class="">Sikar Road <span class="y">~920×</span></b></div><div class="pin" id="pq9" style="left:626px;top:1148px"><i></i><b class="">Malviya Nagar <span class="y">~500×</span></b></div></div></div></div><div class="yl2" id="hl89">1989</div><div class="yl2 r" id="hl24">2024</div><div id="hprice"><b id="hp">₹50 – 300</b><i id="hpi">PER GAJ · 1990</i></div>')
 TOPS=('<div id="ss"><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>SAVE this</span><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2.4;stroke-linejoin:round"/></svg>SHARE it</span></div>'
       '<div id="hh"><i class="up">UP TO</i><b>1,000×</b></div>')
 F=FACE_END
-J += ['tl.set("#cover",{opacity:1},0); tl.to("#cover",{opacity:0,duration:.25},0.55);',
+J += ['tl.set("#cover",{opacity:0},0);',
       f'tl.set("#hook",{{opacity:0}},0); tl.set("#hook",{{opacity:1}},{F:.2f}); tl.fromTo("#avatar",{{opacity:1}},{{opacity:0,duration:.01}},{F + .05:.2f});',
       f'tl.fromTo("#h89 img,#h24 img",{{scale:1}},{{scale:1.07,duration:{T3 - F:.2f},ease:"none"}},{F:.2f});',
       'tl.to("#h24",{clipPath:"inset(0 0 0 50%)",duration:1.0,ease:"power2.inOut"},7.9); tl.to("#h24",{clipPath:"inset(0 0 0 0%)",duration:1.0,ease:"power2.inOut"},9.8);',
       'tl.set("#hline",{x:1080},0); tl.set("#hline",{opacity:1},7.9); tl.to("#hline",{x:540,duration:1.0,ease:"power2.inOut"},7.9); tl.to("#hline",{x:0,duration:1.0,ease:"power2.inOut"},9.8); tl.to("#hline",{opacity:0,duration:.2},10.8);',
-      f'tl.fromTo("#hl89",{{opacity:0}},{{opacity:1,duration:.3}},{F + .2:.2f}); tl.to("#hl89",{{opacity:0,duration:.3}},10.4); tl.fromTo("#hl24",{{opacity:0}},{{opacity:1,duration:.3}},8.5); tl.to("#hl24",{{opacity:0,duration:.3}},{T3:.2f});',
-      'tl.fromTo("#ss",{opacity:0,y:-30},{opacity:1,y:0,duration:.35,ease:"back.out(2)"},0.6); tl.to("#ss span",{scale:1.08,duration:.3,yoyo:true,repeat:3,stagger:.15},1.0); tl.to("#ss",{opacity:0,duration:.3},5.4);',
-      'tl.fromTo("#hh",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.45,ease:"back.out(2)"},1.4); tl.to("#hh",{opacity:0,duration:.3},5.4);',
+      f'tl.fromTo("#hl89",{{opacity:0}},{{opacity:1,duration:.3}},5.7); tl.to("#hl89",{{opacity:0,duration:.3}},10.4); tl.fromTo("#hl24",{{opacity:0}},{{opacity:1,duration:.3}},8.5); tl.to("#hl24",{{opacity:0,duration:.3}},{T3:.2f});',
+      'tl.set("#pre",{opacity:1},0); tl.to("#pre",{opacity:0,duration:.4},5.55); tl.fromTo("#card",{scale:.95},{scale:.8,duration:.6,ease:"power2.out"},2.0);',
+      'tl.fromTo("#pq0",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},2.40);',
+      'tl.fromTo("#pq1",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},2.60);',
+      'tl.fromTo("#pq2",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},2.80);',
+      'tl.fromTo("#pq3",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},3.00);',
+      'tl.fromTo("#pq4",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},3.20);',
+      'tl.fromTo("#pq5",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},3.40);',
+      'tl.fromTo("#pq6",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},3.60);',
+      'tl.fromTo("#pq7",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},3.80);',
+      'tl.fromTo("#pq8",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},4.00);',
+      'tl.fromTo("#pq9",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},4.20);',
+      'tl.fromTo("#ss",{opacity:0,y:-30},{opacity:1,y:0,duration:.35,ease:"back.out(2)"},0.6); tl.to("#ss span",{scale:1.08,duration:.3,yoyo:true,repeat:3,stagger:.15},1.0); tl.to("#ss",{opacity:0,duration:.25},2.3);',
+      'tl.fromTo("#hh",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.45,ease:"back.out(2)"},1.4); tl.to("#hh",{opacity:0,duration:.25},2.3);',
       'tl.fromTo("#hprice",{opacity:0,scale:.6},{opacity:1,scale:1,duration:.4,ease:"back.out(2)"},10.1); tl.to("#hprice",{opacity:0,duration:.3},15.75);',
       'tl.call(()=>{document.getElementById("hp").textContent="₹50 – 300";document.getElementById("hpi").textContent="PER GAJ · 1990"},null,10.0);',
       'tl.call(()=>{document.getElementById("hp").textContent="₹40,000 – 1.5 lakh";document.getElementById("hpi").textContent="PER GAJ · TODAY"},null,12.88); tl.fromTo("#hp",{scale:1.35},{scale:1,duration:.5,ease:"back.out(2)"},12.88);',
       f'tl.to("#gl",{{opacity:1,duration:.01}},{T3 - .3:.2f}); tl.to("#hook",{{opacity:0,duration:.9,ease:"power1.in"}},{T3:.2f});']
-cap("v0", f"Jaipur has given {Y}up to 1,000×{E}", .9, 3.15, top=1490)
-cap("v1", f"returns in the {Y}last 35 years{E}", 3.2, 5.6, top=1490)
+cap("v0", f"Jaipur has given {Y}up to 1,000×{E}", .9, 3.15, top=1530)
+cap("v1", f"returns in the {Y}last 35 years{E}", 3.2, 5.6, top=1530)
 cap("v2", f"This is Jaipur in {Y}1989{E}", 5.68, 7.88)
 cap("v3", f"and this is {Y}today.{E}", 7.92, 9.3)
 cap("v4", f"Back then: {Y}₹50 to ₹300{E} a gaj", 9.36, 12.84)
