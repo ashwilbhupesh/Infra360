@@ -1,13 +1,13 @@
 """3D sample: Jaipur terrain (Copernicus DEM, Sentinel-2 drape) with price-multiplier bars rising per area and a drone camera path."""
 import json
 M = json.load(open("proj/assets/meta.json"))
-END = 68.2
+END = 57.90
 # three areas the camera visits (index into areas)
 import math
 TOUR = sorted(range(len(M['areas'])), key=lambda i: -M['areas'][i]['v'])  # geographic: south (Sitapura) -> north (Sikar Road)
-STOPN = {'sitapura':19.38,'pratap':24.03,'jagatpura':26.67,'malviya':31.47,'mansarovar':33.55,'ajmer':37.40,'vaishali':39.56,'jhotwara':42.60,'vidyadhar':45.00,'sikar':47.80}
+STOPN = {'sitapura':9.08, 'pratap':13.73, 'jagatpura':16.37, 'malviya':21.17, 'mansarovar':23.25, 'ajmer':27.10, 'vaishali':29.26, 'jhotwara':32.30, 'vidyadhar':34.70, 'sikar':37.50}
 STOPS = [STOPN[M['areas'][i]['k']] for i in TOUR]
-T3 = 15.85; TS = STOPS[0]; DS = 3.1; TO = 53.0; FACE_END = 2.0
+T3 = 5.55; TS = STOPS[0]; DS = 3.1; TO = 42.70; FACE_END = 2.0
 HTML = """<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script>
 <style>*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#05070b}
@@ -163,17 +163,14 @@ def cap(i, html, a, b, top=None):
     J.append(f'tl.fromTo("#{i}",{{opacity:0,y:16,scale:.96}},{{opacity:1,y:0,scale:1,duration:.2,ease:"back.out(2)"}},{a:.2f}); tl.to("#{i}",{{opacity:0,duration:.12}},{b - .12:.2f});')
 Y='<span class="y">'; E='</span>'
 HOOK=('<div class="full" id="h89"><img src="assets/city_1989.jpg"/></div><div class="full" id="h24"><img src="assets/city_2025.jpg"/></div><div id="hline"><b>⟷</b></div>'
-      '<div class="full" id="pre"><img class="bgb" src="assets/city_2025.jpg"/><div id="card"><img src="assets/city_2025.jpg"/><div id="pins"><div class="pin" id="pq0" style="left:853px;top:1336px"><i></i><b class="r">Jagatpura <span class="y">~1,200×</span></b></div><div class="pin" id="pq1" style="left:343px;top:1131px"><i></i><b class="" style="top:26px">Mansarovar <span class="y">~570×</span></b></div><div class="pin" id="pq2" style="left:212px;top:792px"><i></i><b class="">Vaishali Nagar <span class="y">~580×</span></b></div><div class="pin" id="pq3" style="left:770px;top:1607px"><i></i><b class="r">Sitapura <span class="y">~1,200×</span></b></div><div class="pin" id="pq4" style="left:645px;top:1482px"><i></i><b class="">Pratap Nagar <span class="y">~790×</span></b></div><div class="pin" id="pq5" style="left:199px;top:572px"><i></i><b class="">Jhotwara <span class="y">~350×</span></b></div><div class="pin" id="pq6" style="left:60px;top:1039px"><i></i><b class="">Ajmer Road <span class="y">~710×</span></b></div><div class="pin" id="pq7" style="left:424px;top:501px"><i></i><b class="">Vidyadhar Nagar <span class="y">~620×</span></b></div><div class="pin" id="pq8" style="left:367px;top:331px"><i></i><b class="">Sikar Road <span class="y">~920×</span></b></div><div class="pin" id="pq9" style="left:626px;top:1148px"><i></i><b class="">Malviya Nagar <span class="y">~500×</span></b></div></div></div></div><div class="yl2" id="hl89">1989</div><div class="yl2 r" id="hl24">2024</div><div id="hprice"><b id="hp">₹50 – 300</b><i id="hpi">PER GAJ · 1990</i></div>')
+      '<div class="full" id="pre"><img class="bgb" src="assets/city_2025.jpg"/><div id="card"><img src="assets/city_2025.jpg"/><div id="pins"><div class="pin" id="pq0" style="left:853px;top:1336px"><i></i><b class="r">Jagatpura <span class="y">~1,200×</span></b></div><div class="pin" id="pq1" style="left:343px;top:1131px"><i></i><b class="" style="top:44px">Mansarovar <span class="y">~570×</span></b></div><div class="pin" id="pq2" style="left:212px;top:792px"><i></i><b class="">Vaishali Nagar <span class="y">~580×</span></b></div><div class="pin" id="pq3" style="left:770px;top:1607px"><i></i><b class="r">Sitapura <span class="y">~1,200×</span></b></div><div class="pin" id="pq4" style="left:645px;top:1482px"><i></i><b class="">Pratap Nagar <span class="y">~790×</span></b></div><div class="pin" id="pq5" style="left:199px;top:572px"><i></i><b class="">Jhotwara <span class="y">~350×</span></b></div><div class="pin" id="pq6" style="left:60px;top:1039px"><i></i><b class="">Ajmer Road <span class="y">~710×</span></b></div><div class="pin" id="pq7" style="left:424px;top:501px"><i></i><b class="">Vidyadhar Nagar <span class="y">~620×</span></b></div><div class="pin" id="pq8" style="left:367px;top:331px"><i></i><b class="">Sikar Road <span class="y">~920×</span></b></div><div class="pin" id="pq9" style="left:626px;top:1148px"><i></i><b class="">Malviya Nagar <span class="y">~500×</span></b></div></div></div></div><div class="yl2" id="hl89">1989</div><div class="yl2 r" id="hl24">2024</div><div id="hprice"><b id="hp">₹50 – 300</b><i id="hpi">PER GAJ · 1990</i></div>')
 TOPS=('<div id="ss"><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>SAVE this</span><span><svg viewBox="0 0 24 24" width="38" height="38"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2.4;stroke-linejoin:round"/></svg>SHARE it</span></div>'
       '<div id="hh"><i class="up">UP TO</i><b>1,000×</b></div>')
 F=FACE_END
 J += ['tl.set("#cover",{opacity:0},0);',
       f'tl.set("#hook",{{opacity:0}},0); tl.set("#hook",{{opacity:1}},{F:.2f}); tl.fromTo("#avatar",{{opacity:1}},{{opacity:0,duration:.01}},{F + .05:.2f});',
       f'tl.fromTo("#h89 img,#h24 img",{{scale:1}},{{scale:1.07,duration:{T3 - F:.2f},ease:"none"}},{F:.2f});',
-      'tl.to("#h24",{clipPath:"inset(0 0 0 50%)",duration:1.0,ease:"power2.inOut"},7.9); tl.to("#h24",{clipPath:"inset(0 0 0 0%)",duration:1.0,ease:"power2.inOut"},9.8);',
-      'tl.set("#hline",{x:1080},0); tl.set("#hline",{opacity:1},7.9); tl.to("#hline",{x:540,duration:1.0,ease:"power2.inOut"},7.9); tl.to("#hline",{x:0,duration:1.0,ease:"power2.inOut"},9.8); tl.to("#hline",{opacity:0,duration:.2},10.8);',
-      f'tl.fromTo("#hl89",{{opacity:0}},{{opacity:1,duration:.3}},5.7); tl.to("#hl89",{{opacity:0,duration:.3}},10.4); tl.fromTo("#hl24",{{opacity:0}},{{opacity:1,duration:.3}},8.5); tl.to("#hl24",{{opacity:0,duration:.3}},{T3:.2f});',
-      'tl.set("#pre",{opacity:1},0); tl.to("#pre",{opacity:0,duration:.4},5.55); tl.fromTo("#card",{scale:.95},{scale:.8,duration:.6,ease:"power2.out"},2.0);',
+      'tl.set("#pre",{opacity:1},0); tl.fromTo("#card",{scale:.95},{scale:.8,duration:.6,ease:"power2.out"},2.0);',
       'tl.fromTo("#pq0",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},2.40);',
       'tl.fromTo("#pq1",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},2.60);',
       'tl.fromTo("#pq2",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},2.80);',
@@ -186,18 +183,11 @@ J += ['tl.set("#cover",{opacity:0},0);',
       'tl.fromTo("#pq9",{opacity:0,scale:.3},{opacity:1,scale:1,duration:.25,ease:"back.out(3)"},4.20);',
       'tl.fromTo("#ss",{opacity:0,y:-30},{opacity:1,y:0,duration:.35,ease:"back.out(2)"},0.6); tl.to("#ss span",{scale:1.08,duration:.3,yoyo:true,repeat:3,stagger:.15},1.0); tl.to("#ss",{opacity:0,duration:.25},2.3);',
       'tl.fromTo("#hh",{opacity:0,scale:1.6},{opacity:1,scale:1,duration:.45,ease:"back.out(2)"},1.4); tl.to("#hh",{opacity:0,duration:.25},2.3);',
-      'tl.fromTo("#hprice",{opacity:0,scale:.6},{opacity:1,scale:1,duration:.4,ease:"back.out(2)"},10.1); tl.to("#hprice",{opacity:0,duration:.3},15.75);',
-      'tl.call(()=>{document.getElementById("hp").textContent="₹50 – 300";document.getElementById("hpi").textContent="PER GAJ · 1990"},null,10.0);',
-      'tl.call(()=>{document.getElementById("hp").textContent="₹40,000 – 1.5 lakh";document.getElementById("hpi").textContent="PER GAJ · TODAY"},null,12.88); tl.fromTo("#hp",{scale:1.35},{scale:1,duration:.5,ease:"back.out(2)"},12.88);',
       f'tl.to("#gl",{{opacity:1,duration:.01}},{T3 - .3:.2f}); tl.to("#hook",{{opacity:0,duration:.9,ease:"power1.in"}},{T3:.2f});']
 cap("v0", f"Jaipur has given {Y}up to 1,000×{E}", .9, 3.15, top=1530)
 cap("v1", f"returns in the {Y}last 35 years{E}", 3.2, 5.6, top=1530)
-cap("v2", f"This is Jaipur in {Y}1989{E}", 5.68, 7.88)
-cap("v3", f"and this is {Y}today.{E}", 7.92, 9.3)
-cap("v4", f"Back then: {Y}₹50 to ₹300{E} a gaj", 9.36, 12.84)
-cap("v5", f"Today: {Y}₹40,000 to ₹1.5 lakh{E}", 12.88, 15.88)
-cap("v6", f"Now watch it {Y}in 3D{E}", 15.92, 17.58)
-cap("v7", f"The taller the bar, {Y}the bigger the jump{E}", 17.6, 19.34)
+cap("v6", f"Now watch it {Y}in 3D{E}", 5.62, 7.28, top=1530)
+cap("v7", f"The taller the bar, {Y}the bigger the jump{E}", 7.30, 9.04)
 for n, i in enumerate(TOUR):
     a = M['areas'][i]; m = a['p1'] / a['p0']; t = STOPS[n]; nx = STOPS[n + 1] if n + 1 < len(STOPS) else TO
     mm = f"~{round(m, -2) if m >= 1000 else round(m, -1):,.0f}×"
@@ -205,20 +195,20 @@ for n, i in enumerate(TOUR):
     cap(f"a{n}", f"{a['name'].split(' ·')[0]}: {Y}{mm}{E}<small>{f(a['p0'])} → {f(a['p1'])} per sq yd</small>", t, nx - .02)
     J.append(f'tl.call(()=>{{document.getElementById("rk").textContent="{n + 1} / {len(TOUR)}"}},null,{t - .05:.2f}); tl.fromTo("#rank b",{{scale:1.5}},{{scale:1,duration:.35,ease:"back.out(2.5)"}},{t:.2f});')
 J.append(f'tl.fromTo("#rank",{{opacity:0}},{{opacity:1,duration:.3}},{TS - .1:.2f}); tl.to("#rank",{{opacity:0,duration:.3}},{TO:.2f});')
-J.append(f'tl.fromTo("#fine",{{opacity:0}},{{opacity:1,duration:.3}},9.9); tl.to("#fine",{{opacity:0,duration:.3}},{TO:.2f});')
-cap("e0", f"Which area in Jaipur will be {Y}the next 1,000×?{E}", 53.08, 56.4)
-cap("e1", "Comment below 👇", 56.44, 57.45)
-cap("e2", f"Save this reel &amp; {Y}send it{E} to someone planning to buy a plot", 57.48, 60.72)
-cap("e3", f"Don't get late — {Y}and if you want, contact me.{E}", 60.76, 63.75)
-J.append(f'tl.fromTo("#cta",{{opacity:0,y:20}},{{opacity:1,y:0,duration:.4}},56.4); tl.to("#cta svg",{{scale:1.15,duration:.4,yoyo:true,repeat:5}},56.9); tl.to("#cta",{{opacity:0,duration:.3}},63.7);')
-J.append(f'tl.fromTo("#credits",{{opacity:0}},{{opacity:1,duration:.4}},63.85);')
-J.append(f'tl.to("#brand",{{opacity:0,duration:.3}},63.85);')
+J.append(f'tl.fromTo("#fine",{{opacity:0}},{{opacity:1,duration:.3}},7.3); tl.to("#fine",{{opacity:0,duration:.3}},{TO:.2f});')
+cap("e0", f"Which area in Jaipur will be {Y}the next 1,000×?{E}", 42.78, 46.1)
+cap("e1", "Comment below 👇", 46.14, 47.15)
+cap("e2", f"Save this reel &amp; {Y}send it{E} to someone planning to buy a plot", 47.18, 50.42)
+cap("e3", f"Don't get late — {Y}and if you want, contact me.{E}", 50.46, 53.45)
+J.append(f'tl.fromTo("#cta",{{opacity:0,y:20}},{{opacity:1,y:0,duration:.4}},46.1); tl.to("#cta svg",{{scale:1.15,duration:.4,yoyo:true,repeat:5}},46.6); tl.to("#cta",{{opacity:0,duration:.3}},53.4);')
+J.append(f'tl.fromTo("#credits",{{opacity:0}},{{opacity:1,duration:.4}},53.55);')
+J.append(f'tl.to("#brand",{{opacity:0,duration:.3}},53.55);')
 SFX=[]
 def sfx(n,t,v=.25): SFX.append(f'<audio class="clip" src="assets/sfx/{n}.mp3" data-start="{t:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v}"></audio>')
-sfx("impact-bass-1",1.4,.3); sfx("whoosh",7.9,.22); sfx("ping",12.88,.22); sfx("whoosh",T3,.3)
+sfx("impact-bass-1",1.4,.3); sfx("whoosh",T3,.3)
 for j in range(len(TOUR)): sfx("click-soft",T3+1.6+.2*j,.15)
 for n in range(len(TOUR)): sfx("whoosh-short",STOPS[n]-.8,.2)
-sfx("sparkle",53.08,.22)
+sfx("sparkle",42.78,.22)
 TL = 'const tl = gsap.timeline({ paused: true });\n' + "\n".join(J) + '\nwindow.__timelines = window.__timelines || {}; window.__timelines["main"] = tl;'
 HTML = HTML.replace("__HOOK__", HOOK).replace("__TOPS__", TOPS).replace("__CAPS__", "".join(CAPS)).replace("__TL__", TL).replace('<audio id="music"', "".join(SFX) + '<audio id="music"')
 HTML = HTML.replace("__T3__", str(T3)).replace("__TS__", str(TS)).replace("__DS__", str(DS)).replace("__TO__", str(TO)).replace("__STOPS__", json.dumps(STOPS))
