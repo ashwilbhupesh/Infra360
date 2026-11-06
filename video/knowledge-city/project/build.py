@@ -143,7 +143,7 @@ ih += f'<div class="ic jp" id="icj" style="left:{jx:.0f}px;top:{jy:.0f}px"><i></
 ih += '<div id="inote">India map: Milenioscuro, CC BY 4.0</div></div>'
 H.append(ih)
 show("india", 27.4, 47.8, .4)
-STORY = [("Greater Noida — Knowledge Park", "Khet the. Aaj dozens of colleges &amp; universities, lakhon students — hostels, PG, flats.", 30.0, 34.5, "c_gn.jpg", "Knowledge Park III · Derivator2017, CC BY 4.0 (Wikimedia Commons)"),
+STORY = [("Greater Noida — Knowledge Park", "Khet the. Aaj dozens of colleges &amp; universities, lakhon students — hostels, PG, flats.", 30.0, 34.5, "u_gn.jpg", "Noida today · DLF Mall of India · image supplied"),
          ("Sonipat — Education City", "Ashoka, OP Jindal jaisi universities — chhota sheher national map pe.", 34.5, 39.0, "u_so.jpg", "Sonipat · image supplied"),
          ("Mohali — Knowledge City", "IISER jaise research institutes — aas-paas naye sectors.", 39.0, 43.5, "u_mo.jpg", "IISER Mohali · image supplied"),
          ("Kota — Rajasthan", "Coaching ne poore sheher ki economy badal di.", 43.5, 47.6, "u_ko.jpg", "Kota · image supplied")]
