@@ -65,8 +65,8 @@ BL.sort(key=lambda b: math.hypot(b["x"], b["z"]))
 SPUR = [ROADX[1], (KC[0] - 20, KC[1] - 30), KC]
 D3 = {"road": [list(p) for p in ROAD[::3] + ROADX[:2]], "spur": [list(p) for p in SPUR], "kc": list(KC), "blocks": BL}
 # ---------- 0–2.2 · face placeholder (Ashwil's face goes here) ----------
-H.append('<div id="face"><div><b>YOUR FACE</b><i>first 2 seconds</i></div></div>')
-J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.35}, 2.0);')
+H.append('<video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="__ENDN__" data-track-index="0" playsinline data-has-audio="true" data-volume="1" style="position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover"></video>')
+J.append('tl.set("#avatar", {opacity:1}, 0); tl.to("#avatar", {opacity:0, scale:1.06, duration:.3}, 1.8);')
 H.append('<div id="kt"><i>DIGGI MALPURA ROAD</i><b>KNOWLEDGE<br/>CITY</b></div>')
 J.append('tl.fromTo("#kt", {opacity:0, scale:1.3}, {opacity:1, scale:1, duration:.45, ease:"back.out(2)"}, 0.25); tl.to("#kt", {opacity:0, duration:.3}, 2.1);')
 cap("c0", f"{Y}Diggi Malpura Road{E} pe aa raha hai — {G}Knowledge City{E2}", 0.25, 2.0, top=1450)
@@ -80,7 +80,7 @@ H.append('<div id="dtag"><b>10 SAAL BAAD?</b><i>imagination · not an official p
 
 cap("c1", f"Socho… 10 saal baad — {Y}university, medical college, IT institute{E}…", 5.0, 7.6)
 H.append('<div id="today"><b>AAJ — MAUKA HAI</b><i>early stage</i></div>'); show("today", 7.8, 9.6, .25)
-cap("c2", f"…aur aaj? {Y}Mauka hai — invest karne ka samay.{E}", 7.7, 9.6)
+cap("c2", f"Aaj? Aaj ek {Y}mauka hai — invest karne ka sahi samay{E}", 7.7, 12.83)
 sfx("riser", 1.9, .3); sfx("whoosh", 2.0, .3); sfx("impact-bass-1", 5.0, .35); sfx("whoosh", 7.6, .3)
 for k in range(8): sfx("pop", 5.1 + .25 * k, .15)
 
@@ -94,7 +94,6 @@ J.append('tl.fromTo("#pulse", {opacity:.9, attr:{r:9}}, {opacity:0, attr:{r:60},
 H.append('<div class="lab" id="kclab"><b>KNOWLEDGE CITY</b><i>Chittora · approx. location</i></div>')
 cam(13.6, (KC[0], KC[1] - 10), 520, 1.6)
 show("kclab", 13.0, 13.9, .3)
-cap("c3", f"Yeh hai Knowledge City — {Y}Diggi Malpura Road{E} pe, Chittora ke paas", 9.7, 13.6)
 cap("c4", f"JDA ki official scheme — {Y}Knowledge City South{E}", 13.6, 16.0)
 sfx("whoosh-short", 9.6, .25); sfx("ping", 12.6, .3)
 
@@ -104,7 +103,7 @@ PLAN = ["UNIVERSITY", "IT INSTITUTE", "TECHNICAL INSTITUTES", "MEDICAL COLLEGE &
 H.append('<div id="plan"><b>THE PLAN · AS PER JDA LAYOUT &amp; REPORTS</b>' + "".join(f'<div class="pi" id="pi{k}"><s>{k + 1}</s>{p}</div>' for k, p in enumerate(PLAN)) + '<em>~1,000 hectare · Dainik Bhaskar</em></div>')
 show("plan", 19.3, 27.4)
 for k in range(len(PLAN)):
-    t = 19.4 + 1.25 * k
+    t = 19.4 + .9 * k
     J.append(f'tl.fromTo("#pi{k}", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.35, ease:"back.out(2)"}}, {t:.2f});'); sfx("pop", t, .22)
 J.append('tl.from("#plan em", {opacity:0, scale:.5, duration:.4, ease:"back.out(2)"}, 26.6);')
 
@@ -112,9 +111,9 @@ J.append('tl.from("#plan em", {opacity:0, scale:.5, duration:.4, ease:"back.out(
 PIMG = [("p_univ.jpg", "University", "Representative image"), ("p_it.jpg", "IT institute", "Representative image"), ("p_tech.jpg", "Technical institutes", "Representative image"),
         ("p_med.jpg", "Medical college &amp; hospital", "Representative image"), ("p_lib.jpg", "International library", "Representative image"), ("p_jecc.jpg", "Convention centre", "JECC, Jaipur · representative")]
 for k, (src, nm, cr) in enumerate(PIMG):
-    t = 19.4 + 1.25 * k
+    t = 19.4 + .9 * k
     H.append(f'<div class="pim" id="pim{k}"><img src="assets/img/{src}"/><div><b>{nm}</b><i>{cr}</i></div></div>')
-    J.append(f'tl.fromTo("#pim{k}", {{opacity:0, scale:.85, y:30}}, {{opacity:1, scale:1, y:0, duration:.35, ease:"back.out(1.8)"}}, {t:.2f}); tl.to("#pim{k}", {{opacity:0, duration:.2}}, {(t + 1.25 if k < 5 else 27.3):.2f});')
+    J.append(f'tl.fromTo("#pim{k}", {{opacity:0, scale:.85, y:30}}, {{opacity:1, scale:1, y:0, duration:.35, ease:"back.out(1.8)"}}, {t:.2f}); tl.to("#pim{k}", {{opacity:0, duration:.2}}, {(t + .9 if k < 5 else 27.3):.2f});')
 # 3D-city section: quick photo flashes as the towers rise
 for k, (src, nm, t0, t1) in enumerate([("p_univ.jpg", "University", 5.2, 6.0), ("p_med.jpg", "Medical college", 6.0, 6.8), ("p_it.jpg", "IT institute", 6.8, 7.6)]):
     H.append(f'<div class="pfl" id="pfl{k}"><img src="assets/img/{src}"/><b>{nm}</b><i>Representative image</i></div>')
@@ -128,25 +127,25 @@ J.append('tl.fromTo("#dbh", {opacity:0, scale:.8, rotation:3}, {opacity:1, scale
 H.append('<div id="stamp">OFFICIAL</div>')
 J.append('tl.fromTo("#stamp", {opacity:0, scale:2.2, rotation:-18}, {opacity:1, scale:1, rotation:-12, duration:.3, ease:"power3.in"}, 14.6); tl.to("#stamp", {opacity:0, duration:.2}, 19.2);')
 sfx("pop", 13.9, .3); sfx("impact-bass-1", 14.6, .3); sfx("whoosh-short", 16.1, .3)
-cap("c5", f"Jan 2026: JDA ne kabza {Y}RSRDC ko saunpa{E} — project ko mili gati", 16.1, 19.3)
-cap("c6", f"University. IT institute. Medical college. {Y}International library.{E}", 19.3, 27.4)
+cap("c5", f"January 2026 mein JDA ne kabza {Y}RSRDC ko saunp diya{E} — project ko mili gati, lagbhag {Y}1,000 hectare{E}", 16.1, 19.3)
+cap("c6", f"Plan suniye — {Y}university, IT institute, technical institute, medical college, international library, convention centre{E}", 19.3, 24.83)
+cap("c6b", f"Aur {Y}desh-videsh{E} ke bade sansthano ko bhi yahan aamantrit kiya gaya hai", 24.83, 27.4)
 
 # ---------- 27.4–47.6 · it has happened before ----------
 def ip(lat, lon, GX=40, GY=300, GW=1000): return (GX + (lon - 67.0) / 32.0 * GW, GY + (37.5 - lat) / 32.5 * 1293 * GW / 1200)
-CIT = [("Greater Noida", 28.47, 77.50, "Knowledge Park", 1), ("Sonipat", 28.99, 77.02, "Education City", -1), ("Mohali", 30.70, 76.72, "Knowledge City", 1), ("Kota", 25.18, 75.83, "Coaching capital", 1)]
+CIT = [("Greater Noida", 28.47, 77.50, "Knowledge Park", 1), ("Sonipat", 28.99, 77.02, "Education City", -1), ("Mohali", 30.70, 76.72, "Knowledge City", 1), ]
 ih = '<div id="india"><img src="assets/img/indiamap.png" style="position:absolute;left:40px;top:300px;width:1000px;opacity:.95"/>'
 for k, (n, la, lo, sub, sd) in enumerate(CIT):
-    x, y = ip(la, lo); dy = {"Greater Noida": 10, "Sonipat": -40, "Mohali": -30, "Kota": 10}[n]
+    x, y = ip(la, lo); dy = {"Greater Noida": 10, "Sonipat": -40, "Mohali": -30}[n]
     ih += f'<div class="ic" id="ic{k}" style="left:{x:.0f}px;top:{y:.0f}px"><i></i><b style="{"left" if sd > 0 else "right"}:22px;top:{dy}px">{n} <span>{sub}</span></b></div>'
 jx, jy = ip(26.92, 75.82)
 ih += f'<div class="ic jp" id="icj" style="left:{jx:.0f}px;top:{jy:.0f}px"><i></i><b style="right:26px;top:-20px">Jaipur?</b></div>'
 ih += '<div id="inote">India map: Milenioscuro, CC BY 4.0</div></div>'
 H.append(ih)
 show("india", 27.4, 47.8, .4)
-STORY = [("Greater Noida — Knowledge Park", "Khet the. Aaj dozens of colleges &amp; universities, lakhon students — hostels, PG, flats.", 30.0, 34.5, "u_gn.jpg", "Noida today · DLF Mall of India · image supplied"),
-         ("Sonipat — Education City", "Ashoka, OP Jindal jaisi universities — chhota sheher national map pe.", 34.5, 39.0, "u_so.jpg", "Sonipat · image supplied"),
-         ("Mohali — Knowledge City", "IISER jaise research institutes — aas-paas naye sectors.", 39.0, 43.5, "u_mo.jpg", "IISER Mohali · image supplied"),
-         ("Kota — Rajasthan", "Coaching ne poore sheher ki economy badal di.", 43.5, 47.6, "u_ko.jpg", "Kota · image supplied")]
+STORY = [("Greater Noida — Knowledge Park", "Pehle khet the. Aaj wahan bahut saare colleges aur universities khul gayi hain.", 30.0, 34.5, "u_gn.jpg", "Noida today · DLF Mall of India · image supplied"),
+         ("Sonipat — Education City", "Ashoka, OP Jindal jaisi universities ne chhote sheher ko national map pe jagah de di.", 34.5, 39.0, "u_so.jpg", "Sonipat · image supplied"),
+         ("Mohali — Knowledge City", "IISER jaise research institutes ke aas-paas naye sectors develop ho gaye.", 39.0, 43.5, "u_mo.jpg", "IISER Mohali · image supplied")]
 for k, (t1, t2, a, b, img, cr) in enumerate(STORY):
     J.append(f'tl.fromTo("#ic{k}", {{opacity:0, scale:.3}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(3)"}}, {a - .1:.2f}); tl.to("#ic{k} i", {{scale:1.5, duration:.3, yoyo:true, repeat:3}}, {a + .2:.2f});')
     H.append(f'<div class="card" id="cd{k}"><b>{t1}</b><p>{t2}</p></div>'); show(f"cd{k}", a, b, .25)
@@ -154,7 +153,7 @@ for k, (t1, t2, a, b, img, cr) in enumerate(STORY):
     J.append(f'tl.fromTo("#ci{k}", {{opacity:0, scale:.85, y:30}}, {{opacity:1, scale:1, y:0, duration:.4, ease:"back.out(1.6)"}}, {a + .1:.2f}); tl.to("#ci{k}", {{opacity:0, duration:.25}}, {b - .1:.2f});')
     sfx("click-soft", a, .25)
 J.append('tl.fromTo("#icj", {opacity:0, scale:.3}, {opacity:1, scale:1, duration:.4, ease:"back.out(3)"}, 45.6); tl.to("#icj i", {scale:1.6, duration:.35, yoyo:true, repeat:3}, 45.9);')
-cap("c7", f"Yeh idea naya nahi hai — {Y}dekho kya hua{E}", 27.5, 30.0)
+cap("c7", f"Yeh idea naya nahi hai — India ke kuch shehron ne yahi kiya, {Y}aur dekhiye kya hua{E}", 27.5, 30.0)
 
 # ---------- 47.6–59.5 · imagine Jaipur ----------
 J.append('tl.to("#gl", {opacity:1, duration:.6}, 47.5); tl.to("#gl", {opacity:0, duration:.6}, 59.3);')
@@ -164,8 +163,8 @@ H.append('<div id="dem">' + "".join(f'<div class="dm" id="dm{k}" style="{"left" 
 for k in range(len(DEM)):
     t = 53.0 + .45 * k; J.append(f'tl.fromTo("#dm{k}", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2.5)"}}, {t:.2f}); tl.to("#dm{k}", {{opacity:0, duration:.3}}, 56.0);'); sfx("pop", t, .18)
 H.append('<div id="dtag2"><b>IMAGINE JAIPUR</b><i>imagination · not an official plan</i></div>'); show("dtag2", 48.0, 59.5)
-cap("c8", f"Ab socho Jaipur mein… {Y}sab ek belt mein{E}", 47.7, 50.8)
-cap("c9", f"Hazaron students, doctors, teachers — {Y}unhe chahiye ghar{E}", 50.8, 56.0)
+cap("c8", f"Ab socho Jaipur mein… {Y}sab ek hi belt mein{E}", 47.7, 50.8)
+cap("c9", f"Hazaron students, doctors, teachers — unhe chahiye {Y}ghar, hostel, PG, cafe, shops{E}", 50.8, 56.0)
 H.append('<div id="quote">Jahan <span class="g">knowledge</span> aata hai —<br/>wahan sheher apne aap<br/>ban jaata hai.</div>')
 J.append('tl.fromTo("#quote", {opacity:0, scale:.9}, {opacity:1, scale:1, duration:.5, ease:"power2.out"}, 56.0); tl.to("#quote", {opacity:0, duration:.3}, 59.4);')
 sfx("sparkle", 56.0, .3)
@@ -177,26 +176,36 @@ J.append('tl.to(["#pin","#area"], {opacity:1, duration:.4}, 60.0);')
 H.append('<div id="chk"><b>ABHI EARLY STAGE · PEHLE CHECK KARO</b><div>✓ Official map</div><div>✓ Approval</div><div>✓ Patta &amp; conversion</div></div>')
 show("chk", 60.2, 66.0)
 J.append('tl.from("#chk div", {opacity:0, x:-30, duration:.3, stagger:.5}, 61.2);')
-cap("c10", f"Par yaad rakhna — {Y}abhi early stage hai.{E}", 59.5, 62.4)
-cap("c11", f"Plot lene se pehle {Y}official map, approval aur patta{E} check karo", 62.4, 66.0)
+cap("c10", f"Par yaad rakhna — {Y}abhi yeh early stage hai{E}", 59.5, 61.6)
+cap("c11", f"Plot lene se pehle scheme ka {Y}official map, JDA approval aur patta{E} zaroor check karo", 61.6, 66.0)
 
 # ---------- 66–73 · CTA ----------
 END = 73.0
 cap("c12", f"Kya Jaipur ka Knowledge City {G}agla Greater Noida{E2} banega?", 66.0, 69.6)
-cap("c13", f"Comment karo. {Y}Save karo{E} — aur bhejo usko jo future dekh ke invest karta hai", 69.6, END + .2)
+cap("c13", f"Comment kijiye — {Y}reel save kariye aur share kariye{E}", 69.6, END + .2)
 H.append('<div id="share"><span><svg viewBox="0 0 24 24" width="52" height="52"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>Save it</span><span><svg viewBox="0 0 24 24" width="52" height="52"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round"/></svg>Send it</span></div>')
 J.append('tl.fromTo("#share", {opacity:0, y:20}, {opacity:1, y:0, duration:.4}, 69.8); tl.to("#share svg", {scale:1.15, duration:.4, yoyo:true, repeat:5}, 70.2);')
 H.append('<div id="brand">ASHWILLPOWER · JAIPUR REAL ESTATE</div>')
 H.append('<div id="credit">Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0) · Map data © OpenStreetMap · plan details as per media reports</div>')
 J.append('tl.set("#credit", {opacity:0}, 0); tl.to("#credit", {opacity:1, duration:.3}, 2.3);')
 
+ANCH = [(0, 0), (2.0, 2.9), (5.0, 5.5), (7.6, 9.0), (9.6, 12.0), (13.6, 14.6), (16.05, 17.25), (19.3, 23.77), (27.4, 34.85), (30.0, 39.4), (34.5, 45.6), (39.0, 52.3), (43.5, 58.6), (47.6, 59.7), (56.0, 68.9), (59.45, 72.0), (66.0, 80.9), (73.0, 87.4)]
+def o2n(t):
+    for (a0, b0), (a1, b1) in zip(ANCH, ANCH[1:]):
+        if t <= a1: return b0 + (b1 - b0) * (t - a0) / (a1 - a0)
+    return ANCH[-1][1] + t - ANCH[-1][0]
+ENDN = 87.6
+import re as _re
+SFX = [_re.sub(r'data-start="([\d.]+)"', lambda m: f'data-start="{o2n(float(m.group(1))):.2f}"', x) for x in SFX]
+H = [x.replace("__ENDN__", str(ENDN)) for x in H]
+WARP = "const master = gsap.timeline({ paused: true });\n" + "\n".join(f"master.fromTo(tl, {{time:{a0}}}, {{time:{a1}, duration:{b1 - b0:.3f}, ease:'none', immediateRender:false}}, {b0});" for (a0, b0), (a1, b1) in zip(ANCH, ANCH[1:])) + f"\nmaster.set({{}}, {{}}, {ENDN});"
 CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#070b12}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;background:linear-gradient(180deg,#05070c 0%,#1d1630 20%,#4a2a3a 28%,#0b0f17 44%)}
 #world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#FFD36B}.g{color:#5CF08A}
 .st{position:absolute;left:50px;right:50px;text-align:center;opacity:0}.st .bx{display:inline-block;padding:12px 26px 14px;border-radius:22px;background:rgba(6,8,12,.64);font:900 60px/1.12 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000}
 #face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(70% 50% at 50% 40%,#2b3446,#0b0d12);opacity:0}
 #face div{border:4px dashed rgba(255,255,255,.35);border-radius:30px;padding:60px 80px;text-align:center;font-family:Inter}#face b{display:block;font-size:72px;color:#fff;letter-spacing:.06em}#face i{display:block;font-style:normal;font-size:34px;color:#9fb0c4}
-#kt{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0;font-family:Inter;text-shadow:0 6px 0 #000,0 0 30px rgba(0,0,0,.8)}#kt i{display:block;font-style:normal;font:800 34px "JetBrains Mono",monospace;letter-spacing:.3em;color:#FFD36B}#kt b{display:block;font-weight:900;font-size:120px;line-height:.95;color:#5CF08A}
+#kt{position:absolute;left:0;right:0;top:200px;text-align:center;opacity:0;font-family:Inter;text-shadow:0 6px 0 #000,0 0 30px rgba(0,0,0,.8)}#kt i{display:block;font-style:normal;font:800 34px "JetBrains Mono",monospace;letter-spacing:.3em;color:#FFD36B}#kt b{display:block;font-weight:900;font-size:120px;line-height:.95;color:#5CF08A}
 #rtag{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#rtag b{display:inline-block;padding:8px 24px;border-radius:16px;background:#FFD36B;font-weight:900;font-size:60px;color:#1a1200;box-shadow:0 0 30px rgba(255,200,80,.6)}#rtag i{display:table;margin:10px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:700 26px \"JetBrains Mono\",monospace;font-style:normal;color:#fff}\n#rlab{position:absolute;left:0;top:0;transform:translate(0,-50%);opacity:0;white-space:nowrap;padding:8px 18px;border-radius:14px;background:#FFD36B;box-shadow:0 0 30px rgba(255,200,80,.7);font-family:Inter}#rlab b{display:block;font-weight:900;font-size:40px;color:#1a1200}#rlab i{display:block;font:800 22px "JetBrains Mono",monospace;font-style:normal;color:#5a3d00}\n.l3{position:absolute;left:0;top:0;transform:translate(-50%,-100%);opacity:0;white-space:nowrap;padding:6px 14px;border-radius:12px;background:rgba(6,8,12,.82);border:2px solid #FFD98A;font:900 28px Inter;color:#FFD98A}\n#dtag,#dtag2,#today{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#dtag b,#dtag2 b,#today b{display:inline-block;padding:8px 26px;border-radius:18px;background:rgba(6,8,12,.7);font-weight:900;font-size:72px;color:#FFD98A;text-shadow:0 0 24px rgba(255,194,74,.7)}
 #dtag i,#dtag2 i,#today i{display:table;margin:10px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:700 26px "JetBrains Mono",monospace;font-style:normal;color:#fff}#today b{color:#fff;text-shadow:none}
 .lab{position:absolute;left:0;right:0;top:850px;text-align:center;opacity:0;font-family:Inter}.lab b{display:inline-block;padding:10px 24px;border-radius:16px;background:#5CF08A;font-weight:900;font-size:50px;color:#06210f}.lab i{display:table;margin:8px auto 0;padding:5px 14px;border-radius:10px;background:rgba(6,8,12,.8);font:700 24px "JetBrains Mono",monospace;font-style:normal;color:#fff}
@@ -224,14 +233,15 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #credit{position:absolute;left:40px;right:40px;bottom:90px;text-align:center;font:500 19px "JetBrains Mono",monospace;color:rgba(255,255,255,.65);text-shadow:0 1px 3px #000}"""
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script><style>{CSS}</style></head><body>
-<div id="root" data-composition-id="main" data-start="0" data-duration="{END}" data-width="1080" data-height="1920" data-fps="30">
+<div id="root" data-composition-id="main" data-start="0" data-duration="{ENDN}" data-width="1080" data-height="1920" data-fps="30">
 <svg id="world" viewBox="{vb(KC, 520)}" preserveAspectRatio="xMidYMid slice">{"".join(S)}</svg>\n<canvas id="gl" width="1080" height="1920" style="position:absolute;inset:0;width:1080px;height:1920px;opacity:0"></canvas><div id="l3"></div>
 {"".join(H)}
-<audio id="music" class="clip" src="assets/music_tune.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.55" data-fade-in="0.5" data-fade-out="2.5"></audio>
+<audio id="music" class="clip" src="assets/music_tune.mp3" data-start="0" data-duration="{ENDN}" data-track-index="10" data-volume="0.13" data-fade-in="0.5" data-fade-out="2.5"></audio>
 {"".join(SFX)}
 </div><script>
 const tl = gsap.timeline({{ paused: true }});
 {chr(10).join(J)}
-window.__timelines = window.__timelines || {{}}; window.__timelines["main"] = tl;
-</script>__JS3__</body></html>""".replace("__JS3__", open("js3.js").read().replace("__D3__", json.dumps(D3))))
+{WARP}
+window.__timelines = window.__timelines || {{}}; window.__timelines["main"] = master;
+</script>__JS3__</body></html>""".replace("__JS3__", open("js3.js").read().replace("__D3__", json.dumps(D3)).replace("__ANCH__", json.dumps(ANCH))))
 print("ok", END, len(ROAD))

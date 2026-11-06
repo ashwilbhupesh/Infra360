@@ -50,8 +50,11 @@ function rise(t, k) {
   else { const a = cl((t - 48.0 - k * .025) / .55); e = 1 - Math.pow(1 - a, 3); }
   return e;
 }
+const ANCH = __ANCH__;
+function n2o(t){ for (let i = 0; i < ANCH.length - 1; i++) { const [a0,b0] = ANCH[i], [a1,b1] = ANCH[i+1]; if (t <= b1) return a0 + (a1 - a0) * (t - b0) / (b1 - b0); } return t; }
 function renderAt(t) {
   if (!ok) return;
+  t = n2o(t);
   if (!((t > 1.7 && t < 9.9) || (t > 47.3 && t < 59.8))) { document.querySelectorAll('#l3 > *').forEach(d => d.style.opacity = 0); return; }
   const kc = new THREE.Vector3(wx(D.kc), 0, wz(D.kc));
   const p = t < 20 ? cl((t - 1.9) / 3.1) : 1, ps = t < 20 ? cl((t - 4.6) / .6) : 1;
