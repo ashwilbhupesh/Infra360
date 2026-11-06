@@ -126,6 +126,8 @@ pa = np.array(PINK); PCEN = (float(pa[:, 0].mean()), float(pa[:, 1].mean()) + 25
 END = 53.6
 def scap(i, html, t, until, top=1330): story(i, html, t, until); J.append(f'tl.set("#{i}", {{top:{top}}}, 0);')
 # ---- 0 · hook: 1 km ring around a station, then 36 pins rain over Jaipur
+J.append('tl.set("#credit", {opacity:0}, 0); tl.to("#credit", {opacity:1, duration:.3}, 1.2);')
+J.append('tl.set("#avatar", {opacity:1, scale:1}, 0); tl.to("#avatar", {opacity:0, scale:1.08, duration:.3, ease:"power2.in"}, 0.85);')
 # hook: tilted 3D map, a glowing train runs the Orange Line, the 1 km corridor lights up behind it
 TA, TB = 0.35, 6.0
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb((CALL[0], CALL[1] + 40), WALL * 0.92)}"}}}}, 0);')
@@ -341,8 +343,8 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><met
 <script src="assets/gsap.min.js"></script><style>{FONTS}{CSS}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{END}" data-width="1080" data-height="1920" data-fps="30">
 <svg id="world" viewBox="{vb(CALL, WALL * 1.25)}" preserveAspectRatio="xMidYMid slice">{"".join(S)}</svg>
+<video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="{END}" data-track-index="0" playsinline data-has-audio="true" data-volume="1" style="position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover"></video>
 {"".join(H)}{"".join(H2)}
-<video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="{END}" data-track-index="0" playsinline data-has-audio="true" data-volume="1" style="position:absolute;left:0;top:0;width:2px;height:2px;opacity:0"></video>
 <audio id="music" class="clip" src="assets/music_tune.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.13" data-fade-in="0.3" data-fade-out="2.5"></audio>
 {"".join(SFX)}
 </div><script>
