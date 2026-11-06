@@ -126,19 +126,35 @@ pa = np.array(PINK); PCEN = (float(pa[:, 0].mean()), float(pa[:, 1].mean()) + 25
 END = 53.6
 def scap(i, html, t, until, top=1330): story(i, html, t, until); J.append(f'tl.set("#{i}", {{top:{top}}}, 0);')
 # ---- 0 · hook: 1 km ring around a station, then 36 pins rain over Jaipur
-GN = [p for n, s, p in OS if n == "Gandhi Nagar"][0]
-J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(GN, 420)}"}}}}, 0);')
-S.append(f'<g id="hpin" style="opacity:0"><circle id="hring" cx="{GN[0]:.1f}" cy="{GN[1]:.1f}" r="59" style="fill:#FF8A1F;fill-opacity:.18;stroke:#FFB36B;stroke-width:3;stroke-dasharray:8 6"/>'
-         f'<path d="M{GN[0]:.1f} {GN[1]:.1f} l-14 -30 a16 16 0 1 1 28 0 z" style="fill:#FF2D55;stroke:#fff;stroke-width:3"/>'
-         f'<text x="{GN[0] + 64:.1f}" y="{GN[1] + 6:.1f}" style="font:900 22px Inter;fill:#fff;paint-order:stroke;stroke:#000;stroke-width:5px">1 km</text></g>')
-J.append('tl.fromTo("#hpin", {opacity:0, y:-120}, {opacity:1, y:0, duration:.5, ease:"bounce.out"}, 0.5);')
-J.append(f'tl.fromTo("#hring", {{attr:{{r:4}}}}, {{attr:{{r:59}}, duration:1.0, ease:"power2.out"}}, 0.9);')
-J.append(f'tl.to("#hring", {{fillOpacity:.32, duration:.5, yoyo:true, repeat:5}}, 2.0); tl.to("#hpin", {{opacity:0, duration:.3}}, 5.3);')
+# hook: tilted 3D map, a glowing train runs the Orange Line, the 1 km corridor lights up behind it
+TA, TB = 0.35, 6.0
+J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb((CALL[0], CALL[1] + 40), WALL * 0.92)}"}}}}, 0);')
+J.append('tl.set("#world", {transformPerspective:1400, transformOrigin:"50% 72%", rotationX:44, scale:1.9}, 0);')
+J.append('tl.to("#world", {rotationX:0, scale:1, duration:.9, ease:"power2.inOut"}, 8.0);')
+J.append(f'tl.fromTo("#world", {{attr:{{viewBox:"{vb((CALL[0] + 20, CALL[1] + 140), WALL * 1.0)}"}}}}, {{attr:{{viewBox:"{vb((CALL[0] + 20, CALL[1] - 40), WALL * 1.12)}"}}, duration:{TB - TA:.2f}, ease:"none"}}, {TA:.2f});')
+S.append(f'<path id="hkcor" pathLength="1" d="{pd(ORANGE)}" style="fill:none;stroke:#FF8A1F;stroke-opacity:.20;stroke-width:118;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
+S.append(f'<path id="hkedge" pathLength="1" d="{pd(ORANGE)}" style="fill:none;stroke:#FFB36B;stroke-opacity:.45;stroke-width:122;stroke-dasharray:1;stroke-dashoffset:1;mask:url(#hkm)"/>')
+S.append(f'<path id="hkline" pathLength="1" d="{pd(ORANGE)}" style="fill:none;stroke:#FF8A1F;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 6px #FF8A1F)"/>')
+for w, op, ln in ((34, .18, .07), (20, .35, .045), (11, .9, .022), (6, 1, .012)):
+    S.append(f'<path class="hktr" pathLength="1" d="{pd(ORANGE)}" style="fill:none;stroke:#FFF4E0;stroke-opacity:{op};stroke-width:{w};stroke-linecap:round;stroke-dasharray:{ln} {2 - ln};stroke-dashoffset:{ln};filter:drop-shadow(0 0 10px #FFB36B)"/>')
+J.append(f'tl.to(["#hkcor","#hkline"], {{strokeDashoffset:0, duration:{TB - TA:.2f}, ease:"none"}}, {TA:.2f});')
+J.append(f'tl.fromTo(".hktr", {{strokeDashoffset:(i,el)=>parseFloat(el.style.strokeDasharray)}}, {{strokeDashoffset:(i,el)=>parseFloat(el.style.strokeDasharray)-1, duration:{TB - TA:.2f}, ease:"none"}}, {TA:.2f});')
+J.append(f'tl.to(".hktr", {{opacity:0, duration:.3}}, {TB:.2f});')
+J.append('tl.to("#hkcor", {strokeOpacity:.32, duration:.5, yoyo:true, repeat:3}, 6.1); tl.to(["#hkcor","#hkline"], {opacity:0, duration:.4}, 8.4);')
+AREAS = [("SANGANER", "Sanganer", 1), ("DURGAPURA", "Durgapura", 1), ("GANDHI NAGAR", "Gandhi Nagar", 1),
+         ("TONK PHATAK", "Tonk Phatak", -1), ("RAMBAGH", "Rambagh Circle", 1), ("C-SCHEME", "Ashok Marg", 1), ("BANI PARK", "Collectorate", -1), ("SIKAR ROAD", "Ambabari", -1)]
+SNP = {n: (sv, p) for n, sv, p in OS}
+for k, (lab, st, side) in enumerate(AREAS):
+    sv, p = SNP[st]; t = TA + (TB - TA) * sv / OC[-1]; x = p[0] + side * 70
+    S.append(f'<g id="ha{k}" style="opacity:0"><circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="9" style="fill:#fff;stroke:#FF8A1F;stroke-width:4"/>'
+             f'<text x="{x:.1f}" y="{p[1] + 9:.1f}" text-anchor="{"start" if side > 0 else "end"}" style="font:900 30px Inter,Arial,sans-serif;letter-spacing:.06em;fill:#fff;paint-order:stroke;stroke:#05080d;stroke-width:7px;filter:drop-shadow(0 0 8px #FF8A1F)">{lab}</text></g>')
+    J.append(f'tl.fromTo("#ha{k}", {{opacity:0, scale:.5, transformOrigin:"{p[0]:.1f}px {p[1]:.1f}px"}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2.5)"}}, {t + .05:.2f}); tl.to("#ha{k}", {{opacity:0, duration:.3}}, 8.3);')
+    sfx("click-soft", t, .18)
 for k, (nm, sv, p) in enumerate(OS):
-    S.append(f'<g id="rp{k}" style="opacity:0"><path d="M{p[0]:.1f} {p[1]:.1f} l-9 -20 a11 11 0 1 1 18 0 z" style="fill:#FF8A1F;stroke:#fff;stroke-width:2.5"/></g>')
-    J.append(f'tl.fromTo("#rp{k}", {{opacity:0, y:-160}}, {{opacity:1, y:0, duration:.45, ease:"bounce.out"}}, {6.1 + .07 * k:.2f}); tl.to("#rp{k}", {{opacity:0, duration:.3}}, 8.6);')
-    if k % 3 == 0: sfx("pop", 6.1 + .07 * k, .18)
-cam(5.3, CALL, WALL, 1.2, "power2.inOut")
+    S.append(f'<circle id="hs{k}" cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="6" style="fill:#FFF4E0;stroke:#FF8A1F;stroke-width:3;opacity:0;filter:drop-shadow(0 0 6px #FFB36B)"/>')
+    J.append(f'tl.fromTo("#hs{k}", {{opacity:0, attr:{{r:16}}}}, {{opacity:1, attr:{{r:6}}, duration:.3, ease:"back.out(2)"}}, {6.15 + .06 * k:.2f}); tl.to("#hs{k}", {{opacity:0, duration:.3}}, 8.4);')
+H.append('<div id="hk36"><b>36</b><i>NEW STATIONS</i></div>')
+J.append('tl.fromTo("#hk36", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.4, ease:"back.out(2.2)"}, 6.15); tl.to("#hk36", {opacity:0, duration:.3}, 8.6);')
 H.append('<div id="ss"><span><svg viewBox="0 0 24 24" width="40" height="40"><path d="M6 3h12v18l-6-4-6 4z" style="fill:#FFE03A"/></svg>SAVE this map</span>'
          '<span><svg viewBox="0 0 24 24" width="40" height="40"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2.4;stroke-linejoin:round"/></svg>SHARE it</span></div>')
 J.append('tl.fromTo("#ss", {opacity:0, y:-30}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 0.3); tl.to("#ss span", {scale:1.08, duration:.3, yoyo:true, repeat:3, stagger:.15}, 0.7); tl.to("#ss", {opacity:0, duration:.3}, 5.2);')
@@ -146,7 +162,7 @@ scap("h0", f"Metro station ke {Y}1 km ke andar{E} ki zameen", 0.6, 3.0)
 scap("h1", f"aksar {Y}sabse pehle mehngi{E} hoti hai", 3.0, 5.3)
 scap("h2", f"Jaipur mein {O_}36 naye stations{E2} aa rahe hain", 5.36, 7.6)
 scap("h3", f"Dekhiye {Y}kahan{E}", 7.6, 8.75)
-sfx("impact-bass-1", 0.5, .35); sfx("whoosh", 5.3, .3)
+sfx("impact-bass-1", 0.35, .35); sfx("riser", 4.8, .25)
 # ---- 8.75 · India map: Jaipur, 6th city with a metro
 def ip(lat, lon, GX=40, GY=300, GW=1000): return (GX + (lon - 67.0) / 32.0 * GW, GY + (37.5 - lat) / 32.5 * 1293 * GW / 1200)
 CITIES = [("Kolkata", 22.57, 88.36, "1984", 1), ("Delhi", 28.61, 77.21, "2002", 1), ("Bengaluru", 12.97, 77.59, "2011", 1), ("Gurugram", 28.46, 77.03, "2013", -1), ("Mumbai", 19.08, 72.88, "2014", 1), ("Jaipur", 26.92, 75.82, "2015", 1)]
@@ -284,7 +300,7 @@ H2 = ['<div id="cover"><svg width="1080" height="1920" style="position:absolute;
       f'{tags}<div id="cvpill">₹13,037 cr · 41 km · ~36 stations</div></div>']
 J.append('tl.set("#cover", {opacity:0}, 0);')
 
-CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#070b12}
+CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#070b12}#root{background:linear-gradient(180deg,#05070c 0%,#1a1410 22%,#3a2410 30%,#0b0f17 46%)}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .y{color:#FFE03A}.o{color:#FF9B3D}
 .st{position:absolute;left:50px;right:50px;top:1330px;text-align:center;opacity:0;font:900 70px/1.08 Inter,Arial,sans-serif;color:#fff;text-shadow:0 4px 0 #000,0 0 20px rgba(0,0,0,.95),0 0 4px #000}
@@ -307,6 +323,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #share svg{background:#FF8A1F;border-radius:50%;padding:16px;box-shadow:0 0 0 12px rgba(255,138,31,.3)}
 #brand{position:absolute;left:0;right:0;top:150px;text-align:center;font:700 24px "JetBrains Mono",monospace;letter-spacing:.2em;color:rgba(255,255,255,.85);text-shadow:0 2px 6px #000}
 #credit{position:absolute;left:40px;right:40px;bottom:90px;text-align:center;font:500 19px "JetBrains Mono",monospace;color:rgba(255,255,255,.65);text-shadow:0 1px 3px #000}
+#hk36{position:absolute;left:0;right:0;top:400px;text-align:center;opacity:0;font-family:Inter}#hk36 b{display:block;font-weight:900;font-size:170px;line-height:1;color:#FF9B3D;text-shadow:0 6px 0 #000,0 0 30px rgba(255,138,31,.6)}#hk36 i{display:inline-block;margin-top:6px;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:800 32px "JetBrains Mono",monospace;font-style:normal;letter-spacing:.16em;color:#fff}
 #india{position:absolute;inset:0;opacity:0;background:radial-gradient(120% 80% at 50% 45%,#16202e,#070b12)}
 .ic{position:absolute;opacity:0}.ic i{position:absolute;left:-13px;top:-13px;width:26px;height:26px;border-radius:50%;background:#FF5FA2;border:4px solid #fff;box-shadow:0 0 18px #FF5FA2}
 .ic b{position:absolute;white-space:nowrap;padding:6px 14px;border-radius:12px;background:rgba(6,8,12,.86);font:900 32px Inter;color:#fff}.ic b span{color:#FF9FC6}
