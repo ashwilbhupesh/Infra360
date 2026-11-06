@@ -66,7 +66,7 @@ SPUR = [ROADX[1], (KC[0] - 20, KC[1] - 30), KC]
 D3 = {"road": [list(p) for p in ROAD[::3] + ROADX[:2]], "spur": [list(p) for p in SPUR], "kc": list(KC), "blocks": BL}
 # ---------- 0–2.2 · face placeholder (Ashwil's face goes here) ----------
 H.append('<video id="avatar" class="clip" src="assets/avatar.mp4" data-start="0" data-duration="__ENDN__" data-track-index="0" playsinline data-has-audio="true" data-volume="1" style="position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover"></video>')
-J.append('tl.set("#avatar", {opacity:1}, 0); tl.to("#avatar", {opacity:0, scale:1.06, duration:.3}, 1.8);')
+J.append('tl.set("#avatar", {opacity:1}, 0); tl.to("#avatar", {opacity:0, scale:1.06, duration:.25}, 0.45);')
 H.append('<div id="kt"><i>DIGGI MALPURA ROAD</i><b>KNOWLEDGE<br/>CITY</b></div>')
 J.append('tl.fromTo("#kt", {opacity:0, scale:1.3}, {opacity:1, scale:1, duration:.45, ease:"back.out(2)"}, 0.25); tl.to("#kt", {opacity:0, duration:.3}, 2.1);')
 cap("c0", f"{Y}Diggi Malpura Road{E} pe aa raha hai — {G}Knowledge City{E2}", 0.25, 2.0, top=1450)
@@ -75,7 +75,7 @@ sfx("impact-bass-1", .25, .35)
 
 # ---------- 1.9–9.6 · 3D: fly down Diggi Malpura Road, a vertical city rises ----------
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(((SANG[0] + KC[0]) / 2, (SANG[1] + KC[1]) / 2), 900)}"}}}}, 0);')
-J.append('tl.set("#gl", {opacity:0}, 0); tl.to("#gl", {opacity:1, duration:.35}, 1.85); tl.to("#gl", {opacity:0, duration:.5}, 9.3);')
+J.append('tl.set("#gl", {opacity:0}, 0); tl.to("#gl", {opacity:1, duration:.2}, 0.45); tl.to("#gl", {opacity:0, duration:.5}, 9.3);')
 H.append('<div id="dtag"><b>10 SAAL BAAD?</b><i>imagination · not an official plan</i></div>'); show("dtag", 5.1, 7.6)
 
 cap("c1", f"Socho… 10 saal baad — {Y}university, medical college, IT institute{E}…", 5.0, 7.6)

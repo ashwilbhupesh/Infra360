@@ -55,9 +55,9 @@ function n2o(t){ for (let i = 0; i < ANCH.length - 1; i++) { const [a0,b0] = ANC
 function renderAt(t) {
   if (!ok) return;
   t = n2o(t);
-  if (!((t > 1.7 && t < 9.9) || (t > 47.3 && t < 59.8))) { document.querySelectorAll('#l3 > *').forEach(d => d.style.opacity = 0); return; }
+  if (!((t > 0.4 && t < 9.9) || (t > 47.3 && t < 59.8))) { document.querySelectorAll('#l3 > *').forEach(d => d.style.opacity = 0); return; }
   const kc = new THREE.Vector3(wx(D.kc), 0, wz(D.kc));
-  const p = t < 20 ? cl((t - 1.9) / 3.1) : 1, ps = t < 20 ? cl((t - 4.6) / .6) : 1;
+  const p = t < 20 ? cl((t - 0.6) / 4.4) : 1, ps = t < 20 ? cl((t - 4.6) / .6) : 1;
   road.geometry.setDrawRange(0, Math.floor(road.userData.n * sm(p) / 6) * 6);
   spur.geometry.setDrawRange(0, Math.floor(spur.userData.n * ps / 6) * 6);
   const rc = road.geometry.parameters.path, scv = spur.geometry.parameters.path;
@@ -75,7 +75,7 @@ function renderAt(t) {
     cam.lookAt(target);
   }
   cam.updateMatrixWorld(true);
-  { const rl = document.getElementById('rlab'); v.copy(head.position).setY(14).project(cam); const vis = t > 2.0 && t < 5.3; rl.style.left = ((v.x + 1) / 2 * 1080 + 40).toFixed(1) + 'px'; rl.style.top = ((1 - v.y) / 2 * 1920).toFixed(1) + 'px'; rl.style.opacity = vis ? 1 : 0; }
+  { const rl = document.getElementById('rlab'); v.copy(head.position).setY(14).project(cam); const vis = t > 0.7 && t < 5.3; rl.style.left = ((v.x + 1) / 2 * 1080 + 40).toFixed(1) + 'px'; rl.style.top = ((1 - v.y) / 2 * 1920).toFixed(1) + 'px'; rl.style.opacity = vis ? 1 : 0; }
   B.forEach(b => { const e = rise(t, b.k); b.m.scale.y = Math.max(.001, b.h * e); b.m.visible = e > .002; });
   LB.forEach(l => { v.set(l.m.position.x, l.m.scale.y + 6, l.m.position.z).project(cam);
     const vis = l.m.scale.y > l.h * .8 && v.z < 1 && Math.abs(v.x) < .78 && v.y < .62 && v.y > -.35; l.d.style.left = ((v.x + 1) / 2 * 1080).toFixed(1) + "px"; l.d.style.top = ((1 - v.y) / 2 * 1920).toFixed(1) + "px"; l.d.style.opacity = vis ? 1 : 0; });
