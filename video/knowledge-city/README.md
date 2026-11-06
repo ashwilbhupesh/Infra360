@@ -17,6 +17,13 @@ After the face slot (0–2 s), a Three.js scene shows a camera flying down Diggi
 | 59.5 | Reality check: early stage; check official map, approval, patta |
 | 66 | Call to action plus save and send |
 
+## Revision 3
+- A "DIGGI MALPURA ROAD · SH-12 →" label rides the light along the road.
+- Facility photos (supplied, labelled "Representative image"; JECC for the convention centre).
+- India comparison photos: Greater Noida (Commons, Derivator2017, CC BY 4.0), plus supplied photos for Sonipat, Mohali and Kota.
+- **Official proof** at 13.9–19.3 s: the JDA layout "Knowledge City South – Chittora" (supplied) and Dainik Bhaskar, Jaipur, 23 Jan 2026 (supplied). The Bhaskar report says JDA handed possession of the Knowledge City land at Chittora to **RSRDC**, on roughly 1,000 hectare, with a focus on universities, R&D, startups and an industrial/IT park. This replaces the earlier "1,800 bigha" and "RIICO" from blogs.
+- **Not used:** the Vardaan Empire promo map. It's a private developer graphic showing IndianOil and Piramal Pharma plots, with no official source confirming those companies.
+
 ## Accuracy
 - **Location:** Chittora (Phagi tehsil) is approximate, from Nominatim. The scheme square (~2.1 km, about 1,800 bigha) is illustrative.
 - **Plan list and area:** from property sites citing JDA scheme documents, so the screen says "as per reports".

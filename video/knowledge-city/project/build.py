@@ -77,7 +77,7 @@ sfx("impact-bass-1", .25, .35)
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(((SANG[0] + KC[0]) / 2, (SANG[1] + KC[1]) / 2), 900)}"}}}}, 0);')
 J.append('tl.set("#gl", {opacity:0}, 0); tl.to("#gl", {opacity:1, duration:.35}, 1.85); tl.to("#gl", {opacity:0, duration:.5}, 9.3);')
 H.append('<div id="dtag"><b>10 SAAL BAAD?</b><i>imagination · not an official plan</i></div>'); show("dtag", 5.1, 7.6)
-H.append('<div id="rtag"><b>DIGGI MALPURA ROAD</b><i>SH-12 · Sanganer → Phagi</i></div>'); show("rtag", 2.1, 5.0)
+
 cap("c1", f"Socho… 10 saal baad — {Y}university, medical college, IT institute{E}…", 5.0, 7.6)
 H.append('<div id="today"><b>AAJ</b><i>khaali zameen</i></div>'); show("today", 7.8, 9.6, .25)
 cap("c2", f"…aur aaj? {Y}Khaali zameen.{E}", 7.7, 9.6)
@@ -93,21 +93,42 @@ J.append('tl.fromTo("#pin", {opacity:0, attr:{r:30}}, {opacity:1, attr:{r:9}, du
 J.append('tl.fromTo("#pulse", {opacity:.9, attr:{r:9}}, {opacity:0, attr:{r:60}, duration:1.2, repeat:12, ease:"power1.out"}, 12.8);')
 H.append('<div class="lab" id="kclab"><b>KNOWLEDGE CITY</b><i>Chittora · approx. location</i></div>')
 cam(13.6, (KC[0], KC[1] - 10), 520, 1.6)
-show("kclab", 13.0, 16.3, .3)
+show("kclab", 13.0, 13.9, .3)
 cap("c3", f"Yeh hai Knowledge City — {Y}Diggi Malpura Road{E} pe, Chittora ke paas", 9.7, 13.6)
-cap("c4", f"JDA ki nayi scheme. {Y}Aaj yahan kuch nahi.{E}", 13.6, 16.0)
+cap("c4", f"JDA ki official scheme — {Y}Knowledge City South{E}", 13.6, 16.0)
 sfx("whoosh-short", 9.6, .25); sfx("ping", 12.6, .3)
 
 # ---------- 16–27.4 · the plan (as per reports) ----------
 J.append('tl.fromTo("#area", {opacity:0, scale:.6, transformOrigin:"' + f'{KC[0]:.1f}px {KC[1]:.1f}px' + '"}, {opacity:1, scale:1, duration:.6, ease:"back.out(1.6)"}, 16.2);')
 PLAN = ["UNIVERSITY", "IT INSTITUTE", "TECHNICAL INSTITUTES", "MEDICAL COLLEGE &amp; HOSPITAL", "INTERNATIONAL LIBRARY", "CONVENTION CENTRE"]
-H.append('<div id="plan"><b>THE PLAN · AS PER REPORTS</b>' + "".join(f'<div class="pi" id="pi{k}"><s>{k + 1}</s>{p}</div>' for k, p in enumerate(PLAN)) + '<em>~1,800 bigha</em></div>')
-show("plan", 16.6, 27.4)
+H.append('<div id="plan"><b>THE PLAN · AS PER JDA LAYOUT &amp; REPORTS</b>' + "".join(f'<div class="pi" id="pi{k}"><s>{k + 1}</s>{p}</div>' for k, p in enumerate(PLAN)) + '<em>~1,000 hectare · Dainik Bhaskar</em></div>')
+show("plan", 19.3, 27.4)
 for k in range(len(PLAN)):
     t = 19.4 + 1.25 * k
     J.append(f'tl.fromTo("#pi{k}", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.35, ease:"back.out(2)"}}, {t:.2f});'); sfx("pop", t, .22)
 J.append('tl.from("#plan em", {opacity:0, scale:.5, duration:.4, ease:"back.out(2)"}, 26.6);')
-cap("c5", f"Aur plan bada hai — {Y}reports ke mutabik{E} yahan aayenge…", 16.1, 19.3)
+
+# photos for each planned facility (representative images)
+PIMG = [("p_univ.jpg", "University", "Representative image"), ("p_it.jpg", "IT institute", "Representative image"), ("p_tech.jpg", "Technical institutes", "Representative image"),
+        ("p_med.jpg", "Medical college &amp; hospital", "Representative image"), ("p_lib.jpg", "International library", "Representative image"), ("p_jecc.jpg", "Convention centre", "JECC, Jaipur · representative")]
+for k, (src, nm, cr) in enumerate(PIMG):
+    t = 19.4 + 1.25 * k
+    H.append(f'<div class="pim" id="pim{k}"><img src="assets/img/{src}"/><div><b>{nm}</b><i>{cr}</i></div></div>')
+    J.append(f'tl.fromTo("#pim{k}", {{opacity:0, scale:.85, y:30}}, {{opacity:1, scale:1, y:0, duration:.35, ease:"back.out(1.8)"}}, {t:.2f}); tl.to("#pim{k}", {{opacity:0, duration:.2}}, {(t + 1.25 if k < 5 else 27.3):.2f});')
+# 3D-city section: quick photo flashes as the towers rise
+for k, (src, nm, t0, t1) in enumerate([("p_univ.jpg", "University", 5.2, 6.0), ("p_med.jpg", "Medical college", 6.0, 6.8), ("p_it.jpg", "IT institute", 6.8, 7.6)]):
+    H.append(f'<div class="pfl" id="pfl{k}"><img src="assets/img/{src}"/><b>{nm}</b><i>Representative image</i></div>')
+    J.append(f'tl.fromTo("#pfl{k}", {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.25}}, {t0:.2f}); tl.to("#pfl{k}", {{opacity:0, duration:.2}}, {t1:.2f});')
+
+# official proof: JDA layout + Dainik Bhaskar (23 Jan 2026)
+H.append('<div class="doc" id="djda"><img src="assets/img/jda_layout.jpg"/><i>JDA · Knowledge City South – Chittora · layout plan (supplied)</i></div>')
+J.append('tl.fromTo("#djda", {opacity:0, scale:.8, rotation:-3}, {opacity:1, scale:1, rotation:0, duration:.45, ease:"back.out(1.6)"}, 13.9); tl.fromTo("#djda img", {scale:1}, {scale:1.25, x:-30, y:20, duration:2.0, ease:"power1.inOut"}, 14.2); tl.to("#djda", {opacity:0, duration:.25}, 16.0);')
+H.append('<div class="doc tall" id="dbh"><img src="assets/img/bhaskar.jpg"/><i>Dainik Bhaskar, Jaipur · 23 January 2026</i></div>')
+J.append('tl.fromTo("#dbh", {opacity:0, scale:.8, rotation:3}, {opacity:1, scale:1, rotation:0, duration:.45, ease:"back.out(1.6)"}, 16.1); tl.fromTo("#dbh img", {scale:1, y:0}, {scale:1.3, y:120, x:0, duration:2.4, ease:"power1.inOut"}, 16.6); tl.to("#dbh", {opacity:0, duration:.25}, 19.3);')
+H.append('<div id="stamp">OFFICIAL</div>')
+J.append('tl.fromTo("#stamp", {opacity:0, scale:2.2, rotation:-18}, {opacity:1, scale:1, rotation:-12, duration:.3, ease:"power3.in"}, 14.6); tl.to("#stamp", {opacity:0, duration:.2}, 19.2);')
+sfx("pop", 13.9, .3); sfx("impact-bass-1", 14.6, .3); sfx("whoosh-short", 16.1, .3)
+cap("c5", f"Jan 2026: JDA ne kabza {Y}RSRDC ko saunpa{E} — project ko mili gati", 16.1, 19.3)
 cap("c6", f"University. IT institute. Medical college. {Y}International library.{E}", 19.3, 27.4)
 
 # ---------- 27.4–47.6 · it has happened before ----------
@@ -122,13 +143,15 @@ ih += f'<div class="ic jp" id="icj" style="left:{jx:.0f}px;top:{jy:.0f}px"><i></
 ih += '<div id="inote">India map: Milenioscuro, CC BY 4.0</div></div>'
 H.append(ih)
 show("india", 27.4, 47.8, .4)
-STORY = [("Greater Noida — Knowledge Park", "Khet the. Aaj dozens of colleges &amp; universities, lakhon students — hostels, PG, flats.", 30.0, 34.5),
-         ("Sonipat — Education City", "Ashoka, OP Jindal jaisi universities — chhota sheher national map pe.", 34.5, 39.0),
-         ("Mohali — Knowledge City", "IISER jaise research institutes — aas-paas naye sectors.", 39.0, 43.5),
-         ("Kota — Rajasthan", "Coaching ne poore sheher ki economy badal di.", 43.5, 47.6)]
-for k, (t1, t2, a, b) in enumerate(STORY):
+STORY = [("Greater Noida — Knowledge Park", "Khet the. Aaj dozens of colleges &amp; universities, lakhon students — hostels, PG, flats.", 30.0, 34.5, "c_gn.jpg", "Knowledge Park III · Derivator2017, CC BY 4.0 (Wikimedia Commons)"),
+         ("Sonipat — Education City", "Ashoka, OP Jindal jaisi universities — chhota sheher national map pe.", 34.5, 39.0, "u_so.jpg", "Sonipat · image supplied"),
+         ("Mohali — Knowledge City", "IISER jaise research institutes — aas-paas naye sectors.", 39.0, 43.5, "u_mo.jpg", "IISER Mohali · image supplied"),
+         ("Kota — Rajasthan", "Coaching ne poore sheher ki economy badal di.", 43.5, 47.6, "u_ko.jpg", "Kota · image supplied")]
+for k, (t1, t2, a, b, img, cr) in enumerate(STORY):
     J.append(f'tl.fromTo("#ic{k}", {{opacity:0, scale:.3}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(3)"}}, {a - .1:.2f}); tl.to("#ic{k} i", {{scale:1.5, duration:.3, yoyo:true, repeat:3}}, {a + .2:.2f});')
     H.append(f'<div class="card" id="cd{k}"><b>{t1}</b><p>{t2}</p></div>'); show(f"cd{k}", a, b, .25)
+    H.append(f'<div class="cimg" id="ci{k}"><img src="assets/img/{img}"/><i>{cr}</i></div>')
+    J.append(f'tl.fromTo("#ci{k}", {{opacity:0, scale:.85, y:30}}, {{opacity:1, scale:1, y:0, duration:.4, ease:"back.out(1.6)"}}, {a + .1:.2f}); tl.to("#ci{k}", {{opacity:0, duration:.25}}, {b - .1:.2f});')
     sfx("click-soft", a, .25)
 J.append('tl.fromTo("#icj", {opacity:0, scale:.3}, {opacity:1, scale:1, duration:.4, ease:"back.out(3)"}, 45.6); tl.to("#icj i", {scale:1.6, duration:.35, yoyo:true, repeat:3}, 45.9);')
 cap("c7", f"Yeh idea naya nahi hai — {Y}dekho kya hua{E}", 27.5, 30.0)
@@ -174,9 +197,15 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(70% 50% at 50% 40%,#2b3446,#0b0d12);opacity:0}
 #face div{border:4px dashed rgba(255,255,255,.35);border-radius:30px;padding:60px 80px;text-align:center;font-family:Inter}#face b{display:block;font-size:72px;color:#fff;letter-spacing:.06em}#face i{display:block;font-style:normal;font-size:34px;color:#9fb0c4}
 #kt{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0;font-family:Inter;text-shadow:0 6px 0 #000,0 0 30px rgba(0,0,0,.8)}#kt i{display:block;font-style:normal;font:800 34px "JetBrains Mono",monospace;letter-spacing:.3em;color:#FFD36B}#kt b{display:block;font-weight:900;font-size:120px;line-height:.95;color:#5CF08A}
-#rtag{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#rtag b{display:inline-block;padding:8px 24px;border-radius:16px;background:#FFD36B;font-weight:900;font-size:60px;color:#1a1200;box-shadow:0 0 30px rgba(255,200,80,.6)}#rtag i{display:table;margin:10px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:700 26px \"JetBrains Mono\",monospace;font-style:normal;color:#fff}\n.l3{position:absolute;left:0;top:0;transform:translate(-50%,-100%);opacity:0;white-space:nowrap;padding:6px 14px;border-radius:12px;background:rgba(6,8,12,.82);border:2px solid #FFD98A;font:900 28px Inter;color:#FFD98A}\n#dtag,#dtag2,#today{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#dtag b,#dtag2 b,#today b{display:inline-block;padding:8px 26px;border-radius:18px;background:rgba(6,8,12,.7);font-weight:900;font-size:72px;color:#FFD98A;text-shadow:0 0 24px rgba(255,194,74,.7)}
+#rtag{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#rtag b{display:inline-block;padding:8px 24px;border-radius:16px;background:#FFD36B;font-weight:900;font-size:60px;color:#1a1200;box-shadow:0 0 30px rgba(255,200,80,.6)}#rtag i{display:table;margin:10px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:700 26px \"JetBrains Mono\",monospace;font-style:normal;color:#fff}\n#rlab{position:absolute;left:0;top:0;transform:translate(0,-50%);opacity:0;white-space:nowrap;padding:8px 18px;border-radius:14px;background:#FFD36B;box-shadow:0 0 30px rgba(255,200,80,.7);font-family:Inter}#rlab b{display:block;font-weight:900;font-size:40px;color:#1a1200}#rlab i{display:block;font:800 22px "JetBrains Mono",monospace;font-style:normal;color:#5a3d00}\n.l3{position:absolute;left:0;top:0;transform:translate(-50%,-100%);opacity:0;white-space:nowrap;padding:6px 14px;border-radius:12px;background:rgba(6,8,12,.82);border:2px solid #FFD98A;font:900 28px Inter;color:#FFD98A}\n#dtag,#dtag2,#today{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#dtag b,#dtag2 b,#today b{display:inline-block;padding:8px 26px;border-radius:18px;background:rgba(6,8,12,.7);font-weight:900;font-size:72px;color:#FFD98A;text-shadow:0 0 24px rgba(255,194,74,.7)}
 #dtag i,#dtag2 i,#today i{display:table;margin:10px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:700 26px "JetBrains Mono",monospace;font-style:normal;color:#fff}#today b{color:#fff;text-shadow:none}
 .lab{position:absolute;left:0;right:0;top:850px;text-align:center;opacity:0;font-family:Inter}.lab b{display:inline-block;padding:10px 24px;border-radius:16px;background:#5CF08A;font-weight:900;font-size:50px;color:#06210f}.lab i{display:table;margin:8px auto 0;padding:5px 14px;border-radius:10px;background:rgba(6,8,12,.8);font:700 24px "JetBrains Mono",monospace;font-style:normal;color:#fff}
+.pim{position:absolute;left:150px;right:150px;top:820px;height:470px;opacity:0;border-radius:22px;overflow:hidden;border:3px solid #5CF08A;box-shadow:0 20px 50px rgba(0,0,0,.7);background:#111}.pim img{width:100%;height:100%;object-fit:cover}
+.pim div{position:absolute;left:0;right:0;bottom:0;padding:30px 18px 10px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85));font-family:Inter}.pim b{display:block;font-weight:900;font-size:40px;color:#fff}.pim i{display:block;font-style:normal;font-size:20px;color:#ddd}
+.pfl{position:absolute;right:40px;top:470px;width:360px;height:250px;opacity:0;border-radius:18px;overflow:hidden;border:3px solid #FFD98A;box-shadow:0 14px 40px rgba(0,0,0,.7)}.pfl img{width:100%;height:100%;object-fit:cover}.pfl b{position:absolute;left:12px;bottom:26px;font:900 30px Inter;color:#fff;text-shadow:0 2px 6px #000}.pfl i{position:absolute;left:12px;bottom:6px;font:600 16px Inter;font-style:normal;color:#eee;text-shadow:0 2px 4px #000}
+.doc{position:absolute;left:90px;right:90px;top:300px;height:820px;opacity:0;border-radius:18px;overflow:hidden;background:#fff;border:4px solid #FFD36B;box-shadow:0 24px 60px rgba(0,0,0,.75)}.doc img{width:100%;height:100%;object-fit:contain;transform-origin:50% 30%}.doc.tall{left:170px;right:170px;height:900px}
+.doc i{position:absolute;left:0;right:0;bottom:0;padding:10px 14px;background:rgba(6,8,12,.88);font:700 22px Inter;font-style:normal;color:#FFD36B}
+#stamp{position:absolute;right:70px;top:250px;opacity:0;padding:10px 22px;border:6px solid #e5262f;border-radius:14px;font:900 56px Inter;letter-spacing:.08em;color:#e5262f;background:rgba(255,255,255,.85)}
 #plan{position:absolute;left:60px;right:60px;top:250px;opacity:0;padding:24px 28px;border-radius:24px;background:rgba(6,10,14,.86);border:2px solid #5CF08A;font-family:Inter}#plan>b{display:block;font:800 26px "JetBrains Mono",monospace;letter-spacing:.14em;color:#5CF08A;margin-bottom:10px}
 .pi{display:flex;align-items:center;gap:16px;padding:9px 0;font-weight:900;font-size:40px;color:#fff;opacity:0}.pi s{text-decoration:none;display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;border-radius:50%;background:#5CF08A;color:#06210f;font-size:30px}
 #plan em{display:block;margin-top:12px;font-style:normal;font-weight:900;font-size:44px;color:#FFD36B}
@@ -185,7 +214,8 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 .ic b{position:absolute;white-space:nowrap;padding:6px 14px;border-radius:12px;background:rgba(6,8,12,.86);font:900 30px Inter;color:#fff}.ic b span{display:block;font-size:22px;color:#9ff7bd}
 .ic.jp i{width:40px;height:40px;left:-20px;top:-20px;background:#FFD36B;box-shadow:0 0 30px #FFD36B}.ic.jp b{font-size:46px;background:#FFD36B;color:#111}
 #inote{position:absolute;right:50px;top:1640px;font:500 20px "JetBrains Mono",monospace;color:rgba(255,255,255,.7)}
-.card{position:absolute;left:60px;right:60px;top:1130px;opacity:0;padding:20px 26px;border-radius:22px;background:rgba(6,10,14,.9);border-left:10px solid #5CF08A;font-family:Inter}.card b{display:block;font-weight:900;font-size:44px;color:#5CF08A}.card p{margin-top:6px;font-weight:700;font-size:34px;line-height:1.25;color:#fff}
+.cimg{position:absolute;left:110px;right:110px;top:720px;height:410px;opacity:0;border-radius:22px;overflow:hidden;border:3px solid #5CF08A;box-shadow:0 20px 50px rgba(0,0,0,.7)}.cimg img{width:100%;height:100%;object-fit:cover}.cimg i{position:absolute;left:0;right:0;bottom:0;padding:22px 14px 8px;background:linear-gradient(180deg,transparent,rgba(0,0,0,.85));font:600 20px Inter;font-style:normal;color:#eee}
+.card{position:absolute;left:60px;right:60px;top:1160px;opacity:0;padding:20px 26px;border-radius:22px;background:rgba(6,10,14,.9);border-left:10px solid #5CF08A;font-family:Inter}.card b{display:block;font-weight:900;font-size:44px;color:#5CF08A}.card p{margin-top:6px;font-weight:700;font-size:34px;line-height:1.25;color:#fff}
 .dm{position:absolute;opacity:0;padding:12px 26px;border-radius:40px;background:rgba(6,8,12,.82);border:3px solid #FFD98A;font:900 40px Inter;color:#FFD98A;box-shadow:0 0 24px rgba(255,194,74,.5)}
 #quote{position:absolute;left:60px;right:60px;top:560px;text-align:center;opacity:0;padding:30px;border-radius:30px;background:rgba(6,8,12,.6);font:900 72px/1.15 Inter;color:#fff;text-shadow:0 4px 0 #000}
 #chk{position:absolute;left:60px;right:60px;top:250px;opacity:0;padding:24px 28px;border-radius:24px;background:rgba(6,10,14,.88);border:2px solid #FFD36B;font-family:Inter}#chk b{display:block;font:800 26px "JetBrains Mono",monospace;letter-spacing:.12em;color:#FFD36B;margin-bottom:10px}#chk div{font-weight:900;font-size:46px;color:#fff;padding:6px 0}
