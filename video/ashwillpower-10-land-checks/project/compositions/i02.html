@@ -1,0 +1,47 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9B79C; white-space: nowrap; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .ins-grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .bug { position: absolute; left: 60px; top: 178px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.55); }
+    .note { position: absolute; left: 60px; right: 200px; top: 905px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.75); white-space: nowrap; }
+    .stage { position: absolute; left: 60px; right: 60px; top: 250px; height: 640px; }
+    .ln { fill: none; stroke: #F3E7D3; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .ln-a { fill: none; stroke: #E3A23B; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .tag { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px; background: rgba(243,231,211,0.07); border: 1.5px solid rgba(243,231,211,0.22); font-family: "Inter", sans-serif; font-weight: 700; font-size: 40px; color: #F3E7D3; white-space: nowrap; }
+    .tag.amb { border-color: #E3A23B; background: rgba(227,162,59,0.14); }
+    .tag i { font-style: normal; display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+
+  </style>
+  <div id="root" data-composition-id="i02" data-width="1080" data-height="1920">
+    <div id="i02-host" class="host clip" data-start="0" data-duration="3.3">
+      <div id="i02-bg" class="ins"><div class="ins-grain"></div><div class="bug">ASHWILLPOWER</div>
+        <svg class="stage" viewBox="0 0 960 640"><g id="i02-d1"><rect class="ln" x="40" y="90" width="360" height="440" rx="10"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 134 H376"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 164 H336"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 194 H376"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 224 H336"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 254 H376"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 284 H336"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 314 H376"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 344 H336"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 374 H376"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 404 H336"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 434 H376"/><path class="ln" style="stroke-width:3;opacity:.55" d="M64 464 H336"/></g><g id="i02-d2"><rect class="ln" x="560" y="90" width="360" height="440" rx="10"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 134 H896"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 164 H856"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 194 H896"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 224 H856"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 254 H896"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 284 H856"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 314 H896"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 344 H856"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 374 H896"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 404 H856"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 434 H896"/><path class="ln" style="stroke-width:3;opacity:.55" d="M584 464 H856"/></g>
+          <path id="i02-plus" class="ln-a" style="stroke-width:8" d="M480 280 V340 M450 310 H510"/></svg>
+        <div id="i02-h1" class="serif" style="position:absolute;left:100px;top:790px;font-size:64px">Jamabandi</div>
+        <div id="i02-s1" class="lbl" style="position:absolute;left:100px;top:860px">Revenue record</div>
+        <div id="i02-h2" class="serif" style="position:absolute;left:620px;top:790px;font-size:64px">Naamantaran</div>
+        <div id="i02-s2" class="lbl" style="position:absolute;left:620px;top:860px">Naam ki entry</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 18 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
+      const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
+      tl.fromTo("#i02-bg", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }, 0);
+      IN("#i02-d1", 0.05); IN("#i02-h1", 0.1); IN("#i02-s1", 0.9);
+      IN("#i02-plus", 1.6, { scale: 0.4 }, { scale: 1 });
+      IN("#i02-d2", 1.9); IN("#i02-h2", 1.95); IN("#i02-s2", 2.2);
+      tl.to("#i02-bg", { opacity: 0, duration: 0.3, ease: "power2.in" }, 3.0);
+      window.__timelines["i02"] = tl;
+    })();
+  </script>
+</template>

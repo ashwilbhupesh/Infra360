@@ -1,0 +1,88 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9B79C; white-space: nowrap; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .ins-grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .bug { position: absolute; left: 60px; top: 178px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.55); }
+    .note { position: absolute; left: 60px; right: 200px; top: 905px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.75); white-space: nowrap; }
+    .stage { position: absolute; left: 60px; right: 60px; top: 250px; height: 640px; }
+    .ln { fill: none; stroke: #F3E7D3; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .ln-a { fill: none; stroke: #E3A23B; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .tag { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px; background: rgba(243,231,211,0.07); border: 1.5px solid rgba(243,231,211,0.22); font-family: "Inter", sans-serif; font-weight: 700; font-size: 40px; color: #F3E7D3; white-space: nowrap; }
+    .tag.amb { border-color: #E3A23B; background: rgba(227,162,59,0.14); }
+    .tag i { font-style: normal; display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+
+    .hd { position: absolute; left: 60px; top: 965px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.86); border-left: 6px solid #E3A23B; opacity: 0; }
+    .hd-c { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.2em; color: #E3A23B; }
+    .hd-h { font-family: "Instrument Serif", serif; font-size: 62px; line-height: 1.05; color: #F3E7D3; white-space: nowrap; }
+    #op { position: absolute; left: 60px; right: 180px; top: 958px; padding: 12px 28px 14px; border-radius: 22px; background: rgba(27,20,15,0.88); border-left: 6px solid #E3A23B; }
+    #op-a { font-family: "Instrument Serif", serif; font-style: italic; font-size: 50px; color: #F3E7D3; line-height: 1.05; }
+    #op-b { font-family: "Inter", sans-serif; font-weight: 800; font-size: 56px; color: #E3A23B; letter-spacing: -0.01em; line-height: 1.05; }
+    #op-k { font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: #C9B79C; margin-bottom: 8px; }
+    #cl { position: absolute; left: 60px; top: 965px; padding: 14px 28px 16px 24px; border-radius: 18px; background: rgba(27,20,15,0.86); border-left: 6px solid #E3A23B; }
+  </style>
+  <div id="root" data-composition-id="chrome" data-width="1080" data-height="1920">
+    <div id="chrome-host" class="host clip" data-start="0" data-duration="107.12">
+      <div id="op"><div id="op-a">Zameen khareedne se pehle:</div><div id="op-b">10 zaroori checks</div></div>
+      <div id="hd-1" class="hd"><div class="hd-c">CHECK 01/10</div><div class="hd-h">Asli maalik kaun?</div></div><div id="hd-2" class="hd"><div class="hd-c">CHECK 02/10</div><div class="hd-h">Records verify karein</div></div><div id="hd-3" class="hd"><div class="hd-c">CHECK 03/10</div><div class="hd-h">Bechne ka haq</div></div><div id="hd-4" class="hd"><div class="hd-c">CHECK 04/10</div><div class="hd-h">Loan ya dispute?</div></div><div id="hd-5" class="hd"><div class="hd-c">CHECK 05/10</div><div class="hd-h">Use ki permission?</div></div><div id="hd-6" class="hd"><div class="hd-c">CHECK 06/10</div><div class="hd-h">Patta + approved layout</div></div><div id="hd-7" class="hd"><div class="hd-c">CHECK 07/10</div><div class="hd-h">Boundary aur kabza</div></div><div id="hd-8" class="hd"><div class="hd-c">CHECK 08/10</div><div class="hd-h">Legal raasta</div></div><div id="hd-9" class="hd"><div class="hd-c">CHECK 09/10</div><div class="hd-h">Restrictions check karein</div></div><div id="hd-10" class="hd"><div class="hd-c">CHECK 10/10</div><div class="hd-h">Total cost + written terms</div></div>
+      <div id="cl" class="hd"><div class="hd-c">YAAD RAKHIYE</div><div class="hd-h">Own &middot; use &middot; sell</div></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      tl.fromTo("#op", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.15);
+      tl.fromTo("#op-b", { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0.45);
+      tl.to("#op", { opacity: 0, y: -10, duration: 0.3, ease: "power2.in" }, 5.05);
+      tl.fromTo("#hd-1 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 5.39);
+      tl.fromTo("#hd-1 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 5.449999999999999);
+      tl.fromTo("#hd-1", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 5.39);
+      tl.to("#hd-1", { opacity: 0, duration: 0.2, ease: "power2.in" }, 12.440000000000001);
+      tl.fromTo("#hd-2 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 12.64);
+      tl.fromTo("#hd-2 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 12.700000000000001);
+      tl.fromTo("#hd-2", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 12.64);
+      tl.to("#hd-2", { opacity: 0, duration: 0.2, ease: "power2.in" }, 23.69);
+      tl.fromTo("#hd-3 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 23.89);
+      tl.fromTo("#hd-3 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 23.95);
+      tl.fromTo("#hd-3", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 23.89);
+      tl.to("#hd-3", { opacity: 0, duration: 0.2, ease: "power2.in" }, 33.16);
+      tl.fromTo("#hd-4 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 33.36);
+      tl.fromTo("#hd-4 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 33.42);
+      tl.fromTo("#hd-4", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 33.36);
+      tl.to("#hd-4", { opacity: 0, duration: 0.2, ease: "power2.in" }, 39.669999999999995);
+      tl.fromTo("#hd-5 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 39.87);
+      tl.fromTo("#hd-5 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 39.93);
+      tl.fromTo("#hd-5", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 39.87);
+      tl.to("#hd-5", { opacity: 0, duration: 0.2, ease: "power2.in" }, 48.9);
+      tl.fromTo("#hd-6 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 49.1);
+      tl.fromTo("#hd-6 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 49.160000000000004);
+      tl.fromTo("#hd-6", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 49.1);
+      tl.to("#hd-6", { opacity: 0, duration: 0.2, ease: "power2.in" }, 59.07);
+      tl.fromTo("#hd-7 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 59.27);
+      tl.fromTo("#hd-7 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 59.330000000000005);
+      tl.fromTo("#hd-7", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 59.27);
+      tl.to("#hd-7", { opacity: 0, duration: 0.2, ease: "power2.in" }, 69.97);
+      tl.fromTo("#hd-8 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 70.17);
+      tl.fromTo("#hd-8 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 70.23);
+      tl.fromTo("#hd-8", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 70.17);
+      tl.to("#hd-8", { opacity: 0, duration: 0.2, ease: "power2.in" }, 78.41);
+      tl.fromTo("#hd-9 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 78.61);
+      tl.fromTo("#hd-9 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 78.67);
+      tl.fromTo("#hd-9", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 78.61);
+      tl.to("#hd-9", { opacity: 0, duration: 0.2, ease: "power2.in" }, 87.85);
+      tl.fromTo("#hd-10 .hd-c", { opacity: 0, x: -14 }, { opacity: 1, x: 0, duration: 0.35, ease: "power3.out" }, 88.05);
+      tl.fromTo("#hd-10 .hd-h", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 88.11);
+      tl.fromTo("#hd-10", { opacity: 0 }, { opacity: 1, duration: 0.01 }, 88.05);
+      tl.to("#hd-10", { opacity: 0, duration: 0.2, ease: "power2.in" }, 101.05);
+      tl.fromTo("#cl", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 101.42);
+      tl.to("#cl", { opacity: 0, duration: 0.2 }, 106.87);
+      window.__timelines["chrome"] = tl;
+    })();
+  </script>
+</template>

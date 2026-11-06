@@ -1,0 +1,46 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .bug { position: absolute; left: 96px; top: 190px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.6); z-index: 5; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    .panel { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; overflow: hidden; }
+    .panel video { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; object-fit: cover; }
+    .panel-fade { position: absolute; left: 0; right: 0; top: 840px; height: 262px; background: linear-gradient(180deg, rgba(18,13,10,0), #120D0A); }
+    .rep { position: absolute; right: 96px; top: 960px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(243,231,211,0.7); }
+    .note { position: absolute; left: 96px; top: 960px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.85); white-space: nowrap; }
+    .ln { fill: none; stroke: #F3E7D3; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .ln-a { fill: none; stroke: #E3A23B; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .tag { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px; background: rgba(27,20,15,0.86); border: 1.5px solid rgba(243,231,211,0.25); font-family: "Inter", sans-serif; font-weight: 700; font-size: 40px; color: #F3E7D3; white-space: nowrap; }
+    .tag.amb { border-color: #E3A23B; background: rgba(60,38,14,0.9); }
+    .tag i { font-style: normal; display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+    .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9B79C; white-space: nowrap; }
+    .row { position: absolute; left: 96px; right: 96px; height: 84px; display: flex; align-items: center; gap: 22px; border-bottom: 1px solid rgba(243,231,211,0.16); font-family: "Inter", sans-serif; font-weight: 700; font-size: 44px; color: #F3E7D3; }
+    .row b { display: inline-flex; width: 50px; height: 50px; border-radius: 12px; border: 2px solid #E3A23B; align-items: center; justify-content: center; color: #E3A23B; font-size: 32px; }
+
+  </style>
+  <div id="root" data-composition-id="j" data-width="1080" data-height="1920">
+    <div id="j-host" class="host clip" data-start="0" data-duration="6.0"><div id="j-bg" class="ins"><div class="grain"></div></div></div>
+    <div id="j-vids"></div>
+    <div id="j-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div class="lbl" style="position:absolute;left:72px;top:250px;color:#E3A23B">Connectivity brings</div><div id="j-k0" style="position:absolute;left:72px;top:300px;width:300px;height:520px;border-radius:20px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="j-v0" class="clip" src="assets/broll/wh.mp4" data-start="0" data-duration="6.0" muted playsinline style="position:absolute;left:-250px;top:0;width:800px;height:520px;object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:14px 18px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:34px;line-height:1.1;color:#F3E7D3">Jobs &amp; industries</div></div><div id="j-k1" style="position:absolute;left:390px;top:300px;width:300px;height:520px;border-radius:20px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="j-v1" class="clip" src="assets/broll/homes.mp4" data-start="0" data-duration="6.0" muted playsinline style="position:absolute;left:-250px;top:0;width:800px;height:520px;object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:14px 18px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:34px;line-height:1.1;color:#F3E7D3">Housing</div></div><div id="j-k2" style="position:absolute;left:708px;top:300px;width:300px;height:520px;border-radius:20px;overflow:hidden;border:2px solid rgba(243,231,211,0.35)"><video id="j-v2" class="clip" src="assets/broll/trucks.mp4" data-start="0" data-duration="6.0" muted playsinline style="position:absolute;left:-250px;top:0;width:800px;height:520px;object-fit:cover"></video><div style="position:absolute;left:0;right:0;bottom:0;padding:14px 18px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:34px;line-height:1.1;color:#F3E7D3">Logistics</div></div><div class="rep">Representative footage</div></div></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 16 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
+      const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
+      tl.fromTo(["#j-bg", "#j-vids", "#j-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#j-vids", { scale: 1.04 }, { scale: 1.0, duration: 6.0, ease: "none" }, 0);
+      IN("#j-k0", 1.21, { scale: 0.94 }, { scale: 1 });
+      IN("#j-k1", 3.45, { scale: 0.94 }, { scale: 1 });
+      IN("#j-k2", 4.01, { scale: 0.94 }, { scale: 1 });
+      tl.to(["#j-bg", "#j-vids", "#j-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 5.72);
+      window.__timelines["j"] = tl;
+    })();
+  </script>
+</template>

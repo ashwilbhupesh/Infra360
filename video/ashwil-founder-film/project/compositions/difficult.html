@@ -1,0 +1,51 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; font-weight: 400; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; font-weight: 400; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .serif { font-family: "Instrument Serif", serif; font-weight: 400; color: #f2ede4; line-height: 0.92; letter-spacing: -0.01em; }
+    .it { font-style: italic; }
+    .gold { color: #c9a86a; }
+    .sans { font-family: "Inter", sans-serif; color: #f2ede4; }
+    .lbl { white-space: nowrap; font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 30px; letter-spacing: 0.22em; text-transform: uppercase; color: #a8a194; }
+    .lbl b { color: #c9a86a; font-weight: 400; }
+    .panel { position: absolute; top: 0; bottom: 0; background: radial-gradient(130% 70% at 30% 25%, #1a1a1f 0%, #0c0c0e 65%); overflow: hidden; }
+    .panel.full { left: 0; width: 1080px; }
+    .panel.left { left: 0; width: 560px; border-right: 2px solid rgba(201,168,106,0.55); }
+    .panel.right { left: 520px; width: 560px; border-left: 2px solid rgba(201,168,106,0.55); }
+    .grain { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px); background-size: 7px 7px; }
+    .col { position: absolute; left: 56px; right: 48px; }
+    .rule { height: 2px; background: linear-gradient(90deg, #c9a86a, rgba(201,168,106,0)); transform-origin: 0 50%; }
+    .scrim { position: absolute; left: 0; right: 0; top: 0; height: 760px; background: linear-gradient(180deg, rgba(12,12,14,0.86) 0%, rgba(12,12,14,0.55) 55%, rgba(12,12,14,0) 100%); }
+
+    #df-a { position: absolute; left: 0; right: 0; top: 230px; text-align: center; }
+    #df-b { position: absolute; left: 0; right: 0; top: 290px; text-align: center; font-size: 170px; }
+    #df-c { position: absolute; left: 0; right: 0; top: 290px; text-align: center; font-size: 170px; }
+
+  </style>
+  <div id="root" data-composition-id="difficult" data-width="1080" data-height="1920">
+    <div id="difficult-host" class="host clip" data-start="0" data-duration="3.0">
+      <div class="scrim" id="df-scrim"></div>
+      <div id="df-a" class="lbl">It was always</div>
+      <div id="df-b" class="serif">difficult</div>
+      <div id="df-c" class="serif it gold">prestigious.</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const MOVE = { duration: 0.62, ease: "power3.inOut" };
+      const IN = (sel, t, extra) => tl.fromTo(sel, Object.assign({ opacity: 0, filter: "blur(10px)" }, (extra||{}).from || {}), Object.assign({ opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, (extra||{}).to || {}), t);
+
+      tl.fromTo("#df-scrim", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0);
+      IN("#df-a", 0.08);
+      IN("#df-b", 0.34, { from: { y: 26 }, to: { y: 0 } });
+      tl.to("#df-a", { opacity: 0, duration: 0.2 }, 1.95);
+      tl.to("#df-b", { opacity: 0, filter: "blur(10px)", duration: 0.2, ease: "power2.in" }, 2.1);
+      IN("#df-c", 2.26, { from: { y: 26 }, to: { y: 0 } });
+      tl.to("#df-c, #df-scrim", { opacity: 0, filter: "blur(8px)", duration: 0.2 }, 2.78);
+      window.__timelines["difficult"] = tl;
+    })();
+  </script>
+</template>

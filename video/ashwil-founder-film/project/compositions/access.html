@@ -1,0 +1,77 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; font-weight: 400; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; font-weight: 400; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .serif { font-family: "Instrument Serif", serif; font-weight: 400; color: #f2ede4; line-height: 0.92; letter-spacing: -0.01em; }
+    .it { font-style: italic; }
+    .gold { color: #c9a86a; }
+    .sans { font-family: "Inter", sans-serif; color: #f2ede4; }
+    .lbl { white-space: nowrap; font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 30px; letter-spacing: 0.22em; text-transform: uppercase; color: #a8a194; }
+    .lbl b { color: #c9a86a; font-weight: 400; }
+    .panel { position: absolute; top: 0; bottom: 0; background: radial-gradient(130% 70% at 30% 25%, #1a1a1f 0%, #0c0c0e 65%); overflow: hidden; }
+    .panel.full { left: 0; width: 1080px; }
+    .panel.left { left: 0; width: 560px; border-right: 2px solid rgba(201,168,106,0.55); }
+    .panel.right { left: 520px; width: 560px; border-left: 2px solid rgba(201,168,106,0.55); }
+    .grain { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px); background-size: 7px 7px; }
+    .col { position: absolute; left: 56px; right: 48px; }
+    .rule { height: 2px; background: linear-gradient(90deg, #c9a86a, rgba(201,168,106,0)); transform-origin: 0 50%; }
+    .scrim { position: absolute; left: 0; right: 0; top: 0; height: 760px; background: linear-gradient(180deg, rgba(12,12,14,0.86) 0%, rgba(12,12,14,0.55) 55%, rgba(12,12,14,0) 100%); }
+
+
+    #ac-lbl { top: 250px; }
+    #ac-last { top: 300px; font-size: 150px; }
+    #ac-per { top: 430px; font-size: 150px; }
+    #ac-acc { top: 610px; font-family: "Inter", sans-serif; font-weight: 600; font-size: 42px; line-height: 1.25; color: #f2ede4; }
+    #ac-chart { position: absolute; left: 56px; top: 790px; width: 456px; height: 300px; overflow: visible; }
+    #ac-chart .ax { stroke: rgba(242,237,228,0.25); stroke-width: 2; fill: none; }
+    #ac-chart #ac-curve { stroke: #c9a86a; stroke-width: 5; fill: none; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    #ac-chart #ac-area { fill: url(#ac-grad); }
+    #ac-dot { fill: #c9a86a; }
+    #ac-lbl2 { top: 1110px; }
+    #ac-earn { position: absolute; right: 48px; top: 760px; font-size: 96px; }
+
+  </style>
+  <div id="root" data-composition-id="access" data-width="1080" data-height="1920">
+    <div id="access-host" class="host clip" data-start="0" data-duration="8.6">
+      <div id="ac-panel" class="panel right"><div class="grain"></div>
+        <div id="ac-lbl" class="col lbl">Access &middot; <b>for all</b></div>
+        <div id="ac-last" class="col serif">The last</div>
+        <div id="ac-per" class="col serif it gold">person.</div>
+        <div id="ac-acc" class="col">Access to the market<br/>around them.</div>
+        <svg id="ac-chart" viewBox="0 0 456 300">
+          <defs><linearGradient id="ac-grad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9a86a" stop-opacity="0.35"/><stop offset="1" stop-color="#c9a86a" stop-opacity="0"/></linearGradient></defs>
+          <path class="ax" d="M0,0 V290 H456"/>
+          <path id="ac-area" d="M0,270 C90,262 150,240 220,200 S350,90 446,24 L446,290 L0,290 Z"/>
+          <path id="ac-curve" pathLength="1" d="M0,270 C90,262 150,240 220,200 S350,90 446,24"/>
+          <circle id="ac-dot" cx="446" cy="24" r="10"/>
+        </svg>
+        <div id="ac-earn" class="serif it">Earn.</div>
+        <div id="ac-lbl2" class="col lbl">Per capita <b>income &uarr;</b></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const MOVE = { duration: 0.62, ease: "power3.inOut" };
+      const IN = (sel, t, extra) => tl.fromTo(sel, Object.assign({ opacity: 0, filter: "blur(10px)" }, (extra||{}).from || {}), Object.assign({ opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, (extra||{}).to || {}), t);
+
+      tl.fromTo("#ac-panel", { x: 560 }, { x: 0, ...MOVE }, 0);
+      IN("#ac-lbl", 0.5);
+      IN("#ac-last", 1.2, { from: { y: 30 }, to: { y: 0 } });
+      IN("#ac-per", 1.5, { from: { y: 30 }, to: { y: 0 } });
+      IN("#ac-acc", 2.7, { from: { y: 16 }, to: { y: 0 } });
+      IN("#ac-earn", 5.2, { from: { y: 20 }, to: { y: 0 } });
+      tl.to("#ac-earn", { opacity: 0, duration: 0.2 }, 5.6);
+      tl.fromTo("#ac-chart .ax", { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.55);
+      tl.fromTo("#ac-curve", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.7, ease: "power2.inOut" }, 5.7);
+      tl.fromTo("#ac-area", { opacity: 0 }, { opacity: 1, duration: 1.2 }, 6.3);
+      tl.fromTo("#ac-dot", { scale: 0, transformOrigin: "50% 50%" }, { scale: 1, duration: 0.35, ease: "back.out(2.5)" }, 7.35);
+      IN("#ac-lbl2", 5.75);
+      tl.to("#ac-panel", { x: -1080, ...MOVE }, 7.95);
+      window.__timelines["access"] = tl;
+    })();
+  </script>
+</template>

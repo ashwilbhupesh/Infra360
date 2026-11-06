@@ -1,0 +1,279 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-02T06:59:48Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 542886858,
+  "lat": 26.9239320,
+  "lon": 75.8268652,
+  "tags": {
+    "access": "yes",
+    "alt_name:de": "Palast der Winde",
+    "alt_name:en": "Palace of winds",
+    "alt_name:es": "Palacio de los vientos",
+    "alt_name:fr": "Palais des vents",
+    "alt_name:it": "Palazzo dei venti",
+    "alt_name:ru": "Дворец ветров",
+    "fee": "yes",
+    "historic": "monument",
+    "name": "Hawa Mahal",
+    "name:de": "Hawa Mahal",
+    "name:en": "Hawa Mahal",
+    "name:es": "Hawa Mahal",
+    "name:fr": "Hawa Mahal",
+    "name:hi": "हवा महल",
+    "name:it": "Hawa Mahal",
+    "name:ru": "Хава-Махал",
+    "name:zh": "风之宫",
+    "opening_hours": "Mon-Su 09:00-18:30",
+    "tourism": "attraction",
+    "wikidata": "Q836531"
+  }
+},
+{
+  "type": "node",
+  "id": 3806140191,
+  "lat": 26.9287662,
+  "lon": 75.8239003,
+  "tags": {
+    "amenity": "place_of_worship",
+    "name": "Govind Dev Ji Ka Mandir",
+    "religion": "hindu"
+  }
+},
+{
+  "type": "node",
+  "id": 10047925085,
+  "lat": 26.9241294,
+  "lon": 75.8263893,
+  "tags": {
+    "name": "Hawa Mahal tickets",
+    "shop": "ticket"
+  }
+},
+{
+  "type": "node",
+  "id": 14058709890,
+  "lat": 26.9251919,
+  "lon": 75.8245568,
+  "tags": {
+    "information": "board",
+    "name": "Astronomical Observatory, Jaipur (Jantar Mantar)",
+    "name:en": "Astronomical Observatory, Jaipur (Jantar Mantar)",
+    "name:hi": "खगोलीय वेधशाला जयपुर (जन्तर मन्तर)",
+    "tourism": "information"
+  }
+},
+{
+  "type": "way",
+  "id": 102879535,
+  "center": {
+    "lat": 26.9247280,
+    "lon": 75.8245099
+  },
+  "nodes": [
+    1188122042,
+    14058937515,
+    14058937514,
+    14058937520,
+    14058937519,
+    1188122213,
+    1188121974,
+    1188121954,
+    13429972602,
+    1813472496,
+    1813472603,
+    1813472563,
+    1813472548,
+    1188122047,
+    1813472459,
+    1813472606,
+    1813472627,
+    1813472624,
+    13429965800,
+    1188122233,
+    14058805986,
+    1188122227,
+    14058805987,
+    1188122042
+  ],
+  "tags": {
+    "barrier": "wall",
+    "heritage:operator": "whc",
+    "heritage:website": "https://whc.unesco.org/en/list/1338",
+    "historic": "archaeological_site",
+    "name": "Jantar Mantar",
+    "name:gu": "જંતર મંતર",
+    "name:hi": "जन्तर मन्तर",
+    "ref:whc": "1338",
+    "start_date": "1734",
+    "tourism": "attraction",
+    "whc:criteria": "(iii)(iv)",
+    "whc:inscription_date": "2010",
+    "wikidata": "Q508634",
+    "wikipedia": "en:Jantar Mantar, Jaipur"
+  }
+},
+{
+  "type": "way",
+  "id": 229590208,
+  "center": {
+    "lat": 26.9116797,
+    "lon": 75.8195026
+  },
+  "nodes": [
+    2381605065,
+    2381605039,
+    2381605111,
+    2381605007,
+    2381605031,
+    2381605067,
+    2381605021,
+    2381605009,
+    2381605053,
+    2381605093,
+    2381605033,
+    2381605027,
+    2381605061,
+    2381605087,
+    2381605095,
+    2381605025,
+    2381605023,
+    2381605107,
+    2381605013,
+    2381605055,
+    2381605109,
+    2381605099,
+    2381605065
+  ],
+  "tags": {
+    "building": "yes",
+    "check_date": "2026-02-19",
+    "check_date:opening_hours": "2026-02-19",
+    "fee": "yes",
+    "layer": "1",
+    "museum": "history",
+    "name": "Albert Hall Museum",
+    "opening_hours": "Mo-Su 09:00-20:00",
+    "tourism": "museum",
+    "website": "https://obms-tourist.rajasthan.gov.in/place-details/Government-Central-Museum-Albert-Hall-Jaipur"
+  }
+},
+{
+  "type": "way",
+  "id": 272783001,
+  "center": {
+    "lat": 26.9120324,
+    "lon": 75.8196900
+  },
+  "nodes": [
+    2777043254,
+    2777043255,
+    2777043256,
+    2777043257,
+    2777043258,
+    2777043259,
+    2777043260,
+    2777043261,
+    2777043262,
+    2777043263,
+    2777043264,
+    2777043254
+  ],
+  "tags": {
+    "leisure": "park",
+    "name": "Ram Niwas Public Gardens",
+    "name:etymology:wikidata": "Q18707728",
+    "wikidata": "Q2770471"
+  }
+},
+{
+  "type": "way",
+  "id": 328136434,
+  "center": {
+    "lat": 26.9328727,
+    "lon": 75.8249931
+  },
+  "nodes": [
+    3349617659,
+    12343871171,
+    12343871174,
+    3349617652,
+    3349617644,
+    3349617646,
+    3349617659
+  ],
+  "tags": {
+    "alt_name": "Talktora",
+    "name": "Tal Katora lake , Jaipur",
+    "natural": "water",
+    "water": "pond"
+  }
+},
+{
+  "type": "way",
+  "id": 455720627,
+  "center": {
+    "lat": 26.9262372,
+    "lon": 75.8238122
+  },
+  "nodes": [
+    1188084375,
+    1813495612,
+    1813495554,
+    11556748707,
+    1813495610,
+    4520792082,
+    4520792083,
+    4520792084,
+    4520792085,
+    4520792086,
+    5077005225,
+    5077005231,
+    4520792088,
+    5077005226,
+    4520792689,
+    7329359222,
+    7329359221,
+    4520792692,
+    7329359218,
+    4520792693,
+    5077012514,
+    5077012511,
+    4520792694,
+    4520792695,
+    1813506411,
+    1813506373,
+    1813506337,
+    1813506397,
+    4520792696,
+    4520792697,
+    4520792698,
+    4520792699,
+    4520792700,
+    1813495614,
+    1813495622,
+    1813495544,
+    1188084375
+  ],
+  "tags": {
+    "alt_name": "The City Palace",
+    "castle_type": "palace",
+    "historic": "castle",
+    "museum": "history",
+    "name": "City Palace",
+    "tourism": "attraction",
+    "url": "https://www.royaljaipur.in/",
+    "wikidata": "Q2723395",
+    "wikipedia": "en:City Palace, Jaipur"
+  }
+}
+
+  ]
+}

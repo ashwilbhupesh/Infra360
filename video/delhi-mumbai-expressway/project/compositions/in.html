@@ -1,0 +1,55 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .bug { position: absolute; left: 96px; top: 190px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.6); z-index: 5; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    .panel { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; overflow: hidden; }
+    .panel video { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; object-fit: cover; }
+    .panel-fade { position: absolute; left: 0; right: 0; top: 840px; height: 262px; background: linear-gradient(180deg, rgba(18,13,10,0), #120D0A); }
+    .rep { position: absolute; right: 96px; top: 960px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(243,231,211,0.7); }
+    .note { position: absolute; left: 96px; top: 960px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.85); white-space: nowrap; }
+    .ln { fill: none; stroke: #F3E7D3; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .ln-a { fill: none; stroke: #E3A23B; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .tag { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px; background: rgba(27,20,15,0.86); border: 1.5px solid rgba(243,231,211,0.25); font-family: "Inter", sans-serif; font-weight: 700; font-size: 40px; color: #F3E7D3; white-space: nowrap; }
+    .tag.amb { border-color: #E3A23B; background: rgba(60,38,14,0.9); }
+    .tag i { font-style: normal; display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+    .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9B79C; white-space: nowrap; }
+    .row { position: absolute; left: 96px; right: 96px; height: 84px; display: flex; align-items: center; gap: 22px; border-bottom: 1px solid rgba(243,231,211,0.16); font-family: "Inter", sans-serif; font-weight: 700; font-size: 44px; color: #F3E7D3; }
+    .row b { display: inline-flex; width: 50px; height: 50px; border-radius: 12px; border: 2px solid #E3A23B; align-items: center; justify-content: center; color: #E3A23B; font-size: 32px; }
+
+  </style>
+  <div id="root" data-composition-id="in" data-width="1080" data-height="1920">
+    <div id="in-host" class="host clip" data-start="0" data-duration="4.0"><div id="in-bg" class="ins"><div class="grain"></div></div></div>
+    <div id="in-vids"></div>
+    <div id="in-fg" class="host"><div class="body" style="position:absolute;inset:0;transform:translateY(90px)"><div id="in-z" style="position:absolute;left:0;top:0;width:1080px;height:1830px;transform-origin:337px 533px"><img src="assets/img/indiamap.png" style="position:absolute;left:40px;top:210px;width:1000px;height:auto;opacity:0.9"/><svg style="position:absolute;left:0;top:0;width:1080px;height:1830px;overflow:visible"><path id="in-r" pathLength="1" d="M359.062 504.738 C358.385 506.340 356.354 509.600 355.000 514.352 C353.646 519.104 351.979 528.166 350.938 533.250 C349.896 538.334 350.469 540.986 348.750 544.854 C347.031 548.722 342.604 553.142 340.625 556.458 C338.646 559.773 338.438 560.602 336.875 564.746 C335.312 568.890 333.333 576.350 331.250 581.323 C329.167 586.296 326.302 588.396 324.375 594.585 C322.448 600.773 322.813 610.167 319.688 618.455 C316.563 626.744 310.365 634.093 305.625 644.315 C300.885 654.538 297.760 671.170 291.250 679.790 C284.740 688.410 273.542 692.554 266.562 696.035 C259.583 699.517 254.948 697.748 249.375 700.677 C243.802 703.606 237.031 708.081 233.125 713.607 C229.219 719.133 227.396 727.532 225.938 733.831 C224.479 740.130 224.635 743.114 224.375 751.402 C224.115 759.691 223.594 773.229 224.375 783.562 C225.156 793.894 229.167 807.211 229.062 813.400 C228.958 819.589 224.635 819.478 223.750 820.694" style="fill:none;stroke:#1E7FD0;stroke-width:13;filter:drop-shadow(0 0 6px rgba(30,127,208,0.8));stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/><path id="in-l" pathLength="1" d="M315.625 560.768 C317.604 560.436 323.333 559.497 327.500 558.778 C331.667 558.060 338.438 556.844 340.625 556.458" style="fill:none;stroke:#F5B04A;stroke-width:7;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/></svg><div class="tag amb" id="in-t0" style="left:375px;top:481px;font-size:30px;padding:8px 16px">Delhi</div><div id="in-d0" style="position:absolute;left:349px;top:495px;width:20px;height:20px;border-radius:50%;background:#F5B04A;box-shadow:0 0 0 4px rgba(245,176,74,0.35)"></div><div class="tag amb" id="in-t1" style="left:332px;top:537px;font-size:30px;padding:8px 16px">Jaipur</div><div id="in-d1" style="position:absolute;left:306px;top:551px;width:20px;height:20px;border-radius:50%;background:#F5B04A;box-shadow:0 0 0 4px rgba(245,176,74,0.35)"></div><div class="tag" id="in-t2" style="left:332px;top:594px;font-size:26px;padding:8px 16px">Kota</div><div id="in-d2" style="position:absolute;left:306px;top:608px;width:20px;height:20px;border-radius:50%;background:#F5B04A;box-shadow:0 0 0 4px rgba(245,176,74,0.35)"></div><div class="tag" id="in-t3" style="left:249px;top:690px;font-size:26px;padding:8px 16px">Vadodara</div><div id="in-d3" style="position:absolute;left:223px;top:704px;width:20px;height:20px;border-radius:50%;background:#F5B04A;box-shadow:0 0 0 4px rgba(245,176,74,0.35)"></div><div class="tag" id="in-t4" style="left:238px;top:727px;font-size:26px;padding:8px 16px">Surat</div><div id="in-d4" style="position:absolute;left:212px;top:741px;width:20px;height:20px;border-radius:50%;background:#F5B04A;box-shadow:0 0 0 4px rgba(245,176,74,0.35)"></div><div class="tag amb" id="in-t5" style="left:54px;top:797px;font-size:30px;padding:8px 16px">Mumbai</div><div id="in-d5" style="position:absolute;left:214px;top:811px;width:20px;height:20px;border-radius:50%;background:#F5B04A;box-shadow:0 0 0 4px rgba(245,176,74,0.35)"></div></div><div class="tag amb" id="in-k" style="left:560px;top:671px;font-size:34px;padding:12px 20px">Delhi → Mumbai · ≈1,380 km</div><div id="in-p" style="position:absolute;left:660px;top:740px;width:370px;height:440px;border-radius:16px;overflow:hidden;border:3px solid #F5B04A;box-shadow:0 12px 32px rgba(0,0,0,0.65);opacity:0"><img src="assets/img/ht_route.jpg" style="width:100%;height:100%;object-fit:cover"/><div style="position:absolute;left:0;right:0;bottom:0;padding:22px 12px 8px;background:linear-gradient(180deg,rgba(18,13,10,0),rgba(18,13,10,.92));font-family:Inter,sans-serif;font-weight:800;font-size:28px;color:#F3E7D3">Route graphic<div style="font-weight:600;font-size:22px;color:#E8D9BF">Graphic: Ritesh Kumar · supplied</div></div></div><div class="note" style="top:1308px;left:auto;right:64px;font-size:24px;color:rgba(201,183,156,0.9)">Map: Milenioscuro, CC BY 4.0 · route schematic</div></div></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 16 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
+      const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
+      tl.fromTo(["#in-bg", "#in-vids", "#in-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#in-vids", { scale: 1.04 }, { scale: 1.0, duration: 4.0, ease: "none" }, 0);
+      tl.fromTo("#in-z", { scale: 4.2 }, { scale: 1, duration: 1.3, ease: "power2.inOut" }, 0);
+      tl.fromTo("#in-r", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 1.6, ease: "power1.inOut" }, 1.0);
+      tl.fromTo("#in-l", { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: 0.5 }, 2.2);
+      IN("#in-t0", 0.40);
+      IN("#in-t1", 0.40);
+      IN("#in-t2", 1.56);
+      IN("#in-t3", 1.74);
+      IN("#in-t4", 1.92);
+      IN("#in-t5", 2.10);
+      IN("#in-k", 2.0);
+      tl.fromTo("#in-p", { opacity: 0, scale: 0.6, transformOrigin: "50% 100%" }, { opacity: 1, scale: 1, duration: 0.4, ease: "back.out(1.6)" }, 2.3);
+
+      tl.to(["#in-bg", "#in-vids", "#in-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 3.72);
+      window.__timelines["in"] = tl;
+    })();
+  </script>
+</template>

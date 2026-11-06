@@ -1,0 +1,50 @@
+{
+ "fairmont": [
+  27.0309,
+  75.89018,
+  "Fairmont Jaipur, Arya College Road, Kukas, Amber Tehsil, Jaipur, Rajasthan, 3031"
+ ],
+ "lemeridien": [
+  27.03208,
+  75.88853,
+  "Le Méridien Jaipur Resort & Spa, Arya College Road, Kukas, Amber Tehsil, Jaipur,"
+ ],
+ "leela": null,
+ "trident": [
+  26.95698,
+  75.84299,
+  "Trident Hotel , Jaipur, Amer Road, Brahmapuri , Jaipur, Jaipur, Jaipur Municipal"
+ ],
+ "westin": null,
+ "rambagh": [
+  26.89729,
+  75.80758,
+  "Taj Rambagh Palace, Sawai Mansingh Road, Adarsh Nagar, Jaipur, Jaipur Municipal "
+ ],
+ "itc": [
+  26.91969,
+  75.79128,
+  "ITC Rajputana, Khasa Kothi Flyover, Barodia Scheme , Jaipur, Bani Park, Jaipur, "
+ ],
+ "jaimahal": [
+  26.91247,
+  75.78469,
+  "Jai Mahal Palace, Ajmer Road, Gayatri Nagar, Ram Nagar Extension, Sodala, Jaipur"
+ ],
+ "marriott": [
+  26.84192,
+  75.79625,
+  "Marriott, Tonk Road Flyover Ramp, Jaipur Municipal Corporation, Sanganer Tehsil,"
+ ],
+ "crowne": null,
+ "oberoi": [
+  26.87634,
+  75.88381,
+  "The Oberoi  Rajvilas, Goner Road, Kho Nagoriya, Jaipur Municipal Corporation, Sa"
+ ],
+ "clarks": [
+  26.84652,
+  75.80086,
+  "Hotel Clarks Amer, Opp Fortis Hospital, Girdhar Marg, Jaipur Municipal Corporati"
+ ]
+}
