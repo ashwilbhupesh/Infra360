@@ -51,29 +51,40 @@ S.append('<g id="dream" style="opacity:0">' + "".join(
     f'<rect class="db" x="{x - w / 2:.1f}" y="{y - h / 2:.1f}" width="{w:.1f}" height="{h:.1f}" rx="2" style="fill:#FFD98A;fill-opacity:.55;stroke:#FFF1C9;stroke-width:1.2;filter:drop-shadow(0 0 6px #FFC24A)"/>'
     for x, y, w, h, r in blocks) + "</g>")
 
+import random as _r
+rr = _r.Random(11); BL = []
+LAND = [("UNIVERSITY", 0, -70, 50, 32, 34, "#c9b48a"), ("MEDICAL COLLEGE", 85, -10, 26, 26, 70, "#d8dde6"), ("IT INSTITUTE", -75, 20, 20, 20, 120, "#5d8fc9"),
+        ("LIBRARY", 40, 75, 28, 28, 30, "#c9b48a"), ("CONVENTION CENTRE", -45, 95, 56, 32, 22, "#b89a6a")]
+for nm, x, z, w, d, h, c in LAND: BL.append({"x": x, "z": z, "w": w, "d": d, "h": h, "c": c, "e": "#ffb84a", "ei": .35, "label": nm})
+for i in range(70):
+    r = rr.uniform(30, 150); a = rr.uniform(0, 6.283); x, z = r * math.cos(a), r * math.sin(a)
+    if any(abs(x - b["x"]) < (b["w"] / 2 + 10) and abs(z - b["z"]) < (b["d"] / 2 + 10) for b in BL): continue
+    BL.append({"x": round(x, 1), "z": round(z, 1), "w": round(rr.uniform(7, 13), 1), "d": round(rr.uniform(7, 13), 1), "h": round(rr.uniform(22, 95), 1),
+               "c": rr.choice(["#3b4a63", "#4a5670", "#6b7f9e", "#2f3d55"]), "e": "#ffb040", "ei": round(rr.uniform(.15, .5), 2)})
+BL.sort(key=lambda b: math.hypot(b["x"], b["z"]))
+SPUR = [ROADX[1], (KC[0] - 20, KC[1] - 30), KC]
+D3 = {"road": [list(p) for p in ROAD[::3] + ROADX[:2]], "spur": [list(p) for p in SPUR], "kc": list(KC), "blocks": BL}
 # ---------- 0–2.2 · face placeholder (Ashwil's face goes here) ----------
 H.append('<div id="face"><div><b>YOUR FACE</b><i>first 2 seconds</i></div></div>')
 J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.35}, 2.0);')
-H.append('<div id="kt"><i>JAIPUR</i><b>KNOWLEDGE<br/>CITY</b></div>')
+H.append('<div id="kt"><i>DIGGI MALPURA ROAD</i><b>KNOWLEDGE<br/>CITY</b></div>')
 J.append('tl.fromTo("#kt", {opacity:0, scale:1.3}, {opacity:1, scale:1, duration:.45, ease:"back.out(2)"}, 0.25); tl.to("#kt", {opacity:0, duration:.3}, 2.1);')
-cap("c0", f"{G}Knowledge City{E2} — Jaipur ka agla bada sapna", 0.25, 2.2, top=1450)
+cap("c0", f"{Y}Diggi Malpura Road{E} pe aa raha hai — {G}Knowledge City{E2}", 0.25, 2.0, top=1450)
+cap("c0b", f"Jaipur ka {Y}agla bada sapna{E}", 2.0, 5.0)
 sfx("impact-bass-1", .25, .35)
 
-# ---------- 2.2–9.6 · the dream, then today ----------
-J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb((KC[0], KC[1] + 40), 520)}"}}}}, 0);')
-J.append('tl.set("#world", {transformPerspective:1300, transformOrigin:"50% 70%", rotationX:48, scale:1.9}, 0);')
-J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb((KC[0], KC[1] + 10), 420)}"}}, duration:5.4, ease:"none"}}, 2.2);')
-J.append('tl.set("#dream", {opacity:1}, 2.2); tl.from(".db", {scaleY:0, opacity:0, transformOrigin:"50% 100%", duration:.5, stagger:.06, ease:"back.out(2)"}, 2.4);')
-J.append('tl.to(".db", {fillOpacity:.85, duration:.6, yoyo:true, repeat:5, stagger:{each:.02, from:"random"}}, 4.6);')
-H.append('<div id="dtag"><b>10 SAAL BAAD?</b><i>imagination · not an official plan</i></div>'); show("dtag", 2.4, 7.6)
-cap("c1", f"Socho… 10 saal baad — {Y}university campus{E}, students, cafes, hostels…", 2.3, 7.6)
-J.append('tl.to("#dream", {opacity:0, duration:.6}, 7.6);')
+# ---------- 1.9–9.6 · 3D: fly down Diggi Malpura Road, a vertical city rises ----------
+J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(((SANG[0] + KC[0]) / 2, (SANG[1] + KC[1]) / 2), 900)}"}}}}, 0);')
+J.append('tl.set("#gl", {opacity:0}, 0); tl.to("#gl", {opacity:1, duration:.35}, 1.85); tl.to("#gl", {opacity:0, duration:.5}, 9.3);')
+H.append('<div id="dtag"><b>10 SAAL BAAD?</b><i>imagination · not an official plan</i></div>'); show("dtag", 5.1, 7.6)
+H.append('<div id="rtag"><b>DIGGI MALPURA ROAD</b><i>SH-12 · Sanganer → Phagi</i></div>'); show("rtag", 2.1, 5.0)
+cap("c1", f"Socho… 10 saal baad — {Y}university, medical college, IT institute{E}…", 5.0, 7.6)
 H.append('<div id="today"><b>AAJ</b><i>khaali zameen</i></div>'); show("today", 7.8, 9.6, .25)
 cap("c2", f"…aur aaj? {Y}Khaali zameen.{E}", 7.7, 9.6)
-sfx("riser", 1.8, .25); sfx("whoosh", 7.6, .3)
+sfx("riser", 1.9, .3); sfx("whoosh", 2.0, .3); sfx("impact-bass-1", 5.0, .35); sfx("whoosh", 7.6, .3)
+for k in range(8): sfx("pop", 5.1 + .25 * k, .15)
 
 # ---------- 9.6–16 · where it is ----------
-J.append('tl.to("#world", {rotationX:0, scale:1, duration:1.0, ease:"power2.inOut"}, 9.6);')
 mid = ((SANG[0] + KC[0]) / 2, (SANG[1] + KC[1]) / 2)
 cam(9.6, mid, 900, 1.2)
 J.append('tl.to("#road", {strokeDashoffset:0, duration:1.6, ease:"power1.inOut"}, 10.4); tl.to("#roadx", {opacity:1, duration:.5}, 11.8);')
@@ -123,9 +134,7 @@ J.append('tl.fromTo("#icj", {opacity:0, scale:.3}, {opacity:1, scale:1, duration
 cap("c7", f"Yeh idea naya nahi hai — {Y}dekho kya hua{E}", 27.5, 30.0)
 
 # ---------- 47.6–59.5 · imagine Jaipur ----------
-J.append('tl.set("#world", {transformPerspective:1300, transformOrigin:"50% 70%"}, 47.4); tl.to("#world", {rotationX:48, scale:1.9, duration:1.2, ease:"power2.inOut"}, 47.6);')
-cam(47.6, (KC[0], KC[1] + 30), 460, 1.2)
-J.append('tl.to("#dream", {opacity:1, duration:.5}, 48.2); tl.fromTo(".db", {scaleY:0, opacity:0}, {scaleY:1, opacity:1, transformOrigin:"50% 100%", duration:.4, stagger:.04, ease:"back.out(2)", immediateRender:false}, 48.3);')
+J.append('tl.to("#gl", {opacity:1, duration:.6}, 47.5); tl.to("#gl", {opacity:0, duration:.6}, 59.3);')
 J.append('tl.to("#area", {opacity:0, duration:.4}, 47.6); tl.to(["#pin","#pulse"], {opacity:0, duration:.3}, 47.6);')
 DEM = [("HOSTELS", -1, 0), ("PG", 1, 0), ("CAFES", -1, 1), ("SHOPS", 1, 1), ("HOMES", -1, 2), ("RENTALS", 1, 2)]
 H.append('<div id="dem">' + "".join(f'<div class="dm" id="dm{k}" style="{"left" if s < 0 else "right"}:60px;top:{640 + 150 * r}px">{t}</div>' for k, (t, s, r) in enumerate(DEM)) + '</div>')
@@ -139,7 +148,7 @@ J.append('tl.fromTo("#quote", {opacity:0, scale:.9}, {opacity:1, scale:1, durati
 sfx("sparkle", 56.0, .3)
 
 # ---------- 59.5–66 · reality check ----------
-J.append('tl.to("#dream", {opacity:0, duration:.6}, 59.4); tl.to("#world", {rotationX:0, scale:1, duration:1.0, ease:"power2.inOut"}, 59.4);')
+
 cam(59.4, (KC[0], KC[1]), 560, 1.0)
 J.append('tl.to(["#pin","#area"], {opacity:1, duration:.4}, 60.0);')
 H.append('<div id="chk"><b>ABHI EARLY STAGE · PEHLE CHECK KARO</b><div>✓ Official map</div><div>✓ Approval</div><div>✓ Patta &amp; conversion</div></div>')
@@ -165,7 +174,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #face{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(70% 50% at 50% 40%,#2b3446,#0b0d12);opacity:0}
 #face div{border:4px dashed rgba(255,255,255,.35);border-radius:30px;padding:60px 80px;text-align:center;font-family:Inter}#face b{display:block;font-size:72px;color:#fff;letter-spacing:.06em}#face i{display:block;font-style:normal;font-size:34px;color:#9fb0c4}
 #kt{position:absolute;left:0;right:0;top:250px;text-align:center;opacity:0;font-family:Inter;text-shadow:0 6px 0 #000,0 0 30px rgba(0,0,0,.8)}#kt i{display:block;font-style:normal;font:800 34px "JetBrains Mono",monospace;letter-spacing:.3em;color:#FFD36B}#kt b{display:block;font-weight:900;font-size:120px;line-height:.95;color:#5CF08A}
-#dtag,#dtag2,#today{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#dtag b,#dtag2 b,#today b{display:inline-block;padding:8px 26px;border-radius:18px;background:rgba(6,8,12,.7);font-weight:900;font-size:72px;color:#FFD98A;text-shadow:0 0 24px rgba(255,194,74,.7)}
+#rtag{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#rtag b{display:inline-block;padding:8px 24px;border-radius:16px;background:#FFD36B;font-weight:900;font-size:60px;color:#1a1200;box-shadow:0 0 30px rgba(255,200,80,.6)}#rtag i{display:table;margin:10px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:700 26px \"JetBrains Mono\",monospace;font-style:normal;color:#fff}\n.l3{position:absolute;left:0;top:0;transform:translate(-50%,-100%);opacity:0;white-space:nowrap;padding:6px 14px;border-radius:12px;background:rgba(6,8,12,.82);border:2px solid #FFD98A;font:900 28px Inter;color:#FFD98A}\n#dtag,#dtag2,#today{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;font-family:Inter}#dtag b,#dtag2 b,#today b{display:inline-block;padding:8px 26px;border-radius:18px;background:rgba(6,8,12,.7);font-weight:900;font-size:72px;color:#FFD98A;text-shadow:0 0 24px rgba(255,194,74,.7)}
 #dtag i,#dtag2 i,#today i{display:table;margin:10px auto 0;padding:6px 16px;border-radius:12px;background:rgba(6,8,12,.75);font:700 26px "JetBrains Mono",monospace;font-style:normal;color:#fff}#today b{color:#fff;text-shadow:none}
 .lab{position:absolute;left:0;right:0;top:850px;text-align:center;opacity:0;font-family:Inter}.lab b{display:inline-block;padding:10px 24px;border-radius:16px;background:#5CF08A;font-weight:900;font-size:50px;color:#06210f}.lab i{display:table;margin:8px auto 0;padding:5px 14px;border-radius:10px;background:rgba(6,8,12,.8);font:700 24px "JetBrains Mono",monospace;font-style:normal;color:#fff}
 #plan{position:absolute;left:60px;right:60px;top:250px;opacity:0;padding:24px 28px;border-radius:24px;background:rgba(6,10,14,.86);border:2px solid #5CF08A;font-family:Inter}#plan>b{display:block;font:800 26px "JetBrains Mono",monospace;letter-spacing:.14em;color:#5CF08A;margin-bottom:10px}
@@ -186,7 +195,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script><style>{CSS}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{END}" data-width="1080" data-height="1920" data-fps="30">
-<svg id="world" viewBox="{vb(KC, 520)}" preserveAspectRatio="xMidYMid slice">{"".join(S)}</svg>
+<svg id="world" viewBox="{vb(KC, 520)}" preserveAspectRatio="xMidYMid slice">{"".join(S)}</svg>\n<canvas id="gl" width="1080" height="1920" style="position:absolute;inset:0;width:1080px;height:1920px;opacity:0"></canvas><div id="l3"></div>
 {"".join(H)}
 <audio id="music" class="clip" src="assets/music_tune.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.55" data-fade-in="0.5" data-fade-out="2.5"></audio>
 {"".join(SFX)}
@@ -194,5 +203,5 @@ open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><met
 const tl = gsap.timeline({{ paused: true }});
 {chr(10).join(J)}
 window.__timelines = window.__timelines || {{}}; window.__timelines["main"] = tl;
-</script></body></html>""")
+</script>__JS3__</body></html>""".replace("__JS3__", open("js3.js").read().replace("__D3__", json.dumps(D3))))
 print("ok", END, len(ROAD))

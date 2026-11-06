@@ -1,6 +1,9 @@
 # Knowledge City (Chittora, Diggi Malpura Road): dreamy explainer draft
 `Knowledge_City_DRAFT.mp4` is a 73 s draft with Hinglish captions and music. Its timing is estimated: Ashwil adds his face for 0–2 s and a voice-over for the whole reel, then everything is re-timed to his words.
 
+## Revision 2 (3D opening)
+After the face slot (0–2 s), a Three.js scene shows a camera flying down Diggi Malpura Road (SH-12) as it draws on the satellite ground, then a green spur to Knowledge City. At 5 s a vertical dusk city rises: towers with lit windows plus a labelled university, medical college, IT institute, library and convention centre. At 7.6 s it sinks back to "AAJ — khaali zameen". The same 3D city returns for "Imagine Jaipur" (47.5–59.5 s). The hook now leads with "Diggi Malpura Road".
+
 ## Flow
 | Time (s) | Beat |
 |---|---|
