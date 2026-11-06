@@ -79,8 +79,8 @@ J.append('tl.set("#gl", {opacity:0}, 0); tl.to("#gl", {opacity:1, duration:.35},
 H.append('<div id="dtag"><b>10 SAAL BAAD?</b><i>imagination · not an official plan</i></div>'); show("dtag", 5.1, 7.6)
 
 cap("c1", f"Socho… 10 saal baad — {Y}university, medical college, IT institute{E}…", 5.0, 7.6)
-H.append('<div id="today"><b>AAJ</b><i>khaali zameen</i></div>'); show("today", 7.8, 9.6, .25)
-cap("c2", f"…aur aaj? {Y}Khaali zameen.{E}", 7.7, 9.6)
+H.append('<div id="today"><b>AAJ — MAUKA HAI</b><i>early stage</i></div>'); show("today", 7.8, 9.6, .25)
+cap("c2", f"…aur aaj? {Y}Mauka hai — invest karne ka samay.{E}", 7.7, 9.6)
 sfx("riser", 1.9, .3); sfx("whoosh", 2.0, .3); sfx("impact-bass-1", 5.0, .35); sfx("whoosh", 7.6, .3)
 for k in range(8): sfx("pop", 5.1 + .25 * k, .15)
 
