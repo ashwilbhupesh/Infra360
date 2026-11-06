@@ -7,7 +7,7 @@ const canvas = document.getElementById("gl");
 const R = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
 R.setPixelRatio(1); R.setSize(1080, 1920, false); R.outputColorSpace = THREE.SRGBColorSpace; R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.1;
 const scene = new THREE.Scene(); scene.background = new THREE.Color(0x2a1d3a); scene.fog = new THREE.Fog(0x3a2740, 500, 1500);
-const cam = new THREE.PerspectiveCamera(46, 1080 / 1920, 1, 4000);
+const cam = new THREE.PerspectiveCamera(46, 1080 / 1920, 1, 30000);
 scene.add(new THREE.HemisphereLight(0xffe9c8, 0x30263a, 1.0));
 const sun = new THREE.DirectionalLight(0xffc98a, 2.4); sun.position.set(-300, 260, 200); scene.add(sun);
 function img(src){ return new Promise((r, j) => { const i = new Image(); i.onload = () => r(i); i.onerror = j; i.src = src; }); }
@@ -16,6 +16,9 @@ const ready = (async () => {
   const tex = new THREE.Texture(await img("assets/img/sat.jpg")); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8; tex.needsUpdate = true;
   const g = new THREE.PlaneGeometry(W, Hh); g.rotateX(-Math.PI / 2);
   scene.add(new THREE.Mesh(g, new THREE.MeshStandardMaterial({ map: tex, roughness: 1, color: 0x9a8f9c })));
+  const tb = new THREE.Texture(await img("assets/img/sat_big.jpg")); tb.colorSpace = THREE.SRGBColorSpace; tb.anisotropy = 8; tb.needsUpdate = true;
+  const gb = new THREE.PlaneGeometry(13312, 17408); gb.rotateX(-Math.PI / 2);
+  const big = new THREE.Mesh(gb, new THREE.MeshStandardMaterial({ map: tb, roughness: 1, color: 0x9a8f9c })); big.position.set(-384, -0.6, -1792); scene.add(big);
   const curve = new THREE.CatmullRomCurve3(D.road.map(p => new THREE.Vector3(wx(p), 1.2, wz(p))));
   road = new THREE.Mesh(new THREE.TubeGeometry(curve, 600, 4.2, 8, false), new THREE.MeshStandardMaterial({ color: 0xffd36b, emissive: 0xffb000, emissiveIntensity: 1.4 }));
   scene.add(road); road.userData.n = road.geometry.index.count;
@@ -23,6 +26,10 @@ const ready = (async () => {
   const sc = new THREE.CatmullRomCurve3(D.spur.map(p => new THREE.Vector3(wx(p), 1.2, wz(p))));
   spur = new THREE.Mesh(new THREE.TubeGeometry(sc, 80, 3.6, 8, false), new THREE.MeshStandardMaterial({ color: 0x5cf08a, emissive: 0x2fd47a, emissiveIntensity: 1.3 }));
   scene.add(spur); spur.userData.n = spur.geometry.index.count;
+  const ovc = new THREE.CatmullRomCurve3(D.ov.map(p => new THREE.Vector3(wx(p), 2, wz(p))));
+  window.__ov = new THREE.Mesh(new THREE.TubeGeometry(ovc, 500, 22, 8, false), new THREE.MeshBasicMaterial({ color: 0xffd36b, transparent: true, opacity: .95 }));
+  scene.add(window.__ov);
+  for (const [id, txt] of [["ovj", "JAIPUR"], ["ovr", "DIGGI MALPURA ROAD"], ["ovk", "KNOWLEDGE CITY"]]) { const d = document.createElement("div"); d.id = id; d.className = "ovl"; d.textContent = txt; document.getElementById("l3").appendChild(d); }
   head = new THREE.Mesh(new THREE.SphereGeometry(5, 20, 20), new THREE.MeshBasicMaterial({ color: 0xfff4d0 })); scene.add(head);
   head.add(new THREE.PointLight(0xffc860, 3, 120));
   const rl = document.createElement('div'); rl.id = 'rlab'; rl.innerHTML = '<b>DIGGI MALPURA ROAD</b><i>SH-12 →</i>'; document.getElementById('l3').appendChild(rl);
@@ -55,14 +62,24 @@ function n2o(t){ for (let i = 0; i < ANCH.length - 1; i++) { const [a0,b0] = ANC
 function renderAt(t) {
   if (!ok) return;
   t = n2o(t);
-  if (!((t > 0.4 && t < 9.9) || (t > 47.3 && t < 59.8))) { document.querySelectorAll('#l3 > *').forEach(d => d.style.opacity = 0); return; }
+  if (!((t > 0.3 && t < 9.9) || (t > 47.3 && t < 59.8))) { document.querySelectorAll('#l3 > *').forEach(d => d.style.opacity = 0); return; }
   const kc = new THREE.Vector3(wx(D.kc), 0, wz(D.kc));
-  const p = t < 20 ? cl((t - 0.6) / 4.4) : 1, ps = t < 20 ? cl((t - 4.6) / .6) : 1;
+  const p = t < 20 ? cl((t - 2.5) / 2.5) : 1, ps = t < 20 ? cl((t - 4.6) / .6) : 1;
   road.geometry.setDrawRange(0, Math.floor(road.userData.n * sm(p) / 6) * 6);
   spur.geometry.setDrawRange(0, Math.floor(spur.userData.n * ps / 6) * 6);
   const rc = road.geometry.parameters.path, scv = spur.geometry.parameters.path;
   const hp = p < 1 ? rc.getPointAt(sm(p)) : scv.getPointAt(ps); head.position.copy(hp).setY(6); head.visible = t < 5.4;
-  if (t < 4.8) {
+  const CCJ = new THREE.Vector3(D.cc[0] - W / 2, 0, D.cc[1] - Hh / 2);
+  const s0 = rc.getPointAt(0), s1 = rc.getPointAt(.12);
+  const MID = new THREE.Vector3((CCJ.x + kc.x) / 2, 0, (CCJ.z + kc.z) / 2); const ovPos = new THREE.Vector3(MID.x + 60, 5600, MID.z - 300), ovTgt = MID.clone();
+  const roadPos = new THREE.Vector3(s0.x + 60, 330, s0.z - 70);
+  window.__ov.visible = t < 2.15; window.__ov.material.opacity = .95 * (1 - sm(cl((t - 1.75) / .35)));
+  scene.fog.near = t < 2.5 ? 9000 : 500; scene.fog.far = t < 2.5 ? 20000 : 1500;
+  if (t < 2.5) {
+    const ov2 = ovPos.clone().add(new THREE.Vector3(0, -500 * cl((t - .45) / 1.25), 200 * cl((t - .45) / 1.25)));
+    const f = sm(cl((t - 1.7) / .8));
+    cam.position.copy(ov2.lerp(roadPos, f)); cam.lookAt(ovTgt.clone().lerp(s1.clone(), f));
+  } else if (t < 4.8) {
     const q = sm(p); const a = rc.getPointAt(Math.max(0, q - .16));
     const b2 = rc.getPointAt(Math.min(1, q + .10)); cam.position.set(a.x + 60, 330 - 60 * q, a.z - 70); cam.lookAt(b2.x, 0, b2.z);
   } else {
@@ -75,7 +92,10 @@ function renderAt(t) {
     cam.lookAt(target);
   }
   cam.updateMatrixWorld(true);
-  { const rl = document.getElementById('rlab'); v.copy(head.position).setY(14).project(cam); const vis = t > 0.7 && t < 5.3; rl.style.left = ((v.x + 1) / 2 * 1080 + 40).toFixed(1) + 'px'; rl.style.top = ((1 - v.y) / 2 * 1920).toFixed(1) + 'px'; rl.style.opacity = vis ? 1 : 0; }
+  { const rl = document.getElementById('rlab'); v.copy(head.position).setY(14).project(cam); const vis = t > 2.4 && t < 5.3; rl.style.left = ((v.x + 1) / 2 * 1080 + 40).toFixed(1) + 'px'; rl.style.top = ((1 - v.y) / 2 * 1920).toFixed(1) + 'px'; rl.style.opacity = vis ? 1 : 0; }
+  for (const [id, P, y] of [["ovj", CCJ, 0], ["ovr", rc.getPointAt(.45), 0], ["ovk", kc, 0]]) {
+    const d = document.getElementById(id); v.set(P.x, 20, P.z).project(cam); const on = t > .5 && t < 1.9 && v.z < 1;
+    d.style.left = ((v.x + 1) / 2 * 1080).toFixed(1) + "px"; d.style.top = ((1 - v.y) / 2 * 1920).toFixed(1) + "px"; d.style.opacity = on ? 1 : 0; }
   B.forEach(b => { const e = rise(t, b.k); b.m.scale.y = Math.max(.001, b.h * e); b.m.visible = e > .002; });
   LB.forEach(l => { v.set(l.m.position.x, l.m.scale.y + 6, l.m.position.z).project(cam);
     const vis = l.m.scale.y > l.h * .8 && v.z < 1 && Math.abs(v.x) < .78 && v.y < .62 && v.y > -.35; l.d.style.left = ((v.x + 1) / 2 * 1080).toFixed(1) + "px"; l.d.style.top = ((1 - v.y) / 2 * 1920).toFixed(1) + "px"; l.d.style.opacity = vis ? 1 : 0; });
