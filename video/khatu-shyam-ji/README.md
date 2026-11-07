@@ -1,6 +1,6 @@
 # Khatu Shyam Ji — connectivity & temple triangle reel (text-led, no voice yet)
 
-- `Khatu_Shyam_Ji.mp4` (55.6 s) and `Khatu_Shyam_Ji_1.1x.mp4` (50.5 s), 1080×1920.
+- `Khatu_Shyam_Ji.mp4` (66.6 s) and `Khatu_Shyam_Ji_1.1x.mp4` (60.6 s), 1080×1920.
 - Hook: "Khatu Shyam Ji jaate ho? Agle 5 saal mein yeh jagah pehchaan nahi paoge."
 - Facts on screen: ~50 lakh during Lakkhi mela (Rajasthan Tourism via ThePrint); Kotputli–Kishangarh greenfield expressway ~181 km 6-lane (route drawn indicative);
   Jaipur–Ringas NH-52 4→6 lane + Khatu ring road (approved, DPR stage; ring drawn indicative); Ringas–Khatu rail 17.49 km ~₹254 Cr, Sundarpura station
@@ -8,3 +8,6 @@
 - Sundarpura station picture is labelled "Concept image · not official design" (AI render; fake train board blurred).
 - Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0). Music composed in code (`project/compose_music.py`).
 - Rebuild: `python3 project/build.py` from the work dir, then `npx hyperframes@0.8.221 render`.
+- v2: big glowing highlight around every city as it is named; existing Jaipur–Sikar rail and new Ringas–Khatu rail drawn as track;
+  new "Opportunity map" section (Khatu, Ringas, Chomu, Renwal expressway belt, Kishangarh, Kotputli, Salasar + Jeen Mata), labelled
+  "Possibilities, not guaranteed returns · lines indicative".

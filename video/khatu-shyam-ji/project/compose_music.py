@@ -1,6 +1,6 @@
 """Original devotional-pop bed for the Khatu Shyam Ji reel (composed in code, fully owned). D, 96 BPM: tanpura drone, temple bell, dholak groove, bansuri-style melody."""
 import numpy as np, soundfile as sf
-SR=44100; BPM=96; BEAT=60/BPM; BAR=4*BEAT; DUR=58.0; N=int(DUR*SR); rng=np.random.default_rng(11)
+SR=44100; BPM=96; BEAT=60/BPM; BAR=4*BEAT; DUR=69.0; N=int(DUR*SR); rng=np.random.default_rng(11)
 L=np.zeros(N); R=np.zeros(N)
 def hz(m): return 440*2**((m-69)/12)
 def add(s,t,pan=0,g=1):

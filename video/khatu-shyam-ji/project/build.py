@@ -10,9 +10,9 @@ PXKM = 256 * 2 ** 11 / 360 / (111.32 * math.cos(math.radians(27.4)))
 G = {k: wp(*v) for k, v in {
     "khatu": (27.3637, 75.4029), "ringas": (27.3662, 75.5676), "jaipur": (26.9155, 75.8000), "chomu": (27.1727, 75.7204),
     "kotputli": (27.7072, 76.1996), "kishangarh": (26.5886, 74.8611), "renwal": (27.1504, 75.3565), "dudu": (26.6811, 75.2321),
-    "salasar": (27.7258, 74.7243), "jeen": (27.4444, 75.2002), "sikar": (27.6094, 75.1399), "shahpura": (27.3900, 75.9600),
+    "salasar": (27.7258, 74.7243), "jeen": (27.4444, 75.2002), "sikar": (27.6094, 75.1399), "renwal2": (27.15, 75.36), "shahpura": (27.3900, 75.9600),
     "behror": (27.8900, 76.2800), "delhi": (28.6139, 77.2090), "gurgaon": (28.4595, 77.0266)}.items()}
-END = 55.6
+END = 66.6
 S, H, H2, J, SFX = [], [], [], [], []
 def pd(pts, close=False): return "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in pts) + (" Z" if close else "")
 def smooth(pts, n=12):
@@ -35,6 +35,26 @@ def scr(p, t):
         if t0 + d <= t + 1e-6: c, w = c1, w1
     h = w * 1920 / 1080
     return ((p[0] - (c[0] - w / 2)) / w * 1080, (p[1] - (c[1] - h / 2)) / h * 1920)
+def camw(t):
+    w = CAMS[0][3]
+    for t0, d, c1, w1 in CAMS:
+        if t0 + d <= t + 1e-6: w = w1
+    return w
+def halo(i, p, t, until, at=None, rpx=110):
+    r = rpx * camw(at if at is not None else t) / 1080
+    S.append(f'<g id="{i}" style="opacity:0"><circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="{r:.1f}" fill="url(#hg)"/>'
+             f'<circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="{r * .5:.1f}" style="fill:none;stroke:#fff;stroke-width:{r * .045:.2f}"/>'
+             f'<circle id="{i}r" cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="{r * .5:.1f}" style="fill:none;stroke:#FFD54A;stroke-width:{r * .08:.2f}"/></g>')
+    rep = max(0, int((until - t) / 0.9) - 1)
+    J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.3, transformOrigin:"{p[0]:.1f}px {p[1]:.1f}px"}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {t:.2f});'
+             f'tl.fromTo("#{i}r", {{attr:{{r:{r * .45:.1f}}}, opacity:1}}, {{attr:{{r:{r * 1.15:.1f}}}, opacity:0, duration:.9, ease:"power1.out", repeat:{rep}}}, {t:.2f});'
+             f'tl.to("#{i}", {{opacity:0, duration:.25}}, {until - .25:.2f});')
+def rail(i, pts, col, w, t, until, d=.5):
+    dd = pd(pts)
+    S.append(f'<g id="{i}" style="opacity:0"><path d="{dd}" style="fill:none;stroke:#111;stroke-width:{w * 3.4:.1f};stroke-opacity:.55;stroke-linecap:round"/>'
+             f'<path d="{dd}" style="fill:none;stroke:#fff;stroke-width:{w * 2.6:.1f};stroke-dasharray:{w * .5:.1f} {w * 1.3:.1f}"/>'
+             f'<path d="{dd}" style="fill:none;stroke:{col};stroke-width:{w:.1f};stroke-linecap:round"/></g>')
+    J.append(f'tl.to("#{i}", {{opacity:1, duration:{d}}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:.3}}, {until - .3:.2f});')
 def sfx(name, t, vol=0.5):
     SFX.append(f'<audio class="clip" src="assets/sfx/{name}.mp3" data-start="{t:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{vol}"></audio>')
 def inout(sel, t, until, frm="opacity:0, y:30, scale:.94", to="opacity:1, y:0, scale:1", d=.3, ease="back.out(2)", out="opacity:0, duration:.2"):
@@ -66,6 +86,7 @@ def dot(i, p, r, t, until, col="#FFD54A"):
 Y = '<span class="y">'; E = '</span>'
 
 # ---------- world ----------
+S.append('<defs><radialGradient id="hg"><stop offset="0" stop-color="#FFD54A" stop-opacity=".7"/><stop offset=".5" stop-color="#FFD54A" stop-opacity=".3"/><stop offset="1" stop-color="#FFD54A" stop-opacity="0"/></radialGradient></defs>')
 S.append('<rect x="-3000" y="-3000" width="11000" height="11000" style="fill:#0d1014"/>')
 S.append('<image href="assets/img/s2_k11.jpg" x="0" y="0" width="4352" height="5120" preserveAspectRatio="none"/>')
 S.append('<image id="hi" href="assets/img/s2_k13.jpg" x="1088" y="2048" width="576" height="512" preserveAspectRatio="none" style="opacity:0"/>')
@@ -108,6 +129,7 @@ J.append('tl.to("#kpin", {opacity:1, duration:.2}, 7.7); tl.fromTo("#kring", {at
 label("lk", G["khatu"], "🚩 KHATU SHYAM JI", 7.8, 12.4, at=9.2, cls="hot", dy=-70)
 label("ldel", G["kotputli"], "DELHI ↗<br/><span class='y'>~300 km</span>", 8.6, 12.4, at=9.2, cls="big", dx=40, dy=-260)
 label("ljai", G["jaipur"], "JAIPUR<br/><span class='c'>~80 km</span>", 10.0, 12.4, at=10.0, cls="big", dx=-190)
+halo("hk1", G["khatu"], 7.8, 12.4, at=9.2); halo("hj1", G["jaipur"], 10.0, 12.4, at=10.0)
 dot("djai", G["jaipur"], 12, 9.6, 12.3, "#4FC3F7")
 story("s2", f"Delhi se {Y}~300 km{E}<br/>Jaipur se {Y}~80 km{E}", 8.3, 12.4)
 sfx("whoosh", 7.5, 0.35); sfx("click-soft", 10.0, 0.3)
@@ -134,6 +156,7 @@ J.append('tl.to("#kpin", {attr:{r:24}, duration:.3}, 15.0);')
 label("lkot", G["kotputli"], "KOTPUTLI", 15.6, 19.6, at=16.3, dy=60, dx=-40)
 label("lkis", G["kishangarh"], "KISHANGARH", 16.8, 19.6, at=16.3, dy=-60, dx=60)
 label("lk2", G["khatu"], "🚩 KHATU SHYAM JI", 15.4, 19.6, at=16.3, cls="hot", dy=-60, dx=-60)
+halo("hko", G["kotputli"], 15.6, 19.6, at=16.3); halo("hki", G["kishangarh"], 16.8, 19.6, at=16.3); halo("hk2", G["khatu"], 15.4, 19.6, at=16.3)
 chip("c1", "① GREENFIELD EXPRESSWAY", f"Kotputli → Kishangarh<br/>{Y}~181 km · 6-lane{E}", 15.1, 19.6)
 story("s4", f"Khatu Shyam Ji area se hokar", 15.8, 19.6)
 H2.append('<div class="cred" id="cexp" style="top:420px">Route indicative · not exact alignment</div>'); inout("#cexp", 15.6, 19.6, frm="opacity:0", to="opacity:1")
@@ -149,6 +172,7 @@ for n, k in [("dj2", "jaipur"), ("dch", "chomu"), ("dri", "ringas")]: dot(n, G[k
 label("lj2", G["jaipur"], "JAIPUR", 20.0, 23.6, at=20.9, dy=50)
 label("lch", G["chomu"], "CHOMU", 20.5, 23.6, at=20.9, dx=-120)
 label("lri", G["ringas"], "RINGAS", 21.0, 23.6, at=20.9, dx=150)
+halo("hj2", G["jaipur"], 20.0, 23.6, at=20.9); halo("hch", G["chomu"], 20.5, 23.6, at=20.9); halo("hri", G["ringas"], 21.0, 23.6, at=20.9)
 label("l46", wp(27.10, 75.73), f"4 → {Y}6 LANE{E}", 21.4, 23.6, at=20.9, cls="big", dx=200)
 chip("c2", "② NH-52 WIDENING", f"Jaipur → Ringas · {Y}4-lane → 6-lane{E}<br/><small>Approved by Centre &amp; NHAI · DPR ordered</small>", 19.7, 23.6)
 sfx("whoosh-short", 19.6, 0.35); sfx("click-soft", 21.4, 0.35)
@@ -159,6 +183,7 @@ J.append('tl.to("#hi", {opacity:1, duration:.6}, 23.9); tl.to("#kpin", {attr:{r:
 RR = [(K_C[0] + 4.2 * PXKM * math.cos(a) * (1 + .12 * math.sin(3 * a)), K_C[1] + 3.4 * PXKM * math.sin(a) * (1 + .1 * math.cos(2 * a))) for a in [i / 60 * 2 * math.pi for i in range(61)]]
 line("rring", RR, "#FFD54A", 4, 24.4, 1.6, until=27.5)
 label("lk3", G["khatu"], "KHATU", 24.0, 27.6, at=25.0, cls="hot sm", dy=-45)
+halo("hk3", G["khatu"], 24.0, 27.6, at=25.0, rpx=130)
 label("lring", (K_C[0], K_C[1] + 3.6 * PXKM), "RING ROAD", 25.2, 27.6, at=25.0, cls="", dy=40)
 chip("c3", "③ KHATU RING ROAD", f"Mele ka {Y}jam khatam{E}", 23.7, 27.6)
 story("s6", "Approved alongside NH-52 · DPR stage", 24.3, 27.6)
@@ -174,6 +199,11 @@ J.append('tl.to("#rrail0", {opacity:.9, duration:.3}, 27.9); tl.to("#rrail0", {o
 dot("dri2", G["ringas"], 6, 27.8, 29.4, "#FF2D95"); dot("dkh2", G["khatu"], 6, 27.8, 29.4, "#FF2D95")
 label("lri2", G["ringas"], "RINGAS", 27.9, 29.6, at=28.7, dy=-45)
 label("lkh4", G["khatu"], "KHATU", 27.9, 29.6, at=28.7, cls="hot sm", dy=-45)
+halo("hri2", G["ringas"], 27.9, 29.4, at=28.7); halo("hk4", G["khatu"], 27.9, 29.4, at=28.7)
+RX = smooth([G["jaipur"], G["chomu"], G["ringas"], G["sikar"]], 10)
+rail("rx1", RX, "#9aa4b2", 3, 27.6, 29.4)
+rail("rn1", RL, "#FF2D95", 3, 29.2, 29.4, d=.1)
+label("lrx", wp(27.43, 75.50), "Existing rail · Jaipur–Sikar", 28.0, 29.6, at=28.7, cls="sm", dy=-40)
 label("lkm", wp(27.369, 75.485), f"{Y}17.49 km{E}", 28.8, 29.6, at=28.7, cls="big", dy=70)
 chip("c4", "④ RINGAS–KHATU RAIL LINE", f"{Y}17.49 km · ~₹254 Cr{E} sanctioned", 27.7, 33.4)
 photo("paaj", "aajtak_map.jpg", "Proposed rail alignment near Khatu", "Aaj Tak · image supplied", 29.4, 31.3, x=60, y=470, w=960, h=640)
@@ -218,6 +248,7 @@ TRI = [G["khatu"], G["salasar"], G["jeen"], G["khatu"]]
 line("rtri", TRI, "#FFD54A", 7, 44.2, 1.6)
 J.append('tl.to("#kpin", {attr:{r:14}, duration:.2}, 43.5);')
 for n, k in [("dsa", "salasar"), ("dje", "jeen")]: dot(n, G[k], 14, 44.0, 48.5, "#FFD54A")
+for i, (n, k) in enumerate([("hkt", "khatu"), ("hsa", "salasar"), ("hje", "jeen")]): halo(n, G[k], 44.3 + .55 * i, 48.4, at=45.1, rpx=120)
 H.append('<div id="tri">')
 for nid, img, name, x, y in [("vk", "shringar.jpg", "KHATU SHYAM JI", 800, 860), ("vs", "salasar.jpg", "SALASAR BALAJI", 170, 420), ("vj", "jeen.jpg", "JEEN MATA", 460, 740)]:
     H.append(f'<div class="tv" id="{nid}" style="left:{x}px;top:{y}px"><img src="assets/img/{img}"/><b>{name}</b></div>')
@@ -229,21 +260,57 @@ story("s10", f"Sirf Khatu nahi — {Y}Salasar Balaji{E}<br/>+ {Y}Jeen Mata{E} = 
 H2.append('<div class="tagimg" id="t10">Temple images supplied</div>'); inout("#t10", 44.3, 48.5, frm="opacity:0", to="opacity:1")
 sfx("whoosh", 43.5, 0.3)
 
-# ---------- 11 · smart check (48.6–51.6) ----------
-J.append('tl.to("#dim", {opacity:.8, duration:.4}, 48.5);')
+# ---------- 10b · OPPORTUNITIES across the region (48.6–59.6) ----------
+J.append('tl.to(["#rtri","#rtrig"], {opacity:0, duration:.3}, 48.5); tl.to("#dim", {opacity:.4, duration:.3}, 48.5); tl.to("#kpin", {opacity:0, duration:.2}, 48.5);')
+OV_C, OV_W = (1355, 2560), 2650
+cam(48.6, OV_C, OV_W, 1.3)
+J.append('tl.to("#credit", {opacity:0, duration:.2}, 48.6); tl.to("#credit", {opacity:1, duration:.2}, 59.6);')
+line("oexp", EXP, "#FF8A00", 16, 48.9, 1.2, until=59.4)
+line("onh", NH, "#4FC3F7", 14, 49.2, .9, until=59.4)
+rail("orx", RX, "#cfd6df", 9, 49.4, 59.6)
+rail("orn", RL, "#FF2D95", 10, 49.6, 59.6)
+H2.append('<div id="legend"><span><i style="background:#FF8A00"></i>Expressway</span><span><i style="background:#4FC3F7"></i>6-lane NH-52</span><span><i class="rl" style="background:#9aa4b2"></i>Rail</span><span><i class="rl" style="background:#FF2D95"></i>New rail</span></div>')
+inout("#legend", 49.3, 59.6, frm="opacity:0", to="opacity:1")
+chip("c11", "OPPORTUNITY MAP", f"Jahan connectivity, {Y}wahan growth{E}", 48.7, 59.6)
+OPP = [("khatu", "KHATU SHYAM JI", "Hotels · Dharamshala · Homestays", 0, -150),
+       ("ringas", "RINGAS", "Rail junction + 6-lane<br/>Shops · Stays · Commercial", 120, 150),
+       ("chomu", "CHOMU", "6-lane corridor<br/>Housing near Jaipur", 60, 150),
+       ("renwal", "RENWAL · EXPRESSWAY BELT", "Warehousing · Logistics<br/>near interchanges", -40, 150),
+       ("kishangarh", "KISHANGARH", "Marble hub + airport<br/>Logistics · Industry", 230, -40),
+       ("kotputli", "KOTPUTLI", "NH-48 junction<br/>Logistics · Highway shops", -150, 160),
+       ("salasar", "SALASAR · JEEN MATA", "Pilgrim stays · Food · Travel", 200, 150)]
+T0, STEP = 50.0, 1.35
+for i, (k, nm, txt, dx, dy) in enumerate(OPP):
+    t = T0 + STEP * i; nxt = t + STEP + .05
+    halo(f"ho{i}", G[k], t, nxt, at=t, rpx=150)
+    if k == "salasar": halo("ho7", G["jeen"], t, nxt, at=t, rpx=150)
+    x, y = scr(G[k], t); x = min(max(x + dx, 280), 800); y = y + dy
+    H.append(f'<div class="opp" id="op{i}" style="left:{x:.0f}px;top:{y:.0f}px"><b>{nm}</b>{txt}</div>')
+    inout(f"#op{i}", t + .05, nxt, frm="opacity:0, scale:.6", to="opacity:1, scale:1", d=.3)
+    sx, sy = scr(G[k], t)
+    odx = {"khatu": -80, "ringas": 60}.get(k, 0)
+    if nxt < 59.0:
+        H.append(f'<div class="oname" id="on{i}" style="left:{sx + odx:.0f}px;top:{sy + 40:.0f}px">{nm.split(" ·")[0]}</div>')
+        inout(f"#on{i}", nxt - .05, 59.5, frm="opacity:0", to="opacity:1", d=.2)
+    sfx("pop", t, .3)
+H2.append('<div class="cred" id="copp" style="top:470px">Possibilities, not guaranteed returns · lines indicative</div>'); inout("#copp", 49.5, 59.6, frm="opacity:0", to="opacity:1")
+sfx("whoosh", 48.6, 0.3); sfx("riser", 57.0, 0.2)
+
+# ---------- 11 · smart check (59.6–62.6) ----------
+J.append('tl.to("#dim", {opacity:.8, duration:.4}, 59.5);')
 H2.append(f'<div id="chk"><small>PLOT LENE SE PEHLE CHECK KARO</small>'
           f'<p id="k1">✓ Expressway {Y}interchange{E} kitni door hai</p><p id="k2">✓ Layout ka {Y}approval{E}</p><p id="k3">✓ {Y}Patta{E} &amp; land conversion</p></div>')
-J.append('tl.fromTo("#chk", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 48.6); tl.to("#chk", {opacity:0, duration:.25}, 51.5);')
-for i in range(3): J.append(f'tl.from("#k{i + 1}", {{opacity:0, x:-60, duration:.3, ease:"power3.out"}}, {48.9 + .45 * i:.2f});'); sfx("click-soft", 48.9 + .45 * i, .35)
+J.append('tl.fromTo("#chk", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 59.6); tl.to("#chk", {opacity:0, duration:.25}, 62.5);')
+for i in range(3): J.append(f'tl.from("#k{i + 1}", {{opacity:0, x:-60, duration:.3, ease:"power3.out"}}, {59.9 + .45 * i:.2f});'); sfx("click-soft", 59.9 + .45 * i, .35)
 
-# ---------- 12 · CTA (51.6–END) ----------
+# ---------- 12 · CTA (62.6–END) ----------
 H2.append('<div id="ctabg" class="full"><img src="assets/img/shringar.jpg" style="object-position:50% 38%"/><div class="shade"></div></div>')
-J.append(f'tl.set("#ctabg", {{opacity:0}}, 0); tl.to("#ctabg", {{opacity:1, duration:.3}}, 51.5); tl.fromTo("#ctabg img", {{scale:1.0}}, {{scale:1.12, duration:{END - 51.5:.1f}, ease:"none"}}, 51.5);')
+J.append(f'tl.set("#ctabg", {{opacity:0}}, 0); tl.to("#ctabg", {{opacity:1, duration:.3}}, 62.5); tl.fromTo("#ctabg img", {{scale:1.0}}, {{scale:1.12, duration:{END - 62.5:.1f}, ease:"none"}}, 62.5);')
 H2.append(f'<div id="cta"><small>Aap kitni baar Khatu gaye ho?</small><b>Comment karo<br/>{Y}JAI SHREE SHYAM{E} 🙏</b></div>')
-J.append('tl.fromTo("#cta", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.4, ease:"back.out(2)"}, 51.7); tl.fromTo("#cta b", {scale:1}, {scale:1.05, duration:.5, yoyo:true, repeat:5}, 52.3);')
+J.append('tl.fromTo("#cta", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.4, ease:"back.out(2)"}, 62.7); tl.fromTo("#cta b", {scale:1}, {scale:1.05, duration:.5, yoyo:true, repeat:5}, 63.3);')
 H2.append('<div id="share"><svg viewBox="0 0 24 24" width="76" height="76"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round"/></svg><span>Bhejo usko jo har Ekadashi<br/>Khatu jaata hai</span></div>')
-J.append('tl.fromTo("#share", {opacity:0, y:30}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 52.6); tl.fromTo("#share svg", {scale:1}, {scale:1.15, duration:.45, yoyo:true, repeat:5}, 53.0);')
-sfx("sparkle", 51.7, 0.35); sfx("impact-bass-1", 51.6, 0.35)
+J.append('tl.fromTo("#share", {opacity:0, y:30}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 63.6); tl.fromTo("#share svg", {scale:1}, {scale:1.15, duration:.45, yoyo:true, repeat:5}, 64.0);')
+sfx("sparkle", 62.7, 0.35); sfx("impact-bass-1", 62.6, 0.35)
 
 H2.append('<div id="brand">ASHWILLPOWER · JAIPUR REAL ESTATE</div>')
 H.append('<div id="credit">Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0) · routes indicative</div>')
@@ -292,6 +359,11 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #share{position:absolute;left:0;right:0;top:1120px;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0}
 #share span{display:block;padding:14px 26px;border-radius:22px;background:rgba(8,10,14,.78);text-align:center;font:900 46px/1.12 Inter,sans-serif;color:#fff}
 #share svg{background:#FF8A00;border-radius:50%;padding:16px;box-shadow:0 0 0 12px rgba(255,138,0,.3)}
+.opp{position:absolute;opacity:0;translate:-50% -50%;padding:14px 22px;border-radius:18px;background:rgba(8,10,14,.9);border:3px solid #FFD54A;font:800 32px/1.18 Inter,sans-serif;color:#fff;text-align:center;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.6)}
+.opp b{display:block;font:900 34px Inter,sans-serif;color:#FFD54A;margin-bottom:4px}
+.oname{position:absolute;opacity:0;translate:-50% 0;padding:4px 10px;border-radius:8px;background:rgba(8,10,14,.75);font:800 22px Inter,sans-serif;color:#fff;white-space:nowrap}
+#legend{position:absolute;left:40px;right:40px;top:400px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;opacity:0;font:700 26px Inter,sans-serif;color:#fff}
+#legend span{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:12px;background:rgba(8,10,14,.75)}#legend i{display:inline-block;width:36px;height:8px;border-radius:4px}#legend i.rl{height:6px;outline:3px dashed #fff;outline-offset:2px}
 #brand{position:absolute;left:0;right:0;top:96px;text-align:center;font:700 22px "JetBrains Mono",monospace;letter-spacing:.2em;color:rgba(255,255,255,.8);text-shadow:0 2px 6px #000}
 #credit{position:absolute;left:40px;right:40px;top:1300px;text-align:center;font:500 18px "JetBrains Mono",monospace;color:rgba(255,255,255,.6);text-shadow:0 1px 3px #000}"""
 S = S[:LINES_AT] + S[LINES_AT:]
