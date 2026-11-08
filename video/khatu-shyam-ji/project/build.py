@@ -46,7 +46,7 @@ def halo(i, p, t, until, at=None, rpx=110):
              f'<circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="{r * .5:.1f}" style="fill:none;stroke:#fff;stroke-width:{r * .045:.2f}"/>'
              f'<circle id="{i}r" cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="{r * .5:.1f}" style="fill:none;stroke:#FFD54A;stroke-width:{r * .08:.2f}"/></g>')
     rep = max(0, int((until - t) / 0.9) - 1)
-    J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.3, transformOrigin:"{p[0]:.1f}px {p[1]:.1f}px"}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {t:.2f});'
+    J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.3, transformOrigin:"50% 50%"}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {t:.2f});'
              f'tl.fromTo("#{i}r", {{attr:{{r:{r * .45:.1f}}}, opacity:1}}, {{attr:{{r:{r * 1.15:.1f}}}, opacity:0, duration:.9, ease:"power1.out", repeat:{rep}}}, {t:.2f});'
              f'tl.to("#{i}", {{opacity:0, duration:.25}}, {until - .25:.2f});')
 def rail(i, pts, col, w, t, until, d=.5):
@@ -55,6 +55,29 @@ def rail(i, pts, col, w, t, until, d=.5):
              f'<path d="{dd}" style="fill:none;stroke:#fff;stroke-width:{w * 2.6:.1f};stroke-dasharray:{w * .5:.1f} {w * 1.3:.1f}"/>'
              f'<path d="{dd}" style="fill:none;stroke:{col};stroke-width:{w:.1f};stroke-linecap:round"/></g>')
     J.append(f'tl.to("#{i}", {{opacity:1, duration:{d}}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:.3}}, {until - .3:.2f});')
+def railanim(i, pts, col, w, t, d, until):
+    dd = pd(pts)
+    S.append(f'<mask id="m{i}" maskUnits="userSpaceOnUse" x="-9000" y="-9000" width="30000" height="30000"><path id="mp{i}" d="{dd}" pathLength="1" style="fill:none;stroke:#fff;stroke-width:{w * 8:.1f};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/></mask>')
+    S.append(f'<g id="{i}" mask="url(#m{i})"><path d="{dd}" style="fill:none;stroke:{col};stroke-width:{w * 6:.1f};stroke-opacity:.35;stroke-linecap:round"/>'
+             f'<path d="{dd}" style="fill:none;stroke:#111;stroke-width:{w * 3.4:.1f};stroke-opacity:.6"/>'
+             f'<path d="{dd}" style="fill:none;stroke:#fff;stroke-width:{w * 2.6:.1f};stroke-dasharray:{w * .5:.1f} {w * 1.3:.1f}"/>'
+             f'<path d="{dd}" style="fill:none;stroke:{col};stroke-width:{w:.1f};stroke-linecap:round"/></g>')
+    L = [0.0]
+    for a_, b_ in zip(pts, pts[1:]): L.append(L[-1] + math.hypot(b_[0] - a_[0], b_[1] - a_[1]))
+    N = 40; samp = []
+    for k in range(N + 1):
+        tgt = L[-1] * k / N; j = max(1, next((m for m in range(1, len(L)) if L[m] >= tgt), len(L) - 1))
+        f = (tgt - L[j - 1]) / max(1e-6, L[j] - L[j - 1]); a_, b_ = pts[j - 1], pts[j]
+        samp.append((a_[0] + (b_[0] - a_[0]) * f, a_[1] + (b_[1] - a_[1]) * f, math.degrees(math.atan2(b_[1] - a_[1], b_[0] - a_[0]))))
+    tw, th = w * 9, w * 3.6
+    S.append(f'<g id="tr{i}" style="opacity:0" transform="translate({samp[0][0]:.1f},{samp[0][1]:.1f}) rotate({samp[0][2]:.1f})">'
+             f'<circle r="{tw * .9:.1f}" fill="url(#hg)"/><rect x="{-tw / 2:.1f}" y="{-th / 2:.1f}" width="{tw:.1f}" height="{th:.1f}" rx="{th / 2:.1f}" style="fill:{col};stroke:#fff;stroke-width:{w * .5:.1f}"/>'
+             f'<rect x="{tw * .18:.1f}" y="{-th * .28:.1f}" width="{tw * .2:.1f}" height="{th * .56:.1f}" rx="{th * .1:.1f}" style="fill:#fff"/></g>')
+    J.append(f'tl.to("#mp{i}", {{strokeDashoffset:0, duration:{d}, ease:"none"}}, {t:.2f}); tl.to("#tr{i}", {{opacity:1, duration:.15}}, {t:.2f});')
+    for k in range(1, N + 1):
+        x, y, ang = samp[k]
+        J.append(f'tl.to("#tr{i}", {{attr:{{transform:"translate({x:.1f},{y:.1f}) rotate({ang:.1f})"}}, duration:{d / N:.4f}, ease:"none"}}, {t + d * (k - 1) / N:.4f});')
+    J.append(f'tl.to(["#{i}", "#tr{i}"], {{opacity:0, duration:.3}}, {until - .3:.2f});')
 def sfx(name, t, vol=0.5):
     SFX.append(f'<audio class="clip" src="assets/sfx/{name}.mp3" data-start="{t:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{vol}"></audio>')
 def inout(sel, t, until, frm="opacity:0, y:30, scale:.94", to="opacity:1, y:0, scale:1", d=.3, ease="back.out(2)", out="opacity:0, duration:.2"):
@@ -107,10 +130,10 @@ H2.append('<div class="tagimg" id="t0">Image supplied</div>'); inout("#t0", 0.3,
 # ---------- 1 · SCALE (3.4–7.6) ----------
 H2.append('<div id="crowdbg" class="full"><img src="assets/img/nishan.jpg"/><div class="shade"></div></div>')
 J.append('tl.set("#crowdbg", {opacity:0}, 0); tl.to("#crowdbg", {opacity:1, duration:.15}, 3.3); tl.fromTo("#crowdbg img", {scale:1.05}, {scale:1.22, duration:4.4, ease:"none"}, 3.3); tl.to("#crowdbg", {opacity:0, duration:.3}, 7.45);')
-H2.append('<div id="count"><small>SIRF LAKKHI MELE MEIN</small><span id="cnum">0</span><em>SHRADDHALU</em></div>')
+H2.append('<div id="count"><small>HAR SAAL</small><span>LAKHON BHAKT</span><em>Sirf Lakkhi mele mein ~50 lakh</em></div>')
 inout("#count", 3.45, 7.6, frm="opacity:0, scale:.6", to="opacity:1, scale:1")
-J.append('const cn={v:0}; tl.to(cn, {v:5000000, duration:1.6, ease:"power2.out", onUpdate:()=>{document.getElementById("cnum").textContent="~"+Math.round(cn.v).toLocaleString("en-IN")}}, 3.5);')
-story("s1", f"Haare ka sahara — {Y}Rajasthan ka sabse bada{E}<br/>pilgrimage magnet", 4.9, 7.6)
+
+story("s1", f"Aur ab yahan pahunchna hoga<br/>{Y}aur bhi aasaan{E}", 4.9, 7.6)
 H2.append('<div class="tagimg" id="t1">~50 lakh during Lakkhi mela · Rajasthan Tourism via ThePrint · Image supplied</div>'); inout("#t1", 3.6, 7.5, frm="opacity:0", to="opacity:1")
 sfx("riser", 3.4, 0.25); sfx("ping", 5.1, 0.35)
 
@@ -131,7 +154,7 @@ label("ldel", G["kotputli"], "DELHI ↗<br/><span class='y'>~300 km</span>", 8.6
 label("ljai", G["jaipur"], "JAIPUR<br/><span class='c'>~80 km</span>", 10.0, 12.4, at=10.0, cls="big", dx=-190)
 halo("hk1", G["khatu"], 7.8, 12.4, at=9.2); halo("hj1", G["jaipur"], 10.0, 12.4, at=10.0)
 dot("djai", G["jaipur"], 12, 9.6, 12.3, "#4FC3F7")
-story("s2", f"Delhi se {Y}~300 km{E}<br/>Jaipur se {Y}~80 km{E}", 8.3, 12.4)
+story("s2", f"Delhi ho ya Jaipur —<br/>{Y}seedhi connectivity aa rahi hai{E}", 8.3, 12.4)
 sfx("whoosh", 7.5, 0.35); sfx("click-soft", 10.0, 0.3)
 
 # ---------- 3 · CM clipping (12.4–15.0) ----------
@@ -157,8 +180,8 @@ label("lkot", G["kotputli"], "KOTPUTLI", 15.6, 19.6, at=16.3, dy=60, dx=-40)
 label("lkis", G["kishangarh"], "KISHANGARH", 16.8, 19.6, at=16.3, dy=-60, dx=60)
 label("lk2", G["khatu"], "🚩 KHATU SHYAM JI", 15.4, 19.6, at=16.3, cls="hot", dy=-60, dx=-60)
 halo("hko", G["kotputli"], 15.6, 19.6, at=16.3); halo("hki", G["kishangarh"], 16.8, 19.6, at=16.3); halo("hk2", G["khatu"], 15.4, 19.6, at=16.3)
-chip("c1", "① GREENFIELD EXPRESSWAY", f"Kotputli → Kishangarh<br/>{Y}~181 km · 6-lane{E}", 15.1, 19.6)
-story("s4", f"Khatu Shyam Ji area se hokar", 15.8, 19.6)
+chip("c1", "① GREENFIELD EXPRESSWAY", f"Kotputli → Kishangarh<br/>{Y}Delhi side se seedha, tez safar{E}", 15.1, 19.6)
+story("s4", f"Khatu area se hokar —<br/>{Y}naye investment zones{E}", 15.8, 19.6)
 H2.append('<div class="cred" id="cexp" style="top:420px">Route indicative · not exact alignment</div>'); inout("#cexp", 15.6, 19.6, frm="opacity:0", to="opacity:1")
 sfx("whoosh-short", 15.0, 0.35); sfx("riser", 15.4, 0.2)
 
@@ -174,7 +197,7 @@ label("lch", G["chomu"], "CHOMU", 20.5, 23.6, at=20.9, dx=-120)
 label("lri", G["ringas"], "RINGAS", 21.0, 23.6, at=20.9, dx=150)
 halo("hj2", G["jaipur"], 20.0, 23.6, at=20.9); halo("hch", G["chomu"], 20.5, 23.6, at=20.9); halo("hri", G["ringas"], 21.0, 23.6, at=20.9)
 label("l46", wp(27.10, 75.73), f"4 → {Y}6 LANE{E}", 21.4, 23.6, at=20.9, cls="big", dx=200)
-chip("c2", "② NH-52 WIDENING", f"Jaipur → Ringas · {Y}4-lane → 6-lane{E}<br/><small>Approved by Centre &amp; NHAI · DPR ordered</small>", 19.7, 23.6)
+chip("c2", "② NH-52 WIDENING", f"Jaipur → Ringas {Y}6-lane{E}<br/><small>Jaipur se Khatu — kam traffic, kam time</small>", 19.7, 23.6)
 sfx("whoosh-short", 19.6, 0.35); sfx("click-soft", 21.4, 0.35)
 
 # ---------- 6 · ③ ring road (23.6–27.6) ----------
@@ -186,44 +209,41 @@ label("lk3", G["khatu"], "KHATU", 24.0, 27.6, at=25.0, cls="hot sm", dy=-45)
 halo("hk3", G["khatu"], 24.0, 27.6, at=25.0, rpx=130)
 label("lring", (K_C[0], K_C[1] + 3.6 * PXKM), "RING ROAD", 25.2, 27.6, at=25.0, cls="", dy=40)
 chip("c3", "③ KHATU RING ROAD", f"Mele ka {Y}jam khatam{E}", 23.7, 27.6)
-story("s6", "Approved alongside NH-52 · DPR stage", 24.3, 27.6)
+story("s6", f"Mele mein bhi {Y}aasaan darshan{E}", 24.3, 27.6)
 H2.append('<div class="cred" id="crr" style="top:1270px">Ring shown indicative · final alignment awaited</div>'); inout("#crr", 24.4, 27.6, frm="opacity:0", to="opacity:1")
 sfx("whoosh", 23.6, 0.3); sfx("sparkle", 24.4, 0.3)
 
 # ---------- 7 · ④ rail (27.6–33.4) ----------
 RA_C = wp(27.372, 75.485); cam(27.6, RA_C, 430, 1.1)
 RL = smooth([G["ringas"], wp(27.372, 75.52), wp(27.369, 75.45), G["khatu"]], 12)
-S.append(f'<path id="rrail0" d="{pd(RL)}" style="fill:none;stroke:#fff;stroke-width:6;stroke-linecap:round;opacity:0"/>')
-line("rrail", RL, "#FF2D95", 4, 27.9, 1.4, until=29.4)
-J.append('tl.to("#rrail0", {opacity:.9, duration:.3}, 27.9); tl.to("#rrail0", {opacity:0, duration:.3}, 29.4);')
-dot("dri2", G["ringas"], 6, 27.8, 29.4, "#FF2D95"); dot("dkh2", G["khatu"], 6, 27.8, 29.4, "#FF2D95")
-label("lri2", G["ringas"], "RINGAS", 27.9, 29.6, at=28.7, dy=-45)
-label("lkh4", G["khatu"], "KHATU", 27.9, 29.6, at=28.7, cls="hot sm", dy=-45)
-halo("hri2", G["ringas"], 27.9, 29.4, at=28.7); halo("hk4", G["khatu"], 27.9, 29.4, at=28.7)
 RX = smooth([G["jaipur"], G["chomu"], G["ringas"], G["sikar"]], 10)
-rail("rx1", RX, "#9aa4b2", 3, 27.6, 29.4)
-rail("rn1", RL, "#FF2D95", 3, 29.2, 29.4, d=.1)
-label("lrx", wp(27.43, 75.50), "Existing rail · Jaipur–Sikar", 28.0, 29.6, at=28.7, cls="sm", dy=-40)
-label("lkm", wp(27.369, 75.485), f"{Y}17.49 km{E}", 28.8, 29.6, at=28.7, cls="big", dy=70)
-chip("c4", "④ RINGAS–KHATU RAIL LINE", f"{Y}17.49 km · ~₹254 Cr{E} sanctioned", 27.7, 33.4)
-photo("paaj", "aajtak_map.jpg", "Proposed rail alignment near Khatu", "Aaj Tak · image supplied", 29.4, 31.3, x=60, y=470, w=960, h=640)
-photo("psun", "sundarpura.jpg", "", "", 31.2, 33.4, x=60, y=430, w=470, h=740)
-H2.append('<div class="tagc" id="tsun" style="left:60px;top:1185px;width:470px">Concept image · not official design</div>'); inout("#tsun", 31.3, 33.4, frm="opacity:0", to="opacity:1")
-photo("pie", "clip_ie.jpg", "", "", 31.5, 33.4, x=550, y=520, w=470, h=326, fit="cover", pos="50% 0%", rot=2)
-H2.append('<div class="tagc" id="tie" style="left:550px;top:860px;width:470px">The Indian Express · image supplied</div>'); inout("#tie", 31.6, 33.4, frm="opacity:0", to="opacity:1")
-story("s7", f"Naya {Y}Sundarpura station{E} — construction<br/>next year (Indian Express)", 29.5, 33.4)
-J.append('tl.to("#dim", {opacity:.6, duration:.4}, 29.3);')
-sfx("whoosh-short", 27.6, 0.35)
+rail("rx1", RX, "#9aa4b2", 3, 27.6, 30.6)
+railanim("rn1", RL, "#FF2D95", 3.2, 28.0, 2.3, 30.6)
+dot("dri2", G["ringas"], 6, 27.8, 30.5, "#FF2D95"); dot("dkh2", G["khatu"], 6, 27.8, 30.5, "#FF2D95")
+label("lri2", G["ringas"], "RINGAS", 27.9, 30.6, at=28.7, dy=-45)
+label("lkh4", G["khatu"], "KHATU", 27.9, 30.6, at=28.7, cls="hot sm", dy=-45)
+halo("hri2", G["ringas"], 27.9, 30.5, at=28.7); halo("hk4", G["khatu"], 29.9, 30.5, at=28.7, rpx=140)
+label("lrx", wp(27.43, 75.50), "Existing rail · Jaipur–Sikar", 28.0, 30.6, at=28.7, cls="sm", dy=-40)
+label("lkm", wp(27.369, 75.485), f"{Y}PROPOSED RAIL LINE{E}", 28.6, 30.6, at=28.7, cls="big", dy=70)
+chip("c4", "④ RINGAS–KHATU RAIL LINE", f"{Y}Train se seedha Khatu{E}<br/><small>Ringas–Khatu line sanctioned</small>", 27.7, 33.4)
+photo("paaj", "aajtak_map.jpg", "Proposed rail alignment near Khatu", "Aaj Tak · image supplied", 30.5, 32.0, x=60, y=470, w=960, h=640)
+photo("psun", "sundarpura.jpg", "", "", 31.9, 33.4, x=60, y=430, w=470, h=740)
+H2.append('<div class="tagc" id="tsun" style="left:60px;top:1185px;width:470px">Concept image · not official design</div>'); inout("#tsun", 32.0, 33.4, frm="opacity:0", to="opacity:1")
+photo("pie", "clip_ie.jpg", "", "", 32.1, 33.4, x=550, y=520, w=470, h=326, fit="cover", pos="50% 0%", rot=2)
+H2.append('<div class="tagc" id="tie" style="left:550px;top:860px;width:470px">The Indian Express · image supplied</div>'); inout("#tie", 32.2, 33.4, frm="opacity:0", to="opacity:1")
+story("s7", f"Naya {Y}Sundarpura station{E} — construction<br/>next year (Indian Express)", 30.6, 33.4)
+J.append('tl.to("#dim", {opacity:.6, duration:.4}, 30.4);')
+sfx("whoosh-short", 27.6, 0.35); sfx("riser", 28.0, 0.25)
 
 # ---------- 8 · heritage (33.4–38.0) ----------
 H2.append('<div id="herbg" class="full"><img src="assets/img/entrance.jpg"/><div class="shade"></div></div>')
 J.append('tl.set("#herbg", {opacity:0}, 0); tl.to("#herbg", {opacity:1, duration:.25}, 33.3); tl.fromTo("#herbg img", {scale:1.02}, {scale:1.15, duration:4.8, ease:"none"}, 33.3); tl.to("#herbg", {opacity:0, duration:.3}, 37.9);')
-H2.append('<div id="crore"><small>MANDIR KA KAYAKALP</small><span>₹<i id="crn">0</i> CR</span><em>Swadesh Darshan 2.0 · heritage look</em></div>')
+H2.append('<div id="crore"><small>MANDIR KA KAYAKALP</small><span>HERITAGE LOOK</span><em>₹87.87 Cr · Swadesh Darshan 2.0</em></div>')
 inout("#crore", 33.5, 38.0, frm="opacity:0, scale:.6", to="opacity:1, scale:1")
-J.append('const cc={v:0}; tl.to(cc, {v:87.87, duration:1.1, ease:"power2.out", onUpdate:()=>{document.getElementById("crn").textContent=cc.v.toFixed(2)}}, 33.6);')
+
 photo("psd", "clip_sd.jpg", "", "", 35.0, 38.0, x=60, y=840, w=960, h=296, fit="cover")
 H2.append('<div class="cred" id="csd" style="top:1150px">Bhaskar English · image supplied</div>'); inout("#csd", 35.1, 38.0, frm="opacity:0", to="opacity:1")
-story("s8", f"First installment {Y}₹8.78 Cr{E} already allocated", 35.6, 38.0)
+story("s8", f"Behtar darshan → zyada bhakt<br/>→ {Y}zyada demand{E}", 35.6, 38.0)
 sfx("impact-bass-1", 33.4, 0.4); sfx("sparkle", 34.7, 0.3)
 
 # ---------- 9 · hub (38.0–43.6) ----------
@@ -268,10 +288,10 @@ J.append('tl.to("#credit", {opacity:0, duration:.2}, 48.6); tl.to("#credit", {op
 line("oexp", EXP, "#FF8A00", 16, 48.9, 1.2, until=59.4)
 line("onh", NH, "#4FC3F7", 14, 49.2, .9, until=59.4)
 rail("orx", RX, "#cfd6df", 9, 49.4, 59.6)
-rail("orn", RL, "#FF2D95", 10, 49.6, 59.6)
+railanim("orn", RL, "#FF2D95", 9, 49.6, 1.6, 59.6)
 H2.append('<div id="legend"><span><i style="background:#FF8A00"></i>Expressway</span><span><i style="background:#4FC3F7"></i>6-lane NH-52</span><span><i class="rl" style="background:#9aa4b2"></i>Rail</span><span><i class="rl" style="background:#FF2D95"></i>New rail</span></div>')
 inout("#legend", 49.3, 59.6, frm="opacity:0", to="opacity:1")
-chip("c11", "OPPORTUNITY MAP", f"Jahan connectivity, {Y}wahan growth{E}", 48.7, 59.6)
+chip("c11", "POORA REGION BADAL RAHA HAI", f"Jahan connectivity, {Y}wahan growth{E}", 48.7, 59.6)
 OPP = [("khatu", "KHATU SHYAM JI", "Hotels · Dharamshala · Homestays", 0, -150),
        ("ringas", "RINGAS", "Rail junction + 6-lane<br/>Shops · Stays · Commercial", 120, 150),
        ("chomu", "CHOMU", "6-lane corridor<br/>Housing near Jaipur", 60, 150),
@@ -336,9 +356,9 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 .lab.big{font-size:52px}.lab.hot{background:#FFD54A;color:#111;font-size:40px}.lab.hot.sm{font-size:32px}.lab.sm{font-size:30px}
 #count{position:absolute;left:40px;right:40px;top:300px;text-align:center;opacity:0;padding:26px 0 30px;border-radius:30px;background:rgba(8,10,14,.72)}
 #count small{display:block;font:800 34px "JetBrains Mono",monospace;letter-spacing:.14em;color:#fff}
-#count span{display:block;font-weight:900;font-size:150px;line-height:1.05;color:#FFD54A}#count em{display:block;font-style:normal;font:800 40px "JetBrains Mono",monospace;letter-spacing:.3em;color:#fff}
+#count span{display:block;font-weight:900;font-size:112px;line-height:1.05;color:#FFD54A}#count em{display:block;font-style:normal;font:800 40px Inter,sans-serif;color:#fff}
 #crore{position:absolute;left:40px;right:40px;top:300px;text-align:center;opacity:0;padding:26px 0 30px;border-radius:30px;background:rgba(8,10,14,.75)}
-#crore small{display:block;font:800 34px "JetBrains Mono",monospace;letter-spacing:.14em;color:#fff}#crore span{display:block;font-weight:900;font-size:160px;line-height:1.05;color:#FFD54A}
+#crore small{display:block;font:800 34px "JetBrains Mono",monospace;letter-spacing:.14em;color:#fff}#crore span{display:block;font-weight:900;font-size:112px;line-height:1.05;color:#FFD54A}
 #crore i{font-style:normal}#crore em{display:block;font-style:normal;font:800 36px Inter,sans-serif;color:#fff}
 #badge{position:absolute;right:50px;top:1130px;opacity:0;width:150px;height:150px;border-radius:50%;background:#FFD54A;display:flex;align-items:center;justify-content:center;font:900 76px Inter,sans-serif;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 #badge i{font-style:normal;position:absolute;left:0;width:96px;text-align:right}#badge{justify-content:flex-end;padding-right:22px}#badge span{font-size:40px;opacity:.7}

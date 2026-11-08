@@ -11,3 +11,5 @@
 - v2: big glowing highlight around every city as it is named; existing Jaipur–Sikar rail and new Ringas–Khatu rail drawn as track;
   new "Opportunity map" section (Khatu, Ringas, Chomu, Renwal expressway belt, Kishangarh, Kotputli, Salasar + Jeen Mata), labelled
   "Possibilities, not guaranteed returns · lines indicative".
+- v3: no counting meters (values appear instantly); copy reframed around ease of travel, investment and area hype;
+  proposed Ringas–Khatu rail now draws in as track with a moving train (rail section and opportunity map).
