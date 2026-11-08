@@ -18,3 +18,5 @@
 - VOICE: `Khatu_Shyam_Ji_VOICE.mp4` (82.8 s) and `_VOICE_1.1x.mp4` — Ashwil's Hinglish recording (retakes removed, pauses tightened, `project/cut.py`),
   face for 0.78 s from the first word, captions verbatim (`project/phrases.json`), scenes time-warped to the voice (`ANCH` in `project/build.py`);
   new "Toh chukiyega mat" card for the ad-libbed line. `project/build_text.py` is the text-only build.
+- VOICE v2 opening: idol on "Khatu Shyam Ji", full highway + rail teaser map on "agle 5 saal…", animated streams of bhakts
+  converging on Khatu from 8 directions on "lakhon bhakt", then the crowd photo as a popup.

@@ -40,13 +40,13 @@ def cam(t, c, w, d=1.2, ease="power2.inOut"):
     J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(c, w)}"}}, duration:{d}, ease:"{ease}"}}, {t:.2f});'); CAMS.append((t, d, c, w))
 def scr(p, t):
     c, w = CAMS[0][2], CAMS[0][3]
-    for t0, d, c1, w1 in CAMS:
+    for t0, d, c1, w1 in sorted(CAMS, key=lambda q: q[0]):
         if t0 + d <= t + 1e-6: c, w = c1, w1
     h = w * 1920 / 1080
     return ((p[0] - (c[0] - w / 2)) / w * 1080, (p[1] - (c[1] - h / 2)) / h * 1920)
 def camw(t):
     w = CAMS[0][3]
-    for t0, d, c1, w1 in CAMS:
+    for t0, d, c1, w1 in sorted(CAMS, key=lambda q: q[0]):
         if t0 + d <= t + 1e-6: w = w1
     return w
 def halo(i, p, t, until, at=None, rpx=110):
@@ -130,23 +130,22 @@ LINES_AT = len(S)
 
 # ---------- 0 · HOOK (0–3.4) ----------
 H2.append('<div id="hookbg" class="full"><img src="assets/img/shringar.jpg" style="object-position:50% 40%"/><div class="shade"></div></div>')
-J.append('tl.fromTo("#hookbg img", {scale:1.25}, {scale:1.04, duration:3.6, ease:"power1.out"}, 0); tl.set("#hookbg", {opacity:1}, 0); tl.to("#hookbg", {opacity:0, duration:.2}, 3.3);')
+J.append('tl.fromTo("#hookbg img", {scale:1.25}, {scale:1.04, duration:3.6, ease:"power1.out"}, 0); tl.set("#hookbg", {opacity:1}, 0); tl.to("#hookbg", {opacity:0, duration:.25}, 1.05);')
 H2.append('<div id="save"><span>🔖 SAVE</span><span>➤ SHARE</span></div>')
 J.append('tl.fromTo("#save", {opacity:0, y:-20}, {opacity:1, y:0, duration:.3}, 0.05); tl.to("#save", {opacity:0, duration:.3}, 3.2);')
 H2.append('<div id="hook"><b>KHATU SHYAM JI</b></div>')
-J.append('tl.fromTo("#hook", {opacity:0, scale:1.25}, {opacity:1, scale:1, duration:.3, ease:"back.out(2.2)"}, 0.02); tl.to("#hook", {opacity:0, duration:.2}, 3.2);')
+J.append('tl.fromTo("#hook", {opacity:0, scale:1.25}, {opacity:1, scale:1, duration:.3, ease:"back.out(2.2)"}, 0.02); tl.to("#hook", {opacity:0, duration:.2}, 1.0);')
 story("s0", f"Agle 5 saal mein yeh jagah<br/>{Y}pehchaan nahi paoge{E}", 1.1, 3.4)
 sfx("impact-bass-1", 0.02, 0.55); sfx("whoosh-short", 1.05, 0.35)
-H2.append('<div class="tagimg" id="t0">Image supplied</div>'); inout("#t0", 0.3, 3.3, frm="opacity:0", to="opacity:1")
+H2.append('<div class="tagimg" id="t0">Image supplied</div>'); inout("#t0", 0.3, 1.1, frm="opacity:0", to="opacity:1")
 
 # ---------- 1 · SCALE (3.4–7.6) ----------
-H2.append('<div id="crowdbg" class="full"><img src="assets/img/nishan.jpg"/><div class="shade"></div></div>')
-J.append('tl.set("#crowdbg", {opacity:0}, 0); tl.to("#crowdbg", {opacity:1, duration:.15}, 3.3); tl.fromTo("#crowdbg img", {scale:1.05}, {scale:1.22, duration:4.4, ease:"none"}, 3.3); tl.to("#crowdbg", {opacity:0, duration:.3}, 7.45);')
+
 H2.append('<div id="count"><small>HAR SAAL</small><span>LAKHON BHAKT</span><em>Sirf Lakkhi mele mein ~50 lakh</em></div>')
-inout("#count", 3.45, 7.6, frm="opacity:0, scale:.6", to="opacity:1, scale:1")
+inout("#count", 3.45, 5.45, frm="opacity:0, scale:.6", to="opacity:1, scale:1")
 
 story("s1", f"Aur ab yahan pahunchna hoga<br/>{Y}aur bhi aasaan{E}", 4.9, 7.6)
-H2.append('<div class="tagimg" id="t1">~50 lakh during Lakkhi mela · Rajasthan Tourism via ThePrint · Image supplied</div>'); inout("#t1", 3.6, 7.5, frm="opacity:0", to="opacity:1")
+H2.append('<div class="tagimg" id="t1">~50 lakh during Lakkhi mela · Rajasthan Tourism via ThePrint</div>'); inout("#t1", 3.6, 5.45, frm="opacity:0", to="opacity:1")
 sfx("riser", 3.4, 0.25); sfx("ping", 5.1, 0.35)
 
 
@@ -200,7 +199,7 @@ for k, t in [(2, 19.6), (3, 23.6), (4, 27.6)]:
     J.append(f'tl.set("#bn{k - 1}", {{opacity:0}}, {t:.2f}); tl.set("#bn{k}", {{opacity:1}}, {t:.2f}); tl.fromTo("#badge", {{scale:1.35}}, {{scale:1, duration:.35, ease:"back.out(3)", immediateRender:false}}, {t:.2f});')
 
 # ---------- 4 · ① expressway (15.0–19.6) ----------
-REG_C = (1455, 2668); cam(15.0, REG_C, 2500, 1.2)
+REG_C = (1455, 2900); cam(15.0, REG_C, 2500, 1.2)
 EXP = smooth([G["kotputli"], wp(27.52, 75.86), wp(27.40, 75.50), G["renwal"], wp(26.85, 75.24), G["dudu"], G["kishangarh"]], 12)
 line("rexp", EXP, "#FF8A00", 14, 15.5, 2.0, until=19.5)
 for n, k in [("dko", "kotputli"), ("dki", "kishangarh")]: dot(n, G[k], 16, 15.4, 19.5, "#FF8A00")
@@ -209,6 +208,7 @@ label("lkot", G["kotputli"], "KOTPUTLI", 15.6, 19.6, at=16.3, dy=60, dx=-40)
 label("lkis", G["kishangarh"], "KISHANGARH", 16.8, 19.6, at=16.3, dy=-60, dx=60)
 label("lk2", G["khatu"], "🚩 KHATU SHYAM JI", 15.4, 19.6, at=16.3, cls="hot", dy=-60, dx=-60)
 halo("hko", G["kotputli"], 15.6, 19.6, at=16.3); halo("hki", G["kishangarh"], 16.8, 19.6, at=16.3); halo("hk2", G["khatu"], 15.4, 19.6, at=16.3)
+J.append('tl.to("#credit", {opacity:0, duration:.2}, 15.0); tl.to("#credit", {opacity:1, duration:.2}, 19.6);')
 chip("c1", "① GREENFIELD EXPRESSWAY", f"Kotputli → Kishangarh<br/>{Y}Delhi side se seedha, tez safar{E}", 15.1, 19.6)
 story("s4", f"Khatu area se hokar —<br/>{Y}naye investment zones{E}", 15.8, 19.6)
 H2.append('<div class="cred" id="cexp" style="top:420px">Route indicative · not exact alignment</div>'); inout("#cexp", 15.6, 19.6, frm="opacity:0", to="opacity:1")
@@ -308,6 +308,46 @@ chip("c10", "RAJASTHAN KA", f"{Y}TEMPLE TRIANGLE{E}", 43.7, 48.6)
 story("s10", f"Sirf Khatu nahi — {Y}Salasar Balaji{E}<br/>+ {Y}Jeen Mata{E} = poora circuit", 45.6, 48.6)
 H2.append('<div class="tagimg" id="t10">Temple images supplied</div>'); inout("#t10", 44.3, 48.5, frm="opacity:0", to="opacity:1")
 sfx("whoosh", 43.5, 0.3)
+
+# ---------- 0b · TEASER map + bhakt streams + bheed popup (old 1.05–7.35) ----------
+TZ_C, TZ_W = (1355, 2560), 2650
+J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(TZ_C, TZ_W)}"}}}}, 1.04);'); CAMS.append((1.04, 0, TZ_C, TZ_W))
+line("texp", EXP, "#FF8A00", 16, 1.2, 1.1, until=7.2)
+line("tnh", NH, "#4FC3F7", 14, 1.45, .9, until=7.2)
+rail("trx", RX, "#cfd6df", 9, 1.6, 7.3)
+railanim("trn", RL, "#FF2D95", 10, 1.8, 1.0, 7.3)
+line("tring", RR, "#FFD54A", 4, 2.0, .8, until=7.2)
+halo("hkt0", G["khatu"], 1.3, 3.4, at=1.3, rpx=150)
+H2.append('<div id="legend0" class="lg"><span><i style="background:#FF8A00"></i>Expressway</span><span><i style="background:#4FC3F7"></i>6-lane NH-52</span><span><i class="rl" style="background:#9aa4b2"></i>Rail</span><span><i class="rl" style="background:#FF2D95"></i>New rail</span></div>')
+inout("#legend0", 1.4, 3.4, frm="opacity:0", to="opacity:1")
+chip("ct0", "AGLE 5 SAAL MEIN", f"Expressway · 6-lane · {Y}nayi rail line{E}", 1.12, 3.4)
+H.append('<div class="lab hot" id="ltz" style="left:0;top:0">🚩 KHATU SHYAM JI</div>')
+x_, y_ = scr(G["khatu"], 1.1)
+J.append(f'tl.set("#ltz", {{left:{x_:.0f}, top:{y_ - 70:.0f}}}, 1.05);')
+inout("#ltz", 1.3, 3.45, frm="opacity:0, scale:.6", to="opacity:1, scale:1")
+sfx("whoosh", 1.05, .35); sfx("sparkle", 1.6, .3)
+# bhakt streams converging on Khatu (old 3.4–5.6)
+cam(3.4, (G["khatu"][0] + 60, G["khatu"][1] + 120), 1700, 2.0, "power2.inOut")
+J.append('tl.to(["#texp","#texpg","#tnh","#tnhg","#trx","#trn","#tring","#tringg"], {opacity:.45, duration:.4}, 3.4);')
+import random
+rnd = random.Random(5)
+SRC = [(27.95, 76.35), (26.85, 75.85), (27.85, 75.15), (27.55, 74.55), (26.75, 74.95), (27.15, 76.1), (27.05, 75.35), (27.85, 75.7)]
+k_ = 0
+for la, lo in SRC:
+    sx_, sy_ = wp(la, lo); kx, ky = G["khatu"]; sx_, sy_ = kx + (sx_ - kx) * .62, ky + (sy_ - ky) * .62
+    for j in range(18):
+        jit = rnd.uniform(-60, 60); t0_ = 3.25 + rnd.uniform(0, 1.3); d_ = rnd.uniform(.9, 1.2)
+        px, py = -(ky - sy_), (kx - sx_); n_ = math.hypot(px, py); px, py = px / n_ * jit, py / n_ * jit
+        for tail, r_, op, dl in ((0, 17, 1, 0), (1, 11, .55, .07), (2, 7, .3, .14)):
+            S.append(f'<circle id="bk{k_}_{tail}" cx="{sx_ + px:.1f}" cy="{sy_ + py:.1f}" r="{r_}" style="fill:#FF9933;stroke:#fff;stroke-width:{3 if tail == 0 else 0};opacity:0"/>')
+            J.append(f'tl.fromTo("#bk{k_}_{tail}", {{attr:{{cx:{sx_ + px:.1f}, cy:{sy_ + py:.1f}}}, opacity:{op * .9}}}, {{attr:{{cx:{kx + px * .1:.1f}, cy:{ky + py * .1:.1f}}}, opacity:{op}, duration:{d_:.2f}, ease:"power1.in", immediateRender:false}}, {t0_ + dl:.2f});'
+                     f'tl.to("#bk{k_}_{tail}", {{opacity:0, duration:.15}}, {t0_ + dl + d_ - .1:.2f});')
+        k_ += 1
+halo("hkt1", G["khatu"], 3.6, 5.6, at=5.4, rpx=190)
+sfx("riser", 3.4, 0.3)
+# bheed popup (old 5.4–7.35)
+photo("pbheed", "nishan.jpg", "Khatu Shyam Ji · bhakton ki bheed", "Image supplied", 5.35, 7.3, x=70, y=430, w=940, h=760)
+J.append('tl.fromTo("#pbheed img", {scale:1.0}, {scale:1.12, duration:2.0, ease:"none", immediateRender:false}, 5.35);')
 
 # ---------- 10b · OPPORTUNITIES across the region (48.6–59.6) ----------
 J.append('tl.to(["#rtri","#rtrig"], {opacity:0, duration:.3}, 48.5); tl.to("#dim", {opacity:.4, duration:.3}, 48.5); tl.to("#kpin", {opacity:0, duration:.2}, 48.5);')
@@ -417,8 +457,8 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 .opp{position:absolute;opacity:0;translate:-50% -50%;padding:14px 22px;border-radius:18px;background:rgba(8,10,14,.9);border:3px solid #FFD54A;font:800 32px/1.18 Inter,sans-serif;color:#fff;text-align:center;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.6)}
 .opp b{display:block;font:900 34px Inter,sans-serif;color:#FFD54A;margin-bottom:4px}
 .oname{position:absolute;opacity:0;translate:-50% 0;padding:4px 10px;border-radius:8px;background:rgba(8,10,14,.75);font:800 22px Inter,sans-serif;color:#fff;white-space:nowrap}
-#legend{position:absolute;left:40px;right:40px;top:400px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;opacity:0;font:700 26px Inter,sans-serif;color:#fff}
-#legend span{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:12px;background:rgba(8,10,14,.75)}#legend i{display:inline-block;width:36px;height:8px;border-radius:4px}#legend i.rl{height:6px;outline:3px dashed #fff;outline-offset:2px}
+#legend,#legend0{position:absolute;left:40px;right:40px;top:400px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;opacity:0;font:700 26px Inter,sans-serif;color:#fff}
+#legend span,#legend0 span{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:12px;background:rgba(8,10,14,.75)}#legend i,#legend0 i{display:inline-block;width:36px;height:8px;border-radius:4px}#legend i.rl,#legend0 i.rl{height:6px;outline:3px dashed #fff;outline-offset:2px}
 #spacevig{position:absolute;inset:0;opacity:0;pointer-events:none;background:radial-gradient(70% 45% at 50% 50%,rgba(0,0,0,0) 40%,rgba(2,6,18,.85) 100%)}
 .dvt{position:absolute;left:0;right:0;top:820px;text-align:center;opacity:0;font:900 120px Inter,sans-serif;letter-spacing:.12em;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.8)}
 #dvalt{position:absolute;left:40px;right:40px;top:1330px;text-align:center;opacity:0;font:700 34px "JetBrains Mono",monospace;color:#fff;text-shadow:0 2px 8px #000}#dvalt b{color:#FFD54A}
