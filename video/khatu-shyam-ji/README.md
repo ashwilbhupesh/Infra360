@@ -15,3 +15,6 @@
   proposed Ringas–Khatu rail now draws in as track with a moving train (rail section and opportunity map).
 - v4: dive from space (India → Rajasthan → Khatu Shyam Ji) after the crowd shot, using NASA Blue Marble (public domain)
   for the India/Rajasthan layers, colour-matched and feathered into the Sentinel-2 imagery.
+- VOICE: `Khatu_Shyam_Ji_VOICE.mp4` (82.8 s) and `_VOICE_1.1x.mp4` — Ashwil's Hinglish recording (retakes removed, pauses tightened, `project/cut.py`),
+  face for 0.78 s from the first word, captions verbatim (`project/phrases.json`), scenes time-warped to the voice (`ANCH` in `project/build.py`);
+  new "Toh chukiyega mat" card for the ad-libbed line. `project/build_text.py` is the text-only build.

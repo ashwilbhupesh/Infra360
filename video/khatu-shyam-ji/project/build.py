@@ -12,9 +12,16 @@ G = {k: wp(*v) for k, v in {
     "kotputli": (27.7072, 76.1996), "kishangarh": (26.5886, 74.8611), "renwal": (27.1504, 75.3565), "dudu": (26.6811, 75.2321),
     "salasar": (27.7258, 74.7243), "jeen": (27.4444, 75.2002), "sikar": (27.6094, 75.1399), "renwal2": (27.15, 75.36), "shahpura": (27.3900, 75.9600),
     "behror": (27.8900, 76.2800), "delhi": (28.6139, 77.2090), "gurgaon": (28.4595, 77.0266)}.items()}
-END = 66.6
-FZ, DIVE = 7.75, 2.6
-def o2n(t): return t if t < FZ else t + DIVE
+END = 68.6
+ANCH = [(0, 0), (0, .75), (1.1, 1.45), (3.4, 4.1), (7.35, 7.85), (7.75, 8.25), (7.75, 11.15), (8.6, 11.45), (10.0, 12.2), (12.4, 14.7),
+        (15.0, 16.1), (19.6, 20.55), (23.6, 25.1), (27.6, 31.8), (30.5, 34.1), (31.9, 35.5), (33.4, 37.85), (35.0, 39.6), (38.0, 41.7), (40.7, 46.05),
+        (43.6, 50.1), (48.6, 55.1), (50.0, 57.2), (51.35, 58.45), (52.7, 60.0), (54.05, 61.35), (55.4, 63.3), (56.75, 64.6), (58.1, 65.6), (59.5, 68.3),
+        (61.6, 72.3), (64.6, 76.25), (65.6, 79.6), (68.6, 82.6)]
+FZ, FZN, DIVE = 7.75, 8.25, 2.9
+def o2n(t):
+    for (o1, n1), (o2, n2) in zip(ANCH, ANCH[1:]):
+        if o2 > o1 and o1 <= t <= o2: return n1 + (t - o1) * (n2 - n1) / (o2 - o1)
+    return ANCH[-1][1] + t - ANCH[-1][0]
 S, H, H2, J, SFX = [], [], [], [], []
 def pd(pts, close=False): return "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in pts) + (" Z" if close else "")
 def smooth(pts, n=12):
@@ -81,10 +88,11 @@ def railanim(i, pts, col, w, t, d, until):
         J.append(f'tl.to("#tr{i}", {{attr:{{transform:"translate({x:.1f},{y:.1f}) rotate({ang:.1f})"}}, duration:{d / N:.4f}, ease:"none"}}, {t + d * (k - 1) / N:.4f});')
     J.append(f'tl.to(["#{i}", "#tr{i}"], {{opacity:0, duration:.3}}, {until - .3:.2f});')
 def sfx(name, t, vol=0.5):
-    SFX.append(f'<audio class="clip" src="assets/sfx/{name}.mp3" data-start="{o2n(t):.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{vol}"></audio>')
+    SFX.append(f'<audio class="clip" src="assets/sfx/{name}.mp3" data-start="{o2n(t):.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{vol * .7:.2f}"></audio>')
 def inout(sel, t, until, frm="opacity:0, y:30, scale:.94", to="opacity:1, y:0, scale:1", d=.3, ease="back.out(2)", out="opacity:0, duration:.2"):
     J.append(f'tl.fromTo("{sel}", {{{frm}}}, {{{to}, duration:{d}, ease:"{ease}"}}, {t:.2f}); tl.to("{sel}", {{{out}}}, {until - .2:.2f});')
 def story(i, html, t, until, top=1330):
+    return
     H2.append(f'<div class="st" id="{i}" style="top:{top}px"><div>{html}</div></div>'); inout(f"#{i}", t, until)
 def chip(i, kick, text, t, until, y=230):
     H2.append(f'<div class="chip" id="{i}" style="top:{y}px"><b>{kick}</b>{text}</div>')
@@ -125,7 +133,7 @@ H2.append('<div id="hookbg" class="full"><img src="assets/img/shringar.jpg" styl
 J.append('tl.fromTo("#hookbg img", {scale:1.25}, {scale:1.04, duration:3.6, ease:"power1.out"}, 0); tl.set("#hookbg", {opacity:1}, 0); tl.to("#hookbg", {opacity:0, duration:.2}, 3.3);')
 H2.append('<div id="save"><span>🔖 SAVE</span><span>➤ SHARE</span></div>')
 J.append('tl.fromTo("#save", {opacity:0, y:-20}, {opacity:1, y:0, duration:.3}, 0.05); tl.to("#save", {opacity:0, duration:.3}, 3.2);')
-H2.append('<div id="hook"><b>KHATU SHYAM JI<br/>JAATE HO?</b></div>')
+H2.append('<div id="hook"><b>KHATU SHYAM JI</b></div>')
 J.append('tl.fromTo("#hook", {opacity:0, scale:1.25}, {opacity:1, scale:1, duration:.3, ease:"back.out(2.2)"}, 0.02); tl.to("#hook", {opacity:0, duration:.2}, 3.2);')
 story("s0", f"Agle 5 saal mein yeh jagah<br/>{Y}pehchaan nahi paoge{E}", 1.1, 3.4)
 sfx("impact-bass-1", 0.02, 0.55); sfx("whoosh-short", 1.05, 0.35)
@@ -169,7 +177,7 @@ D.append(f'dv.set("#world", {{attr:{{viewBox:"{vb(IND_C, 62000)}"}}}}, 0);')
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(IND_C, 62000)}"}}}}, 7.35); tl.set("#spacevig", {{opacity:1}}, 7.35);')
 D.append(f'dv.to("#world", {{attr:{{viewBox:"{vb(RAJ_C, 15000)}"}}, duration:1.15, ease:"power2.inOut"}}, 0.05);')
 D.append(f'dv.to("#world", {{attr:{{viewBox:"{vb(WIDE_C, WIDE_W * 1.25)}"}}, duration:1.4, ease:"power2.out"}}, 1.2);')
-D.append('dv.fromTo("#spacevig", {opacity:1}, {opacity:0, duration:1.6, ease:"power1.in"}, 0.4);')
+D.append('dv.fromTo("#spacevig", {opacity:1}, {opacity:0, duration:1.6, ease:"power1.in", immediateRender:false}, 0.4);')
 D.append('dv.fromTo("#dvind", {opacity:0, scale:1.3}, {opacity:1, scale:1, duration:.3}, 0.0); dv.to("#dvind", {opacity:0, scale:.7, duration:.25}, 0.85);')
 D.append('dv.fromTo("#dvraj", {opacity:0, scale:1.3}, {opacity:1, scale:1, duration:.3}, 0.95); dv.to("#dvraj", {opacity:0, scale:.7, duration:.25}, 1.75);')
 D.append('dv.fromTo("#dvalt", {opacity:0}, {opacity:1, duration:.2}, 0.0); dv.to("#dvalt", {opacity:0, duration:.2}, 2.4);')
@@ -317,7 +325,7 @@ OPP = [("khatu", "KHATU SHYAM JI", "Hotels · Dharamshala · Homestays", 0, -150
        ("ringas", "RINGAS", "Rail junction + 6-lane<br/>Shops · Stays · Commercial", 120, 150),
        ("chomu", "CHOMU", "6-lane corridor<br/>Housing near Jaipur", 60, 150),
        ("renwal", "RENWAL · EXPRESSWAY BELT", "Warehousing · Logistics<br/>near interchanges", -40, 150),
-       ("kishangarh", "KISHANGARH", "Marble hub + airport<br/>Logistics · Industry", 230, -40),
+       ("kishangarh", "KISHANGARH", "Marble hub + airport<br/>Logistics · Industry", 230, -170),
        ("kotputli", "KOTPUTLI", "NH-48 junction<br/>Logistics · Highway shops", -150, 160),
        ("salasar", "SALASAR · JEEN MATA", "Pilgrim stays · Food · Travel", 200, 150)]
 T0, STEP = 50.0, 1.35
@@ -337,21 +345,27 @@ for i, (k, nm, txt, dx, dy) in enumerate(OPP):
 H2.append('<div class="cred" id="copp" style="top:470px">Possibilities, not guaranteed returns · lines indicative</div>'); inout("#copp", 49.5, 59.6, frm="opacity:0", to="opacity:1")
 sfx("whoosh", 48.6, 0.3); sfx("riser", 57.0, 0.2)
 
-# ---------- 11 · smart check (59.6–62.6) ----------
-J.append('tl.to("#dim", {opacity:.8, duration:.4}, 59.5);')
+# ---------- 10c · mauka card (59.6–61.6) ----------
+J.append('tl.to("#dim", {opacity:.75, duration:.4}, 59.5);')
+H2.append(f'<div id="mauka"><small>IS AREA MEIN INVEST KA SOCH RAHE HO?</small><b>Toh {Y}chukiyega mat{E}</b></div>')
+J.append('tl.fromTo("#mauka", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.35, ease:"back.out(2)"}, 59.6); tl.from("#mauka b", {opacity:0, y:30, duration:.3}, 60.6); tl.to("#mauka", {opacity:0, duration:.25}, 61.5);')
+sfx("impact-bass-1", 60.6, 0.35)
+
+# ---------- 11 · smart check (61.6–64.6) ----------
+J.append('tl.to("#dim", {opacity:.8, duration:.4}, 61.5);')
 H2.append(f'<div id="chk"><small>PLOT LENE SE PEHLE CHECK KARO</small>'
           f'<p id="k1">✓ Expressway {Y}interchange{E} kitni door hai</p><p id="k2">✓ Layout ka {Y}approval{E}</p><p id="k3">✓ {Y}Patta{E} &amp; land conversion</p></div>')
-J.append('tl.fromTo("#chk", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 59.6); tl.to("#chk", {opacity:0, duration:.25}, 62.5);')
-for i in range(3): J.append(f'tl.from("#k{i + 1}", {{opacity:0, x:-60, duration:.3, ease:"power3.out"}}, {59.9 + .45 * i:.2f});'); sfx("click-soft", 59.9 + .45 * i, .35)
+J.append('tl.fromTo("#chk", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 61.6); tl.to("#chk", {opacity:0, duration:.25}, 64.5);')
+for i in range(3): J.append(f'tl.from("#k{i + 1}", {{opacity:0, x:-60, duration:.3, ease:"power3.out"}}, {61.9 + .45 * i:.2f});'); sfx("click-soft", 61.9 + .45 * i, .35)
 
-# ---------- 12 · CTA (62.6–END) ----------
+# ---------- 12 · CTA (64.6–END) ----------
 H2.append('<div id="ctabg" class="full"><img src="assets/img/shringar.jpg" style="object-position:50% 38%"/><div class="shade"></div></div>')
-J.append(f'tl.set("#ctabg", {{opacity:0}}, 0); tl.to("#ctabg", {{opacity:1, duration:.3}}, 62.5); tl.fromTo("#ctabg img", {{scale:1.0}}, {{scale:1.12, duration:{END - 62.5:.1f}, ease:"none"}}, 62.5);')
+J.append(f'tl.set("#ctabg", {{opacity:0}}, 0); tl.to("#ctabg", {{opacity:1, duration:.3}}, 64.5); tl.fromTo("#ctabg img", {{scale:1.0}}, {{scale:1.12, duration:{END - 64.5:.1f}, ease:"none"}}, 64.5);')
 H2.append(f'<div id="cta"><small>Aap kitni baar Khatu gaye ho?</small><b>Comment karo<br/>{Y}JAI SHREE SHYAM{E} 🙏</b></div>')
-J.append('tl.fromTo("#cta", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.4, ease:"back.out(2)"}, 62.7); tl.fromTo("#cta b", {scale:1}, {scale:1.05, duration:.5, yoyo:true, repeat:5}, 63.3);')
+J.append('tl.fromTo("#cta", {opacity:0, scale:.8}, {opacity:1, scale:1, duration:.4, ease:"back.out(2)"}, 64.7); tl.fromTo("#cta b", {scale:1}, {scale:1.05, duration:.5, yoyo:true, repeat:5}, 65.3);')
 H2.append('<div id="share"><svg viewBox="0 0 24 24" width="76" height="76"><path d="M3 11l18-8-8 18-2-8z" style="fill:none;stroke:#fff;stroke-width:2;stroke-linejoin:round"/></svg><span>Bhejo usko jo har Ekadashi<br/>Khatu jaata hai</span></div>')
-J.append('tl.fromTo("#share", {opacity:0, y:30}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 63.6); tl.fromTo("#share svg", {scale:1}, {scale:1.15, duration:.45, yoyo:true, repeat:5}, 64.0);')
-sfx("sparkle", 62.7, 0.35); sfx("impact-bass-1", 62.6, 0.35)
+J.append('tl.fromTo("#share", {opacity:0, y:30}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 65.6); tl.fromTo("#share svg", {scale:1}, {scale:1.15, duration:.45, yoyo:true, repeat:5}, 66.0);')
+sfx("sparkle", 64.7, 0.35); sfx("impact-bass-1", 64.6, 0.35)
 
 H2.append('<div id="brand">ASHWILLPOWER · JAIPUR REAL ESTATE</div>')
 H.append('<div id="credit">Imagery: NASA Blue Marble · Sentinel-2 cloudless 2016 by EOX (CC BY 4.0) · routes indicative</div>')
@@ -397,7 +411,7 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #chk small{display:block;font:800 32px "JetBrains Mono",monospace;letter-spacing:.08em;color:#FFD54A;margin-bottom:18px}#chk p{font:900 54px/1.2 Inter,sans-serif;color:#fff;margin:16px 0}
 #cta{position:absolute;left:40px;right:40px;top:330px;opacity:0;text-align:center;padding:30px 20px;border-radius:30px;background:rgba(8,10,14,.75)}
 #cta small{display:block;font:800 48px Inter,sans-serif;color:#fff}#cta b{display:block;margin-top:14px;font:900 80px/1.08 Inter,sans-serif;color:#fff}
-#share{position:absolute;left:0;right:0;top:1120px;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0}
+#share{position:absolute;left:0;right:0;top:1010px;display:flex;flex-direction:column;align-items:center;gap:14px;opacity:0}
 #share span{display:block;padding:14px 26px;border-radius:22px;background:rgba(8,10,14,.78);text-align:center;font:900 46px/1.12 Inter,sans-serif;color:#fff}
 #share svg{background:#FF8A00;border-radius:50%;padding:16px;box-shadow:0 0 0 12px rgba(255,138,0,.3)}
 .opp{position:absolute;opacity:0;translate:-50% -50%;padding:14px 22px;border-radius:18px;background:rgba(8,10,14,.9);border:3px solid #FFD54A;font:800 32px/1.18 Inter,sans-serif;color:#fff;text-align:center;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.6)}
@@ -410,16 +424,48 @@ CSS = """*{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;heigh
 #dvalt{position:absolute;left:40px;right:40px;top:1330px;text-align:center;opacity:0;font:700 34px "JetBrains Mono",monospace;color:#fff;text-shadow:0 2px 8px #000}#dvalt b{color:#FFD54A}
 #brand{position:absolute;left:0;right:0;top:96px;text-align:center;font:700 22px "JetBrains Mono",monospace;letter-spacing:.2em;color:rgba(255,255,255,.8);text-shadow:0 2px 6px #000}
 #credit{position:absolute;left:40px;right:40px;top:1300px;text-align:center;font:500 18px "JetBrains Mono",monospace;color:rgba(255,255,255,.6);text-shadow:0 1px 3px #000}"""
+
+MASTER = []
+for (o1, n1), (o2, n2) in zip(ANCH, ANCH[1:]):
+    if o2 > o1: MASTER.append(f'master.fromTo(tl, {{time:{o1}}}, {{time:{o2}, duration:{n2 - n1:.3f}, ease:"none", immediateRender:false}}, {n1:.3f});')
+MJ = []
+PH = json.load(open("rec/phrases.json"))
+HI = ["Khatu Shyam Ji", "5 saal", "pehchaan", "lakhon bhakt", "aasaan", "India", "Rajasthan", "Delhi", "Jaipur", "connectivity", "4 bade projects", "Ek", "Do", "Teen", "Chaar",
+      "greenfield expressway", "6-lane", "ring road", "bypass", "rail line", "Sundarpura", "heritage look", "zyada demand", "hotels", "dharamshala", "agla hub",
+      "Salasar Balaji", "Jeen Mata", "temple circuit", "badal", "commercial", "housing", "logistics", "industry", "growth", "chukiyega mat", "approval", "patta",
+      "Jai Shree Shyam!", "Ekadashi"]
+def hl(t):
+    for h in sorted(HI, key=len, reverse=True):
+        if h in t and "<span" not in t.split(h)[0][-20:]: t = t.replace(h, f'<span class="y">{h}</span>', 1)
+    return t
+ci = 0
+for ph in PH:
+    words = ph["t"].split(); chunks = []; cur = ""
+    for w in words:
+        if cur and len(cur) + 1 + len(w) > 30: chunks.append(cur); cur = w
+        else: cur = (cur + " " + w).strip()
+    chunks.append(cur)
+    tot = sum(len(c) for c in chunks); t = ph["s"]
+    nxt = next((q["s"] for q in PH if q["s"] > ph["s"]), ph["e"] + .6)
+    for k, c in enumerate(chunks):
+        d = (ph["e"] - ph["s"]) * len(c) / tot; a_ = max(.02, t - .05); b_ = min(t + d + (.35 if k == len(chunks) - 1 else 0), nxt - .05) if k == len(chunks) - 1 else t + d
+        H2.append(f'<div class="cp" id="cp{ci}"><div>{hl(c)}</div></div>')
+        MJ.append(f'master.fromTo("#cp{ci}", {{opacity:0, scale:.94}}, {{opacity:1, scale:1, duration:.1, immediateRender:false}}, {a_:.2f}); master.to("#cp{ci}", {{opacity:0, duration:.06}}, {b_ - .06:.2f});')
+        t += d; ci += 1
+MJ.append('master.set("#avatar", {opacity:1}, 0); master.set("#avatar", {opacity:0}, .78);')
+CSS_CP = ".cp{position:absolute;left:40px;right:40px;top:1330px;text-align:center;opacity:0}.cp div{display:inline-block;padding:16px 26px;border-radius:22px;background:rgba(8,10,14,.8);font:900 58px/1.12 Inter,Arial,sans-serif;color:#fff}"
+CSS_CP += "#avatar{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;opacity:0}#mauka{position:absolute;left:50px;right:50px;top:560px;opacity:0;text-align:center;padding:40px 24px;border-radius:30px;background:rgba(8,10,14,.9);border:3px solid #FFD54A}#mauka small{display:block;font:800 34px Inter,sans-serif;color:#fff}#mauka b{display:block;margin-top:14px;font:900 96px/1.05 Inter,sans-serif;color:#fff}"
 S = S[:LINES_AT] + S[LINES_AT:]
-for n_, t_, v_ in SFX_DIVE: SFX.append(f'<audio class="clip" src="assets/sfx/{n_}.mp3" data-start="{t_:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v_}"></audio>')
-TOTAL = END + DIVE
+for n_, t_, v_ in [(n, t - FZ + FZN, v) for n, t, v in SFX_DIVE]: SFX.append(f'<audio class="clip" src="assets/sfx/{n_}.mp3" data-start="{t_:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v_}"></audio>')
+TOTAL = ANCH[-1][1] + .2
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
-<script src="assets/gsap.min.js"></script><style>{CSS}</style></head><body>
+<script src="assets/gsap.min.js"></script><style>{CSS}{CSS_CP}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{TOTAL}" data-width="1080" data-height="1920" data-fps="30">
 <div id="maplayer"><svg id="world" viewBox="{vb(WIDE_C, WIDE_W * 1.25)}" preserveAspectRatio="xMidYMid slice">{"".join(S)}</svg>
 {"".join(H)}</div>
 {"".join(H2)}
-<audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{TOTAL}" data-track-index="10" data-volume="0.55" data-fade-out="1.5"></audio>
+<audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{TOTAL}" data-track-index="10" data-volume="0.16" data-fade-out="1.5"></audio>
+<video id="avatar" class="clip" src="assets/voice.mp4" data-start="0" data-duration="{TOTAL}" data-track-index="1" playsinline data-has-audio="true" data-volume="1"></video>
 {"".join(SFX)}
 </div><script>
 const tl = gsap.timeline({{ paused: true }});
@@ -427,9 +473,10 @@ const tl = gsap.timeline({{ paused: true }});
 const dv = gsap.timeline();
 {chr(10).join(D)}
 const master = gsap.timeline({{ paused: true }});
-master.to(tl, {{time:{FZ}, duration:{FZ}, ease:"none"}}, 0);
-master.add(dv, {FZ});
-master.fromTo(tl, {{time:{FZ}}}, {{time:{END}, duration:{END - FZ:.2f}, ease:"none", immediateRender:false}}, {FZ + DIVE});
+master.set(tl, {{time:0}}, 0);
+{chr(10).join(MASTER)}
+master.add(dv, {FZN});
+{chr(10).join(MJ)}
 window.__timelines = window.__timelines || {{}}; window.__timelines["main"] = master;
 </script></body></html>""")
 print("END", END, {k: (round(v[0]), round(v[1])) for k, v in G.items()})
