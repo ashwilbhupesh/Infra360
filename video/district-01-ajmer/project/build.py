@@ -132,6 +132,7 @@ def theme(i, num, name, t, until):
 IND_C, IND_W = fitb(bbw(BD["india"]), 700, 1400, 1.08)
 RAJ_C, RAJ_W = fitb(bbw(BD["raj"]), 720, 1380, 1.1)
 AJD_C, AJD_W = fitb(bbw(BD["ajmer"]), 800, 1390, 1.15)
+AJD_C = (AJD_C[0] + AJD_W * .2, AJD_C[1])
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(IND_C, IND_W)}"}}}}, 0);')
 J.append('const VB = document.getElementById("world"); function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); }}, t); }')
 TZ1 = .45; TZ2 = 1.75
@@ -246,6 +247,30 @@ H.append('<div id="nums"><div class="nb" id="nb0"><i>&#128101;</i><div><b>~26 LA
 J.append(f'tl.fromTo("#nums", {{opacity:0}}, {{opacity:1, duration:.2}}, {TN0:.2f}); tl.to("#nums", {{opacity:0, duration:.2}}, {S(1) - .1:.2f});')
 for i_, t in enumerate([TN0, max(wt(0, "economy") - .1, TN0 + .8), E(0) - .3]):
     J.append(f'tl.fromTo("#nb{i_}", {{opacity:0, x:-80}}, {{opacity:1, x:0, duration:.3, ease:"back.out(2)"}}, {t:.2f});'); sfx("pop", t, .3)
+# country comparison panels (shape filled with flag)
+CT = json.load(open("data/countries.json"))
+def cpanel(cid, name, flag_svg, t0, t1, box_w, box_h, label, sub, col):
+    g = CT[name]; polys = [g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]
+    xs = [c[0] for p_ in polys for c in p_[0]]; ys = [c[1] for p_ in polys for c in p_[0]]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys); k = min(box_w / (x1 - x0), box_h / (y1 - y0))
+    ox = (box_w - (x1 - x0) * k) / 2; oy = (box_h - (y1 - y0) * k) / 2
+    d = " ".join("M" + " L".join(f"{ox + (c[0] - x0) * k:.1f} {oy + (y1 - c[1]) * k:.1f}" for c in p_[0]) + " Z" for p_ in polys)
+    fw, fh = (x1 - x0) * k, (y1 - y0) * k; s_ = max(fw / 3, fh / 2); FW, FH = 3 * s_, 2 * s_
+    fx, fy = ox + (fw - FW) / 2, oy + (fh - FH) / 2
+    H.append(f'<div class="cpan" id="{cid}" style="border-color:{col}"><svg width="{box_w}" height="{box_h}" style="overflow:visible"><defs><clipPath id="{cid}c"><path d="{d}"/></clipPath>'
+             f'<filter id="{cid}g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/></filter></defs>'
+             f'<path d="{d}" style="fill:none;stroke:{col};stroke-width:14;stroke-linejoin:round;opacity:.6" filter="url(#{cid}g)"/>'
+             f'<g clip-path="url(#{cid}c)"><g transform="translate({fx:.1f},{fy:.1f}) scale({FW / 300:.4f},{FH / 200:.4f})">{flag_svg}</g></g>'
+             f'<path d="{d}" style="fill:none;stroke:#fff;stroke-width:4;stroke-linejoin:round"/></svg>'
+             f'<svg class="fchip" width="96" height="64" viewBox="0 0 300 200">{flag_svg}</svg>'
+             f'<b>{label}</b><span>{sub}</span></div>')
+    J.append(f'tl.fromTo("#{cid}", {{opacity:0, scale:.4, rotation:-6}}, {{opacity:1, scale:1, rotation:0, duration:.4, ease:"back.out(2)"}}, {t0:.2f}); tl.to("#{cid}", {{opacity:0, scale:.8, duration:.2}}, {t1 - .2:.2f});')
+    sfx("pop", t0, .35)
+BW_FLAG = '<rect width="300" height="200" fill="#75AADB"/><rect y="75" width="300" height="50" fill="#fff"/><rect y="83.3" width="300" height="33.3" fill="#000"/>'
+MV_FLAG = '<rect width="300" height="200" fill="#D21034"/><rect x="50" y="50" width="200" height="100" fill="#007E3A"/><circle cx="160" cy="100" r="33" fill="#fff"/><circle cx="173" cy="100" r="28" fill="#007E3A"/>'
+TB = wt(0, "Botswana") - .15; TM = wt(0, "Maldives") - .15
+cpanel("cbw", "Botswana", BW_FLAG, TB, max(TM, TB + 1.4), 380, 380, "BOTSWANA", "23.6 lakh log &middot; Ajmer se kam!", "#75AADB")
+cpanel("cmv", "Maldives", MV_FLAG, TM, S(1) - .05, 380, 380, "MALDIVES", "Economy ~$6.6 bn &middot; Ajmer se chhoti!", "#D21034")
 J.append(f'tl.to("#nb0 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Botswana") - .1:.2f}); tl.to("#nb1 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Maldives") - .1:.2f});')
 
 # ---------- 8 FUTURE ----------
@@ -329,6 +354,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .mlab{position:absolute;opacity:0;translate:-50% -50%;padding:8px 22px;border-radius:30px;background:rgba(8,10,15,.85);font:400 54px/1 Anton;color:#fff;letter-spacing:.06em;z-index:6}.mlab.pk{color:#FF4FA3}.mlab.yl{color:#111;background:#FFC42E}
 #ov{position:absolute;inset:0;opacity:0;z-index:7}#ovlist{position:absolute;left:50px;right:50px;top:330px;padding:14px 22px;border-radius:24px;background:rgba(8,10,15,.88);border:3px solid #FF4FA3;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}#ovlist p{display:flex;align-items:center;gap:10px;height:50px;font:800 27px Mont;color:#fff;white-space:nowrap}#ovlist p b{width:36px;height:36px;flex:none;border-radius:50%;background:#FF4FA3;color:#111;display:flex;align-items:center;justify-content:center;font:900 20px Mont}
 #hqb{position:absolute;left:40px;right:40px;top:1300px;opacity:0;text-align:center;padding:14px;border-radius:22px;background:#FF4FA3;font:900 40px Mont;color:#111;z-index:12}#hqb b{font:400 54px Anton}
+.cpan{position:absolute;right:30px;top:860px;width:450px;opacity:0;padding:22px 20px 18px;border-radius:28px;background:rgba(8,10,15,.88);border:4px solid;z-index:9;text-align:center;display:flex;flex-direction:column;align-items:center}.fchip{position:absolute;left:18px;top:18px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.6)}.cpan b{display:block;margin-top:8px;font:400 60px/1 Anton;color:#fff;letter-spacing:.04em}.cpan span{display:block;margin-top:6px;font:900 24px Mont;color:#FFC42E}
 #ajay{position:absolute;left:60px;right:60px;top:430px;opacity:0;text-align:center;padding:30px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #B98CFF;font:400 96px/1.1 Anton;color:#fff;z-index:9}
 #ajay b{color:#FFC42E;font-weight:400}#ajay span{display:block;margin-top:10px;font:800 34px Mont;color:#ddd}
 #jp{position:absolute;right:50px;top:560px;opacity:0;padding:20px 28px;border-radius:24px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;font:400 70px/1 Anton;color:#fff;z-index:9;text-align:right}#jp b{color:#FFC42E;font-weight:400}#jp span{display:block;font:900 30px Mont;color:#ccc;margin-top:6px}
