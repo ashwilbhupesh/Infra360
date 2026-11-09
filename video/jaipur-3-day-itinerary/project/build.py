@@ -46,7 +46,8 @@ def bbox(keys, pad=1.35):
 # ---------------- helpers ----------------
 CARDS = []
 def card(cid, img, t0, t1, time_, title, sub, day, tag=None, box=(900, 700)):
-    a = ASP[img]; bw, bh = box
+    imgs = img if isinstance(img, list) else [img]
+    a = ASP[imgs[0]]; bw, bh = box
     w = bw; h = w / a
     if h > bh: h = bh; w = h * a
     cw = w + 28; top = 360 + (700 - h) / 2 * .6
@@ -56,12 +57,23 @@ def card(cid, img, t0, t1, time_, title, sub, day, tag=None, box=(900, 700)):
         kind, name = tag
         col = {"CAFE": "#3CDCFF", "FOOD": "#FF9F43", "SHOP": "#FF4FA3", "DINNER": "#FFC42E"}[kind]
         tag_html = f'<div class="tag"><b style="background:{col}">{kind}</b>{name}</div>'
+    stack = "".join(f'<div id="{cid}_{i}" class="lyr" style="{"opacity:0;" if i else ""}width:{w:.0f}px;height:{h:.0f}px">'
+                    + (f'<img class="bgb" src="assets/img/{im}.jpg"/>' if i else '') + f'<img class="fg" src="assets/img/{im}.jpg" style="object-fit:{"contain" if i else "fill"}"/></div>' for i, im in enumerate(imgs))
     H.append(f'<div class="card" id="{cid}" style="left:{left:.0f}px;top:{top:.0f}px;width:{cw:.0f}px">'
              + (f'<div class="tp" style="background:{DAYC[day]}">{time_}</div>' if time_ else '')
-             + f'<img src="assets/img/{img}.jpg" style="width:{w:.0f}px;height:{h:.0f}px"/>'
-             f'<div class="ct">{title}</div>' + (f'<div class="cs">{sub}</div>' if sub else '') + tag_html + '</div>')
+             + f'<div class="stk" style="width:{w:.0f}px;height:{h:.0f}px">{stack}</div>'
+             f'<div class="ct">{title}</div>' + (f'<div class="cs">{sub}</div>' if sub else '') + tag_html
+             + (f'<div class="cnt">' + "".join(f'<i id="{cid}_d{i}" style="opacity:{1 if i == 0 else .35}"></i>' for i in range(len(imgs))) + '</div>' if len(imgs) > 1 else '') + '</div>')
     J.append(f'tl.fromTo("#{cid}", {{opacity:0, scale:.6, y:40}}, {{opacity:1, scale:1, y:0, duration:.32, ease:"back.out(1.7)"}}, {t0:.2f});'
              f'tl.to("#{cid}", {{opacity:0, scale:.85, y:30, duration:.18, ease:"power2.in"}}, {t1 - .18:.2f});')
+    n = len(imgs)
+    if n > 1:
+        step = (t1 - t0 - .2) / n
+        for i in range(1, n):
+            t = t0 + step * i
+            J.append(f'tl.fromTo("#{cid}_{i}", {{opacity:0, scale:1.06}}, {{opacity:1, scale:1, duration:.2, immediateRender:false}}, {t:.2f});')
+        for i in range(1, n):
+            J.append(f'tl.set("#{cid}_d{i - 1}", {{opacity:.35}}, {t0 + step * i:.2f}); tl.set("#{cid}_d{i}", {{opacity:1}}, {t0 + step * i:.2f});')
     sfx("pop", t0, .22)
 def fly(k, t, w=760, d=.55):
     c = (W[k][0], W[k][1] + w * 1920 / 1080 * .12)
@@ -98,6 +110,7 @@ for d in (1, 2, 3):
     t0, t1 = DSTART[d], DEND[d]
     c, w = bbox(DAYS[d])
     if d > 1: J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(c, w * 1.25)}"}}, duration:.6, ease:"power2.inOut"}}, {t0 - .2:.2f});')
+    c, w = bbox(DAYS[d], 1.9)
     cam(t0, c, w, 1.0, "power2.out")
     J.append(f'tl.to("#route{d}", {{strokeDashoffset:0, duration:1.1, ease:"power2.inOut"}}, {t0 + .1:.2f});')
     for i, k in enumerate(DAYS[d]): J.append(f'tl.to("#pin_{k}", {{opacity:1, duration:.15}}, {t0 + .15 + .1 * i:.2f});')
@@ -107,9 +120,43 @@ for d in (1, 2, 3):
     J.append(f'tl.to("#route{d}", {{opacity:.35, duration:.3}}, {FIRST[d] - .2:.2f});')
     H.append(f'<div class="daytab" id="dt{d}" style="background:{DAYC[d]}">DAY {d}<span>{SUBT[d]}</span></div>')
     J.append(f'tl.fromTo("#dt{d}", {{opacity:0, x:-60}}, {{opacity:1, x:0, duration:.3, ease:"power3.out"}}, {t0:.2f}); tl.to("#dt{d}", {{opacity:0, duration:.2}}, {t1 - .25:.2f});')
-    rows = "".join(f'<p><b style="color:{DAYC[d]}">{a}</b>{b}</p>' for a, b in TT[d])
-    H.append(f'<div class="tt" id="tt{d}" style="border-color:{DAYC[d]}"><h3>DAY {d} TIMETABLE</h3>{rows}</div>')
-    J.append(f'tl.fromTo("#tt{d}", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.3, ease:"power3.out"}}, {t0 + .15:.2f}); tl.from("#tt{d} p", {{opacity:0, x:-30, duration:.2, stagger:.06}}, {t0 + .3:.2f}); tl.to("#tt{d}", {{opacity:0, duration:.2}}, {FIRST[d] - .1:.2f});')
+    xs = [W[k][0] for k in DAYS[d]]; ys = [W[k][1] for k in DAYS[d]]
+    xsp, ysp = max(xs) - min(xs), max(ys) - min(ys)
+    nrow = len(DAYS[d]); LT = 410; LB = LT + 70 + nrow * 54; ytop = LB + 60; ybot = 1300
+    w = max(xsp * 1080 / 820, ysp * 1080 / (ybot - ytop), 500)
+    c = ((max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2 - ((ytop + ybot) / 2 - 960) * w / 1080)
+    J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(c, w)}"}}, duration:.9, ease:"power2.inOut"}}, {t0 + .9:.2f});')
+    h_ = w * 1920 / 1080
+    def scrn(p): return [(p[0] - (c[0] - w / 2)) / w * 1080, (p[1] - (c[1] - h_ / 2)) / h_ * 1920]
+    pos = [scrn(W[k]) for k in DAYS[d]]; orig = [q[:] for q in pos]
+    for _ in range(60):
+        for i in range(len(pos)):
+            for j in range(i + 1, len(pos)):
+                dx = pos[j][0] - pos[i][0]; dy = pos[j][1] - pos[i][1]; dd = math.hypot(dx, dy) or .01
+                if dd < 52:
+                    m = (52 - dd) / 2; pos[i][0] -= dx / dd * m; pos[i][1] -= dy / dd * m; pos[j][0] += dx / dd * m; pos[j][1] += dy / dd * m
+    TIMES = {"hawa": "9:00", "city": "10:15", "jantar": "12:15", "rawat": "1:30", "johri": "3:00", "bapu": "4:00", "amrapali": "7:00", "lassi": "7:45", "niros": "8:30",
+             "amer": "8:00", "panna": "11:00", "jal": "12:00", "nahar": "4:30", "galta": "7:30", "birla": "10:00", "patrika": "11:30", "shop": "12:30", "albert": "6:00", "chokhi": "7:30"}
+    NAMES = {"hawa": "Hawa Mahal · Tattoo Cafe", "city": "City Palace", "jantar": "Jantar Mantar", "rawat": "Rawat · pyaaz kachori", "johri": "The Johri · Johari Bazaar · LMB",
+             "bapu": "Bapu Bazaar", "amrapali": "Amrapali · MI Road", "lassi": "Lassiwala", "niros": "Niros (dinner)", "amer": "Amer Fort · 1135 AD", "panna": "Panna Meena ka Kund",
+             "jal": "Jal Mahal", "nahar": "Nahargarh · Padao", "galta": "Galta Ji", "birla": "Birla Mandir", "patrika": "Patrika Gate",
+             "shop": "Anokhi · Gulab Chand · Tapri", "albert": "Albert Hall", "chokhi": "Chokhi Dhani (dinner)"}
+    pts = " ".join(f"{q[0]:.0f},{q[1]:.0f}" for q in orig)
+    g = f'<polyline points="{pts}" style="fill:none;stroke:{DAYC[d]};stroke-width:5;stroke-linejoin:round;opacity:.85"/>'
+    for i, (q, o) in enumerate(zip(pos, orig)):
+        g += f'<line x1="{o[0]:.0f}" y1="{o[1]:.0f}" x2="{q[0]:.0f}" y2="{q[1]:.0f}" style="stroke:#fff;stroke-width:2;opacity:.7"/><circle cx="{o[0]:.0f}" cy="{o[1]:.0f}" r="6" style="fill:#fff"/>'
+    for i, q in enumerate(pos):
+        g += f'<g id="on{d}_{i}"><circle cx="{q[0]:.0f}" cy="{q[1]:.0f}" r="24" style="fill:{DAYC[d]};stroke:#fff;stroke-width:4"/><text x="{q[0]:.0f}" y="{q[1] + 9:.0f}" text-anchor="middle" style="font:900 26px Mont;fill:#111">{i + 1}</text></g>'
+    rows = "".join(f'<p id="ol{d}_{i}"><b style="background:{DAYC[d]}">{i + 1}</b><em style="color:{DAYC[d]}">{TIMES[k]}</em>{NAMES[k]}</p>' for i, k in enumerate(DAYS[d]))
+    H.append(f'<div class="ov" id="ov{d}"><svg width="1080" height="1920" style="position:absolute;inset:0">{g}</svg>'
+             f'<div class="ovl" style="top:{LT}px;border-color:{DAYC[d]}">{rows}</div></div>')
+    J.append(f'tl.fromTo("#ov{d}", {{opacity:0}}, {{opacity:1, duration:.3}}, {t0 + 1.4:.2f}); tl.to("#ov{d}", {{opacity:0, duration:.25}}, {FIRST[d] - .45:.2f});')
+    J.append(f'tl.to(["#route{d}"] .concat({json.dumps([f"#pin_{k}" for k in DAYS[d]])}), {{opacity:0, duration:.2}}, {t0 + 1.3:.2f}); tl.to(["#route{d}"], {{opacity:.35, duration:.3}}, {FIRST[d] - .4:.2f});')
+    J.append(f'tl.to({json.dumps([f"#pin_{k}" for k in DAYS[d]])}, {{opacity:1, duration:.3}}, {FIRST[d] - .4:.2f});')
+    for i in range(len(DAYS[d])):
+        J.append(f'tl.from("#ol{d}_{i}", {{opacity:0, x:-40, duration:.22, ease:"power3.out"}}, {t0 + 1.5 + .14 * i:.2f}); tl.from("#on{d}_{i}", {{opacity:0, duration:.2}}, {t0 + 1.5 + .14 * i:.2f});'); sfx("click-soft", t0 + 1.5 + .14 * i, .15)
+    H.append(f'<div class="ovt" id="ovt{d}" style="background:{DAYC[d]}">PLAN YOUR ROUTE · {len(DAYS[d])} STOPS</div>')
+    J.append(f'tl.fromTo("#ovt{d}", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3}}, {t0 + 1.4:.2f}); tl.to("#ovt{d}", {{opacity:0, duration:.2}}, {FIRST[d] - .45:.2f});')
     sfx("whoosh", t0 - .1, .35)
 
 # ---------------- stops ----------------
@@ -118,40 +165,40 @@ def stop(cid, k, img, t0, t1, time_, title, sub, day, tag=None, flyto=True, w=76
     if flyto and k: fly(k, t0 - .35, w)
     card(cid, img, t0 + .05, t1, time_, title, sub, day, tag)
 # Day 1
-stop("c_hawa", "hawa", "p01", S(6), S(7), "9:00 AM", "HAWA MAHAL", "Palace of Winds", 1)
-stop("c_wind", "windview", "p02", S(7), S(10), "", "HAWA MAHAL VIEW", "Chai on the rooftop opposite", 1, ("CAFE", "Wind View Cafe · Tattoo Cafe"), flyto=False)
-stop("c_city", "city", "p06", S(10), S(11), "10:15 AM", "CITY PALACE", "", 1)
+stop("c_hawa", "hawa", "p01", S(6), S(9), "9:00 AM", "HAWA MAHAL", "Palace of Winds", 1)
+stop("c_wind", "windview", "p02", S(9), S(10), "", "TATTOO CAFE", "Rooftop view of Hawa Mahal", 1, ("CAFE", "Tattoo Cafe"), flyto=False)
+stop("c_city", "city", ["p06", "p03", "p05", "p07", "p08"], S(10), S(11), "10:15 AM", "CITY PALACE", "", 1)
 stop("c_bara", None, "p04", S(11), S(12), "", "INSIDE CITY PALACE", "", 1, ("CAFE", "Baradari · coffee"), flyto=False)
-stop("c_jan", "jantar", "p11", S(12), S(13), "12:15 PM", "JANTAR MANTAR", "", 1)
+stop("c_jan", "jantar", ["p11", "p10"], S(12), S(13), "12:15 PM", "JANTAR MANTAR", "", 1)
 stop("c_kach", "rawat", "p22", S(13), S(14), "1:30 PM", "PYAAZ KACHORI", "", 1, ("FOOD", "Rawat Mishthan Bhandar"))
-stop("c_johri", "johri", "p56", S(15) - .2, S(16), "", "THE JOHRI", "Chai-nashta", 1, ("CAFE", "Johari Bazaar"))
-stop("c_jew", "johari", "p70", S(16), S(17), "", "JOHARI BAZAAR", "Jewellery", 1, ("SHOP", "Jewellery lane"), flyto=False)
-stop("c_lmb", "lmb", "p57", S(17), S(18), "", "LMB", "Mithai", 1, ("FOOD", "Laxmi Misthan Bhandar"), flyto=False)
-stop("c_bapu", "bapu", "p18", S(18), S(19) + 1.0, "4:00 PM", "BAPU BAZAAR", "Mojari", 1, ("SHOP", "Mojari · Bandhej · Lac bangles"))
+stop("c_johri", "johri", ["p56", "p55"], S(15) - .2, S(16), "", "THE JOHRI", "Chai-nashta", 1, ("CAFE", "Johari Bazaar"))
+stop("c_jew", "johari", ["p70", "p79", "p14", "p67"], S(16), S(17), "", "JOHARI BAZAAR", "Jewellery", 1, ("SHOP", "Jewellery lane"), flyto=False)
+stop("c_lmb", "lmb", ["p57", "p58"], S(17), S(18), "", "LMB", "Mithai", 1, ("FOOD", "Laxmi Misthan Bhandar"), flyto=False)
+stop("c_bapu", "bapu", ["p18", "p20", "p21", "p80"], S(18), S(19) + 1.0, "4:00 PM", "BAPU BAZAAR", "Mojari", 1, ("SHOP", "Mojari · Bandhej · Lac bangles"))
 stop("c_bapu2", None, "p19", S(19) + 1.0, S(20), "", "BAPU BAZAAR", "Bandhej · Lac bangles", 1, flyto=False)
 TL = S(21) + 1.55
 stop("c_amra", "amrapali", "p71", S(20), TL, "7:00 PM", "AMRAPALI", "Silver jewellery · MI Road", 1, ("SHOP", "Amrapali"))
 stop("c_lassi", "lassi", "p23", TL, S(22), "", "LASSIWALA", "MI Road", 1, ("FOOD", "Lassiwala"))
-stop("c_niros", "niros", "p59", S(22), S(23), "8:30 PM", "NIROS", "Dinner since 1949", 1, ("DINNER", "Niros · MI Road"))
+stop("c_niros", "niros", ["p59", "p69"], S(22), S(23), "8:30 PM", "NIROS", "Dinner since 1949", 1, ("DINNER", "Niros · MI Road"))
 # Day 2
-stop("c_amer", "amer", "p24", S(25), S(26), "8:00 AM", "AMER FORT", "", 2, w=900)
-stop("c_1135", None, "p62", S(26), S(28), "", "1135 AD", "Royal lunch ya chai", 2, ("DINNER", "1135 AD · inside Amer"), flyto=False)
-stop("c_panna", "panna", "p29", S(28), S(29), "11:00 AM", "PANNA MEENA KA KUND", "", 2)
-stop("c_jal", "jal", "p52", S(29), S(30), "12:00 PM", "JAL MAHAL", "", 2, w=900)
+stop("c_amer", "amer", ["p24", "p25", "p26", "p27"], S(25), S(26), "8:00 AM", "AMER FORT", "", 2, w=900)
+stop("c_1135", None, ["p62", "p61"], S(26), S(28), "", "1135 AD", "Royal lunch ya chai", 2, ("DINNER", "1135 AD · inside Amer"), flyto=False)
+stop("c_panna", "panna", ["p29", "p28"], S(28), S(29), "11:00 AM", "PANNA MEENA KA KUND", "", 2)
+stop("c_jal", "jal", ["p52", "p37"], S(29), S(30), "12:00 PM", "JAL MAHAL", "", 2, w=900)
 T_PADAO = S(31) + 1.3; T_NIGHT = S(31) + 3.6
 stop("c_nahar", "nahar", "p35", S(31), T_PADAO, "4:30 PM", "NAHARGARH", "Sunset", 2, w=900)
-stop("c_padao", None, "p68", T_PADAO, T_NIGHT, "", "PADAO CAFE", "Sunset on Nahargarh", 2, ("CAFE", "Padao"), flyto=False)
-stop("c_night", None, "p53", T_NIGHT, S(32), "", "JAIPUR AT NIGHT", "From Nahargarh", 2, flyto=False)
+stop("c_padao", None, ["p68", "p66"], T_PADAO, T_NIGHT, "", "PADAO CAFE", "Sunset on Nahargarh", 2, ("CAFE", "Padao"), flyto=False)
+stop("c_night", None, ["p53", "p31", "p54"], T_NIGHT, S(32), "", "JAIPUR AT NIGHT", "From Nahargarh", 2, flyto=False)
 # Day 3
-stop("c_galta", "galta", "p45", S(34), S(36), "7:30 AM", "GALTA JI", "", 3, w=900)
+stop("c_galta", "galta", ["p45", "p43", "p44"], S(34), S(36), "7:30 AM", "GALTA JI", "", 3, w=900)
 stop("c_birla", "birla", "p42", S(36), S(38), "10:00 AM", "BIRLA MANDIR", "", 3)
 stop("c_patrika", "patrika", "p40", S(38), S(43), "11:30 AM", "PATRIKA GATE", "Photos", 3, w=900)
-stop("c_gulab", "shop", "p74", S(43), S(45), "12:30 PM", "JAIPUR PRINT", "Gulab Chand Prints", 3, ("SHOP", "Anokhi · Gulab Chand"))
-stop("c_blue", None, "p75", S(45), S(46), "", "BLUE POTTERY", "", 3, ("SHOP", "Blue pottery"), flyto=False)
+stop("c_gulab", "shop", ["p81", "p82", "p74", "p73"], S(43), S(45), "12:30 PM", "JAIPUR PRINT", "Gulab Chand Prints", 3, ("SHOP", "Anokhi · Gulab Chand"))
+stop("c_blue", None, ["p75", "p78"], S(45), S(46), "", "BLUE POTTERY", "", 3, ("SHOP", "Blue pottery"), flyto=False)
 stop("c_tapri", "tapri", "p64", S(46), S(48), "", "TAPRI CENTRAL", "Chai", 3, ("CAFE", "Tapri · opp. Central Park"))
-stop("c_albert", "albert", "p34", S(48), S(49), "6:00 PM", "ALBERT HALL", "", 3)
+stop("c_albert", "albert", ["p34", "p38"], S(48), S(49), "6:00 PM", "ALBERT HALL", "", 3)
 T_FIRE = S(49) + 1.3
-stop("c_chokhi", "chokhi", "p47", S(49), T_FIRE, "7:30 PM", "CHOKHI DHANI", "Rajasthani dinner", 3, ("DINNER", "Chokhi Dhani"), w=1100)
+stop("c_chokhi", "chokhi", ["p47", "p49", "p48"], S(49), T_FIRE, "7:30 PM", "CHOKHI DHANI", "Rajasthani dinner", 3, ("DINNER", "Chokhi Dhani"), w=1100)
 stop("c_fire", None, "p51", T_FIRE, S(50), "", "CHOKHI DHANI", "Folk dance & thali", 3, flyto=False)
 
 # ---------------- tips ----------------
@@ -173,7 +220,7 @@ J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(wp(26.905, 75.825), 5200)}"}}, 
 sfx("sparkle", S(58), .3); sfx("impact-bass-1", TS - .1, .3)
 
 # ---------------- captions ----------------
-HI = ["Jaipur", "3 din", "save", "Day 1", "Day 2", "Day 3", "Hawa Mahal", "Wind View Cafe", "best view", "Tattoo Cafe", "City Palace", "Baradari", "Jantar Mantar",
+HI = ["Jaipur", "3 din", "save", "Day 1", "Day 2", "Day 3", "Hawa Mahal", "Tattoo Cafe", "City Palace", "Baradari", "Jantar Mantar",
       "Rawat", "pyaaz kachori", "The Johri", "Johari Bazaar", "LMB", "Bapu Bazaar", "lac ki chudiyan", "MI Road", "Amrapali", "Lassiwala", "Niros", "forts", "Amer Fort",
       "1135 AD", "Panna Meena ka Kund", "Jal Mahal", "Nahargarh", "Padao Cafe", "sunset", "Galta Ji", "Birla Mandir", "Patrika Gate", "shopping", "Anokhi", "Gulabji",
       "blue pottery", "Tapri Central", "Albert Hall", "Chokhi Dhani", "October", "March", "Central Jaipur", "dal baati churma", "ghewar", "agli city"]
@@ -222,7 +269,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .tt{position:absolute;left:50px;right:50px;top:350px;padding:26px 30px 18px;border-radius:26px;background:rgba(8,10,15,.88);border:3px solid;opacity:0;z-index:4}
 .tt h3{font:400 44px Anton;color:#fff;letter-spacing:.05em;margin-bottom:10px}.tt p{font:800 36px/1.5 Mont;color:#fff}.tt p b{display:inline-block;width:150px;font-weight:900}
 .card{position:absolute;opacity:0;padding:14px 14px 18px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);z-index:6;text-align:center}
-.card img{display:block;border-radius:14px;margin:0 auto}
+.stk{position:relative;margin:0 auto;border-radius:14px;overflow:hidden;background:#111}.lyr{position:absolute;left:0;top:0;overflow:hidden}.lyr img{position:absolute;inset:0;width:100%;height:100%;display:block}.lyr .bgb{object-fit:cover;filter:blur(22px) brightness(.55);transform:scale(1.15)}.cnt{position:absolute;right:26px;top:26px;display:flex;gap:7px;padding:8px 10px;border-radius:20px;background:rgba(0,0,0,.55)}.cnt i{width:12px;height:12px;border-radius:50%;background:#fff}
 .tp{position:absolute;left:-14px;top:-26px;padding:10px 22px;border-radius:30px;font:900 36px Mont;color:#111;box-shadow:0 6px 16px rgba(0,0,0,.4)}
 .ct{margin-top:12px;font:400 64px/1 Anton;color:#14161c;letter-spacing:.02em}.cs{margin-top:6px;font:700 30px Mont;color:#5b6070}
 .tag{position:absolute;left:50%;bottom:-38px;transform:translateX(-50%);white-space:nowrap;display:flex;align-items:center;gap:12px;padding:8px 22px 8px 8px;border-radius:40px;background:#14161c;color:#fff;font:800 32px Mont;box-shadow:0 8px 20px rgba(0,0,0,.5)}
@@ -234,6 +281,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .tr b{width:250px;font:900 34px Mont;color:#FFC42E;letter-spacing:.06em}.tr span{font:800 46px Mont;color:#fff}
 #foods{display:flex;gap:16px;margin-top:20px}.fd{flex:1;border-radius:18px;overflow:hidden;background:#fff;padding:8px}.fd img{width:100%;height:240px;object-fit:cover;border-radius:12px;display:block}
 .fd i{display:block;font-style:normal;font:900 26px Mont;color:#14161c;text-align:center;padding:8px 0 2px}
+.ov{position:absolute;inset:0;opacity:0;z-index:4}.ovl{position:absolute;left:50px;right:50px;padding:16px 22px;border-radius:24px;background:rgba(8,10,15,.88);border:3px solid}.ovl p{display:flex;align-items:center;gap:14px;height:54px;font:800 32px Mont;color:#fff;white-space:nowrap}.ovl p b{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 24px Mont;color:#111}.ovl p em{font-style:normal;width:84px;font:900 28px Mont}.ol{position:absolute;display:flex;align-items:center;gap:10px;padding:6px 16px 6px 6px;border-radius:30px;background:rgba(8,10,15,.9);border:2px solid;font:800 27px Mont;color:#fff;white-space:nowrap}.ol b{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:900 22px Mont;color:#111}.ol em{font-style:normal;font:700 22px Mont;color:#aab}
+.ovt{position:absolute;left:0;right:0;margin:0 auto;width:640px;top:330px;text-align:center;padding:12px 0;border-radius:30px;font:900 32px Mont;color:#111;letter-spacing:.06em;opacity:0;z-index:5}
 #cta{position:absolute;left:0;right:0;top:470px;opacity:0;text-align:center;z-index:9}
 #cta div{margin:0 auto 26px;width:820px;padding:26px 0;border-radius:30px;font:400 92px/1 Anton;letter-spacing:.03em}
 #cta .b1{background:#FFC42E;color:#111}#cta .b2{background:#FF4FA3;color:#111}#cta .b3{background:#fff;color:#111;font-size:76px}"""
