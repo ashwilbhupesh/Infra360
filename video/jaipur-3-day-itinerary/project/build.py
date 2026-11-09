@@ -75,11 +75,11 @@ H.append('<div id="intro"><div id="grid">' + "".join(f'<div class="gi" id="g{i}"
          '<div id="ititle"><span class="k1">JAIPUR</span><span class="k2">3 DAYS</span><span class="k3">TIME-WISE ITINERARY</span></div>'
          '<div id="isave">SAVE THIS FOR YOUR TRIP</div></div>')
 for i in range(len(COL)):
-    J.append(f'tl.fromTo("#g{i}", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, {.02 + .05 * i:.2f});')
+    J.append(f'tl.fromTo("#g{i}", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, {.82 + .04 * i:.2f});')
 J.append('tl.fromTo("#grid", {scale:1.0}, {scale:1.12, duration:7.4, ease:"none"}, 0);')
-J.append('tl.fromTo("#ititle .k1", {opacity:0, y:60}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, .1);'
-         'tl.fromTo("#ititle .k2", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, .35);'
-         'tl.fromTo("#ititle .k3", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, .55);')
+J.append('tl.fromTo("#ititle .k1", {opacity:0, y:60}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, .95);'
+         'tl.fromTo("#ititle .k2", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, 1.15);'
+         'tl.fromTo("#ititle .k3", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 1.3);')
 J.append(f'tl.fromTo("#isave", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, {S(2) + .4:.2f}); tl.to("#isave", {{scale:1.08, duration:.35, yoyo:true, repeat:3}}, {S(2) + .8:.2f});')
 J.append(f'tl.to("#intro", {{opacity:0, duration:.35}}, {S(4) - .3:.2f});')
 sfx("impact-bass-1", 0.02, .45); sfx("riser", 4.4, .2)
@@ -200,12 +200,14 @@ for n, k in enumerate(keys):
         t += d; ci += 1
 
 H.append('<div id="wm">DIGITAL BANJAARAA</div><div id="vig"></div>')
+H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.2" data-track-index="2" muted playsinline></video>')
+J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, .85);')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}
 @font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#07090d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .y{color:#FFC42E}
-#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 60% at 50% 45%,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)}
+#face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:30}#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 60% at 50% 45%,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)}
 #wm{position:absolute;left:0;right:0;top:190px;text-align:center;font:800 26px Mont;letter-spacing:.32em;color:rgba(255,255,255,.5);z-index:20}
 #intro{position:absolute;inset:0;z-index:10;background:#07090d;overflow:hidden}
 #grid{position:absolute;left:-60px;top:-40px;width:1200px;height:2000px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:10px;transform:rotate(-4deg)}
