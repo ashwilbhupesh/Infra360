@@ -32,7 +32,7 @@ m=[]
 for a,b,k in keep:
     if m and a<=m[-1][1]: m[-1][1]=max(m[-1][1],b); m[-1][2].append(k)
     else: m.append([a,b,[k]])
-GAP={5:2.6,24:2.2,33:2.4}
+GAP={5:0.9,24:0.8,33:0.8}
 acc=0; newt={}; gaps=[]
 for a,b,ks_ in m:
     for k in ks_:

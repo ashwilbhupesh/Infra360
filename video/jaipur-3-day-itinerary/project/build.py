@@ -48,9 +48,11 @@ CARDS = []
 def card(cid, img, t0, t1, time_, title, sub, day, tag=None, box=(900, 700)):
     imgs = img if isinstance(img, list) else [img]
     a = ASP[imgs[0]]; bw, bh = box
+    if any(ASP[i] < .9 for i in imgs): a = min(a, .8) if a < .9 else .8
+    if a < 1: bh = 860
     w = bw; h = w / a
     if h > bh: h = bh; w = h * a
-    cw = w + 28; top = 360 + (700 - h) / 2 * .6
+    cw = w + 28; top = 360 + (700 - h) / 2 * .6 if h <= 700 else 330
     left = (1080 - cw) / 2
     tag_html = ""
     if tag:
@@ -58,7 +60,7 @@ def card(cid, img, t0, t1, time_, title, sub, day, tag=None, box=(900, 700)):
         col = {"CAFE": "#3CDCFF", "FOOD": "#FF9F43", "SHOP": "#FF4FA3", "DINNER": "#FFC42E"}[kind]
         tag_html = f'<div class="tag"><b style="background:{col}">{kind}</b>{name}</div>'
     stack = "".join(f'<div id="{cid}_{i}" class="lyr" style="{"opacity:0;" if i else ""}width:{w:.0f}px;height:{h:.0f}px">'
-                    + (f'<img class="bgb" src="assets/img/{im}.jpg"/>' if i else '') + f'<img class="fg" src="assets/img/{im}.jpg" style="object-fit:{"contain" if i else "fill"}"/></div>' for i, im in enumerate(imgs))
+                    + f'<img class="bgb" src="assets/img/{im}.jpg"/>' + f'<img class="fg" src="assets/img/{im}.jpg" style="object-fit:contain"/></div>' for i, im in enumerate(imgs))
     H.append(f'<div class="card" id="{cid}" style="left:{left:.0f}px;top:{top:.0f}px;width:{cw:.0f}px">'
              + (f'<div class="tp" style="background:{DAYC[day]}">{time_}</div>' if time_ else '')
              + f'<div class="stk" style="width:{w:.0f}px;height:{h:.0f}px">{stack}</div>'
@@ -87,12 +89,23 @@ H.append('<div id="intro"><div id="grid">' + "".join(f'<div class="gi" id="g{i}"
          '<div id="ititle"><span class="k1">JAIPUR</span><span class="k2">3 DAYS</span><span class="k3">TIME-WISE ITINERARY</span></div>'
          '<div id="isave">SAVE THIS FOR YOUR TRIP</div></div>')
 for i in range(len(COL)):
-    J.append(f'tl.fromTo("#g{i}", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, {1.62 + .04 * i:.2f});')
+    J.append(f'tl.fromTo("#g{i}", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, {4.2 + .03 * i:.2f});')
+MONT = ["p01", "p24", "p52", "p40", "p34", "p68", "p45", "p18", "p62", "p29", "p06", "p53"]
+MONT_HTML = '<div id="mont">' + "".join(f'<img id="m{i}" src="assets/img/{p}.jpg"/>' for i, p in enumerate(MONT)) + '<div id="mflash"></div></div>'
+H[-1] = H[-1].replace('<div id="ishade"></div>', '<div id="ishade"></div>' + MONT_HTML)
+M0, MD = 1.6, (4.2 - 1.6) / len(MONT)
+for i in range(len(MONT)):
+    t = M0 + MD * i
+    J.append(f'tl.set("#m{i}", {{opacity:1}}, {t:.3f}); tl.fromTo("#m{i}", {{scale:1.25, rotation:{(-1) ** i * 2}}}, {{scale:1.04, rotation:0, duration:{MD + .05:.3f}, ease:"power2.out", immediateRender:false}}, {t:.3f}); tl.set("#m{i}", {{opacity:0}}, {t + MD:.3f});')
+    if i % 2 == 0: sfx("click-soft", t, .25)
+J.append(f'tl.set("#mont", {{opacity:1}}, {M0:.2f}); tl.fromTo("#mflash", {{opacity:.8}}, {{opacity:0, duration:.25, immediateRender:false}}, 4.2); tl.set("#mont", {{opacity:0}}, 4.2);')
+J.append('tl.fromTo("#ititle .k1", {scale:1}, {scale:1.08, duration:.13, yoyo:true, repeat:15, ease:"power1.inOut", immediateRender:false}, 1.95);')
+sfx("whoosh", 1.55, .35); sfx("impact-bass-1", 4.2, .5)
 J.append('tl.fromTo("#grid", {scale:1.0}, {scale:1.12, duration:7.4, ease:"none"}, 0);')
-J.append('tl.fromTo("#ititle .k1", {opacity:0, y:60}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 1.75);'
-         'tl.fromTo("#ititle .k2", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, 1.95);'
-         'tl.fromTo("#ititle .k3", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 2.1);')
-J.append(f'tl.fromTo("#isave", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, {S(2) + .4:.2f}); tl.to("#isave", {{scale:1.08, duration:.35, yoyo:true, repeat:3}}, {S(2) + .8:.2f});')
+J.append('tl.fromTo("#ititle .k1", {opacity:0, y:60}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 1.62);'
+         'tl.fromTo("#ititle .k2", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, 4.25);'
+         'tl.fromTo("#ititle .k3", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 4.4);')
+J.append(f'tl.fromTo("#isave", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, {4.6:.2f}); tl.to("#isave", {{scale:1.08, duration:.35, yoyo:true, repeat:3}}, {5.0:.2f});')
 J.append(f'tl.to("#intro", {{opacity:0, duration:.35}}, {S(4) - .3:.2f});')
 sfx("impact-bass-1", 0.02, .45); sfx("riser", 4.4, .2)
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(bbox(DAYS[1])[0], bbox(DAYS[1])[1] * 1.6)}"}}}}, 0);')
@@ -111,7 +124,6 @@ for d in (1, 2, 3):
     c, w = bbox(DAYS[d])
     if d > 1: J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(c, w * 1.25)}"}}, duration:.6, ease:"power2.inOut"}}, {t0 - .2:.2f});')
     c, w = bbox(DAYS[d], 1.9)
-    cam(t0, c, w, 1.0, "power2.out")
     J.append(f'tl.to("#route{d}", {{strokeDashoffset:0, duration:1.1, ease:"power2.inOut"}}, {t0 + .1:.2f});')
     for i, k in enumerate(DAYS[d]): J.append(f'tl.to("#pin_{k}", {{opacity:1, duration:.15}}, {t0 + .15 + .1 * i:.2f});')
     if d > 1:
@@ -125,7 +137,7 @@ for d in (1, 2, 3):
     nrow = len(DAYS[d]); LT = 410; LB = LT + 70 + nrow * 54; ytop = LB + 60; ybot = 1300
     w = max(xsp * 1080 / 820, ysp * 1080 / (ybot - ytop), 500)
     c = ((max(xs) + min(xs)) / 2, (max(ys) + min(ys)) / 2 - ((ytop + ybot) / 2 - 960) * w / 1080)
-    J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(c, w)}"}}, duration:.9, ease:"power2.inOut"}}, {t0 + .9:.2f});')
+    J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(c, w)}"}}, duration:.8, ease:"power2.inOut"}}, {t0:.2f});')
     h_ = w * 1920 / 1080
     def scrn(p): return [(p[0] - (c[0] - w / 2)) / w * 1080, (p[1] - (c[1] - h_ / 2)) / h_ * 1920]
     pos = [scrn(W[k]) for k in DAYS[d]]; orig = [q[:] for q in pos]
@@ -150,13 +162,13 @@ for d in (1, 2, 3):
     rows = "".join(f'<p id="ol{d}_{i}"><b style="background:{DAYC[d]}">{i + 1}</b><em style="color:{DAYC[d]}">{TIMES[k]}</em>{NAMES[k]}</p>' for i, k in enumerate(DAYS[d]))
     H.append(f'<div class="ov" id="ov{d}"><svg width="1080" height="1920" style="position:absolute;inset:0">{g}</svg>'
              f'<div class="ovl" style="top:{LT}px;border-color:{DAYC[d]}">{rows}</div></div>')
-    J.append(f'tl.fromTo("#ov{d}", {{opacity:0}}, {{opacity:1, duration:.3}}, {t0 + 1.4:.2f}); tl.to("#ov{d}", {{opacity:0, duration:.25}}, {FIRST[d] - .45:.2f});')
-    J.append(f'tl.to(["#route{d}"] .concat({json.dumps([f"#pin_{k}" for k in DAYS[d]])}), {{opacity:0, duration:.2}}, {t0 + 1.3:.2f}); tl.to(["#route{d}"], {{opacity:.35, duration:.3}}, {FIRST[d] - .4:.2f});')
+    J.append(f'tl.fromTo("#ov{d}", {{opacity:0}}, {{opacity:1, duration:.3}}, {t0 + .3:.2f}); tl.to("#ov{d}", {{opacity:0, duration:.25}}, {FIRST[d] - .45:.2f});')
+    J.append(f'tl.to(["#route{d}"] .concat({json.dumps([f"#pin_{k}" for k in DAYS[d]])}), {{opacity:0, duration:.2}}, {t0 + .2:.2f}); tl.to(["#route{d}"], {{opacity:.35, duration:.3}}, {FIRST[d] - .4:.2f});')
     J.append(f'tl.to({json.dumps([f"#pin_{k}" for k in DAYS[d]])}, {{opacity:1, duration:.3}}, {FIRST[d] - .4:.2f});')
     for i in range(len(DAYS[d])):
-        J.append(f'tl.from("#ol{d}_{i}", {{opacity:0, x:-40, duration:.22, ease:"power3.out"}}, {t0 + 1.5 + .14 * i:.2f}); tl.from("#on{d}_{i}", {{opacity:0, duration:.2}}, {t0 + 1.5 + .14 * i:.2f});'); sfx("click-soft", t0 + 1.5 + .14 * i, .15)
+        J.append(f'tl.from("#ol{d}_{i}", {{opacity:0, x:-40, duration:.22, ease:"power3.out"}}, {t0 + .35 + .07 * i:.2f}); tl.from("#on{d}_{i}", {{opacity:0, duration:.2}}, {t0 + .35 + .07 * i:.2f});'); sfx("click-soft", t0 + .35 + .07 * i, .12) if i % 2 == 0 else None
     H.append(f'<div class="ovt" id="ovt{d}" style="background:{DAYC[d]}">PLAN YOUR ROUTE · {len(DAYS[d])} STOPS</div>')
-    J.append(f'tl.fromTo("#ovt{d}", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3}}, {t0 + 1.4:.2f}); tl.to("#ovt{d}", {{opacity:0, duration:.2}}, {FIRST[d] - .45:.2f});')
+    J.append(f'tl.fromTo("#ovt{d}", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3}}, {t0 + .3:.2f}); tl.to("#ovt{d}", {{opacity:0, duration:.2}}, {FIRST[d] - .45:.2f});')
     sfx("whoosh", t0 - .1, .35)
 
 # ---------------- stops ----------------
@@ -259,6 +271,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #intro{position:absolute;inset:0;z-index:10;background:#07090d;overflow:hidden}
 #grid{position:absolute;left:-60px;top:-40px;width:1200px;height:2000px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:10px;transform:rotate(-4deg)}
 .gi{overflow:hidden;border-radius:16px}.gi img{width:100%;height:100%;object-fit:cover;display:block}
+#mont{position:absolute;inset:0;opacity:0;z-index:2;overflow:hidden;background:#000}#mont img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;filter:brightness(.62)}#mflash{position:absolute;inset:0;background:#fff;opacity:0}
+#ititle{z-index:3;position:absolute}#isave{z-index:3}
 #ishade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,9,13,.35) 0%,rgba(7,9,13,.82) 32%,rgba(7,9,13,.82) 62%,rgba(7,9,13,.35) 100%)}
 #ititle{position:absolute;left:0;right:0;top:560px;text-align:center;color:#fff}
 #ititle span{display:block}#ititle .k1{font:400 230px/1 Anton;letter-spacing:.04em;color:#FF4FA3;text-shadow:0 8px 40px rgba(0,0,0,.7)}
@@ -274,7 +288,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .ct{margin-top:12px;font:400 64px/1 Anton;color:#14161c;letter-spacing:.02em}.cs{margin-top:6px;font:700 30px Mont;color:#5b6070}
 .tag{position:absolute;left:50%;bottom:-38px;transform:translateX(-50%);white-space:nowrap;display:flex;align-items:center;gap:12px;padding:8px 22px 8px 8px;border-radius:40px;background:#14161c;color:#fff;font:800 32px Mont;box-shadow:0 8px 20px rgba(0,0,0,.5)}
 .tag b{padding:6px 14px;border-radius:30px;color:#111;font:900 24px Mont;letter-spacing:.08em}
-.cp{position:absolute;left:40px;right:130px;top:1370px;text-align:center;opacity:0;z-index:35}
+.cp{position:absolute;left:40px;right:130px;top:1405px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;font:900 62px/1.12 Mont;color:#fff;-webkit-text-stroke:7px #000;paint-order:stroke fill;text-shadow:0 6px 18px rgba(0,0,0,.8)}
 #tips{position:absolute;left:50px;right:50px;top:330px;opacity:0;padding:30px 34px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;z-index:8}
 #tips h2{font:400 70px Anton;color:#FFC42E;margin-bottom:10px}.tr{display:flex;align-items:baseline;gap:20px;margin:12px 0}
