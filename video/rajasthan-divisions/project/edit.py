@@ -31,7 +31,8 @@ m=[]
 for a,b,x in keep:
     if m and a<=m[-1][1]: m[-1][1]=max(m[-1][1],b); m[-1][2]+=x
     else: m.append([a,b,x])
-acc=0; P=[]; EV={}
+GAP={4.34:1.6}
+acc=0; P=[]; EV={}; gaps=[]
 for a,b,x in m:
     for i,k in x:
         s,e=speech(i); ns,ne=acc+s-a,acc+e-a; txt,names=T[k]
@@ -44,11 +45,11 @@ for a,b,x in m:
             if nm.startswith("V:"): EV["V:"+key]=round(tt,2)
             elif nm.startswith("S:"): EV["S:"+key]=round(tt,2)
             else: EV.setdefault("D:"+key, round(tt,2))
-    acc+=b-a
+    acc+=b-a; g=sum(GAP.get(k,0) for _,k in x); gaps.append(g); acc+=g
 EV["galat"]=round(P[0]["s"]+(P[0]["e"]-P[0]["s"])*.82,2); EV["fifty"]=round(P[0]["s"]+(P[0]["e"]-P[0]["s"])*.62,2)
-EV["count"]=P[2]["s"]; EV["divs"]=P[4]["s"]; EV["final"]=P[-2]["s"]; EV["cta"]=round(P[-2]["s"]+(P[-2]["e"]-P[-2]["s"])*.55,2); EV["end"]=round(acc+.8,2)
+EV["count"]=P[2]["s"]; EV["divs"]=P[4]["s"]; EV["final"]=P[-2]["s"]; EV["cta"]=round(P[-2]["s"]+(P[-2]["e"]-P[-2]["s"])*.55,2); EV["end"]=round(acc+.8,2); EV["cancel"]=P[1]["s"]
 json.dump({"phrases":P,"ev":EV},open('timing.json','w'),indent=0)
-fc=[f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS,afade=t=in:d=0.015,afade=t=out:st={b-a-0.02:.3f}:d=0.02[a{i}]" for i,(a,b,_) in enumerate(m)]
+fc=[f"[0:a]atrim={a:.3f}:{b:.3f},asetpts=PTS-STARTPTS,afade=t=in:d=0.015,afade=t=out:st={b-a-0.02:.3f}:d=0.02" + (f",apad=pad_dur={gaps[i]:.3f}" if gaps[i] else "") + f"[a{i}]" for i,(a,b,_) in enumerate(m)]
 fc.append("".join(f"[a{i}]" for i in range(len(m)))+f"concat=n={len(m)}:v=0:a=1,highpass=f=85,afftdn=nf=-25,acompressor=threshold=-20dB:ratio=3:attack=5:release=80,loudnorm=I=-15:TP=-1.5[o]")
 subprocess.run(["ffmpeg","-y","-v","error","-i","rec.mp4","-filter_complex",";".join(fc),"-map","[o]","-ar","48000","-c:a","pcm_s16le","voice.wav"],check=True)
 print(len(m),"pieces",round(acc,2),"first",m[0][0]); print(len([k for k in EV if k.startswith("D:")]),"districts"); print(EV)

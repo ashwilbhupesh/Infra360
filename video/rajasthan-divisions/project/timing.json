@@ -11,243 +11,244 @@
 "t": "December 2024 mein 9 district aur 3 sambhag khatam ho gaye."
 },
 {
-"s": 7.6,
-"e": 8.78,
+"s": 9.2,
+"e": 10.38,
 "t": "Ab hain 7 sambhag"
 },
 {
-"s": 9.0,
-"e": 10.22,
+"s": 10.6,
+"e": 11.82,
 "t": "aur 41 district."
 },
 {
-"s": 10.44,
-"e": 11.32,
+"s": 12.04,
+"e": 12.92,
 "t": "Pehle 7 sambhag:"
 },
 {
-"s": 11.54,
-"e": 12.02,
+"s": 13.14,
+"e": 13.62,
 "t": "Jaipur,"
 },
 {
-"s": 12.24,
-"e": 14.38,
+"s": 13.84,
+"e": 15.98,
 "t": "Jodhpur, Ajmer, Udaipur,"
 },
 {
-"s": 14.6,
-"e": 16.66,
+"s": 16.2,
+"e": 18.26,
 "t": "Kota, Bikaner aur Bharatpur."
 },
 {
-"s": 16.88,
-"e": 20.26,
+"s": 18.48,
+"e": 21.86,
 "t": "Ab ek-ek karke inke district dekhte hain. Jaipur sambhag:"
 },
 {
-"s": 20.48,
-"e": 21.16,
+"s": 22.08,
+"e": 22.76,
 "t": "Jhunjhunu,"
 },
 {
-"s": 21.38,
-"e": 22.34,
+"s": 22.98,
+"e": 23.94,
 "t": "Khairthal-Tijara,"
 },
 {
-"s": 22.56,
-"e": 23.04,
+"s": 24.16,
+"e": 24.64,
 "t": "Sikar,"
 },
 {
-"s": 23.26,
-"e": 24.2,
+"s": 24.86,
+"e": 25.8,
 "t": "Kotputli-Behror,"
 },
 {
-"s": 24.42,
-"e": 24.84,
+"s": 26.02,
+"e": 26.44,
 "t": "Alwar,"
 },
 {
-"s": 25.06,
-"e": 26.3,
+"s": 26.66,
+"e": 27.9,
 "t": "Jaipur aur Dausa."
 },
 {
-"s": 26.52,
-"e": 27.34,
+"s": 28.12,
+"e": 28.94,
 "t": "Jodhpur sambhag:"
 },
 {
-"s": 27.56,
-"e": 29.82,
+"s": 29.16,
+"e": 31.42,
 "t": "Phalodi, Jaisalmer, Jodhpur,"
 },
 {
-"s": 30.04,
-"e": 31.44,
+"s": 31.64,
+"e": 33.04,
 "t": "Barmer, Balotra,"
 },
 {
-"s": 31.66,
-"e": 33.22,
+"s": 33.26,
+"e": 34.82,
 "t": "Pali aur Jalore, Sirohi."
 },
 {
-"s": 33.44,
-"e": 34.8,
+"s": 35.04,
+"e": 36.4,
 "t": "Ajmer sambhag:"
 },
 {
-"s": 35.02,
-"e": 38.42,
+"s": 36.62,
+"e": 40.02,
 "t": "Nagaur, Didwana-Kuchaman, Ajmer, Beawar,"
 },
 {
-"s": 38.64,
-"e": 39.8,
+"s": 40.24,
+"e": 41.4,
 "t": "Tonk aur Bhilwara."
 },
 {
-"s": 40.02,
-"e": 40.84,
+"s": 41.62,
+"e": 42.44,
 "t": "Udaipur sambhag:"
 },
 {
-"s": 41.06,
-"e": 43.52,
+"s": 42.66,
+"e": 45.12,
 "t": "Rajsamand, Chittorgarh, Udaipur,"
 },
 {
-"s": 43.74,
-"e": 44.36,
+"s": 45.34,
+"e": 45.96,
 "t": "Salumber,"
 },
 {
-"s": 44.58,
-"e": 46.9,
+"s": 46.18,
+"e": 48.5,
 "t": "Pratapgarh, Dungarpur aur Banswara."
 },
 {
-"s": 47.12,
-"e": 47.86,
+"s": 48.72,
+"e": 49.46,
 "t": "Kota sambhag:"
 },
 {
-"s": 48.08,
-"e": 48.54,
+"s": 49.68,
+"e": 50.14,
 "t": "Bundi,"
 },
 {
-"s": 48.76,
-"e": 50.74,
+"s": 50.36,
+"e": 52.34,
 "t": "Kota, Baran aur Jhalawar."
 },
 {
-"s": 50.96,
-"e": 51.96,
+"s": 52.56,
+"e": 53.56,
 "t": "Bikaner sambhag:"
 },
 {
-"s": 52.18,
-"e": 54.0,
+"s": 53.78,
+"e": 55.6,
 "t": "Sri Ganganagar, Hanumangarh,"
 },
 {
-"s": 54.22,
-"e": 56.1,
+"s": 55.82,
+"e": 57.7,
 "t": "Bikaner aur Churu."
 },
 {
-"s": 56.32,
-"e": 57.94,
+"s": 57.92,
+"e": 59.54,
 "t": "Bharatpur sambhag: Deeg,"
 },
 {
-"s": 58.16,
-"e": 58.72,
+"s": 59.76,
+"e": 60.32,
 "t": "Bharatpur,"
 },
 {
-"s": 58.94,
-"e": 61.34,
+"s": 60.54,
+"e": 62.94,
 "t": "Dholpur, Karauli aur Sawai Madhopur."
 },
 {
-"s": 61.56,
-"e": 65.64,
+"s": 63.16,
+"e": 67.24,
 "t": "Toh total 7 sambhag aur 41 district. Aapka district kaunsa hai?"
 },
 {
-"s": 65.86,
-"e": 66.84,
+"s": 67.46,
+"e": 68.44,
 "t": "Comment karo!"
 }
 ],
 "ev": {
-"V:Jaipur": 11.54,
-"V:Jodhpur": 12.24,
-"V:Ajmer": 13.04,
-"V:Udaipur": 13.67,
-"V:Kota": 14.6,
-"V:Bikaner": 15.04,
-"V:Bharatpur": 15.92,
-"S:Jaipur": 19.37,
-"D:Jhunjhunu": 20.48,
-"D:Khairthal-Tijara": 21.38,
-"D:Sikar": 22.56,
-"D:Kotputli-Behror": 23.26,
-"D:Alwar": 24.42,
-"D:Jaipur": 25.06,
-"D:Dausa": 25.86,
-"S:Jodhpur": 26.52,
-"D:Phalodi": 27.56,
-"D:Jaisalmer": 28.29,
-"D:Jodhpur": 29.17,
-"D:Barmer": 30.04,
-"D:Balotra": 30.74,
-"D:Pali": 31.66,
-"D:Jalore": 32.25,
-"D:Sirohi": 32.77,
-"S:Ajmer": 33.44,
-"D:Nagaur": 35.02,
-"D:Didwana-Kuchaman": 35.7,
-"D:Ajmer": 37.23,
-"D:Beawar": 37.83,
-"D:Tonk": 38.64,
-"D:Bhilwara": 39.22,
-"S:Udaipur": 40.02,
-"D:Rajsamand": 41.06,
-"D:Chittorgarh": 41.91,
-"D:Udaipur": 42.91,
-"D:Salumber": 43.74,
-"D:Pratapgarh": 44.58,
-"D:Dungarpur": 45.38,
-"D:Banswara": 46.3,
-"S:Kota": 47.12,
-"D:Bundi": 48.08,
-"D:Kota": 48.76,
-"D:Baran": 49.24,
-"D:Jhalawar": 50.03,
-"S:Bikaner": 50.96,
-"D:Sri Ganganagar": 52.18,
-"D:Hanumangarh": 53.22,
-"D:Bikaner": 54.22,
-"D:Churu": 55.47,
-"S:Bharatpur": 56.32,
-"D:Deeg": 57.6,
-"D:Bharatpur": 58.16,
-"D:Dholpur": 58.94,
-"D:Karauli": 59.54,
-"D:Sawai Madhopur": 60.34,
+"V:Jaipur": 13.14,
+"V:Jodhpur": 13.84,
+"V:Ajmer": 14.64,
+"V:Udaipur": 15.27,
+"V:Kota": 16.2,
+"V:Bikaner": 16.64,
+"V:Bharatpur": 17.52,
+"S:Jaipur": 20.97,
+"D:Jhunjhunu": 22.08,
+"D:Khairthal-Tijara": 22.98,
+"D:Sikar": 24.16,
+"D:Kotputli-Behror": 24.86,
+"D:Alwar": 26.02,
+"D:Jaipur": 26.66,
+"D:Dausa": 27.46,
+"S:Jodhpur": 28.12,
+"D:Phalodi": 29.16,
+"D:Jaisalmer": 29.89,
+"D:Jodhpur": 30.77,
+"D:Barmer": 31.64,
+"D:Balotra": 32.34,
+"D:Pali": 33.26,
+"D:Jalore": 33.85,
+"D:Sirohi": 34.37,
+"S:Ajmer": 35.04,
+"D:Nagaur": 36.62,
+"D:Didwana-Kuchaman": 37.3,
+"D:Ajmer": 38.83,
+"D:Beawar": 39.43,
+"D:Tonk": 40.24,
+"D:Bhilwara": 40.82,
+"S:Udaipur": 41.62,
+"D:Rajsamand": 42.66,
+"D:Chittorgarh": 43.51,
+"D:Udaipur": 44.5,
+"D:Salumber": 45.34,
+"D:Pratapgarh": 46.18,
+"D:Dungarpur": 46.98,
+"D:Banswara": 47.9,
+"S:Kota": 48.72,
+"D:Bundi": 49.68,
+"D:Kota": 50.36,
+"D:Baran": 50.84,
+"D:Jhalawar": 51.63,
+"S:Bikaner": 52.56,
+"D:Sri Ganganagar": 53.78,
+"D:Hanumangarh": 54.82,
+"D:Bikaner": 55.82,
+"D:Churu": 57.07,
+"S:Bharatpur": 57.92,
+"D:Deeg": 59.2,
+"D:Bharatpur": 59.76,
+"D:Dholpur": 60.54,
+"D:Karauli": 61.14,
+"D:Sawai Madhopur": 61.94,
 "galat": 2.54,
 "fifty": 1.95,
-"count": 7.6,
-"divs": 10.44,
-"final": 61.56,
-"cta": 63.8,
-"end": 67.76
+"count": 9.2,
+"divs": 12.04,
+"final": 63.16,
+"cta": 65.4,
+"end": 69.36,
+"cancel": 3.3
 }
 }

@@ -64,13 +64,31 @@ cam(0.05, ALLC, ALLW, 2.4, "power2.out")
 
 # ---------------- hook ----------------
 H.append('<div id="hook"><b>RAJASTHAN MEIN<br/>KITNE DISTRICT?</b></div>')
-J.append('tl.fromTo("#hook", {opacity:0, scale:1.4}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, .05); tl.to("#hook", {opacity:0, duration:.2}, ' + f'{T["count"] - .2:.2f});')
+J.append('tl.fromTo("#hook", {opacity:0, scale:1.4}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, .05); tl.to("#hook", {opacity:0, duration:.2}, ' + f'{EV["cancel"] - .1:.2f});')
 H.append('<div id="fifty"><span>50?</span><i></i><b>GALAT</b></div>')
 J.append(f'tl.fromTo("#fifty span", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {T["fifty"]:.2f}); tl.set("#fifty", {{opacity:1}}, {T["fifty"]:.2f});'
          f'tl.fromTo("#fifty i", {{scaleX:0}}, {{scaleX:1, duration:.2, ease:"power3.out"}}, {T["galat"]:.2f}); tl.fromTo("#fifty b", {{opacity:0, scale:2.2}}, {{opacity:1, scale:1, duration:.22, ease:"back.out(2.5)"}}, {T["galat"]:.2f});'
-         f'tl.to("#fifty", {{x:"+=14", duration:.05, yoyo:true, repeat:5}}, {T["galat"] + .2:.2f}); tl.to("#fifty", {{opacity:0, duration:.2}}, {T["count"] - .1:.2f});')
+         f'tl.to("#fifty", {{x:"+=14", duration:.05, yoyo:true, repeat:5}}, {T["galat"] + .2:.2f}); tl.to("#fifty", {{opacity:0, duration:.2}}, {EV["cancel"] - .1:.2f});')
 sfx("impact-bass-1", .05, .45); sfx("pop", T["fifty"], .3); sfx("impact-bass-1", T["galat"], .5)
 
+
+# ---------------- cancelled districts & divisions ----------------
+CX = ["Anupgarh", "Dudu", "Gangapur City", "Jaipur Rural", "Jodhpur Rural", "Kekri", "Neem Ka Thana", "Sanchore", "Shahpura"]
+CV = ["Banswara", "Pali", "Sikar"]
+H.append('<div id="cx"><h4>DEC 2024: KHATAM</h4><small>9 DISTRICTS</small><div class="cg">' + "".join(f'<p id="cx{i}">{n}<i></i></p>' for i, n in enumerate(CX)) + '</div>'
+         '<small>3 SAMBHAG</small><div class="cg">' + "".join(f'<p id="cv{i}">{n}<i></i></p>' for i, n in enumerate(CV)) + '</div></div>')
+TNEWS = EV["cancel"]; TC = EV["cancel"] + 2.0; TEND = T["count"] - .1
+H.append('<div id="ht"><img src="assets/img/ht.jpg"/><em>Hindustan Times · 29 Dec 2024 · image supplied</em></div>')
+J.append(f'tl.fromTo("#ht", {{opacity:0, scale:.6, rotation:-4}}, {{opacity:1, scale:1, rotation:-2, duration:.35, ease:"back.out(1.8)"}}, {TNEWS:.2f}); tl.to("#ht", {{opacity:0, scale:.9, duration:.2}}, {TC - .15:.2f});')
+sfx("pop", TNEWS, .3)
+J.append(f'tl.fromTo("#cx", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3}}, {TC:.2f}); tl.to("#cx", {{opacity:0, duration:.2}}, {TEND:.2f}); tl.to("#state", {{fillOpacity:.45, duration:.3}}, {TC:.2f}); tl.to("#state", {{fillOpacity:.82, duration:.3}}, {TEND:.2f});')
+step = (TEND - TC - 1.1) / (len(CX) + len(CV))
+for i in range(len(CX)):
+    t = TC + .3 + step * i
+    J.append(f'tl.from("#cx{i}", {{opacity:0, scale:.6, duration:.15}}, {t:.2f}); tl.fromTo("#cx{i} i", {{scaleX:0}}, {{scaleX:1, duration:.15}}, {t + .25:.2f});'); sfx("click-soft", t + .25, .2)
+for i in range(len(CV)):
+    t = TC + .3 + step * (len(CX) + i)
+    J.append(f'tl.from("#cv{i}", {{opacity:0, scale:.6, duration:.15}}, {t:.2f}); tl.fromTo("#cv{i} i", {{scaleX:0}}, {{scaleX:1, duration:.15}}, {t + .25:.2f});'); sfx("click-soft", t + .25, .2)
 # ---------------- count ----------------
 H.append('<div id="cnt"><div id="c7"><b>7</b><span>DIVISIONS</span></div><div id="c41"><b>41</b><span>DISTRICTS</span></div><em>After Dec 2024 · 9 districts &amp; 3 divisions cancelled</em></div>')
 J.append(f'tl.fromTo("#cnt", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.3}}, {T["count"]:.2f}); tl.from("#c7", {{opacity:0, scale:.4, duration:.3, ease:"back.out(2.2)"}}, {T["count"] + .1:.2f}); tl.from("#c41", {{opacity:0, scale:.4, duration:.3, ease:"back.out(2.2)"}}, {PH[3]["s"]:.2f}); tl.to("#cnt", {{opacity:0, duration:.25}}, {T["divs"] - .1:.2f});')
@@ -161,6 +179,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0a1418}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .y{color:#FFC42E}#face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:30}.cp{position:absolute;left:40px;right:130px;top:1505px;text-align:center;opacity:0;z-index:35}.cp div{display:inline-block;font:900 58px/1.12 Mont;color:#fff;-webkit-text-stroke:7px #000;paint-order:stroke fill;text-shadow:0 6px 18px rgba(0,0,0,.8)}
+#ht{position:absolute;left:80px;right:80px;top:330px;opacity:0;padding:12px 12px 8px;background:#fff;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.7);z-index:10}#ht img{width:100%;display:block;border-radius:10px}#ht em{display:block;font-style:normal;font:700 20px Mont;color:#555;text-align:center;margin-top:6px}
+#cx{position:absolute;left:50px;right:50px;top:300px;opacity:0;padding:24px 26px;border-radius:26px;background:rgba(8,12,16,.92);border:3px solid #FF3246;z-index:9}#cx h4{font:400 64px Anton;color:#FF3246;margin-bottom:6px}#cx small{display:block;margin:12px 0 8px;font:900 28px Mont;color:#FFC42E;letter-spacing:.12em}.cg{display:flex;flex-wrap:wrap;gap:10px}.cg p{position:relative;padding:6px 16px;border-radius:14px;background:#262b33;font:900 32px Mont;color:#fff}.cg p i{position:absolute;left:8px;right:8px;top:50%;height:5px;background:#FF3246;transform-origin:0 50%}
 #wm{position:absolute;left:0;right:0;top:200px;text-align:center;font:800 24px Mont;letter-spacing:.34em;color:rgba(255,255,255,.6);z-index:20}
 #cred{position:absolute;left:40px;right:40px;top:1650px;text-align:center;font:800 18px Mont;color:rgba(255,255,255,.6);z-index:20}
 #hook{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;z-index:8}#hook b{display:inline-block;padding:18px 30px;border-radius:24px;background:rgba(8,12,16,.85);font:400 92px/1.02 Anton;color:#fff}
