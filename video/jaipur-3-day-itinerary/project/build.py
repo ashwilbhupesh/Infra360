@@ -2,7 +2,7 @@
 import json, math
 P = "proj"
 ASP = json.load(open("aspects.json"))
-PH = {p["k"]: p for p in json.load(open("rec/phrases.json"))}
+PH = {p["k"]: p for p in json.load(open("rec/phrases_fast.json"))}
 def S(k): return PH[k]["s"]
 def E(k): return PH[k]["e"]
 END = round(E(58) + 1.2, 2)
@@ -89,23 +89,23 @@ H.append('<div id="intro"><div id="grid">' + "".join(f'<div class="gi" id="g{i}"
          '<div id="ititle"><span class="k1">JAIPUR</span><span class="k2">3 DAYS</span><span class="k3">TIME-WISE ITINERARY</span></div>'
          '<div id="isave">SAVE THIS FOR YOUR TRIP</div></div>')
 for i in range(len(COL)):
-    J.append(f'tl.fromTo("#g{i}", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, {4.2 + .03 * i:.2f});')
+    J.append(f'tl.fromTo("#g{i}", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, {3.5 + .03 * i:.2f});')
 MONT = ["p01", "p24", "p52", "p40", "p34", "p68", "p45", "p18", "p62", "p29", "p06", "p53"]
 MONT_HTML = '<div id="mont">' + "".join(f'<img id="m{i}" src="assets/img/{p}.jpg"/>' for i, p in enumerate(MONT)) + '<div id="mflash"></div></div>'
 H[-1] = H[-1].replace('<div id="ishade"></div>', '<div id="ishade"></div>' + MONT_HTML)
-M0, MD = 1.6, (4.2 - 1.6) / len(MONT)
+M0, MD = 1.33, (3.5 - 1.33) / len(MONT)
 for i in range(len(MONT)):
     t = M0 + MD * i
     J.append(f'tl.set("#m{i}", {{opacity:1}}, {t:.3f}); tl.fromTo("#m{i}", {{scale:1.25, rotation:{(-1) ** i * 2}}}, {{scale:1.04, rotation:0, duration:{MD + .05:.3f}, ease:"power2.out", immediateRender:false}}, {t:.3f}); tl.set("#m{i}", {{opacity:0}}, {t + MD:.3f});')
     if i % 2 == 0: sfx("click-soft", t, .25)
-J.append(f'tl.set("#mont", {{opacity:1}}, {M0:.2f}); tl.fromTo("#mflash", {{opacity:.8}}, {{opacity:0, duration:.25, immediateRender:false}}, 4.2); tl.set("#mont", {{opacity:0}}, 4.2);')
-J.append('tl.fromTo("#ititle .k1", {scale:1}, {scale:1.08, duration:.13, yoyo:true, repeat:15, ease:"power1.inOut", immediateRender:false}, 1.95);')
-sfx("whoosh", 1.55, .35); sfx("impact-bass-1", 4.2, .5)
+J.append(f'tl.set("#mont", {{opacity:1}}, {M0:.2f}); tl.fromTo("#mflash", {{opacity:.8}}, {{opacity:0, duration:.25, immediateRender:false}}, 3.5); tl.set("#mont", {{opacity:0}}, 3.5);')
+J.append('tl.fromTo("#ititle .k1", {scale:1}, {scale:1.08, duration:.13, yoyo:true, repeat:13, ease:"power1.inOut", immediateRender:false}, 1.6);')
+sfx("whoosh", 1.3, .35); sfx("impact-bass-1", 3.5, .5)
 J.append('tl.fromTo("#grid", {scale:1.0}, {scale:1.12, duration:7.4, ease:"none"}, 0);')
-J.append('tl.fromTo("#ititle .k1", {opacity:0, y:60}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 1.62);'
-         'tl.fromTo("#ititle .k2", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, 4.25);'
-         'tl.fromTo("#ititle .k3", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 4.4);')
-J.append(f'tl.fromTo("#isave", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, {4.6:.2f}); tl.to("#isave", {{scale:1.08, duration:.35, yoyo:true, repeat:3}}, {5.0:.2f});')
+J.append('tl.fromTo("#ititle .k1", {opacity:0, y:60}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 1.35);'
+         'tl.fromTo("#ititle .k2", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, 3.55);'
+         'tl.fromTo("#ititle .k3", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 3.7);')
+J.append(f'tl.fromTo("#isave", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, {3.85:.2f}); tl.to("#isave", {{scale:1.08, duration:.35, yoyo:true, repeat:3}}, {4.2:.2f});')
 J.append(f'tl.to("#intro", {{opacity:0, duration:.35}}, {S(4) - .3:.2f});')
 sfx("impact-bass-1", 0.02, .45); sfx("riser", 4.4, .2)
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(bbox(DAYS[1])[0], bbox(DAYS[1])[1] * 1.6)}"}}}}, 0);')
@@ -258,15 +258,23 @@ for n, k in enumerate(keys):
         J.append(f'tl.fromTo("#cp{ci}", {{opacity:0, scale:.9}}, {{opacity:1, scale:1, duration:.1}}, {a:.2f}); tl.set("#cp{ci}", {{opacity:0}}, {b:.2f});')
         t += d; ci += 1
 
+T3 = S(3); D3 = E(3) - S(3)
+J.append(f'tl.to("#isave", {{opacity:0, duration:.15}}, {T3 - .1:.2f});')
+for i, (img, lab, fr, rot, x) in enumerate([("p24", "GHOOMNA", 0.0, -6, 70), ("p48", "KHAANA", .3, 4, 380), ("p18", "SHOPPING", .62, -3, 690)]):
+    H.append(f'<div class="pp" id="pp{i}" style="left:{x}px;transform:rotate({rot}deg)"><img src="assets/img/{img}.jpg"/><b>{lab}</b></div>')
+    t = T3 + D3 * fr
+    J.append(f'tl.fromTo("#pp{i}", {{opacity:0, scale:.3, y:80}}, {{opacity:1, scale:1, y:0, duration:.25, ease:"back.out(2.2)"}}, {t:.2f}); tl.to("#pp{i}", {{opacity:0, scale:.8, duration:.15}}, {S(4) - .35:.2f});')
+    sfx("pop", t, .3)
 H.append('<div id="wm">DIGITAL BANJAARAA</div><div id="vig"></div>')
-H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="2.2" data-track-index="2" muted playsinline></video>')
-J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.18}, 1.62);')
+H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.9" data-track-index="2" muted playsinline></video>')
+J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.35);')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}
 @font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#07090d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}
 .y{color:#FFC42E}
-#face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:30}#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 60% at 50% 45%,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)}
+#face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:30}.pp{position:absolute;top:1000px;width:320px;padding:10px 10px 12px;background:#fff;border-radius:16px;box-shadow:0 18px 40px rgba(0,0,0,.6);opacity:0;z-index:12;text-align:center}.pp img{width:300px;height:300px;object-fit:cover;border-radius:10px;display:block}.pp b{display:block;margin-top:8px;font:400 40px Anton;color:#14161c;letter-spacing:.04em}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(80% 60% at 50% 45%,rgba(0,0,0,0) 50%,rgba(0,0,0,.6) 100%)}
 #wm{position:absolute;left:0;right:0;top:190px;text-align:center;font:800 26px Mont;letter-spacing:.32em;color:rgba(255,255,255,.5);z-index:20}
 #intro{position:absolute;inset:0;z-index:10;background:#07090d;overflow:hidden}
 #grid{position:absolute;left:-60px;top:-40px;width:1200px;height:2000px;display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(4,1fr);gap:10px;transform:rotate(-4deg)}
