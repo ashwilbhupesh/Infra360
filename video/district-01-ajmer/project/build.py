@@ -104,19 +104,20 @@ def label(i, k, t, until, text=None, dy=-48):
     x, y = scr(W[k], t + .7)
     H.append(f'<div class="pl" id="{i}" style="left:{min(max(x, 250), 830):.0f}px;top:{y + dy:.0f}px">' + (f'<b>{NUM[k]}</b>' if k in NUM else '') + f'{text or PL[k][2]}</div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {t + .2:.2f}); tl.to("#{i}", {{opacity:0, duration:.2}}, {until - .2:.2f});')
-def card(cid, img, t0, t1, title, sub="", tag=None, top=380, maxw=830, maxh=880, rot=0, left=None):
+def card(cid, img, t0, t1, title, sub="", tag=None, top=380, maxw=830, maxh=880, rot=0, left=None, info=None):
+    if info and maxh == 880: maxh = 600 if ASP[(img if isinstance(img, str) else img[0])] < 1 else 640
     imgs = img if isinstance(img, list) else [img]
     a = ASP[imgs[0]]
     if a > 1.2 and maxw == 830: maxw = 960
     w = maxw; h = w / a
     if h > maxh: h = maxh; w = h * a
-    cw = w + 28; lx = (1080 - cw) / 2 if left is None else left
+    cw = max(w + 28, 760) if info else w + 28; lx = (1080 - cw) / 2 if left is None else left
     tg = f'<div class="tg" style="background:{tag[1]}">{tag[0]}</div>' if tag else ''
     stack = "".join(f'<div class="lyr" id="{cid}_{i}" style="width:{w:.0f}px;height:{h:.0f}px;{"opacity:0;" if i else ""}">' + (f'<img class="bgb" src="assets/img/{im}.jpg"/>' if i else '')
                     + f'<img class="fg" src="assets/img/{im}.jpg" style="object-fit:{"contain" if i else "cover"}"/></div>' for i, im in enumerate(imgs))
     dots = ('<div class="dts">' + "".join(f'<i id="{cid}_d{i}" style="opacity:{1 if i == 0 else .35}"></i>' for i in range(len(imgs))) + '</div>') if len(imgs) > 1 else ''
     H.append(f'<div class="card" id="{cid}" style="left:{lx:.0f}px;top:{top}px;width:{cw:.0f}px;rotate:{rot}deg">{tg}<div class="stk" style="width:{w:.0f}px;height:{h:.0f}px">{stack}{dots}</div>'
-             f'<div class="ct">{title}</div>' + (f'<div class="cs">{sub}</div>' if sub else '') + '</div>')
+             f'<div class="ct">{title}</div>' + (f'<div class="cs">{sub}</div>' if sub else '') + (f'<div class="ci">{info}</div>' if info else '') + '</div>')
     J.append(f'tl.fromTo("#{cid}", {{opacity:0, scale:.55, y:60}}, {{opacity:1, scale:1, y:0, duration:.32, ease:"back.out(1.7)"}}, {t0:.2f}); tl.to("#{cid}", {{opacity:0, scale:.85, y:30, duration:.18, ease:"power2.in"}}, {t1 - .18:.2f});')
     step = (t1 - t0 - .2) / len(imgs)
     for i in range(1, len(imgs)):
@@ -189,52 +190,53 @@ J.append(f'tl.fromTo("#thov", {{opacity:0, x:-60}}, {{opacity:1, x:0, duration:.
 
 # ---------- 1 ROCHAK ----------
 theme(1, "01", "KYA AAPKO PATA HAI?", S(3), S(4))
-H.append('<div id="hq"><div class="hb"><img src="assets/img/board.jpg"/><div><b>RAJASTHAN BOARD</b><span>(BSER)</span></div></div><i>+</i><div class="hb"><img src="assets/img/rpsc.jpg"/><div><b>RPSC</b><span>Public Service Commission</span></div></div><em>DONO KA HEADQUARTERS</em><strong>AJMER</strong></div>')
-J.append(f'tl.fromTo("#hq", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(3):.2f}); tl.from("#hq .hb", {{opacity:0, scale:.5, duration:.3, stagger:{(wt(3, "RPSC") - S(3)):.2f}, ease:"back.out(2)"}}, {S(3):.2f});'
-         f'tl.from("#hq em, #hq strong", {{opacity:0, y:30, duration:.3, stagger:.15}}, {wt(3, "headquarters") - .1:.2f}); tl.to("#hq", {{opacity:0, duration:.2}}, {S(4) - .1:.2f});')
+card("r1", "board", S(3) + .05, wt(3, "RPSC") - .05, "RAJASTHAN BOARD (BSER)", "Board of Secondary Education", ("HQ: AJMER", CYAN), info="1957 se. Rajasthan ke lakhon students ki<br/>10th-12th pariksha yahin se hoti hai.")
+card("r2", "rpsc", wt(3, "RPSC"), S(4) + .05, "RPSC", "Rajasthan Public Service Commission", ("HQ: AJMER", CYAN), info="RAS jaisi sarkari bhartiyon ki pariksha.<br/>Har naukri aspirant ka sapna yahin se.")
+H.append('<div id="hqb">DONO KA HEADQUARTERS: <b>AJMER</b></div>')
+J.append(f'tl.fromTo("#hqb", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(3, "headquarters") - .1:.2f}); tl.to("#hqb", {{opacity:0, duration:.2}}, {S(4) - .1:.2f});')
 sfx("pop", S(3), .3); sfx("pop", wt(3, "RPSC"), .3); sfx("impact-bass-1", wt(3, "headquarters"), .35)
 
 # ---------- 2 AASTHA ----------
 theme(2, "02", "AASTHA", S(4), S(5))
-fly("dargah", S(4) - .3, 420); card("a1", "dargah", wt(4, "Ajmer Sharif"), wt(4, "Pushkar ka"), "AJMER SHARIF DARGAH", "Khwaja Garib Nawaz", ("AASTHA", PINK))
+fly("dargah", S(4) - .3, 420); card("a1", "dargah", wt(4, "Ajmer Sharif"), wt(4, "Pushkar ka"), "AJMER SHARIF DARGAH", "Khwaja Garib Nawaz", ("AASTHA", PINK), info="Sufi sant Khwaja Moinuddin Chishti ki dargah.<br/>Har saal Urs mein lakhon zaayreen aate hain, har dharm ke log.")
 label("la1", "dargah", S(4) - .3, wt(4, "Pushkar ka"))
-fly("brahma", wt(4, "Pushkar ka") - .3, 600); card("a2", ["brahma_temple", "pushkar_ghat1", "pushkar_ghat2"], wt(4, "Pushkar ka"), wt(4, "Pushkar mela") - .2, "BRAHMA MANDIR", "Pushkar · ghaat aur pavitra jheel", ("AASTHA", PINK))
+fly("brahma", wt(4, "Pushkar ka") - .3, 600); card("a2", ["brahma_temple", "pushkar_ghat1", "pushkar_ghat2"], wt(4, "Pushkar ka"), wt(4, "Pushkar mela") - .2, "BRAHMA MANDIR", "Pushkar · ghaat aur pavitra jheel", ("AASTHA", PINK), info="Duniya ke gine-chune Brahma mandiron mein se ek.<br/>Pushkar jheel ke kinare 52 ghaat.")
 label("la2", "brahma", wt(4, "Pushkar ka") - .3, S(5))
-card("a3", "pushkar_mela", wt(4, "Pushkar mela") - .2, S(5) + .2, "PUSHKAR MELA", "Duniya bhar mein mashhoor", ("MELA", PINK))
+card("a3", "pushkar_mela", wt(4, "Pushkar mela") - .2, S(5) + .2, "PUSHKAR MELA", "Duniya bhar mein mashhoor", ("MELA", PINK), info="Kartik mahine (Oct-Nov) mein, Kartik Purnima tak.<br/>Duniya ke sabse bade camel fairs mein se ek.")
 J.append(f'tl.to("#pin_mela", {{opacity:1, duration:.2}}, {wt(4, "Pushkar mela") - .2:.2f});')
 
 # ---------- 3 KHAANA ----------
 theme(3, "03", "KHAANA", S(5), S(6))
 for i, (img, nm, w_) in enumerate([("sohan_halwa", "SOHAN HALWA", "sohan"), ("malpua", "MALPUA", "malpue"), ("gulkand", "GULKAND", "gulkand")]):
     t0 = wt(5, w_) - .15; t1 = (wt(5, ["malpue", "gulkand"][i]) - .15) if i < 2 else S(6) + .1
-    card(f"k{i}", img, t0, t1, nm, ["Ajmer", "Pushkar", "Pushkar ke gulab"][i], ("KHAANA", "#FF9F43"))
+    card(f"k{i}", img, t0, t1, nm, ["Ajmer", "Pushkar", "Pushkar ke gulab"][i], ("KHAANA", "#FF9F43"), info=["Ghee, chini aur dry fruits se bani<br/>Ajmer ki pehchaan wali mithai.", "Ghee mein tale, chashni mein doobe<br/>Pushkar ke mashhoor malpue.", "Pushkar ke desi gulab ki pattiyon<br/>aur chini se bana gulkand."][i])
 J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(5):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(6):.2f});')
 
 # ---------- 4 GHOOMNA ----------
 theme(4, "04", "GHOOMNE KI JAGAH", S(6), S(7))
 fly("anasagar", S(6) - .2, CITY_W * 1.3)
-card("g1", ["ana_sagar_baradari", "ana_sagar"], wt(6, "Ana Sagar"), wt(6, "Adhai"), "ANA SAGAR JHEEL", "Baradari, Ajmer", ("GHOOMNA", CYAN))
+card("g1", ["ana_sagar_baradari", "ana_sagar"], wt(6, "Ana Sagar"), wt(6, "Adhai"), "ANA SAGAR JHEEL", "Baradari, Ajmer", ("GHOOMNA", CYAN), info="Prithviraj Chauhan ke dada Arnoraja ne banwayi (12vi sadi).<br/>Kinare ki marble baradari Shah Jahan ne banwayi.")
 label("lg1", "anasagar", S(6) - .2, S(7) + .2)
 J.append(f'tl.to(["#pin_adhai", "#pin_soniji"], {{opacity:1, duration:.2}}, {wt(6, "Adhai") - .2:.2f});')
 label("lg2", "adhai", wt(6, "Adhai") - .5, S(7) + .2, dy=48); label("lg3", "soniji", wt(6, "Soniji") - .5, S(7) + .2)
-card("g2", "adhai_din", wt(6, "Adhai"), wt(6, "Soniji"), "ADHAI DIN KA JHONPRA", "", ("GHOOMNA", CYAN))
-card("g3", "soniji_nasiyan", wt(6, "Soniji"), S(7) + .2, "SONIJI KI NASIYAN", "Sone ka Jain mandir", ("GHOOMNA", CYAN))
+card("g2", "adhai_din", wt(6, "Adhai"), wt(6, "Soniji"), "ADHAI DIN KA JHONPRA", "", ("GHOOMNA", CYAN), info="1199 mein Qutb-ud-din Aibak ne banwaya.<br/>Kahani hai ki yeh dhai din mein bana, isliye yeh naam.")
+card("g3", "soniji_nasiyan", wt(6, "Soniji"), S(7) + .2, "SONIJI KI NASIYAN", "Sone ka Jain mandir", ("GHOOMNA", CYAN), info="1865 mein bana Digambar Jain mandir.<br/>Andar 'Swarna Nagari': sone ki parat chadhi lakdi se bani Jain duniya.")
 
 # ---------- 5 MASHHOOR ----------
 theme(5, "05", "MASHHOOR", S(7), S(8))
 fly("kishangarh", S(7) - .3, 900)
-card("m1", "bani_thani", S(7) + .1, wt(7, "Mayo") - .1, "BANI-THANI", "Rajasthan ki Mona Lisa · Kishangarh", ("MASHHOOR", GOLD), maxh=900)
+card("m1", "bani_thani", S(7) + .1, wt(7, "Mayo") - .1, "BANI-THANI", "Rajasthan ki Mona Lisa · Kishangarh", ("MASHHOOR", GOLD), maxh=600, info="Kishangarh shaili, chitrakar Nihal Chand (lagbhag 1750).<br/>1973 mein is par India Post ka stamp bhi aaya.")
 fly("mayo", wt(7, "Mayo") - .4, 420)
-card("m2", "mayo_college", wt(7, "Mayo") - .1, S(8) + .1, "MAYO COLLEGE", "1875 se", ("MASHHOOR", GOLD))
+card("m2", "mayo_college", wt(7, "Mayo") - .1, S(8) + .1, "MAYO COLLEGE", "1875 se", ("MASHHOOR", GOLD), info="Lord Mayo ke naam par, 1875 mein shuru.<br/>Desh ke sabse purane boarding schools mein se ek.")
 label("lm2", "mayo", wt(7, "Mayo") - .4, S(8), dy=60)
 
 # ---------- 6 SHOPPING ----------
 theme(6, "06", "SHOPPING", S(8), S(9))
 fly("bazaar", S(8) - .3, 520)
-card("s1", "pushkar_bazaar", wt(8, "Pushkar"), wt(8, "marble"), "PUSHKAR BAZAAR", "", ("SHOP", PINK))
+card("s1", "pushkar_bazaar", wt(8, "Pushkar"), wt(8, "marble"), "PUSHKAR BAZAAR", "", ("SHOP", PINK), info="Kadhai wale bags, kapde, chandi ke gehne<br/>aur rang-birangi Rajasthani cheezein.")
 label("ls1", "bazaar", S(8) - .3, wt(8, "marble"))
 fly("mandi", wt(8, "marble") - .3, 700)
-card("s2", ["kishangarh_mandi", "marble_quarry"], wt(8, "marble"), S(9) + .1, "KISHANGARH MARBLE MANDI", "Desh ki sabse badi marble mandiyon mein se ek", ("SHOP", PINK))
+card("s2", ["kishangarh_mandi", "marble_quarry"], wt(8, "marble"), S(9) + .1, "KISHANGARH MARBLE MANDI", "Desh ki sabse badi marble mandiyon mein se ek", ("SHOP", PINK), info="Desh bhar se builders yahan marble lene aate hain.<br/>Saath mein granite aur stone ka bada kaarobaar.")
 label("ls2", "mandi", wt(8, "marble") - .3, S(9))
 
 
@@ -255,13 +257,13 @@ W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][
 J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(9) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(9) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(11) + 1:.2f});')
 label("lf1", "expmid", S(9) + .6, S(10), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
 J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(9, "airport") - .3:.2f});')
-card("fair", "airport", wt(9, "airport") - .1, wt(9, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520); label("lf2", "airport", wt(9, "airport") - .5, S(10), "&#9992; Kishangarh Airport")
+card("fair", "airport", wt(9, "airport") - .1, wt(9, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520, info="October 2017 se shuru.<br/>Ajmer, Pushkar aur Kishangarh ka hawai rasta."); label("lf2", "airport", wt(9, "airport") - .5, S(10), "&#9992; Kishangarh Airport")
 J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(9, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(9, "Smart City") - .5, S(10), "AJMER · SMART CITY", dy=-70)
 H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(9):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(10):.2f});')
 
 # ---------- 8 ITIHAAS ----------
 theme(8, "08", "ITIHAAS", S(10), S(11))
-card("i1", "prithviraj_painting", wt(10, "Prithviraj") - .1, S(11) + .1, "PRITHVIRAJ CHAUHAN", "Ajmer ki rajdhani se raaj · painting", ("ITIHAAS", "#B98CFF"), maxh=900)
+card("i1", "prithviraj_painting", wt(10, "Prithviraj") - .1, S(11) + .1, "PRITHVIRAJ CHAUHAN", "Ajmer ki rajdhani se raaj · painting", ("ITIHAAS", "#B98CFF"), maxh=600, info="12vi sadi ke Chauhan raja, rajdhani Ajmer.<br/>Tarain ke yuddh (1191, 1192) ke liye mashhoor.")
 H.append('<div id="ajay"><b>AJAYAMERU</b> &rarr; <b>AJMER</b><span>Chauhan raja Ajayaraja ne basaya</span></div>')
 J.append(f'tl.fromTo("#ajay", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3}}, {S(10) + .1:.2f}); tl.to("#ajay", {{opacity:0, duration:.2}}, {wt(10, "Prithviraj") - .1:.2f});')
 J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(10):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(11):.2f});')
@@ -318,7 +320,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .th{position:absolute;left:50px;top:250px;display:flex;align-items:center;gap:12px;padding:8px 22px 8px 8px;border-radius:40px;background:rgba(8,10,15,.9);border:2px solid #FFC42E;font:400 44px/1 Anton;color:#fff;letter-spacing:.04em;opacity:0;z-index:12}
 .th b{padding:8px 14px;border-radius:30px;background:#FFC42E;color:#111;font:400 38px/1 Anton}
 .card{position:absolute;opacity:0;padding:14px 14px 16px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);z-index:8;text-align:center}
-.stk{position:relative;border-radius:14px;overflow:hidden;background:#111}.lyr{position:absolute;left:0;top:0;overflow:hidden}.lyr img{position:absolute;inset:0;width:100%;height:100%;display:block}.lyr .bgb{object-fit:cover;filter:blur(22px) brightness(.55);transform:scale(1.15)}.dts{position:absolute;right:14px;top:14px;display:flex;gap:7px;padding:7px 9px;border-radius:20px;background:rgba(0,0,0,.55)}.dts i{width:12px;height:12px;border-radius:50%;background:#fff}.ct{margin-top:10px;font:400 58px/1 Anton;color:#14161c;letter-spacing:.02em}.cs{margin-top:6px;font:700 28px Mont;color:#5b6070}
+.stk{position:relative;margin:0 auto;border-radius:14px;overflow:hidden;background:#111}.lyr{position:absolute;left:0;top:0;overflow:hidden}.lyr img{position:absolute;inset:0;width:100%;height:100%;display:block}.lyr .bgb{object-fit:cover;filter:blur(22px) brightness(.55);transform:scale(1.15)}.dts{position:absolute;right:14px;top:14px;display:flex;gap:7px;padding:7px 9px;border-radius:20px;background:rgba(0,0,0,.55)}.dts i{width:12px;height:12px;border-radius:50%;background:#fff}.ct{margin-top:10px;font:400 58px/1 Anton;color:#14161c;letter-spacing:.02em}.cs{margin-top:6px;font:700 28px Mont;color:#5b6070}
+.ci{margin:10px 6px 0;padding-top:10px;border-top:2px solid #e3e3e8;text-align:left;font:700 26px/1.32 Mont;color:#2a2d36}.ci b{color:#c2185b}
 .tg{position:absolute;left:-12px;top:-22px;padding:8px 20px;border-radius:30px;font:900 28px Mont;color:#111;box-shadow:0 6px 16px rgba(0,0,0,.4);z-index:2}
 .pl{position:absolute;opacity:0;translate:-50% -50%;text-align:center;line-height:1.1;display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:30px;background:rgba(8,10,15,.9);border:2px solid #FF4FA3;font:800 30px Mont;color:#fff;white-space:nowrap;z-index:6}
 .pl b{width:38px;height:38px;border-radius:50%;background:#FF4FA3;color:#111;display:flex;align-items:center;justify-content:center;font:900 22px Mont}
@@ -328,6 +331,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #nums{position:absolute;left:50px;right:50px;top:340px;opacity:0;z-index:9}.nb{display:flex;align-items:center;gap:22px;margin-bottom:14px;padding:14px 26px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #FFC42E}.nb i{font-style:normal;font-size:64px}.nb b{display:block;white-space:nowrap;font:400 74px/1 Anton;color:#FFC42E}.nb span{display:block;margin-top:6px;font:900 28px Mont;color:#fff;letter-spacing:.06em}#nums em{position:absolute;left:0;right:0;top:1265px;display:block;font-style:normal;font:700 21px Mont;color:rgba(255,255,255,.8);text-align:center}
 .mlab{position:absolute;opacity:0;translate:-50% -50%;padding:8px 22px;border-radius:30px;background:rgba(8,10,15,.85);font:400 54px/1 Anton;color:#fff;letter-spacing:.06em;z-index:6}.mlab.pk{color:#FF4FA3}.mlab.yl{color:#111;background:#FFC42E}
 #ov{position:absolute;inset:0;opacity:0;z-index:7}#ovlist{position:absolute;left:50px;right:50px;top:330px;padding:14px 22px;border-radius:24px;background:rgba(8,10,15,.88);border:3px solid #FF4FA3;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}#ovlist p{display:flex;align-items:center;gap:10px;height:50px;font:800 27px Mont;color:#fff;white-space:nowrap}#ovlist p b{width:36px;height:36px;flex:none;border-radius:50%;background:#FF4FA3;color:#111;display:flex;align-items:center;justify-content:center;font:900 20px Mont}
+#hqb{position:absolute;left:40px;right:40px;top:1300px;opacity:0;text-align:center;padding:14px;border-radius:22px;background:#FF4FA3;font:900 40px Mont;color:#111;z-index:12}#hqb b{font:400 54px Anton}
 #ajay{position:absolute;left:60px;right:60px;top:430px;opacity:0;text-align:center;padding:30px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #B98CFF;font:400 96px/1.1 Anton;color:#fff;z-index:9}
 #ajay b{color:#FFC42E;font-weight:400}#ajay span{display:block;margin-top:10px;font:800 34px Mont;color:#ddd}
 #jp{position:absolute;right:50px;top:560px;opacity:0;padding:20px 28px;border-radius:24px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;font:400 70px/1 Anton;color:#fff;z-index:9;text-align:right}#jp b{color:#FFC42E;font-weight:400}#jp span{display:block;font:900 30px Mont;color:#ccc;margin-top:6px}
