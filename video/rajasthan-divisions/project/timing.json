@@ -1,0 +1,253 @@
+{
+"phrases": [
+{
+"s": 0.1,
+"e": 3.08,
+"t": "Rajasthan mein kitne district hain? 50? Galat."
+},
+{
+"s": 3.3,
+"e": 7.38,
+"t": "December 2024 mein 9 district aur 3 sambhag khatam ho gaye."
+},
+{
+"s": 7.6,
+"e": 8.78,
+"t": "Ab hain 7 sambhag"
+},
+{
+"s": 9.0,
+"e": 10.22,
+"t": "aur 41 district."
+},
+{
+"s": 10.44,
+"e": 11.32,
+"t": "Pehle 7 sambhag:"
+},
+{
+"s": 11.54,
+"e": 12.02,
+"t": "Jaipur,"
+},
+{
+"s": 12.24,
+"e": 14.38,
+"t": "Jodhpur, Ajmer, Udaipur,"
+},
+{
+"s": 14.6,
+"e": 16.66,
+"t": "Kota, Bikaner aur Bharatpur."
+},
+{
+"s": 16.88,
+"e": 20.26,
+"t": "Ab ek-ek karke inke district dekhte hain. Jaipur sambhag:"
+},
+{
+"s": 20.48,
+"e": 21.16,
+"t": "Jhunjhunu,"
+},
+{
+"s": 21.38,
+"e": 22.34,
+"t": "Khairthal-Tijara,"
+},
+{
+"s": 22.56,
+"e": 23.04,
+"t": "Sikar,"
+},
+{
+"s": 23.26,
+"e": 24.2,
+"t": "Kotputli-Behror,"
+},
+{
+"s": 24.42,
+"e": 24.84,
+"t": "Alwar,"
+},
+{
+"s": 25.06,
+"e": 26.3,
+"t": "Jaipur aur Dausa."
+},
+{
+"s": 26.52,
+"e": 27.34,
+"t": "Jodhpur sambhag:"
+},
+{
+"s": 27.56,
+"e": 29.82,
+"t": "Phalodi, Jaisalmer, Jodhpur,"
+},
+{
+"s": 30.04,
+"e": 31.44,
+"t": "Barmer, Balotra,"
+},
+{
+"s": 31.66,
+"e": 33.22,
+"t": "Pali aur Jalore, Sirohi."
+},
+{
+"s": 33.44,
+"e": 34.8,
+"t": "Ajmer sambhag:"
+},
+{
+"s": 35.02,
+"e": 38.42,
+"t": "Nagaur, Didwana-Kuchaman, Ajmer, Beawar,"
+},
+{
+"s": 38.64,
+"e": 39.8,
+"t": "Tonk aur Bhilwara."
+},
+{
+"s": 40.02,
+"e": 40.84,
+"t": "Udaipur sambhag:"
+},
+{
+"s": 41.06,
+"e": 43.52,
+"t": "Rajsamand, Chittorgarh, Udaipur,"
+},
+{
+"s": 43.74,
+"e": 44.36,
+"t": "Salumber,"
+},
+{
+"s": 44.58,
+"e": 46.9,
+"t": "Pratapgarh, Dungarpur aur Banswara."
+},
+{
+"s": 47.12,
+"e": 47.86,
+"t": "Kota sambhag:"
+},
+{
+"s": 48.08,
+"e": 48.54,
+"t": "Bundi,"
+},
+{
+"s": 48.76,
+"e": 50.74,
+"t": "Kota, Baran aur Jhalawar."
+},
+{
+"s": 50.96,
+"e": 51.96,
+"t": "Bikaner sambhag:"
+},
+{
+"s": 52.18,
+"e": 54.0,
+"t": "Sri Ganganagar, Hanumangarh,"
+},
+{
+"s": 54.22,
+"e": 56.1,
+"t": "Bikaner aur Churu."
+},
+{
+"s": 56.32,
+"e": 57.94,
+"t": "Bharatpur sambhag: Deeg,"
+},
+{
+"s": 58.16,
+"e": 58.72,
+"t": "Bharatpur,"
+},
+{
+"s": 58.94,
+"e": 61.34,
+"t": "Dholpur, Karauli aur Sawai Madhopur."
+},
+{
+"s": 61.56,
+"e": 65.64,
+"t": "Toh total 7 sambhag aur 41 district. Aapka district kaunsa hai?"
+},
+{
+"s": 65.86,
+"e": 66.84,
+"t": "Comment karo!"
+}
+],
+"ev": {
+"V:Jaipur": 11.54,
+"V:Jodhpur": 12.24,
+"V:Ajmer": 13.04,
+"V:Udaipur": 13.67,
+"V:Kota": 14.6,
+"V:Bikaner": 15.04,
+"V:Bharatpur": 15.92,
+"S:Jaipur": 19.37,
+"D:Jhunjhunu": 20.48,
+"D:Khairthal-Tijara": 21.38,
+"D:Sikar": 22.56,
+"D:Kotputli-Behror": 23.26,
+"D:Alwar": 24.42,
+"D:Jaipur": 25.06,
+"D:Dausa": 25.86,
+"S:Jodhpur": 26.52,
+"D:Phalodi": 27.56,
+"D:Jaisalmer": 28.29,
+"D:Jodhpur": 29.17,
+"D:Barmer": 30.04,
+"D:Balotra": 30.74,
+"D:Pali": 31.66,
+"D:Jalore": 32.25,
+"D:Sirohi": 32.77,
+"S:Ajmer": 33.44,
+"D:Nagaur": 35.02,
+"D:Didwana-Kuchaman": 35.7,
+"D:Ajmer": 37.23,
+"D:Beawar": 37.83,
+"D:Tonk": 38.64,
+"D:Bhilwara": 39.22,
+"S:Udaipur": 40.02,
+"D:Rajsamand": 41.06,
+"D:Chittorgarh": 41.91,
+"D:Udaipur": 42.91,
+"D:Salumber": 43.74,
+"D:Pratapgarh": 44.58,
+"D:Dungarpur": 45.38,
+"D:Banswara": 46.3,
+"S:Kota": 47.12,
+"D:Bundi": 48.08,
+"D:Kota": 48.76,
+"D:Baran": 49.24,
+"D:Jhalawar": 50.03,
+"S:Bikaner": 50.96,
+"D:Sri Ganganagar": 52.18,
+"D:Hanumangarh": 53.22,
+"D:Bikaner": 54.22,
+"D:Churu": 55.47,
+"S:Bharatpur": 56.32,
+"D:Deeg": 57.6,
+"D:Bharatpur": 58.16,
+"D:Dholpur": 58.94,
+"D:Karauli": 59.54,
+"D:Sawai Madhopur": 60.34,
+"galat": 2.54,
+"fifty": 1.95,
+"count": 7.6,
+"divs": 10.44,
+"final": 61.56,
+"cta": 63.8,
+"end": 67.76
+}
+}
