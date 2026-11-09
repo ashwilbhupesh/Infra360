@@ -189,7 +189,7 @@ J.append(f'tl.fromTo("#thov", {{opacity:0, x:-60}}, {{opacity:1, x:0, duration:.
 
 # ---------- 1 ROCHAK ----------
 theme(1, "01", "KYA AAPKO PATA HAI?", S(3), S(4))
-H.append('<div id="hq"><div class="hb"><b>RAJASTHAN BOARD</b><span>(BSER)</span></div><i>+</i><div class="hb"><b>RPSC</b><span>Public Service Commission</span></div><em>DONO KA HEADQUARTERS</em><strong>AJMER</strong></div>')
+H.append('<div id="hq"><div class="hb"><img src="assets/img/board.jpg"/><div><b>RAJASTHAN BOARD</b><span>(BSER)</span></div></div><i>+</i><div class="hb"><img src="assets/img/rpsc.jpg"/><div><b>RPSC</b><span>Public Service Commission</span></div></div><em>DONO KA HEADQUARTERS</em><strong>AJMER</strong></div>')
 J.append(f'tl.fromTo("#hq", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(3):.2f}); tl.from("#hq .hb", {{opacity:0, scale:.5, duration:.3, stagger:{(wt(3, "RPSC") - S(3)):.2f}, ease:"back.out(2)"}}, {S(3):.2f});'
          f'tl.from("#hq em, #hq strong", {{opacity:0, y:30, duration:.3, stagger:.15}}, {wt(3, "headquarters") - .1:.2f}); tl.to("#hq", {{opacity:0, duration:.2}}, {S(4) - .1:.2f});')
 sfx("pop", S(3), .3); sfx("pop", wt(3, "RPSC"), .3); sfx("impact-bass-1", wt(3, "headquarters"), .35)
@@ -254,7 +254,8 @@ theme(70, "07", "FUTURE", S(9), S(10))
 W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][0] + EXP[0][0]) / 2, (W["ajmer"][1] + EXP[0][1]) / 2 + FW * .12); cam(S(9) - .2, FC, FW, .9); CAMS.append((S(9) - .2, .9, FC, FW))
 J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(9) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(9) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(11) + 1:.2f});')
 label("lf1", "expmid", S(9) + .6, S(10), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
-J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(9, "airport") - .3:.2f});'); label("lf2", "airport", wt(9, "airport") - .5, S(10), "&#9992; Kishangarh Airport")
+J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(9, "airport") - .3:.2f});')
+card("fair", "airport", wt(9, "airport") - .1, wt(9, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520); label("lf2", "airport", wt(9, "airport") - .5, S(10), "&#9992; Kishangarh Airport")
 J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(9, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(9, "Smart City") - .5, S(10), "AJMER · SMART CITY", dy=-70)
 H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(9):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(10):.2f});')
 
@@ -321,8 +322,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .tg{position:absolute;left:-12px;top:-22px;padding:8px 20px;border-radius:30px;font:900 28px Mont;color:#111;box-shadow:0 6px 16px rgba(0,0,0,.4);z-index:2}
 .pl{position:absolute;opacity:0;translate:-50% -50%;text-align:center;line-height:1.1;display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:30px;background:rgba(8,10,15,.9);border:2px solid #FF4FA3;font:800 30px Mont;color:#fff;white-space:nowrap;z-index:6}
 .pl b{width:38px;height:38px;border-radius:50%;background:#FF4FA3;color:#111;display:flex;align-items:center;justify-content:center;font:900 22px Mont}
-#hq{position:absolute;left:60px;right:60px;top:400px;opacity:0;text-align:center;z-index:9}.hb{display:block;padding:24px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #3CDCFF}
-.hb b{display:block;font:400 92px/1 Anton;color:#fff}.hb span{display:block;margin-top:6px;font:800 30px Mont;color:#3CDCFF}#hq i{display:block;font:900 80px/1.2 Mont;color:#FFC42E;font-style:normal}
+#hq{position:absolute;left:60px;right:60px;top:400px;opacity:0;text-align:center;z-index:9}.hb{display:flex;align-items:center;gap:20px;text-align:left;padding:16px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #3CDCFF}
+.hb b{display:block;font:400 92px/1 Anton;color:#fff}.hb span{display:block;margin-top:6px;font:800 30px Mont;color:#3CDCFF}.hb img{width:330px;height:220px;object-fit:cover;border-radius:16px;flex:none}.hb b{font-size:70px!important}#hq i{display:block;font:900 70px/1.1 Mont;color:#FFC42E;font-style:normal}
 #hq em{display:block;margin-top:22px;font-style:normal;font:900 38px Mont;color:#fff;letter-spacing:.1em}#hq strong{display:block;font:400 180px/1 Anton;color:#FF4FA3}
 #nums{position:absolute;left:50px;right:50px;top:340px;opacity:0;z-index:9}.nb{display:flex;align-items:center;gap:22px;margin-bottom:14px;padding:14px 26px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #FFC42E}.nb i{font-style:normal;font-size:64px}.nb b{display:block;white-space:nowrap;font:400 74px/1 Anton;color:#FFC42E}.nb span{display:block;margin-top:6px;font:900 28px Mont;color:#fff;letter-spacing:.06em}#nums em{position:absolute;left:0;right:0;top:1265px;display:block;font-style:normal;font:700 21px Mont;color:rgba(255,255,255,.8);text-align:center}
 .mlab{position:absolute;opacity:0;translate:-50% -50%;padding:8px 22px;border-radius:30px;background:rgba(8,10,15,.85);font:400 54px/1 Anton;color:#fff;letter-spacing:.06em;z-index:6}.mlab.pk{color:#FF4FA3}.mlab.yl{color:#111;background:#FFC42E}
