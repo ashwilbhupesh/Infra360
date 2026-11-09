@@ -140,11 +140,10 @@ sfx("riser", S(4), .2)
 # ---------------- 2 · central jaipur ----------------
 chap(2, "02", "CENTRAL JAIPUR", S(5), S(10))
 CORE_C = wp(26.906, 75.812); cam(S(5), CORE_C, CITY_W * .6, 1.2)
-cam(S(8) + 1.2, CEN, CITY_W, 1.0)
 J.append(f'tl.to("#city", {{opacity:1, duration:.8}}, {S(5) + .2:.2f}); tl.to("#bfill", {{fillOpacity:.06, duration:.5}}, {S(5):.2f});')
 road_op(S(5), .45)
 COFF = {'Pink City': (60, -50), 'C-Scheme': (-20, -50), 'Civil Lines': (-110, 20), 'Bani Park': (-40, -50), 'Raja Park': (80, 40), 'Jawahar Nagar': (110, 95), 'Lal Kothi': (-60, 60)}
-HOFF = {'Vaishali Nagar': (-30, -42), 'Shyam Nagar': (-70, 42), 'Mansarovar': (-20, 42), 'Vidhyadhar Nagar': (60, -42), 'Murlipura': (-80, -42), 'Jagatpura': (30, 42)}
+HOFF = {'Vaishali Nagar': (-10, -44), 'Shyam Nagar': (-60, 44), 'Mansarovar': (0, 44), 'Vidhyadhar Nagar': (90, -44), 'Murlipura': (-70, -44), 'Jagatpura': (0, -44)}
 CORE = [("Pink City", (26.924, 75.824), 6, "Pink City"), ("C-Scheme", (26.906, 75.803), 6, "C-Scheme"), ("Civil Lines", (26.904, 75.783), 6, "Civil Lines"),
         ("Bani Park", (26.931, 75.792), 6, "Bani Park"), ("Raja Park", (26.895, 75.826), 7, "Raja Park"), ("Jawahar Nagar", (26.884, 75.836), 8, "Jawahar"),
         ("Lal Kothi", (26.886, 75.808), 8, "Lal Kothi")]
@@ -154,7 +153,7 @@ for i, (nm, ll, k, w) in enumerate(CORE):
     t = wt(k, w); p = wp(*ll)
     pin(f"corep{i}", p, PINK, t, S(12), r=1.2)
     dx, dy = COFF[nm]
-    label(f"lc{i}", p, nm, t, S(8) + 1.25, at=S(5) + 1.3, cls="pink", dx=dx, dy=dy)
+    label(f"lc{i}", p, nm, t, S(10) + .2, at=S(5) + 1.3, cls="pink", dx=dx, dy=dy)
     sfx("pop", t, .2)
 HUBS = [("Vaishali Nagar", (26.912, 75.735)), ("Shyam Nagar", (26.893, 75.765)), ("Mansarovar", (26.860, 75.760)), ("Vidhyadhar Nagar", (26.955, 75.788)),
         ("Murlipura", (26.968, 75.770)), ("Jagatpura", (26.825, 75.865))]
@@ -162,7 +161,7 @@ for i, (nm, ll) in enumerate(HUBS):
     t = wt(9, nm.split()[0]); p = wp(*ll)
     pin(f"hp{i}", p, YEL, t, S(12), r=1.8)
     dx, dy = HOFF[nm]
-    label(f"lh{i}", p, nm, t, S(10) + .2, at=S(8) + 2.3, cls="yel", dx=dx, dy=dy)
+    label(f"lh{i}", p, nm, t, S(10) + .2, at=S(5) + 1.3, cls="yel", dx=dx, dy=dy)
     sfx("pop", t, .2)
 
 # ---------------- price ----------------
@@ -189,6 +188,28 @@ for k in ["delhi", "sikar", "kalwar", "sirsi", "ajmer", "diggi", "tonk", "agra"]
         SVG.append(f'<circle id="pt{pk}" cx="{near[0]:.1f}" cy="{near[1]:.1f}" r="2.2" style="fill:{CYAN};opacity:0"/>')
         J.append(f'tl.fromTo("#pt{pk}", {{attr:{{cx:{near[0] + jx:.1f}, cy:{near[1] + jy:.1f}}}, opacity:.95}}, {{attr:{{cx:{far[0] + jx * 3:.1f}, cy:{far[1] + jy * 3:.1f}}}, opacity:.0, duration:{d:.2f}, ease:"power1.out", immediateRender:false}}, {t0:.2f});')
         pk += 1
+ANG = [(-45, 1), (-100, 1.25), (-128, 1.4), (-150, 1.4), (-178, 1.1), (148, 1), (88, 1), (18, 1)]
+for i, (ang, sc) in enumerate(ANG):
+    a = math.radians(ang); r0, r1_ = 5.5 * PXKM, (15 + 5 * (sc - 1) * 2) * PXKM
+    pts = []
+    for k in range(13):
+        f = k / 12; rr = r0 + (r1_ - r0) * f; aa = a + .18 * math.sin(f * math.pi)
+        pts.append((CEN[0] + rr * math.cos(aa), CEN[1] - rr * math.sin(aa)))
+    (x1, y1), (x2, y2) = pts[-2], pts[-1]; hd = math.atan2(y2 - y1, x2 - x1); L = 1.6 * PXKM * sc
+    head = [(x2 - L * math.cos(hd - .5), y2 - L * math.sin(hd - .5)), (x2, y2), (x2 - L * math.cos(hd + .5), y2 - L * math.sin(hd + .5))]
+    t0 = S(12) + .15 * i
+    SVG.append(f'<path id="ar{i}" d="{pd(pts)}" pathLength="1" style="fill:none;stroke:#fff;stroke-width:{4 * sc:.1f};stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+               f'<path id="ah{i}" d="{pd(head)}" style="fill:none;stroke:#fff;stroke-width:{4 * sc:.1f};stroke-linecap:round;stroke-linejoin:round;opacity:0"/>')
+    J.append(f'tl.to("#ar{i}", {{strokeDashoffset:0, duration:.7, ease:"power2.out"}}, {t0:.2f}); tl.to("#ah{i}", {{opacity:1, duration:.1}}, {t0 + .6:.2f});'
+             f'tl.to(["#ar{i}", "#ah{i}"], {{opacity:.35, duration:.4}}, {S(14):.2f}); tl.to(["#ar{i}", "#ah{i}"], {{opacity:0, duration:.4}}, {S(23):.2f});')
+    if sc > 1.2:
+        J.append(f'tl.to(["#ar{i}", "#ah{i}"], {{opacity:1, stroke:"{GREEN}", duration:.3}}, {wt(14, "Ajmer"):.2f});')
+    # settling houses at arrow end
+    for h in range(3 if sc > 1.2 else 2):
+        hx = x2 + math.cos(hd + 1.6) * (h - 1) * 1.6 * PXKM - math.cos(hd) * 1.2 * PXKM * (h % 2); hy = y2 + math.sin(hd + 1.6) * (h - 1) * 1.6 * PXKM - math.sin(hd) * 1.2 * PXKM * (h % 2)
+        SVG.append(f'<text id="hs{i}_{h}" x="{hx:.1f}" y="{hy:.1f}" text-anchor="middle" style="font-size:{2.6 * PXKM:.0f}px;opacity:0">&#127968;</text>')
+        J.append(f'tl.fromTo("#hs{i}_{h}", {{opacity:0, scale:.2, transformOrigin:"50% 50%"}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2.5)"}}, {t0 + .75 + .12 * h:.2f}); tl.to("#hs{i}_{h}", {{opacity:0, duration:.3}}, {S(23):.2f});')
+    sfx("pop", t0 + .75, .18)
 H.append('<div class="big" id="outw"><b>&larr; &rarr;</b>LOG BAHAR SHIFT</div>'); inout("#outw", S(12) + .2, S(14))
 # expansion wedge between Ajmer & Tonk roads (via Diggi)
 WED = [wp(26.905, 75.745), wp(26.86, 75.62), wp(26.74, 75.60), wp(26.63, 75.70), wp(26.62, 75.84), wp(26.75, 75.83), wp(26.84, 75.80), wp(26.88, 75.77)]
@@ -213,35 +234,58 @@ H.append('<div class="foot" id="fcol">Locations approx. · Kalwar, Sirsi, Diggi 
 # ---------------- why ----------------
 WHY = [("&#128188;", "ROZGAAR", "rozgaar"), ("&#127973;", "HOSPITALS", "hospitals"), ("&#127979;", "SCHOOLS", "schools"), ("&#127891;", "COLLEGES", "colleges"),
        ("&#128739;", "CONNECTIVITY", "connectivity"), ("&#128722;", "SHOPS &amp; COMMERCIAL", "shops")]
-H.append('<div id="why"><h3>KYUN?</h3><div class="wg">' + "".join(f'<div class="wi" id="wi{i}"><i>{a}</i><b>{b}</b></div>' for i, (a, b, _) in enumerate(WHY)) + '</div></div>')
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(20) - .1:.2f}); tl.fromTo("#why", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(20):.2f}); tl.fromTo("#why h3", {{scale:2}}, {{scale:1, duration:.3, ease:"back.out(2)"}}, {S(20):.2f}); tl.to("#why", {{opacity:0, duration:.25}}, {S(23) - .2:.2f}); tl.to("#dim", {{opacity:.2, duration:.3}}, {S(23):.2f});')
-for i, (_, _, w) in enumerate(WHY):
-    k = 21 if i < 2 else 22; t = wt(k, w)
-    J.append(f'tl.fromTo("#wi{i}", {{opacity:0, scale:.4}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2.2)"}}, {t:.2f});'); sfx("pop", t, .25)
+H.append('<div class="big" id="kyun"><b>KYUN?</b></div>'); inout("#kyun", S(20), S(23))
+cam(S(20) - .2, wp(26.815, 75.74), 34 * PXKM, .9)
+WHYP = {"rozgaar": [("&#128188;", "Sitapura / RIICO", (26.78, 75.83)), ("&#128188;", "Mahindra World City", (26.85, 75.59))],
+        "hospitals": [("&#127973;", "Hospital", (26.80, 75.74)), ("&#127973;", "Hospital", (26.88, 75.68))],
+        "schools": [("&#127979;", "School", (26.76, 75.79)), ("&#127979;", "School", (26.84, 75.70))],
+        "colleges": [("&#127891;", "College", (26.82, 75.86)), ("&#127891;", "College", (26.74, 75.70))],
+        "connectivity": [("&#128739;", "Ring Road", (26.79, 75.70))],
+        "shops": [("&#128722;", "Shops", (26.81, 75.77)), ("&#127980;", "Commercial", (26.87, 75.63))]}
+wi = 0
+for w, items in WHYP.items():
+    k = 21 if w in ("rozgaar", "hospitals") else 22; t = wt(k, w)
+    for j, (ic, nm, ll) in enumerate(items):
+        x, y = scr(wp(*ll), S(20) + .8); x = min(max(x, 140), 940)
+        H.append(f'<div class="wpin" id="wp{wi}" style="left:{x:.0f}px;top:{y:.0f}px"><i>{ic}</i><b>{nm}</b></div>')
+        J.append(f'tl.fromTo("#wp{wi}", {{opacity:0, scale:.2, y:30}}, {{opacity:1, scale:1, y:0, duration:.3, ease:"back.out(2.5)"}}, {t + .12 * j:.2f}); tl.to("#wp{wi}", {{opacity:0, duration:.25}}, {S(23) - .1:.2f});')
+        sfx("pop", t + .12 * j, .22); wi += 1
+H.append('<div class="foot" id="fwhy">Icons illustrative</div>'); inout("#fwhy", S(20), S(23), frm="opacity:0", to="opacity:1")
 
 # ---------------- 4 · JDA region ----------------
 chap(4, "04", "JDA REGION", S(23), S(27))
-JW = 120 * PXKM
-cam(S(23), (CEN[0], CEN[1] + 4 * PXKM), JW, 1.4)
 J.append(f'tl.to("#city", {{opacity:0, duration:.5}}, {S(23):.2f});')
-r1 = math.sqrt(3000 / math.pi) * PXKM; r2 = math.sqrt(7000 / math.pi) * PXKM
-SVG.append(f'<circle id="c3k" cx="{CEN[0]:.1f}" cy="{CEN[1]:.1f}" r="{r1:.1f}" style="fill:#fff;fill-opacity:.06;stroke:#fff;stroke-width:4;stroke-dasharray:14 10;opacity:0"/>')
-SVG.append(f'<circle id="c7k" cx="{CEN[0]:.1f}" cy="{CEN[1]:.1f}" r="{r1:.1f}" style="fill:{BLUE};fill-opacity:.2;stroke:{BLUE};stroke-width:6;opacity:0"/>')
-J.append(f'tl.to("#c3k", {{opacity:1, duration:.4}}, {S(24):.2f}); tl.to("#c7k", {{opacity:1, duration:.2}}, {wt(25, "7,000") - .2:.2f}); tl.to("#c7k", {{attr:{{r:{r2:.1f}}}, duration:1.0, ease:"power2.out"}}, {wt(25, "7,000") - .2:.2f});'
-         f'tl.to(["#c3k", "#c7k"], {{opacity:.35, duration:.4}}, {S(27):.2f}); tl.to(["#c3k", "#c7k"], {{opacity:0, duration:.4}}, {S(31):.2f});')
-H.append(f'<div id="jda"><small>JDA NOTIFICATION · OCT 2025</small><div class="jr"><span>~3,000</span><i>&rarr;</i><b>~7,000</b><em>SQ KM</em></div><div class="jv" id="jv"><b>+693</b> NAYE GAON</div></div>')
-J.append(f'tl.fromTo("#jda", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.3}}, {S(24):.2f}); tl.from("#jda .jr b", {{opacity:0, scale:2, duration:.3, ease:"back.out(2)"}}, {wt(25, "7,000") - .1:.2f}); tl.from("#jv", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(26, "693"):.2f}); tl.to("#jda", {{opacity:0, duration:.25}}, {S(27) - .1:.2f});')
+JZ = json.load(open("data/jda_zones_world.json"))
+NEWZ = ["15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
+ZN = {"15": "Shahpura", "16": "Chomu", "17": "Jalsoo", "18": "Jobner", "19": "Mozmabad", "20": "Dudu", "21": "Phagi", "22": "Madhorajpura", "23": "Chaksu", "24": "Bassi", "25": "Andhi"}
+for k, z in JZ["zones"].items():
+    new = k in NEWZ
+    SVG.append(f'<path id="jz{k.replace(" ", "")}" d="{pd(z["poly"], True)}" style="fill:{BLUE if new else "#ffffff"};fill-opacity:{.42 if new else .12};stroke:#fff;stroke-width:{3 if new else 2};stroke-opacity:.9;opacity:0"/>')
+SVG.append(f'<path id="jreg" d="{pd(JZ["region"], True)}" style="fill:none;stroke:{BLUE};stroke-width:8;stroke-linejoin:round;opacity:0"/>')
+ra = JZ["region"]; xs = [p[0] for p in ra]; ys = [p[1] for p in ra]
+JC = ((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2 + 6 * PXKM); JW = (max(xs) - min(xs)) * 1.12
+CAMS.append((S(23), 1.4, JC, JW));
+J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(JC, JW)}"}}, duration:1.4, ease:"power2.inOut"}}, {S(23):.2f});')
+T3K, T7K = wt(25, "3,000"), wt(25, "7,000")
+for k in JZ["zones"]:
+    if k not in NEWZ: J.append(f'tl.to("#jz{k.replace(" ", "")}", {{opacity:1, duration:.3}}, {T3K - .2:.2f});')
+step = (wt(26, "693") + .8 - T7K) / len(NEWZ)
+for i, k in enumerate(NEWZ):
+    t = T7K - .1 + step * i
+    J.append(f'tl.fromTo("#jz{k}", {{opacity:0}}, {{opacity:1, duration:.2}}, {t:.2f}); tl.fromTo("#jz{k}", {{fillOpacity:.85}}, {{fillOpacity:.42, duration:.5, immediateRender:false}}, {t + .2:.2f});')
+    label(f"lz{k}", tuple(JZ["zones"][k]["ctr"]), ZN[k], t + .05, S(27) + .1, at=S(23) + 1.5, cls="blue sm")
+    sfx("click-soft", t, .2)
+J.append(f'tl.to("#jreg", {{opacity:1, duration:.4}}, {wt(26, "693") + .9:.2f}); tl.to([' + ", ".join(f'"#jz{k.replace(" ", "")}"' for k in JZ["zones"]) + f'], {{opacity:.5, duration:.4}}, {S(31):.2f});')
+H.append('<div id="news"><img src="assets/img/firstindia.jpg"/><em>First India · 7 Feb 2025 (plan) · image supplied</em></div>')
+J.append(f'tl.fromTo("#news", {{opacity:0, scale:.6, rotation:-4}}, {{opacity:1, scale:1, rotation:-2, duration:.35, ease:"back.out(1.8)"}}, {S(23):.2f}); tl.to("#news", {{opacity:0, scale:.9, duration:.2}}, {S(24) + .6:.2f});')
+sfx("pop", S(23), .3)
+H.append(f'<div id="jda"><small>FINAL NOTIFICATION · OCT 2025</small><div class="jr"><span>~3,000</span><i>&rarr;</i><b>~7,000</b><em>SQ KM</em></div><div class="jv" id="jv"><b>+693</b> NAYE GAON</div></div>')
+J.append(f'tl.fromTo("#jda", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.3}}, {S(24) + .7:.2f}); tl.from("#jda .jr b", {{opacity:0, scale:2, duration:.3, ease:"back.out(2)"}}, {wt(25, "7,000") - .1:.2f}); tl.from("#jv", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(26, "693"):.2f}); tl.to("#jda", {{opacity:0, duration:.25}}, {S(27) - .1:.2f});')
 sfx("impact-bass-1", wt(25, "7,000") - .2, .45); sfx("sparkle", wt(26, "693"), .3)
-TEH = [("Bassi", (26.838, 76.044)), ("Chaksu", (26.606, 75.948)), ("Jamwa Ramgarh", (27.03, 76.06)), ("Shahpura", (27.39, 75.96)), ("Phagi", (26.57, 75.55)),
-       ("Jobner", (26.972, 75.385)), ("Dudu", (26.681, 75.232)), ("Chomu", (27.17, 75.72))]
-for i, (nm, ll) in enumerate(TEH):
-    t = wt(26, "693") + .1 + .12 * i; p = wp(*ll)
-    pin(f"tp{i}", p, GOLD, t, S(31), r=6)
-    label(f"lt{i}", p, nm, t, S(27) + .1, at=S(23) + 1.5, cls="gold sm", dy=-36)
-H.append('<div class="foot" id="fjda">Oct 2025 notification (Patrika) · circles show area only</div>'); inout("#fjda", S(24), S(27), frm="opacity:0", to="opacity:1")
+H.append('<div class="foot" id="fjda">JDA zones: 2025 JDA zone map, fitted to OSM highways (approx.) · area per Oct 2025 notification (Patrika)</div>'); inout("#fjda", S(24), S(27), frm="opacity:0", to="opacity:1")
 
 # ---------------- opportunity ----------------
-J.append(f'tl.to("#c7k", {{opacity:.8, fillOpacity:.32, duration:.4, yoyo:true, repeat:3}}, {S(27):.2f});')
+J.append(f'tl.to("#jreg", {{strokeWidth:16, duration:.4, yoyo:true, repeat:3}}, {S(27):.2f});')
 H.append('<div id="opp"><small>AAJ KA MAUKA</small><b>JAIPUR KE<br/>BAHAR KE ILAAKE</b><em>Growth wahan pahunchegi</em></div>')
 J.append(f'tl.fromTo("#opp", {{opacity:0, scale:.7}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, {S(28):.2f}); tl.to("#opp", {{opacity:0, duration:.25}}, {S(30) - .1:.2f});')
 H.append('<div id="chk"><small>PLOT LENE SE PEHLE CHECK KARO</small><p>&#10003; JDA / layout <b>APPROVAL</b></p><p>&#10003; <b>PATTA</b></p></div>')
@@ -304,7 +348,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .chap b{padding:8px 14px;border-radius:30px;background:#FFC42E;color:#111;font:400 40px/1 Anton}
 .big{position:absolute;left:0;right:0;top:360px;text-align:center;opacity:0;z-index:7;font:900 50px Mont;color:#fff;letter-spacing:.08em;text-shadow:0 4px 18px #000}.big b{display:block;font:400 150px/1 Anton;color:#FFC42E}
 .lab{position:absolute;opacity:0;translate:-50% -50%;padding:7px 16px;border-radius:24px;background:rgba(8,10,15,.88);border:2px solid #fff;font:800 28px Mont;color:#fff;white-space:nowrap;z-index:5}
-.lab.pink{border-color:#FF50AA}.lab.yel{border-color:#FFE03A}.lab.grn{border-color:#3CFF96}.lab.gold{border-color:#FFC42E}.lab.sm{font-size:24px}.lab.ring{border-color:#3CFF96;color:#3CFF96;font-size:30px}
+.lab.pink{border-color:#FF50AA}.lab.yel{border-color:#FFE03A}.lab.grn{border-color:#3CFF96}.lab.gold{border-color:#FFC42E}.lab.blue{border-color:#50A0FF}
+.wpin{position:absolute;opacity:0;translate:-50% -50%;display:flex;flex-direction:column;align-items:center;z-index:6}.wpin i{font-style:normal;font-size:70px;line-height:1;filter:drop-shadow(0 6px 10px rgba(0,0,0,.7))}.wpin b{margin-top:2px;padding:4px 12px;border-radius:16px;background:rgba(8,10,15,.88);border:2px solid #3CFF96;font:800 22px Mont;color:#fff;white-space:nowrap}.lab.sm{font-size:24px}.lab.ring{border-color:#3CFF96;color:#3CFF96;font-size:30px}
 .lab.big2{font-size:40px;padding:12px 24px;background:#3CFF96;color:#111;border-color:#3CFF96}
 .rl{position:absolute;opacity:0;translate:-50% -50%;display:flex;align-items:center;gap:10px;padding:6px 18px 6px 6px;border-radius:30px;background:rgba(8,10,15,.9);border:2px solid #FFC42E;font:900 28px Mont;color:#fff;white-space:nowrap;z-index:5}
 .rl b{width:38px;height:38px;border-radius:50%;background:#FFC42E;color:#111;display:flex;align-items:center;justify-content:center;font:900 24px Mont}
@@ -313,6 +358,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #mc{position:absolute;left:80px;right:80px;top:790px;opacity:0;text-align:center;padding:18px;border-radius:20px;background:#FF3246;z-index:7}#mc span{display:block;font:900 30px Mont;color:#fff;letter-spacing:.1em}#mc b{display:block;font:400 56px Anton;color:#fff}
 #why{position:absolute;left:50px;right:50px;top:380px;opacity:0;z-index:8;text-align:center}#why h3{font:400 120px Anton;color:#FFC42E;margin-bottom:20px}
 .wg{display:grid;grid-template-columns:1fr 1fr;gap:20px}.wi{opacity:0;padding:24px 10px;border-radius:24px;background:rgba(8,10,15,.92);border:3px solid #3CFF96}.wi i{display:block;font-style:normal;font-size:72px}.wi b{display:block;margin-top:6px;font:900 34px Mont;color:#fff}
+#news{position:absolute;left:90px;right:90px;top:420px;opacity:0;padding:12px 12px 8px;background:#fff;border-radius:18px;box-shadow:0 20px 50px rgba(0,0,0,.7);z-index:9}#news img{width:100%;display:block;border-radius:10px}#news em{display:block;font-style:normal;font:700 20px Mont;color:#555;text-align:center;margin-top:6px}
 #jda{position:absolute;left:50px;right:50px;top:350px;opacity:0;padding:24px 28px;border-radius:26px;background:rgba(8,10,15,.9);border:3px solid #50A0FF;z-index:7;text-align:center}
 #jda small{display:block;font:900 28px Mont;color:#50A0FF;letter-spacing:.1em}.jr{display:flex;align-items:baseline;justify-content:center;gap:18px;margin-top:6px}.jr span{font:400 80px Anton;color:#aab}.jr i{font-style:normal;font:900 60px Mont;color:#fff}.jr b{font:400 120px Anton;color:#fff}.jr em{font-style:normal;font:900 34px Mont;color:#fff}
 .jv{display:inline-block;margin-top:8px;padding:8px 26px;border-radius:30px;background:#FFC42E;color:#111;font:900 40px Mont}.jv b{font:400 50px Anton}
