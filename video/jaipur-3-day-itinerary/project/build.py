@@ -86,7 +86,7 @@ def fly(k, t, w=760, d=.55):
 # ---------------- 0 · OPENING collage ----------------
 COL = ["p01", "p06", "p24", "p52", "p40", "p42", "p34", "p45", "p29", "p18", "p37", "p11"]
 H.append('<div id="intro"><div id="grid">' + "".join(f'<div class="gi" id="g{i}"><img src="assets/img/{p}.jpg"/></div>' for i, p in enumerate(COL)) + '</div><div id="ishade"></div>'
-         '<div id="ititle"><span class="k1">JAIPUR</span><span class="k2">3 DAYS</span><span class="k3">TIME-WISE ITINERARY</span></div>'
+         '<div id="ititle"><span class="k1">JAIPUR</span><span class="k2">3 DAYS</span><span class="k3">TIME-WISE PLAN</span></div>'
          '<div id="isave">SAVE THIS FOR YOUR TRIP</div></div>')
 for i in range(len(COL)):
     J.append(f'tl.fromTo("#g{i}", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, {3.5 + .03 * i:.2f});')
@@ -99,12 +99,14 @@ for i in range(len(MONT)):
     J.append(f'tl.set("#m{i}", {{opacity:1}}, {t:.3f}); tl.fromTo("#m{i}", {{scale:1.25, rotation:{(-1) ** i * 2}}}, {{scale:1.04, rotation:0, duration:{MD + .05:.3f}, ease:"power2.out", immediateRender:false}}, {t:.3f}); tl.set("#m{i}", {{opacity:0}}, {t + MD:.3f});')
     if i % 2 == 0: sfx("click-soft", t, .25)
 J.append(f'tl.set("#mont", {{opacity:1}}, {M0:.2f}); tl.fromTo("#mflash", {{opacity:.8}}, {{opacity:0, duration:.25, immediateRender:false}}, 3.5); tl.set("#mont", {{opacity:0}}, 3.5);')
+D2 = E(2) - S(2)
+sfx("impact-bass-1", S(2) + D2 * .18, .35); sfx("pop", S(2) + D2 * .38, .35)
 J.append('tl.fromTo("#ititle .k1", {scale:1}, {scale:1.08, duration:.13, yoyo:true, repeat:13, ease:"power1.inOut", immediateRender:false}, 1.6);')
 sfx("whoosh", 1.3, .35); sfx("impact-bass-1", 3.5, .5)
 J.append('tl.fromTo("#grid", {scale:1.0}, {scale:1.12, duration:7.4, ease:"none"}, 0);')
 J.append('tl.fromTo("#ititle .k1", {opacity:0, y:60}, {opacity:1, y:0, duration:.35, ease:"back.out(2)"}, 1.35);'
-         'tl.fromTo("#ititle .k2", {opacity:0, scale:.5}, {opacity:1, scale:1, duration:.3, ease:"back.out(2)"}, 3.55);'
-         'tl.fromTo("#ititle .k3", {opacity:0, y:30}, {opacity:1, y:0, duration:.3}, 3.7);')
+         f'tl.fromTo("#ititle .k2", {{opacity:0, scale:2.2}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2.5)"}}, {S(2) + D2 * .18:.2f});'
+         f'tl.fromTo("#ititle .k3", {{opacity:0, scale:1.8}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2.5)"}}, {S(2) + D2 * .38:.2f});')
 J.append(f'tl.fromTo("#isave", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, {3.85:.2f}); tl.to("#isave", {{scale:1.08, duration:.35, yoyo:true, repeat:3}}, {4.2:.2f});')
 J.append(f'tl.to("#intro", {{opacity:0, duration:.35}}, {S(4) - .3:.2f});')
 sfx("impact-bass-1", 0.02, .45); sfx("riser", 4.4, .2)
@@ -284,7 +286,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #ishade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,9,13,.35) 0%,rgba(7,9,13,.82) 32%,rgba(7,9,13,.82) 62%,rgba(7,9,13,.35) 100%)}
 #ititle{position:absolute;left:0;right:0;top:560px;text-align:center;color:#fff}
 #ititle span{display:block}#ititle .k1{font:400 230px/1 Anton;letter-spacing:.04em;color:#FF4FA3;text-shadow:0 8px 40px rgba(0,0,0,.7)}
-#ititle .k2{font:400 150px/1.05 Anton;color:#fff}#ititle .k3{margin-top:14px;font:900 44px Mont;letter-spacing:.14em;color:#FFC42E}
+#ititle .k2{font:400 150px/1.05 Anton;color:#fff}#ititle .k3{margin-top:14px;font:900 64px Mont;letter-spacing:.14em;color:#FFC42E}
 #isave{position:absolute;left:0;right:0;top:1200px;margin:0 auto;width:640px;text-align:center;padding:18px 0;border-radius:60px;background:#FFC42E;color:#111;font:900 38px Mont;letter-spacing:.05em;opacity:0}
 .daytab{position:absolute;left:50px;top:250px;padding:12px 26px;border-radius:40px;font:400 54px/1 Anton;color:#111;opacity:0;z-index:5;display:flex;align-items:center;gap:16px}
 .daytab span{font:900 26px Mont;letter-spacing:.1em}
