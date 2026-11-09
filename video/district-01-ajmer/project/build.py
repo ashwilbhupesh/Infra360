@@ -5,7 +5,6 @@ P = "proj"
 ASP = json.load(open("aspects.json"))
 LINES = [
     "Aayiye Ajmer ko jaante hain. Iski aabadi lagbhag 26 lakh hai, yaani Botswana desh se bhi zyada, aur economy 70 hazaar crore ki, yaani Maldives desh se bhi badi.",
-    "Ajmer mein dekhne layak bahut kuch hai, chalo ek-ek karke dekhte hain.",
     "Yahan hai Ajmer Sharif Dargah, Pushkar ka Brahma mandir, aur duniya bhar mein mashhoor Pushkar mela.",
     "Ghoomne ke liye hai Ana Sagar jheel, Adhai Din ka Jhonpra aur Soniji ki Nasiyan.",
     "Khaane mein zaroor try karo Ajmer ka sohan halwa, Pushkar ke malpue aur gulkand.",
@@ -31,12 +30,13 @@ def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower())
     assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(11) + 1.3, 2)
+END = round(E(10) + 1.3, 2)
 
 def wp(lat, lon):
     n = 2 ** 13
     return (((lon + 180) / 360 * n) - 5791) * 256, (((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n) - 3466) * 256
 SVG, H, J, SFX = [], [], [], []
+CARDS = []
 def vb(c, w): h = w * 1920 / 1080; return f"{c[0] - w / 2:.1f} {c[1] - h / 2:.1f} {w:.1f} {h:.1f}"
 def cam(t, c, w, d=.7, e="power2.inOut"): J.append(f'tl.to("#world", {{attr:{{viewBox:"{vb(c, w)}"}}, duration:{d}, ease:"{e}"}}, {t:.2f});')
 def sfx(n, t, v=.3): SFX.append(f'<audio id="sx{len(SFX)}" class="clip" src="assets/sfx/{n}.mp3" data-start="{t:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v}"></audio>')
@@ -117,7 +117,7 @@ def card(cid, img, t0, t1, title, sub="", tag=None, top=380, maxw=830, maxh=880,
     dots = ('<div class="dts">' + "".join(f'<i id="{cid}_d{i}" style="opacity:{1 if i == 0 else .35}"></i>' for i in range(len(imgs))) + '</div>') if len(imgs) > 1 else ''
     H.append(f'<div class="card" id="{cid}" style="left:{lx:.0f}px;top:{top}px;width:{cw:.0f}px;rotate:{rot}deg">{tg}<div class="stk" style="width:{w:.0f}px;height:{h:.0f}px">{stack}{dots}</div>'
              f'<div class="ct">{title}</div>' + (f'<div class="cs">{sub}</div>' if sub else '') + (f'<div class="ci">{info}</div>' if info else '') + '</div>')
-    J.append(f'tl.fromTo("#{cid}", {{opacity:0, scale:.55, y:60}}, {{opacity:1, scale:1, y:0, duration:.32, ease:"back.out(1.7)"}}, {t0:.2f}); tl.to("#{cid}", {{opacity:0, scale:.85, y:30, duration:.18, ease:"power2.in"}}, {t1 - .18:.2f});')
+    J.append(f'tl.fromTo("#{cid}", {{opacity:0, scale:.55, y:60}}, {{opacity:1, scale:1, y:0, duration:.32, ease:"back.out(1.7)"}}, {t0:.2f});'); CARDS.append([cid, t0, t1])
     step = (t1 - t0 - .2) / len(imgs)
     for i in range(1, len(imgs)):
         t = t0 + step * i
@@ -139,10 +139,10 @@ TZ1 = .45; TZ2 = 1.75
 J.append(f'zoomTo({TZ1}, [{IND_C[0]:.1f},{IND_C[1]:.1f}], {IND_W:.1f}, [{RAJ_C[0]:.1f},{RAJ_C[1]:.1f}], {RAJ_W:.1f}, 1.2);')
 J.append(f'zoomTo({TZ2:.2f}, [{RAJ_C[0]:.1f},{RAJ_C[1]:.1f}], {RAJ_W:.1f}, [{AJD_C[0]:.1f},{AJD_C[1]:.1f}], {AJD_W:.1f}, 1.4);')
 CAMS[:] = [(0, 0, IND_C, IND_W), (TZ1, 1.2, RAJ_C, RAJ_W), (TZ2, 1.4, AJD_C, AJD_W)]
-J.append(f'tl.to("#bout", {{opacity:.55, duration:.6}}, {TZ2 + 1.0:.2f}); tl.to("#bout", {{opacity:.25, duration:.5}}, {S(2) - .3:.2f}); tl.to("#bout", {{opacity:0, duration:.5}}, {S(3):.2f});')
+J.append(f'tl.to("#bout", {{opacity:.55, duration:.6}}, {TZ2 + 1.0:.2f}); tl.to("#bout", {{opacity:.25, duration:.5}}, {S(1) - .3:.2f}); tl.to("#bout", {{opacity:0, duration:.5}}, {S(2):.2f});')
 J.append(f'tl.to("#braj", {{opacity:1, fillOpacity:.45, duration:.4}}, .5); tl.to("#braj", {{fillOpacity:.15, duration:.5}}, {TZ1 + 1.0:.2f}); tl.to("#bdist", {{opacity:1, duration:.5}}, {TZ1 + 1.0:.2f});'
          f'tl.to("#baj", {{opacity:1, fillOpacity:.55, duration:.4}}, {TZ1 + 1.1:.2f}); tl.to("#baj", {{fillOpacity:.2, duration:.4, yoyo:true, repeat:3}}, {TZ1 + 1.4:.2f});'
-         f'tl.to("#baj", {{fillOpacity:.08, duration:.5}}, {TZ2 + 1.4:.2f}); tl.to(["#braj", "#bdist", "#bind"], {{opacity:0, duration:.5}}, {TZ2 + 1.2:.2f}); tl.to("#baj", {{opacity:.6, duration:.5}}, {S(3):.2f});')
+         f'tl.to("#baj", {{fillOpacity:.08, duration:.5}}, {TZ2 + 1.4:.2f}); tl.to(["#braj", "#bdist", "#bind"], {{opacity:0, duration:.5}}, {TZ2 + 1.2:.2f}); tl.to("#baj", {{opacity:.6, duration:.5}}, {S(2):.2f});')
 H.append('<div class="mlab" id="ml_ind">INDIA</div><div class="mlab pk" id="ml_raj">RAJASTHAN</div><div class="mlab yl" id="ml_aj">AJMER</div>')
 x, y = scr(((bbw(BD["india"])[0] + bbw(BD["india"])[2]) / 2, (bbw(BD["india"])[1] + bbw(BD["india"])[3]) / 2), 0)
 J.append(f'tl.set("#ml_ind", {{left:{x:.0f}, top:{y + 120:.0f}}}, 0); tl.fromTo("#ml_ind", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3}}, .05); tl.to("#ml_ind", {{opacity:0, duration:.2}}, {TZ1:.2f});')
@@ -155,86 +155,56 @@ H.append('<div id="series">RAJASTHAN KE 41 RANG · EP 01/41</div>')
 J.append(f'tl.fromTo("#series", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3}}, .1); tl.to("#series", {{opacity:0, duration:.3}}, {TZ2 + 1.2:.2f});')
 sfx("impact-bass-1", .05, .45)
 
-# ---------- OVERVIEW: all places ----------
-ORDERP = ["dargah", "brahma", "mela", "anasagar", "adhai", "soniji", "kishangarh", "mayo", "bazaar", "mandi", "airport"]
-NAMESP = {"dargah": "Ajmer Sharif Dargah", "brahma": "Brahma Mandir · Pushkar", "mela": "Pushkar Mela", "anasagar": "Ana Sagar", "adhai": "Adhai Din ka Jhonpra",
-          "soniji": "Soniji ki Nasiyan", "kishangarh": "Kishangarh · Bani-Thani", "mayo": "Mayo College", "bazaar": "Pushkar Bazaar", "mandi": "Marble Mandi", "airport": "Kishangarh Airport"}
-xs = [W[k][0] for k in ORDERP]; ys = [W[k][1] for k in ORDERP]
-OV_C, OV_W = fitb((min(xs), min(ys), max(xs), max(ys)), 1020, 1380, 1.25)
-cam(S(1) - .3, OV_C, OV_W, 1.0); CAMS.append((S(1) - .3, 1.0, OV_C, OV_W))
-pos = [list(scr(W[k], S(1) + .8)) for k in ORDERP]; orig = [q[:] for q in pos]
-for _ in range(80):
-    for i in range(len(pos)):
-        for j in range(i + 1, len(pos)):
-            dx = pos[j][0] - pos[i][0]; dy = pos[j][1] - pos[i][1]; dd = math.hypot(dx, dy) or .01
-            if dd < 50: m_ = (50 - dd) / 2; pos[i][0] -= dx / dd * m_; pos[i][1] -= dy / dd * m_; pos[j][0] += dx / dd * m_; pos[j][1] += dy / dd * m_
-g = ""
-for i, (q, o) in enumerate(zip(pos, orig)):
-    g += f'<line x1="{o[0]:.0f}" y1="{o[1]:.0f}" x2="{q[0]:.0f}" y2="{q[1]:.0f}" style="stroke:#fff;stroke-width:2"/><circle cx="{o[0]:.0f}" cy="{o[1]:.0f}" r="5" style="fill:#fff"/>'
-for i, q in enumerate(pos):
-    g += f'<g id="ovn{i}"><circle cx="{q[0]:.0f}" cy="{q[1]:.0f}" r="22" style="fill:{PINK};stroke:#fff;stroke-width:4"/><text x="{q[0]:.0f}" y="{q[1] + 8:.0f}" text-anchor="middle" style="font:900 24px Mont;fill:#111">{i + 1}</text></g>'
-rows = "".join(f'<p id="ovl{i}"><b>{i + 1}</b>{NAMESP[k]}</p>' for i, k in enumerate(ORDERP))
-H.append(f'<div id="ov"><svg width="1080" height="1920" style="position:absolute;inset:0">{g}</svg><div id="ovlist">{rows}</div></div>')
-J.append(f'tl.fromTo("#ov", {{opacity:0}}, {{opacity:1, duration:.25}}, {S(1) + .7:.2f}); tl.to("#ov", {{opacity:0, duration:.25}}, {S(2) - .1:.2f});')
-step = (E(1) - S(1) - .9) / len(ORDERP)
-for i in range(len(ORDERP)):
-    t = S(1) + .75 + step * i
-    J.append(f'tl.from("#ovl{i}", {{opacity:0, x:-40, duration:.2}}, {t:.2f}); tl.from("#ovn{i}", {{opacity:0, duration:.15}}, {t:.2f});')
-    if i % 2 == 0: sfx("click-soft", t, .2)
-for k in ORDERP: J.append(f'tl.to("#pin_{k}", {{opacity:1, duration:.2}}, {S(2) - .1:.2f});')
-H.append('<div class="th" id="thov"><b>&#128205;</b>AJMER KI KHAAS JAGAHEIN</div>')
-J.append(f'tl.fromTo("#thov", {{opacity:0, x:-60}}, {{opacity:1, x:0, duration:.3}}, {S(1):.2f}); tl.to("#thov", {{opacity:0, duration:.2}}, {S(2) - .2:.2f});')
-
 # ---------- 1 ROCHAK ----------
-theme(1, "05", "KYA AAPKO PATA HAI?", S(6), S(7))
-card("r1", "board", S(6) + .05, wt(6, "RPSC") - .05, "RAJASTHAN BOARD (BSER)", "Board of Secondary Education", ("HQ: AJMER", CYAN), info="1957 se. Rajasthan ke lakhon students ki<br/>10th-12th pariksha yahin se hoti hai.")
-card("r2", "rpsc", wt(6, "RPSC"), S(7) + .05, "RPSC", "Rajasthan Public Service Commission", ("HQ: AJMER", CYAN), info="RAS jaisi sarkari bhartiyon ki pariksha.<br/>Har naukri aspirant ka sapna yahin se.")
+theme(1, "05", "KYA AAPKO PATA HAI?", S(5), S(6))
+card("r1", "board", S(5) + .05, wt(5, "RPSC") - .05, "RAJASTHAN BOARD (BSER)", "Board of Secondary Education", ("HQ: AJMER", CYAN), info="1957 se. Rajasthan ke lakhon students ki<br/>10th-12th pariksha yahin se hoti hai.")
+card("r2", "rpsc", wt(5, "RPSC"), S(6) + .05, "RPSC", "Rajasthan Public Service Commission", ("HQ: AJMER", CYAN), info="RAS jaisi sarkari bhartiyon ki pariksha.<br/>Har naukri aspirant ka sapna yahin se.")
 H.append('<div id="hqb">DONO KA HEADQUARTERS: <b>AJMER</b></div>')
-J.append(f'tl.fromTo("#hqb", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(6, "headquarters") - .1:.2f}); tl.to("#hqb", {{opacity:0, duration:.2}}, {S(7) - .1:.2f});')
-sfx("pop", S(6), .3); sfx("pop", wt(6, "RPSC"), .3); sfx("impact-bass-1", wt(6, "headquarters"), .35)
+J.append(f'tl.fromTo("#hqb", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(5, "headquarters") - .1:.2f}); tl.to("#hqb", {{opacity:0, duration:.2}}, {S(6) - .1:.2f});')
+sfx("pop", S(5), .3); sfx("pop", wt(5, "RPSC"), .3); sfx("impact-bass-1", wt(5, "headquarters"), .35)
 
 # ---------- 2 AASTHA ----------
-theme(2, "01", "AASTHA", S(2), S(3))
-fly("dargah", S(2) - .3, 420); card("a1", "dargah", wt(2, "Ajmer Sharif"), wt(2, "Pushkar ka"), "AJMER SHARIF DARGAH", "Khwaja Garib Nawaz", ("AASTHA", PINK), info="Sufi sant Khwaja Moinuddin Chishti ki dargah.<br/>Har saal Urs mein lakhon zaayreen aate hain, har dharm ke log.")
-label("la1", "dargah", S(2) - .3, wt(2, "Pushkar ka"))
-fly("brahma", wt(2, "Pushkar ka") - .3, 600); card("a2", ["brahma_temple", "pushkar_ghat1", "pushkar_ghat2"], wt(2, "Pushkar ka"), wt(2, "Pushkar mela") - .2, "BRAHMA MANDIR", "Pushkar · ghaat aur pavitra jheel", ("AASTHA", PINK), info="Duniya ke gine-chune Brahma mandiron mein se ek.<br/>Pushkar jheel ke kinare 52 ghaat.")
-label("la2", "brahma", wt(2, "Pushkar ka") - .3, S(3))
-card("a3", "pushkar_mela", wt(2, "Pushkar mela") - .2, S(3) + .2, "PUSHKAR MELA", "Duniya bhar mein mashhoor", ("MELA", PINK), info="Kartik mahine (Oct-Nov) mein, Kartik Purnima tak.<br/>Duniya ke sabse bade camel fairs mein se ek.")
-J.append(f'tl.to("#pin_mela", {{opacity:1, duration:.2}}, {wt(2, "Pushkar mela") - .2:.2f});')
+theme(2, "01", "AASTHA", S(1), S(2))
+fly("dargah", S(1) - .3, 420); card("a1", "dargah", S(1) + .25, wt(1, "Pushkar ka"), "AJMER SHARIF DARGAH", "Khwaja Garib Nawaz", ("AASTHA", PINK), info="Sufi sant Khwaja Moinuddin Chishti ki dargah.<br/>Har saal Urs mein lakhon zaayreen aate hain, har dharm ke log.")
+label("la1", "dargah", S(1) - .3, wt(1, "Pushkar ka"))
+fly("brahma", wt(1, "Pushkar ka") - .3, 600); card("a2", ["brahma_temple", "pushkar_ghat1", "pushkar_ghat2"], wt(1, "Pushkar ka"), wt(1, "Pushkar mela") - .2, "BRAHMA MANDIR", "Pushkar · ghaat aur pavitra jheel", ("AASTHA", PINK), info="Duniya ke gine-chune Brahma mandiron mein se ek.<br/>Pushkar jheel ke kinare 52 ghaat.")
+label("la2", "brahma", wt(1, "Pushkar ka") - .3, S(2))
+card("a3", "pushkar_mela", wt(1, "Pushkar mela") - .2, S(2) + .2, "PUSHKAR MELA", "Duniya bhar mein mashhoor", ("MELA", PINK), info="Kartik mahine (Oct-Nov) mein, Kartik Purnima tak.<br/>Duniya ke sabse bade camel fairs mein se ek.")
+J.append(f'tl.to("#pin_mela", {{opacity:1, duration:.2}}, {wt(1, "Pushkar mela") - .2:.2f});')
 
 # ---------- 3 KHAANA ----------
-theme(3, "03", "KHAANA", S(4), S(5))
+theme(3, "03", "KHAANA", S(3), S(4))
 for i, (img, nm, w_) in enumerate([("sohan_halwa", "SOHAN HALWA", "sohan"), ("malpua", "MALPUA", "malpue"), ("gulkand", "GULKAND", "gulkand")]):
-    t0 = wt(4, w_) - .15; t1 = (wt(4, ["malpue", "gulkand"][i]) - .15) if i < 2 else S(5) + .1
+    t0 = wt(3, w_) - .15; t1 = (wt(3, ["malpue", "gulkand"][i]) - .15) if i < 2 else S(4) + .1
     card(f"k{i}", img, t0, t1, nm, ["Ajmer", "Pushkar", "Pushkar ke gulab"][i], ("KHAANA", "#FF9F43"), info=["Ghee, chini aur dry fruits se bani<br/>Ajmer ki pehchaan wali mithai.", "Ghee mein tale, chashni mein doobe<br/>Pushkar ke mashhoor malpue.", "Pushkar ke desi gulab ki pattiyon<br/>aur chini se bana gulkand."][i])
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(4):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(5):.2f});')
+J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(3):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(4):.2f});')
 
 # ---------- 4 GHOOMNA ----------
-theme(4, "02", "GHOOMNE KI JAGAH", S(3), S(4))
-fly("anasagar", S(3) - .2, CITY_W * 1.3)
-card("g1", ["ana_sagar_baradari", "ana_sagar"], wt(3, "Ana Sagar"), wt(3, "Adhai"), "ANA SAGAR JHEEL", "Baradari, Ajmer", ("GHOOMNA", CYAN), info="Prithviraj Chauhan ke dada Arnoraja ne banwayi (12vi sadi).<br/>Kinare ki marble baradari Shah Jahan ne banwayi.")
-label("lg1", "anasagar", S(3) - .2, S(4) + .2)
-J.append(f'tl.to(["#pin_adhai", "#pin_soniji"], {{opacity:1, duration:.2}}, {wt(3, "Adhai") - .2:.2f});')
-label("lg2", "adhai", wt(3, "Adhai") - .5, S(4) + .2, dy=48); label("lg3", "soniji", wt(3, "Soniji") - .5, S(4) + .2)
-card("g2", "adhai_din", wt(3, "Adhai"), wt(3, "Soniji"), "ADHAI DIN KA JHONPRA", "", ("GHOOMNA", CYAN), info="1199 mein Qutb-ud-din Aibak ne banwaya.<br/>Kahani hai ki yeh dhai din mein bana, isliye yeh naam.")
-card("g3", "soniji_nasiyan", wt(3, "Soniji"), S(4) + .2, "SONIJI KI NASIYAN", "Sone ka Jain mandir", ("GHOOMNA", CYAN), info="1865 mein bana Digambar Jain mandir.<br/>Andar 'Swarna Nagari': sone ki parat chadhi lakdi se bani Jain duniya.")
+theme(4, "02", "GHOOMNE KI JAGAH", S(2), S(3))
+fly("anasagar", S(2) - .2, CITY_W * 1.3)
+card("g1", ["ana_sagar_baradari", "ana_sagar"], wt(2, "Ana Sagar"), wt(2, "Adhai"), "ANA SAGAR JHEEL", "Baradari, Ajmer", ("GHOOMNA", CYAN), info="Prithviraj Chauhan ke dada Arnoraja ne banwayi (12vi sadi).<br/>Kinare ki marble baradari Shah Jahan ne banwayi.")
+label("lg1", "anasagar", S(2) - .2, S(3) + .2)
+J.append(f'tl.to(["#pin_adhai", "#pin_soniji"], {{opacity:1, duration:.2}}, {wt(2, "Adhai") - .2:.2f});')
+label("lg2", "adhai", wt(2, "Adhai") - .5, S(3) + .2, dy=48); label("lg3", "soniji", wt(2, "Soniji") - .5, S(3) + .2)
+card("g2", "adhai_din", wt(2, "Adhai"), wt(2, "Soniji"), "ADHAI DIN KA JHONPRA", "", ("GHOOMNA", CYAN), info="1199 mein Qutb-ud-din Aibak ne banwaya.<br/>Kahani hai ki yeh dhai din mein bana, isliye yeh naam.")
+card("g3", "soniji_nasiyan", wt(2, "Soniji"), S(3) + .2, "SONIJI KI NASIYAN", "Sone ka Jain mandir", ("GHOOMNA", CYAN), info="1865 mein bana Digambar Jain mandir.<br/>Andar 'Swarna Nagari': sone ki parat chadhi lakdi se bani Jain duniya.")
 
 # ---------- 5 MASHHOOR ----------
-theme(5, "04", "MASHHOOR", S(5), S(6))
-fly("kishangarh", S(5) - .3, 900)
-card("m1", "bani_thani", S(5) + .1, wt(5, "Mayo") - .1, "BANI-THANI", "Rajasthan ki Mona Lisa · Kishangarh", ("MASHHOOR", GOLD), maxh=600, info="Kishangarh shaili, chitrakar Nihal Chand (lagbhag 1750).<br/>1973 mein is par India Post ka stamp bhi aaya.")
-fly("mayo", wt(5, "Mayo") - .4, 420)
-card("m2", "mayo_college", wt(5, "Mayo") - .1, S(6) + .1, "MAYO COLLEGE", "1875 se", ("MASHHOOR", GOLD), info="Lord Mayo ke naam par, 1875 mein shuru.<br/>Desh ke sabse purane boarding schools mein se ek.")
-label("lm2", "mayo", wt(5, "Mayo") - .4, S(6), dy=60)
+theme(5, "04", "MASHHOOR", S(4), S(5))
+fly("kishangarh", S(4) - .3, 900)
+card("m1", "bani_thani", S(4) + .1, wt(4, "Mayo") - .1, "BANI-THANI", "Rajasthan ki Mona Lisa · Kishangarh", ("MASHHOOR", GOLD), maxh=600, info="Kishangarh shaili, chitrakar Nihal Chand (lagbhag 1750).<br/>1973 mein is par India Post ka stamp bhi aaya.")
+fly("mayo", wt(4, "Mayo") - .4, 420)
+card("m2", "mayo_college", wt(4, "Mayo") - .1, S(5) + .1, "MAYO COLLEGE", "1875 se", ("MASHHOOR", GOLD), info="Lord Mayo ke naam par, 1875 mein shuru.<br/>Desh ke sabse purane boarding schools mein se ek.")
+label("lm2", "mayo", wt(4, "Mayo") - .4, S(5), dy=60)
 
 # ---------- 6 SHOPPING ----------
-theme(6, "06", "SHOPPING", S(7), S(8))
-fly("bazaar", S(7) - .3, 520)
-card("s1", "pushkar_bazaar", wt(7, "Pushkar"), wt(7, "marble"), "PUSHKAR BAZAAR", "", ("SHOP", PINK), info="Kadhai wale bags, kapde, chandi ke gehne<br/>aur rang-birangi Rajasthani cheezein.")
-label("ls1", "bazaar", S(7) - .3, wt(7, "marble"))
-fly("mandi", wt(7, "marble") - .3, 700)
-card("s2", ["kishangarh_mandi", "marble_quarry"], wt(7, "marble"), S(8) + .1, "KISHANGARH MARBLE MANDI", "Desh ki sabse badi marble mandiyon mein se ek", ("SHOP", PINK), info="Desh bhar se builders yahan marble lene aate hain.<br/>Saath mein granite aur stone ka bada kaarobaar.")
-label("ls2", "mandi", wt(7, "marble") - .3, S(8))
+theme(6, "06", "SHOPPING", S(6), S(7))
+fly("bazaar", S(6) - .3, 520)
+card("s1", "pushkar_bazaar", wt(6, "Pushkar"), wt(6, "marble"), "PUSHKAR BAZAAR", "", ("SHOP", PINK), info="Kadhai wale bags, kapde, chandi ke gehne<br/>aur rang-birangi Rajasthani cheezein.")
+label("ls1", "bazaar", S(6) - .3, wt(6, "marble"))
+fly("mandi", wt(6, "marble") - .3, 700)
+card("s2", ["kishangarh_mandi", "marble_quarry"], wt(6, "marble"), S(7) + .1, "KISHANGARH MARBLE MANDI", "Desh ki sabse badi marble mandiyon mein se ek", ("SHOP", PINK), info="Desh bhar se builders yahan marble lene aate hain.<br/>Saath mein granite aur stone ka bada kaarobaar.")
+label("ls2", "mandi", wt(6, "marble") - .3, S(7))
 
 
 # ---------- NUMBERS (inside hook) ----------
@@ -274,34 +244,54 @@ cpanel("cmv", "Maldives", MV_FLAG, TM, S(1) - .05, 380, 380, "MALDIVES", "Econom
 J.append(f'tl.to("#nb0 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Botswana") - .1:.2f}); tl.to("#nb1 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Maldives") - .1:.2f});')
 
 # ---------- 8 FUTURE ----------
-theme(70, "07", "FUTURE", S(8), S(9))
-W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][0] + EXP[0][0]) / 2, (W["ajmer"][1] + EXP[0][1]) / 2 + FW * .12); cam(S(8) - .2, FC, FW, .9); CAMS.append((S(8) - .2, .9, FC, FW))
-J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(8) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(8) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(10) + 1:.2f});')
-label("lf1", "expmid", S(8) + .6, S(9), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
-J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(8, "airport") - .3:.2f});')
-card("fair", "airport", wt(8, "airport") - .1, wt(8, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520, info="October 2017 se shuru.<br/>Ajmer, Pushkar aur Kishangarh ka hawai rasta."); label("lf2", "airport", wt(8, "airport") - .5, S(9), "&#9992; Kishangarh Airport")
-J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(8, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(8, "Smart City") - .5, S(9), "AJMER · SMART CITY", dy=-70)
-H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(8):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(9):.2f});')
+theme(70, "07", "FUTURE", S(7), S(8))
+W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][0] + EXP[0][0]) / 2, (W["ajmer"][1] + EXP[0][1]) / 2 + FW * .12); cam(S(7) - .2, FC, FW, .9); CAMS.append((S(7) - .2, .9, FC, FW))
+J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(7) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(7) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(9) + 1:.2f});')
+label("lf1", "expmid", S(7) + .6, S(8), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
+J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(7, "airport") - .3:.2f});')
+card("fair", "airport", wt(7, "airport") - .1, wt(7, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520, info="October 2017 se shuru.<br/>Ajmer, Pushkar aur Kishangarh ka hawai rasta."); label("lf2", "airport", wt(7, "airport") - .5, S(8), "&#9992; Kishangarh Airport")
+J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(7, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(7, "Smart City") - .5, S(8), "AJMER · SMART CITY", dy=-70)
+H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(7):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(8):.2f});')
 
 # ---------- 8 ITIHAAS ----------
-theme(8, "08", "ITIHAAS", S(9), S(10))
-card("i1", "prithviraj_painting", wt(9, "Prithviraj") - .1, S(10) + .1, "PRITHVIRAJ CHAUHAN", "Ajmer ki rajdhani se raaj · painting", ("ITIHAAS", "#B98CFF"), maxh=600, info="12vi sadi ke Chauhan raja, rajdhani Ajmer.<br/>Tarain ke yuddh (1191, 1192) ke liye mashhoor.")
+theme(8, "08", "ITIHAAS", S(8), S(9))
+card("i1", "prithviraj_painting", wt(8, "Prithviraj") - .1, S(9) + .1, "PRITHVIRAJ CHAUHAN", "Ajmer ki rajdhani se raaj · painting", ("ITIHAAS", "#B98CFF"), maxh=600, info="12vi sadi ke Chauhan raja, rajdhani Ajmer.<br/>Tarain ke yuddh (1191, 1192) ke liye mashhoor.")
 H.append('<div id="ajay"><b>AJAYAMERU</b> &rarr; <b>AJMER</b><span>Chauhan raja Ajayaraja ne basaya</span></div>')
-J.append(f'tl.fromTo("#ajay", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3}}, {S(9) + .1:.2f}); tl.to("#ajay", {{opacity:0, duration:.2}}, {wt(9, "Prithviraj") - .1:.2f});')
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(9):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(10):.2f});')
+J.append(f'tl.fromTo("#ajay", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3}}, {S(8) + .1:.2f}); tl.to("#ajay", {{opacity:0, duration:.2}}, {wt(8, "Prithviraj") - .1:.2f});')
+J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(8):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(9):.2f});')
 
 # ---------- 9 CONNECT ----------
-theme(9, "09", "CONNECTIVITY", S(10), S(11))
-cam(S(10) - .2, WIDE_C, WIDE_W * 1.05, .9); CAMS.append((S(10) - .2, .9, WIDE_C, WIDE_W * 1.05))
-J.append(f'tl.to("#nh", {{strokeDashoffset:0, duration:1.0, ease:"power2.out"}}, {S(10):.2f});')
-H.append('<div id="jp">JAIPUR &rarr; <b>135 KM</b><span>NH-48</span></div>'); J.append(f'tl.fromTo("#jp", {{opacity:0, x:60}}, {{opacity:1, x:0, duration:.3, ease:"back.out(2)"}}, {S(10) + .2:.2f}); tl.to("#jp", {{opacity:0, duration:.2}}, {S(11):.2f});')
-for k in ["dargah", "brahma", "anasagar", "soniji", "adhai", "kishangarh", "mayo", "bazaar", "mandi", "airport", "mela"]: J.append(f'tl.to("#pin_{k}", {{opacity:1, duration:.2}}, {S(10):.2f});')
+theme(9, "09", "CONNECTIVITY", S(9), S(10))
+JPR = wp(26.9124, 75.7873); DUDU = wp(26.6811, 75.2321)
+NH2 = [W["ajmer"], W["kishangarh"], DUDU, JPR]
+SVG.append(f'<path id="nh2g" d="{pd(NH2)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:14;stroke-opacity:.35;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+           f'<path id="nh2" d="{pd(NH2)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:6;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+           f'<g id="jpin" style="opacity:0"><circle cx="{JPR[0]:.1f}" cy="{JPR[1]:.1f}" r="60" style="fill:{PINK};opacity:.3"/><circle cx="{JPR[0]:.1f}" cy="{JPR[1]:.1f}" r="26" style="fill:{PINK};stroke:#fff;stroke-width:9"/></g>')
+CC_C, CC_W = fitb((W["brahma"][0], min(JPR[1], W["kishangarh"][1]), JPR[0], W["mayo"][1]), 760, 1340, 1.3)
+cam(S(9) - .2, CC_C, CC_W, 1.1); CAMS.append((S(9) - .2, 1.1, CC_C, CC_W))
+J.append(f'tl.to(["#nh2", "#nh2g"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(9) + .4:.2f}); tl.to("#jpin", {{opacity:1, duration:.3}}, {S(9) + 1.4:.2f}); tl.to("#bout", {{opacity:0, duration:.1}}, {S(9):.2f});')
+x, y = scr(JPR, S(9) + 1.2); H.append(f'<div class="pl" id="ljp" style="left:{min(x, 900):.0f}px;top:{y - 60:.0f}px">JAIPUR</div>')
+J.append(f'tl.fromTo("#ljp", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(9) + 1.4:.2f}); tl.to("#ljp", {{opacity:0, duration:.2}}, {S(10) - .1:.2f});')
+x, y = scr(W["ajmer"], S(9) + 1.2); H.append(f'<div class="pl" id="lajc" style="left:{max(x, 160):.0f}px;top:{y + 60:.0f}px">AJMER</div>')
+J.append(f'tl.fromTo("#lajc", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(9) + .3:.2f}); tl.to("#lajc", {{opacity:0, duration:.2}}, {S(10) - .1:.2f});')
+H.append('<div id="jp">JAIPUR &rarr; <b>135 KM</b><span>NH-48</span></div>'); J.append(f'tl.fromTo("#jp", {{opacity:0, x:60}}, {{opacity:1, x:0, duration:.3, ease:"back.out(2)"}}, {S(9) + .2:.2f}); tl.to("#jp", {{opacity:0, duration:.2}}, {S(10):.2f});')
+sfx("whoosh", S(9) - .2, .3)
 
 # ---------- 10 CTA ----------
 H.append('<div id="cta"><b>AAP AJMER SE HO?</b><span>COMMENT KARO</span><em>NEXT EPISODE: <i>ALWAR</i></em></div>')
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(11):.2f}); tl.fromTo("#cta", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(11):.2f}); tl.from("#cta b", {{opacity:0, scale:.6, duration:.3, ease:"back.out(2)"}}, {S(11):.2f});'
-         f'tl.from("#cta span", {{opacity:0, y:30, duration:.3}}, {wt(11, "Comment"):.2f}); tl.from("#cta em", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(11, "Next"):.2f});')
-sfx("sparkle", wt(11, "Next"), .3)
+J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(10):.2f}); tl.fromTo("#cta", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(10):.2f}); tl.from("#cta b", {{opacity:0, scale:.6, duration:.3, ease:"back.out(2)"}}, {S(10):.2f});'
+         f'tl.from("#cta span", {{opacity:0, y:30, duration:.3}}, {wt(10, "Comment"):.2f}); tl.from("#cta em", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(10, "Next"):.2f});')
+sfx("sparkle", wt(10, "Next"), .3)
+
+
+# ---- card exits: each photo stays until the next one arrives (capped at map moments)
+CAPS_T = sorted([S(7), S(9), S(10), S(8) + .2])
+CARDS.sort(key=lambda c: c[1])
+for i, (cid, t0, t1) in enumerate(CARDS):
+    nxt = CARDS[i + 1][1] if i + 1 < len(CARDS) else END
+    cap = min([c for c in CAPS_T if c > t0 + .3] + [END])
+    out = max(t1, min(nxt + .3, cap))
+    J.append(f'tl.set("#{cid}", {{zIndex:{10 + i}}}, 0); tl.to("#{cid}", {{opacity:0, scale:.9, duration:.2, ease:"power2.in"}}, {out - .2:.2f});')
 
 # ---------- captions ----------
 HI = ["Garib Nawaz", "Dargah", "Brahma", "Ajmer", "Rajasthan Board", "RPSC", "headquarters", "Ajmer Sharif", "Pushkar", "Pushkar mela", "sohan halwa", "malpue", "gulkand",
