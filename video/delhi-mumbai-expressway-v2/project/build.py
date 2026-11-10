@@ -4,7 +4,7 @@ import json, math, os
 P = "proj"
 ASP = json.load(open("aspects.json"))
 LINES = [
-    "Delhi se Jaipur ab sirf 3 ghante mein. Kaise? Delhi Mumbai Expressway.",
+    "Delhi se Jaipur ab sirf 3 ghante mein. Kaise? Delhi Jaipur Mumbai Expressway.",
     "Desh ka sabse lamba expressway, lagbhag 1,350 km, Delhi se Mumbai tak.",
     "Jaipur ke liye bana 67 km ka naya link: Bandikui se seedha Bagrana.",
     "Pehle Delhi se Jaipur saadhe chaar ghante, ab lagbhag 3 ghante.",
@@ -99,20 +99,35 @@ RT_C, RT_W = fitb(ALL, 520, 1380, 1.25)
 RJ_C, RJ_W = fitb([wp(28.0, 77.3), wp(26.4, 75.5), JPR], 760, 1360, 1.2)
 JL_C, JL_W = fitb([BNK, JPR, wp(27.2, 76.6)], 760, 1330, 1.3)
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb((IND_C[0], IND_C[1] - IND_W * .2), IND_W * 2.4)}"}}}}, 0);')
-J.append('const VB = document.getElementById("world"); function setDots(w){ document.querySelectorAll(".dc").forEach(e=>e.setAttribute("r", w/80)); document.querySelectorAll(".dg").forEach(e=>e.setAttribute("r", w/36)); }'
+J.append('const VB = document.getElementById("world"); function setDots(w){ document.querySelectorAll(".dc").forEach(e=>e.setAttribute("r", w/80)); document.querySelectorAll(".dg").forEach(e=>e.setAttribute("r", w/36)); document.querySelectorAll(".mvc").forEach(e=>e.setAttribute("r", w/60)); document.querySelectorAll(".mvg").forEach(e=>e.setAttribute("r", w/22)); document.querySelectorAll(".prg").forEach(e=>e.setAttribute("data-w", w)); }'
          'function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = Math.abs(w0 - w1) < 1e-6 ? o.z : (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); setDots(w); }}, t); }')
 CAMS.append((0, 0, (IND_C[0], IND_C[1] - IND_W * .2), IND_W * 2.4))
 zoom(0, IND_C, IND_W, 1.0)
 
 # ---------- helpers ----------
+def mover(mid, pts, t0, d, col, until, N=60):
+    L = [0.0]
+    for a_, b_ in zip(pts, pts[1:]): L.append(L[-1] + math.hypot(b_[0] - a_[0], b_[1] - a_[1]))
+    samp = []
+    for k in range(N + 1):
+        tg = L[-1] * k / N; j = next((m for m in range(1, len(L)) if L[m] >= tg), len(L) - 1)
+        f = (tg - L[j - 1]) / max(1e-6, L[j] - L[j - 1]); a_, b_ = pts[j - 1], pts[j]
+        samp.append((a_[0] + (b_[0] - a_[0]) * f, a_[1] + (b_[1] - a_[1]) * f))
+    SVG.append(f'<g id="{mid}" style="opacity:0" transform="translate({samp[0][0]:.1f},{samp[0][1]:.1f})"><circle class="mvg" r="1" style="fill:{col};opacity:.45"/><circle class="mvc" r="1" style="fill:#fff;stroke:{col};stroke-width:3;vector-effect:non-scaling-stroke"/></g>')
+    J.append(f'tl.to("#{mid}", {{opacity:1, duration:.1}}, {t0:.2f}); tl.to("#{mid}", {{opacity:0, duration:.2}}, {until:.2f});')
+    for k in range(1, N + 1):
+        x, y = samp[k]; J.append(f'tl.to("#{mid}", {{attr:{{transform:"translate({x:.1f},{y:.1f})"}}, duration:{d / N:.4f}, ease:"none"}}, {t0 + d * (k - 1) / N:.4f});')
+
 def card(cid, img, t0, t1, title, sub="", tag=None, top=400, maxw=900, maxh=600, info=None):
     a = ASP[img]; w = maxw; h = w / a
     if h > maxh: h = maxh; w = h * a
     cw = max(w + 28, 700) if info else w + 28; lx = (1080 - cw) / 2
     tg = f'<div class="tg" style="background:{tag[1]}">{tag[0]}</div>' if tag else ''
-    H.append(f'<div class="card" id="{cid}" style="left:{lx:.0f}px;top:{top}px;width:{cw:.0f}px">{tg}<img src="assets/img/{img}.jpg" style="width:{w:.0f}px;height:{h:.0f}px"/>'
+    H.append(f'<div class="card" id="{cid}" style="left:{lx:.0f}px;top:{top}px;width:{cw:.0f}px">{tg}<div class="iw" style="width:{w:.0f}px;height:{h:.0f}px"><img src="assets/img/{img}.jpg" style="width:{w:.0f}px;height:{h:.0f}px"/><i class="scan"></i></div>'
              f'<div class="ct">{title}</div>' + (f'<div class="cs">{sub}</div>' if sub else '') + (f'<div class="ci">{info}</div>' if info else '') + '</div>')
-    J.append(f'tl.fromTo("#{cid}", {{opacity:0, scale:.55, y:60}}, {{opacity:1, scale:1, y:0, duration:.32, ease:"back.out(1.7)"}}, {t0:.2f});'); CARDS.append([cid, t0, t1])
+    J.append(f'tl.fromTo("#{cid}", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.2, ease:"power2.out"}}, {t0:.2f}); tl.fromTo("#{cid} img", {{clipPath:"inset(0 100% 0 0)"}}, {{clipPath:"inset(0 0% 0 0)", duration:.55, ease:"power2.inOut"}}, {t0:.2f});'
+             f'tl.fromTo("#{cid} .scan", {{left:"0%", opacity:1}}, {{left:"100%", duration:.55, ease:"power2.inOut"}}, {t0:.2f}); tl.to("#{cid} .scan", {{opacity:0, duration:.15}}, {t0 + .55:.2f});'
+             f'tl.fromTo("#{cid} img", {{scale:1.0}}, {{scale:1.06, duration:{max(.5, t1 - t0):.2f}, ease:"none", immediateRender:false}}, {t0 + .5:.2f});'); CARDS.append([cid, t0, t1])
     sfx("pop", t0, .25)
 def lab(i, p, text, t, until, at, dx=0, dy=0, cls=""):
     x, y = scr(p, at); H.append(f'<div class="ml {cls}" id="{i}" style="left:{min(max(x + dx, 150), 930):.0f}px;top:{y + dy:.0f}px">{text}</div>')
@@ -123,15 +138,16 @@ H.append('<div id="clouds"><img id="cl0" src="assets/img/cloud0.png"/><img id="c
 J.append('tl.fromTo("#cl0", {scale:1, y:0, opacity:1}, {scale:2.4, y:500, opacity:0, duration:1.3, ease:"power2.in"}, 0); tl.fromTo("#cl1", {scale:1, y:0, opacity:1}, {scale:2.6, y:-600, opacity:0, duration:1.1, ease:"power2.in"}, 0);')
 H.append('<div id="title"><span>DELHI</span><i>&rarr;</i><span>JAIPUR</span><b>3 GHANTE</b></div>')
 J.append(f'tl.fromTo("#title", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, .25); tl.from("#title b", {{opacity:0, scale:2, duration:.3, ease:"back.out(2.5)"}}, {wt(0, "3 ghante"):.2f}); tl.to("#title", {{opacity:0, duration:.2}}, {wt(0, "Kaise") - .05:.2f});')
-H.append('<div id="glow">DELHI&ndash;MUMBAI<br/>EXPRESSWAY</div>')
-J.append(f'tl.fromTo("#glow", {{opacity:0, scale:.7}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(0, "Delhi Mumbai") - .1:.2f}); tl.to("#glow", {{opacity:0, duration:.2}}, {S(1) + 1.0:.2f});')
-sfx("whoosh", 0, .45); sfx("impact-bass-1", .25, .45); sfx("impact-bass-1", wt(0, "Delhi Mumbai"), .4)
+H.append('<div id="glow">DELHI&ndash;JAIPUR&ndash;MUMBAI<br/>EXPRESSWAY</div>')
+J.append(f'tl.fromTo("#glow", {{opacity:0, scale:.7}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(0, "Delhi Jaipur Mumbai") - .1:.2f}); tl.to("#glow", {{opacity:.55, duration:.06, yoyo:true, repeat:5}}, {wt(0, "Delhi Jaipur Mumbai") + .35:.2f}); tl.to("#glow", {{opacity:0, duration:.2}}, {S(1) + 1.0:.2f});')
+sfx("whoosh", 0, .45); sfx("impact-bass-1", .25, .45); sfx("impact-bass-1", wt(0, "Delhi Jaipur Mumbai"), .4)
 
 # ---------- 1 ROUTE ----------
 zoom(S(1) - .3, RT_C, RT_W, 1.0)
 order = ["Delhi", "Haryana", "Rajasthan", "Madhya Pradesh", "Gujarat", "Maharashtra"]
 T1, D1 = S(1) + .2, (E(1) - S(1)) - .2
 J.append(f'tl.to(["#rt", "#rtg"], {{strokeDashoffset:0, duration:{D1:.2f}, ease:"none"}}, {T1:.2f});')
+mover('car1', RP, T1, D1, GRN, S(2) - .3)
 for i, nm in enumerate(order):
     J.append(f'tl.to("#st_{nm.replace(" ", "")}", {{opacity:1, fillOpacity:.75, duration:.3}}, {T1 + D1 * i / 6:.2f});')
 tot = len(RP)
@@ -139,24 +155,27 @@ for i, (nm, la, lo) in enumerate(WPT):
     if not nm: continue
     p = wp(la, lo); j = min(range(tot), key=lambda k: (RP[k][0] - p[0]) ** 2 + (RP[k][1] - p[1]) ** 2); t = T1 + D1 * j / tot
     J.append(f'tl.fromTo("#dot{i}", {{opacity:0}}, {{opacity:1, duration:.15}}, {t:.2f});')
+    SVG.append(f'<circle id="pr{i}" cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="1" style="fill:none;stroke:{GRN};stroke-width:3;vector-effect:non-scaling-stroke;opacity:0"/>')
+    J.append(f'tl.fromTo("#pr{i}", {{attr:{{r:{RT_W / 200:.1f}}}, opacity:1}}, {{attr:{{r:{RT_W / 22:.1f}}}, opacity:0, duration:.7, ease:"power2.out", immediateRender:false}}, {t:.2f});')
     if nm in ("Delhi", "Alwar", "Dausa", "Kota", "Ratlam", "Vadodara", "Surat", "Mumbai"):
         dx = 120 if nm not in ("Mumbai", "Surat", "Vadodara") else -120
         lab(f"ln{i}", p, nm, t, max(S(2) - .3, t + .5), T1 + D1 + .1, dx=dx)
     if nm in ("Delhi", "Kota", "Vadodara", "Mumbai"): sfx("click-soft", t, .25)
 H.append('<div class="big" id="km"><b>~1,350 KM</b><span>DESH KA SABSE LAMBA EXPRESSWAY</span></div>')
-J.append(f'tl.fromTo("#km", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(1, "1,350") - .1:.2f}); tl.to("#km", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
+J.append(f'tl.fromTo("#km b", {{scale:2.2}}, {{scale:1, duration:.4, ease:"back.out(2.5)"}}, {wt(1, "1,350") - .1:.2f});'); J.append(f'tl.fromTo("#km", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(1, "1,350") - .1:.2f}); tl.to("#km", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
 
 # ---------- 2 JAIPUR LINK ----------
 zoom(S(2) - .3, JL_C, JL_W, 1.1)
 J.append('tl.to(["#st_Haryana", "#st_MadhyaPradesh", "#st_Gujarat", "#st_Maharashtra", "#st_Delhi"], {fillOpacity:.25, duration:.4}, ' + f'{S(2) - .3:.2f}); tl.to("#st_Rajasthan", {{fillOpacity:.55, duration:.4}}, {S(2) - .3:.2f});')
-J.append(f'tl.to(["#lk", "#lkg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {wt(2, "Bandikui") - .2:.2f}); tl.to(["#jpin", "#bpin"], {{opacity:1, duration:.2}}, {wt(2, "Bagrana") - .1:.2f});')
+J.append(f'tl.to(["#lk", "#lkg"], {{strokeDashoffset:0, duration:1.6, ease:"none"}}, {wt(2, "Bandikui") - .2:.2f}); tl.to(["#jpin", "#bpin"], {{opacity:1, duration:.2}}, {wt(2, "Bagrana") - .1:.2f});')
 lab("lbk", BNK, "BANDIKUI", wt(2, "Bandikui") - .2, S(4), S(2) + 1, dy=-60)
 lab("lbg", BAG, "BAGRANA", wt(2, "Bagrana") - .1, S(4), S(2) + 1, dx=60, dy=60, cls="y")
 lab("ljp", JPR, "JAIPUR", wt(2, "Bagrana"), S(4), S(2) + 1, dx=-60, dy=-60, cls="p")
 H.append('<div class="big" id="k67"><b>67 KM</b><span>JAIPUR LINK &middot; 4-LANE &middot; OPEN SINCE 2025</span></div>')
-J.append(f'tl.fromTo("#k67", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(2, "67") - .1:.2f}); tl.to("#k67", {{opacity:0, duration:.2}}, {S(3) - .1:.2f});')
+J.append(f'tl.fromTo("#k67 b", {{scale:2.2}}, {{scale:1, duration:.4, ease:"back.out(2.5)"}}, {wt(2, "67") - .1:.2f});'); J.append(f'tl.fromTo("#k67", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(2, "67") - .1:.2f}); tl.to("#k67", {{opacity:0, duration:.2}}, {S(3) - .1:.2f});')
 card("c_link", "bandikui_link", wt(2, "Bagrana") + .4, S(3) - .1, "BANDIKUI &rarr; JAIPUR", "", ("67 KM", GOLD), top=1000, maxw=640, maxh=420)
 
+mover('car2', LINK, wt(2, 'Bandikui') - .2, 1.6, GOLD, S(3) - .2)
 # ---------- 3 TIME ----------
 zoom(S(3) - .2, RJ_C, RJ_W, .9)
 J.append(f'tl.to("#old", {{strokeDashoffset:0, duration:1.0}}, {S(3):.2f}); tl.to("#old", {{opacity:0, duration:.4}}, {S(4):.2f});')
@@ -205,7 +224,7 @@ for i, (cid, t0, t1) in enumerate(CARDS):
     J.append(f'tl.set("#{cid}", {{zIndex:{10 + i}}}, 0); tl.to("#{cid}", {{opacity:0, scale:.9, duration:.2, ease:"power2.in"}}, {out - .2:.2f});')
 
 # captions (white box, black bold)
-HI = ["Delhi", "Jaipur", "3 ghante", "Delhi Mumbai Expressway", "sabse lamba", "1,350 km", "Mumbai", "67 km", "Bandikui", "Bagrana", "saadhe chaar ghante", "8 lane tunnel",
+HI = ["Delhi", "Jaipur", "3 ghante", "Delhi Jaipur Mumbai Expressway", "sabse lamba", "1,350 km", "Mumbai", "67 km", "Bandikui", "Bagrana", "saadhe chaar ghante", "8 lane tunnel",
       "green overpass", "hotels", "food plaza", "warehouses", "zameen ki demand", "Agra Road", "Ring Road", "plot", "Expressway"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
@@ -239,14 +258,14 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cred{position:absolute;left:40px;right:40px;top:1650px;text-align:center;font:700 17px Mont;color:rgba(255,255,255,.55);z-index:20}
 #title{position:absolute;left:0;right:0;top:300px;text-align:center;opacity:0;z-index:16}#title span{font:400 120px/1 Anton;color:#fff;text-shadow:0 6px 30px #000}#title i{font-style:normal;font:900 90px Mont;color:#3CE65A;margin:0 18px}
 #title b{display:block;margin-top:14px;font:400 150px/1 Anton;color:#3CE65A;text-shadow:0 0 30px rgba(60,230,90,.7),0 6px 30px #000;font-weight:400}
-#glow{position:absolute;left:0;right:0;top:330px;text-align:center;opacity:0;z-index:16;font:900 92px/1.02 Mont;color:#B9FFB0;text-shadow:0 0 18px #3CE65A,0 0 40px #3CE65A,0 6px 20px #000}
+#glow{position:absolute;left:0;right:0;top:330px;text-align:center;opacity:0;z-index:16;font:900 78px/1.05 Mont;color:#B9FFB0;text-shadow:0 0 18px #3CE65A,0 0 40px #3CE65A,0 6px 20px #000}
 .ml{position:absolute;opacity:0;translate:-50% -50%;font:900 44px Mont;color:#fff;white-space:nowrap;text-shadow:0 3px 0 #000,0 0 14px #000;z-index:6}.ml.y{color:#FFC42E}.ml.p{color:#FF4FA3}
 .big{position:absolute;left:40px;right:40px;top:300px;opacity:0;text-align:center;z-index:9}.big b{display:block;font:400 150px/1 Anton;color:#3CE65A;text-shadow:0 0 24px rgba(60,230,90,.6),0 6px 20px #000;font-weight:400}
 .big span{display:inline-block;margin-top:8px;padding:8px 22px;border-radius:10px;background:#fff;color:#111;font:900 32px Mont}
 #time{position:absolute;left:50px;right:50px;top:330px;opacity:0;display:flex;gap:20px;z-index:9}.tb{flex:1;padding:20px;border-radius:24px;text-align:center;background:rgba(10,10,12,.9)}
 .tb small{display:block;font:900 26px Mont;color:#fff;letter-spacing:.06em}.tb b{display:block;font:400 110px/1 Anton;font-weight:400}.tb.old{border:4px solid #FF3B3B}.tb.old b{color:#FF3B3B;text-decoration:line-through}.tb.new{border:4px solid #3CE65A}.tb.new b{color:#3CE65A}
 .card{position:absolute;opacity:0;padding:14px 14px 16px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);z-index:8;text-align:center}
-.card img{display:block;margin:0 auto;border-radius:14px;object-fit:cover}.ct{margin-top:10px;font:400 52px/1.05 Anton;color:#14161c;letter-spacing:.02em}.cs{margin-top:6px;font:700 26px Mont;color:#5b6070}
+.iw{position:relative;margin:0 auto;border-radius:14px;overflow:hidden}.card img{display:block;border-radius:14px;object-fit:cover;transform-origin:50% 50%}.scan{position:absolute;top:-4%;bottom:-4%;width:8px;margin-left:-4px;background:#fff;box-shadow:0 0 18px #fff,0 0 30px #3CE65A;opacity:0}.ct{margin-top:10px;font:400 52px/1.05 Anton;color:#14161c;letter-spacing:.02em}.cs{margin-top:6px;font:700 26px Mont;color:#5b6070}
 .ci{margin:10px 6px 0;padding-top:10px;border-top:2px solid #e3e3e8;text-align:left;font:700 26px/1.32 Mont;color:#2a2d36}
 .tg{position:absolute;left:-12px;top:-22px;padding:8px 20px;border-radius:30px;font:900 28px Mont;color:#111;box-shadow:0 6px 16px rgba(0,0,0,.4);z-index:2}
 #follow{position:absolute;left:60px;right:60px;top:1150px;opacity:0;z-index:30;padding:24px;border-radius:26px;background:#16181d;box-shadow:0 30px 80px rgba(0,0,0,.7);color:#fff}
