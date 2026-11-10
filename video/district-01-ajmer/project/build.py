@@ -9,12 +9,13 @@ LINES = [
     "Ghoomne ke liye hai Ana Sagar jheel, Adhai Din ka Jhonpra aur Soniji ki Nasiyan.",
     "Khaane mein zaroor try karo Ajmer ka sohan halwa, Pushkar ke malpue aur gulkand.",
     "Kishangarh ki Bani-Thani painting ko kehte hain Rajasthan ki Mona Lisa, aur Mayo College 1875 se chal raha hai.",
+    "Har district ki aisi jaankari ke liye, Digital Banjaaraa ko follow karo.",
     "Aur Rajasthan Board aur RPSC, dono ka headquarters Ajmer mein hi hai.",
     "Shopping ke liye Pushkar ka bazaar, aur marble ke liye Kishangarh ki mandi.",
     "Kotputli-Kishangarh expressway aa raha hai, Kishangarh mein airport hai, aur Ajmer Smart City bhi hai.",
     "Ajmer ko Chauhan raja Ajayaraja ne basaya tha, aur yeh Prithviraj Chauhan ki rajdhani rahi.",
     "Jaipur se sirf 135 km, NH-48 par.",
-    "Aap Ajmer se ho? Comment karo. Next episode mein: Alwar.",
+    "Aap Ajmer se ho? Comment karo Ajmer. Next episode mein: Alwar.",
 ]
 VOICE = os.path.exists("rec/phrases.json")
 if VOICE:
@@ -30,7 +31,7 @@ def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower())
     assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(10) + 1.3, 2)
+END = round(E(11) + 1.3, 2)
 
 def wp(lat, lon):
     n = 2 ** 13
@@ -47,13 +48,16 @@ PL = {"dargah": (26.4560, 74.6283, "Ajmer Sharif Dargah"), "brahma": (26.4876, 7
       "mayo": (26.4316, 74.6492, "Mayo College"), "kishangarh": (26.5880, 74.8580, "Kishangarh"), "mandi": (26.5770, 74.8570, "Marble Mandi"),
       "airport": (26.6010, 74.8140, "Kishangarh Airport"), "bazaar": (26.4885, 74.5535, "Pushkar Bazaar"), "ajmer": (26.4499, 74.6399, "Ajmer")}
 W = {k: wp(v[0], v[1]) for k, v in PL.items()}
-SVG.append('<rect x="-900000" y="-900000" width="2000000" height="2000000" style="fill:#0b1a2a"/>')
-SVG.append('<image href="assets/img/bm4.jpg" x="-302848" y="-363008" width="786432" height="786432" preserveAspectRatio="none"/>')
-SVG.append('<image href="assets/img/bm5.jpg" x="-171776" y="-166400" width="327680" height="393216" preserveAspectRatio="none"/>')
-SVG.append('<image href="assets/img/bm7.webp" x="-40704" y="-35328" width="81920" height="65536" preserveAspectRatio="none"/>')
+SVG.append('<rect x="-900000" y="-900000" width="2000000" height="2000000" style="fill:#141414"/>')
+SVG.append('<image href="assets/img/bm4.jpg" x="-302848" y="-363008" width="786432" height="786432" preserveAspectRatio="none" style="filter:grayscale(1) brightness(.62) contrast(1.15)"/>')
+SVG.append('<image href="assets/img/bm5.jpg" x="-171776" y="-166400" width="327680" height="393216" preserveAspectRatio="none" style="filter:grayscale(1) brightness(.62) contrast(1.15)"/>')
+SVG.append('<image href="assets/img/bm7.webp" x="-40704" y="-35328" width="81920" height="65536" preserveAspectRatio="none" style="filter:grayscale(1) brightness(.62) contrast(1.15)"/>')
 SVG.append('<image href="assets/img/aj11.webp" x="-3840" y="-4608" width="11264" height="13312" preserveAspectRatio="none"/>')
+SVG.append('<image id="ajgrey" href="assets/img/aj11.webp" x="-3840" y="-4608" width="11264" height="13312" preserveAspectRatio="none" style="filter:grayscale(1) brightness(.62) contrast(1.15)"/>')
 SVG.append('<image href="assets/img/aj13.webp" x="0" y="0" width="2560" height="2048" preserveAspectRatio="none"/>')
+SVG.append('<image class="ajg" href="assets/img/aj13.webp" x="0" y="0" width="2560" height="2048" preserveAspectRatio="none" style="filter:grayscale(1) brightness(.62) contrast(1.15)"/>')
 SVG.append('<image href="assets/img/aj15.webp" x="640" y="1024" width="448" height="640" preserveAspectRatio="none"/>')
+SVG.append('<image class="ajg" href="assets/img/aj15.webp" x="640" y="1024" width="448" height="640" preserveAspectRatio="none" style="filter:grayscale(1) brightness(.62) contrast(1.15)"/>')
 WIDE_C = ((W["brahma"][0] + W["kishangarh"][0]) / 2, (W["mayo"][1] + W["kishangarh"][1]) / 2); WIDE_W = (W["kishangarh"][0] - W["brahma"][0]) * 1.35
 CITY_C = (W["soniji"][0] - 6, W["adhai"][1]); CITY_W = 150
 # expressway (indicative) arriving at Kishangarh from NE, NH-48 towards Jaipur
@@ -63,11 +67,11 @@ BD = json.load(open("data/bounds.json"))
 def pdr(rings): return " ".join("M" + " L".join(f"{wp(la, lo)[0]:.1f} {wp(la, lo)[1]:.1f}" for lo, la in r) + " Z" for r in rings)
 RD = json.load(open("/home/user/work/rajdiv/data/rajasthan_districts.geojson"))["features"]
 def rr(g): return [g["coordinates"][0]] if g["type"] == "Polygon" else [p_[0] for p_ in g["coordinates"]]
-SVG.append(f'<path id="bind" d="{pdr(BD["india"])}" style="fill:#fff;fill-opacity:.06;stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke;stroke-linejoin:round"/>')
-SVG.append(f'<path id="braj" d="{pdr(BD["raj"])}" style="fill:#FF4FA3;fill-opacity:0;stroke:#FF4FA3;stroke-width:5;vector-effect:non-scaling-stroke;stroke-linejoin:round;opacity:0"/>')
+SVG.append(f'<path id="bind" d="{pdr(BD["india"])}" style="fill:#9A4E1C;fill-opacity:.88;stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke;stroke-linejoin:round"/>')
+SVG.append(f'<path id="braj" d="{pdr(BD["raj"])}" style="fill:#0E2470;fill-opacity:0;stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke;stroke-linejoin:round;opacity:0"/>')
 SVG.append('<g id="bdist" style="opacity:0">' + "".join(f'<path d="{pdr([[c for c in r[::2]] for r in rr(f["geometry"])])}" style="fill:none;stroke:#fff;stroke-width:1.2;stroke-opacity:.7;vector-effect:non-scaling-stroke"/>' for f in RD) + '</g>')
 SVG.append(f'<path id="bout" d="M-900000 -900000 H1100000 V1100000 H-900000 Z {pdr(BD["ajmer"])}" style="fill:#000;fill-rule:evenodd;opacity:0"/>')
-SVG.append(f'<path id="baj" d="{pdr(BD["ajmer"])}" style="fill:#FFC42E;fill-opacity:0;stroke:#FFC42E;stroke-width:6;vector-effect:non-scaling-stroke;stroke-linejoin:round;opacity:0"/>')
+SVG.append(f'<path id="baj" d="{pdr(BD["ajmer"])}" style="fill:#FFC42E;fill-opacity:0;stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke;stroke-linejoin:round;opacity:0"/>')
 def bbw(rings):
     pts = [wp(la, lo) for r in rings for lo, la in r]; xs = [p_[0] for p_ in pts]; ys = [p_[1] for p_ in pts]
     return min(xs), min(ys), max(xs), max(ys)
@@ -133,35 +137,48 @@ IND_C, IND_W = fitb(bbw(BD["india"]), 700, 1400, 1.08)
 RAJ_C, RAJ_W = fitb(bbw(BD["raj"]), 720, 1380, 1.1)
 AJD_C, AJD_W = fitb(bbw(BD["ajmer"]), 800, 1390, 1.15)
 AJD_C = (AJD_C[0] + AJD_W * .2, AJD_C[1])
-J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(IND_C, IND_W)}"}}}}, 0);')
+J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb((IND_C[0], IND_C[1] - IND_W * .25), IND_W * 2.6)}"}}}}, 0);')
 J.append('const VB = document.getElementById("world"); function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); }}, t); }')
-TZ1 = .45; TZ2 = 1.75
+TZ0 = 0.0; TZ1 = 1.05; TZ2 = 2.45
+J.append(f'zoomTo(0, [{IND_C[0]:.1f},{IND_C[1] - IND_W * .25:.1f}], {IND_W * 2.6:.1f}, [{IND_C[0]:.1f},{IND_C[1]:.1f}], {IND_W:.1f}, 1.0);')
 J.append(f'zoomTo({TZ1}, [{IND_C[0]:.1f},{IND_C[1]:.1f}], {IND_W:.1f}, [{RAJ_C[0]:.1f},{RAJ_C[1]:.1f}], {RAJ_W:.1f}, 1.2);')
 J.append(f'zoomTo({TZ2:.2f}, [{RAJ_C[0]:.1f},{RAJ_C[1]:.1f}], {RAJ_W:.1f}, [{AJD_C[0]:.1f},{AJD_C[1]:.1f}], {AJD_W:.1f}, 1.4);')
-CAMS[:] = [(0, 0, IND_C, IND_W), (TZ1, 1.2, RAJ_C, RAJ_W), (TZ2, 1.4, AJD_C, AJD_W)]
+CAMS[:] = [(0, 1.0, IND_C, IND_W), (TZ1, 1.2, RAJ_C, RAJ_W), (TZ2, 1.4, AJD_C, AJD_W)]
 J.append(f'tl.to("#bout", {{opacity:.55, duration:.6}}, {TZ2 + 1.0:.2f}); tl.to("#bout", {{opacity:.25, duration:.5}}, {S(1) - .3:.2f}); tl.to("#bout", {{opacity:0, duration:.5}}, {S(2):.2f});')
-J.append(f'tl.to("#braj", {{opacity:1, fillOpacity:.45, duration:.4}}, .5); tl.to("#braj", {{fillOpacity:.15, duration:.5}}, {TZ1 + 1.0:.2f}); tl.to("#bdist", {{opacity:1, duration:.5}}, {TZ1 + 1.0:.2f});'
-         f'tl.to("#baj", {{opacity:1, fillOpacity:.55, duration:.4}}, {TZ1 + 1.1:.2f}); tl.to("#baj", {{fillOpacity:.2, duration:.4, yoyo:true, repeat:3}}, {TZ1 + 1.4:.2f});'
-         f'tl.to("#baj", {{fillOpacity:.08, duration:.5}}, {TZ2 + 1.4:.2f}); tl.to(["#braj", "#bdist", "#bind"], {{opacity:0, duration:.5}}, {TZ2 + 1.2:.2f}); tl.to("#baj", {{opacity:.6, duration:.5}}, {S(2):.2f});')
+J.append(f'tl.fromTo("#bind", {{fillOpacity:0}}, {{fillOpacity:.88, duration:.5}}, .3); tl.to("#bind", {{fillOpacity:0, duration:.5}}, {TZ1 + .2:.2f});'
+         f'tl.to("#braj", {{opacity:1, fillOpacity:.92, duration:.4}}, {TZ1 + .2:.2f}); tl.to("#bdist", {{opacity:1, duration:.4}}, {TZ1 + .8:.2f});'
+         f'tl.to("#baj", {{opacity:1, fillOpacity:.95, duration:.3}}, {TZ1 + 1.1:.2f}); tl.to("#baj", {{fillOpacity:.7, duration:.35, yoyo:true, repeat:3}}, {TZ1 + 1.4:.2f});'
+         f'tl.to(["#braj", "#bdist", "#bind"], {{opacity:0, duration:.5}}, {TZ2 + 1.2:.2f}); tl.to("#baj", {{fillOpacity:.5, duration:.5}}, {TZ2 + 1.3:.2f}); tl.to("#baj", {{fillOpacity:0, opacity:.7, duration:.5}}, {S(1) - .2:.2f}); tl.to(["#ajgrey", ".ajg"], {{opacity:0, duration:.6}}, {S(1) - .3:.2f});')
 H.append('<div class="mlab" id="ml_ind">INDIA</div><div class="mlab pk" id="ml_raj">RAJASTHAN</div><div class="mlab yl" id="ml_aj">AJMER</div>')
-x, y = scr(((bbw(BD["india"])[0] + bbw(BD["india"])[2]) / 2, (bbw(BD["india"])[1] + bbw(BD["india"])[3]) / 2), 0)
-J.append(f'tl.set("#ml_ind", {{left:{x:.0f}, top:{y + 120:.0f}}}, 0); tl.fromTo("#ml_ind", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3}}, .05); tl.to("#ml_ind", {{opacity:0, duration:.2}}, {TZ1:.2f});')
-bx = bbw(BD["raj"]); x, y = scr(((bx[0] + bx[2]) / 2, (bx[1] + bx[3]) / 2), 0)
-J.append(f'tl.set("#ml_raj", {{left:{x:.0f}, top:{y:.0f}}}, 0); tl.fromTo("#ml_raj", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3}}, .35); tl.to("#ml_raj", {{opacity:0, duration:.2}}, {TZ1 + .3:.2f});')
+x, y = scr(((bbw(BD["india"])[0] + bbw(BD["india"])[2]) / 2, (bbw(BD["india"])[1] + bbw(BD["india"])[3]) / 2), 1.05)
+J.append(f'tl.set("#ml_ind", {{left:{x:.0f}, top:{y + 120:.0f}}}, 0); tl.fromTo("#ml_ind", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3}}, .6); tl.to("#ml_ind", {{opacity:0, duration:.2}}, {TZ1:.2f});')
+bx = bbw(BD["raj"]); x, y = scr(((bx[0] + bx[2]) / 2, (bx[1] + bx[3]) / 2), TZ1 + 1.3)
+J.append(f'tl.set("#ml_raj", {{left:{x:.0f}, top:{y:.0f}}}, 0); tl.fromTo("#ml_raj", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3}}, {TZ1 + .5:.2f}); tl.to("#ml_raj", {{opacity:0, duration:.2}}, {TZ1 + 1.0:.2f});')
 bx = bbw(BD["ajmer"]); x, y = scr(((bx[0] + bx[2]) / 2, (bx[1] + bx[3]) / 2), TZ1 + 1.2)
 J.append(f'tl.set("#ml_aj", {{left:{x:.0f}, top:{y:.0f}}}, 0); tl.fromTo("#ml_aj", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2.5)"}}, {TZ1 + 1.1:.2f}); tl.to("#ml_aj", {{opacity:0, duration:.2}}, {TZ2:.2f});')
-sfx("whoosh", TZ1, .35); sfx("pop", TZ1 + 1.1, .35); sfx("whoosh", TZ2, .35)
+sfx("whoosh", 0, .45); sfx("whoosh", TZ1, .35); sfx("pop", TZ1 + 1.1, .35); sfx("whoosh", TZ2, .35)
+H.append('<div id="clouds"><img id="cl0" src="assets/img/cloud0.png"/><img id="cl1" src="assets/img/cloud1.png"/></div>')
+J.append('tl.fromTo("#cl0", {scale:1, y:0, opacity:1}, {scale:2.4, y:500, opacity:0, duration:1.5, ease:"power2.in"}, 0); tl.fromTo("#cl1", {scale:1, y:0, opacity:1}, {scale:2.6, y:-600, opacity:0, duration:1.3, ease:"power2.in"}, 0);')
 H.append('<div id="series">RAJASTHAN KE 41 RANG · EP 01/41</div>')
 J.append(f'tl.fromTo("#series", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3}}, .1); tl.to("#series", {{opacity:0, duration:.3}}, {TZ2 + 1.2:.2f});')
 sfx("impact-bass-1", .05, .45)
 
+
+# ---------- FOLLOW ----------
+H.append('<div id="follow"><div class="fhead"><div class="fav">DB</div><div class="fst"><p><b>ep 01</b><span>episodes</span></p><p><b>41</b><span>districts</span></p><p><b>&#9733;</b><span>daily</span></p></div></div>'
+         '<div class="fname">Digital Banjaaraa</div><div class="fbio">Rajasthan real estate, maps se samjho<br/>Har district, ek-ek karke</div><div class="fbtn"><span id="fb1">Follow</span><span id="fb2">Following &#10003;</span></div></div>')
+J.append(f'tl.to("#dim", {{opacity:.6, duration:.3}}, {S(5) - .1:.2f}); tl.fromTo("#follow", {{opacity:0, scale:.6, y:80}}, {{opacity:1, scale:1, y:0, duration:.4, ease:"back.out(1.8)"}}, {S(5):.2f});'
+         f'tl.set("#fb1", {{display:"none"}}, {wt(5, "follow") + .2:.2f}); tl.set("#fb2", {{display:"inline"}}, {wt(5, "follow") + .2:.2f}); tl.fromTo(".fbtn", {{scale:.85}}, {{scale:1, duration:.3, ease:"back.out(3)", immediateRender:false}}, {wt(5, "follow") + .2:.2f});'
+         f'tl.to("#follow", {{opacity:0, scale:.9, duration:.2}}, {S(6) - .15:.2f}); tl.to("#dim", {{opacity:.12, duration:.3}}, {S(6):.2f});')
+sfx("pop", S(5), .35); sfx("click-soft", wt(5, "follow") + .2, .5)
+
 # ---------- 1 ROCHAK ----------
-theme(1, "05", "KYA AAPKO PATA HAI?", S(5), S(6))
-card("r1", "board", S(5) + .05, wt(5, "RPSC") - .05, "RAJASTHAN BOARD (BSER)", "Board of Secondary Education", ("HQ: AJMER", CYAN), info="1957 se. Rajasthan ke lakhon students ki<br/>10th-12th pariksha yahin se hoti hai.")
-card("r2", "rpsc", wt(5, "RPSC"), S(6) + .05, "RPSC", "Rajasthan Public Service Commission", ("HQ: AJMER", CYAN), info="RAS jaisi sarkari bhartiyon ki pariksha.<br/>Har naukri aspirant ka sapna yahin se.")
+theme(1, "05", "KYA AAPKO PATA HAI?", S(6), S(7))
+card("r1", "board", S(6) + .05, wt(6, "RPSC") - .05, "RAJASTHAN BOARD (BSER)", "Board of Secondary Education", ("HQ: AJMER", CYAN), info="1957 se. Rajasthan ke lakhon students ki<br/>10th-12th pariksha yahin se hoti hai.")
+card("r2", "rpsc", wt(6, "RPSC"), S(7) + .05, "RPSC", "Rajasthan Public Service Commission", ("HQ: AJMER", CYAN), info="RAS jaisi sarkari bhartiyon ki pariksha.<br/>Har naukri aspirant ka sapna yahin se.")
 H.append('<div id="hqb">DONO KA HEADQUARTERS: <b>AJMER</b></div>')
-J.append(f'tl.fromTo("#hqb", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(5, "headquarters") - .1:.2f}); tl.to("#hqb", {{opacity:0, duration:.2}}, {S(6) - .1:.2f});')
-sfx("pop", S(5), .3); sfx("pop", wt(5, "RPSC"), .3); sfx("impact-bass-1", wt(5, "headquarters"), .35)
+J.append(f'tl.fromTo("#hqb", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {wt(6, "headquarters") - .1:.2f}); tl.to("#hqb", {{opacity:0, duration:.2}}, {S(7) - .1:.2f});')
+sfx("pop", S(6), .3); sfx("pop", wt(6, "RPSC"), .3); sfx("impact-bass-1", wt(6, "headquarters"), .35)
 
 # ---------- 2 AASTHA ----------
 theme(2, "01", "AASTHA", S(1), S(2))
@@ -190,21 +207,21 @@ card("g2", "adhai_din", wt(2, "Adhai"), wt(2, "Soniji"), "ADHAI DIN KA JHONPRA",
 card("g3", "soniji_nasiyan", wt(2, "Soniji"), S(3) + .2, "SONIJI KI NASIYAN", "Sone ka Jain mandir", ("GHOOMNA", CYAN), info="1865 mein bana Digambar Jain mandir.<br/>Andar 'Swarna Nagari': sone ki parat chadhi lakdi se bani Jain duniya.")
 
 # ---------- 5 MASHHOOR ----------
-theme(5, "04", "MASHHOOR", S(4), S(5))
+theme(5, "04", "MASHHOOR", S(4), S(6))
 fly("kishangarh", S(4) - .3, 900)
 card("m1", "bani_thani", S(4) + .1, wt(4, "Mayo") - .1, "BANI-THANI", "Rajasthan ki Mona Lisa · Kishangarh", ("MASHHOOR", GOLD), maxh=600, info="Kishangarh shaili, chitrakar Nihal Chand (lagbhag 1750).<br/>1973 mein is par India Post ka stamp bhi aaya.")
 fly("mayo", wt(4, "Mayo") - .4, 420)
-card("m2", "mayo_college", wt(4, "Mayo") - .1, S(5) + .1, "MAYO COLLEGE", "1875 se", ("MASHHOOR", GOLD), info="Lord Mayo ke naam par, 1875 mein shuru.<br/>Desh ke sabse purane boarding schools mein se ek.")
-label("lm2", "mayo", wt(4, "Mayo") - .4, S(5), dy=60)
+card("m2", "mayo_college", wt(4, "Mayo") - .1, S(6) + .1, "MAYO COLLEGE", "1875 se", ("MASHHOOR", GOLD), info="Lord Mayo ke naam par, 1875 mein shuru.<br/>Desh ke sabse purane boarding schools mein se ek.")
+label("lm2", "mayo", wt(4, "Mayo") - .4, S(6), dy=60)
 
 # ---------- 6 SHOPPING ----------
-theme(6, "06", "SHOPPING", S(6), S(7))
-fly("bazaar", S(6) - .3, 520)
-card("s1", "pushkar_bazaar", wt(6, "Pushkar"), wt(6, "marble"), "PUSHKAR BAZAAR", "", ("SHOP", PINK), info="Kadhai wale bags, kapde, chandi ke gehne<br/>aur rang-birangi Rajasthani cheezein.")
-label("ls1", "bazaar", S(6) - .3, wt(6, "marble"))
-fly("mandi", wt(6, "marble") - .3, 700)
-card("s2", ["kishangarh_mandi", "marble_quarry"], wt(6, "marble"), S(7) + .1, "KISHANGARH MARBLE MANDI", "Desh ki sabse badi marble mandiyon mein se ek", ("SHOP", PINK), info="Desh bhar se builders yahan marble lene aate hain.<br/>Saath mein granite aur stone ka bada kaarobaar.")
-label("ls2", "mandi", wt(6, "marble") - .3, S(7))
+theme(6, "06", "SHOPPING", S(7), S(8))
+fly("bazaar", S(7) - .3, 520)
+card("s1", "pushkar_bazaar", wt(7, "Pushkar"), wt(7, "marble"), "PUSHKAR BAZAAR", "", ("SHOP", PINK), info="Kadhai wale bags, kapde, chandi ke gehne<br/>aur rang-birangi Rajasthani cheezein.")
+label("ls1", "bazaar", S(7) - .3, wt(7, "marble"))
+fly("mandi", wt(7, "marble") - .3, 700)
+card("s2", ["kishangarh_mandi", "marble_quarry"], wt(7, "marble"), S(8) + .1, "KISHANGARH MARBLE MANDI", "Desh ki sabse badi marble mandiyon mein se ek", ("SHOP", PINK), info="Desh bhar se builders yahan marble lene aate hain.<br/>Saath mein granite aur stone ka bada kaarobaar.")
+label("ls2", "mandi", wt(7, "marble") - .3, S(8))
 
 
 # ---------- NUMBERS (inside hook) ----------
@@ -244,48 +261,48 @@ cpanel("cmv", "Maldives", MV_FLAG, TM, S(1) - .05, 380, 380, "MALDIVES", "Econom
 J.append(f'tl.to("#nb0 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Botswana") - .1:.2f}); tl.to("#nb1 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Maldives") - .1:.2f});')
 
 # ---------- 8 FUTURE ----------
-theme(70, "07", "FUTURE", S(7), S(8))
-W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][0] + EXP[0][0]) / 2, (W["ajmer"][1] + EXP[0][1]) / 2 + FW * .12); cam(S(7) - .2, FC, FW, .9); CAMS.append((S(7) - .2, .9, FC, FW))
-J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(7) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(7) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(9) + 1:.2f});')
-label("lf1", "expmid", S(7) + .6, S(8), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
-J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(7, "airport") - .3:.2f});')
-card("fair", "airport", wt(7, "airport") - .1, wt(7, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520, info="October 2017 se shuru.<br/>Ajmer, Pushkar aur Kishangarh ka hawai rasta."); label("lf2", "airport", wt(7, "airport") - .5, S(8), "&#9992; Kishangarh Airport")
-J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(7, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(7, "Smart City") - .5, S(8), "AJMER · SMART CITY", dy=-70)
-H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(7):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(8):.2f});')
+theme(70, "07", "FUTURE", S(8), S(9))
+W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][0] + EXP[0][0]) / 2, (W["ajmer"][1] + EXP[0][1]) / 2 + FW * .12); cam(S(8) - .2, FC, FW, .9); CAMS.append((S(8) - .2, .9, FC, FW))
+J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(8) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(8) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(10) + 1:.2f});')
+label("lf1", "expmid", S(8) + .6, S(9), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
+J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(8, "airport") - .3:.2f});')
+card("fair", "airport", wt(8, "airport") - .1, wt(8, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520, info="October 2017 se shuru.<br/>Ajmer, Pushkar aur Kishangarh ka hawai rasta."); label("lf2", "airport", wt(8, "airport") - .5, S(9), "&#9992; Kishangarh Airport")
+J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(8, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(8, "Smart City") - .5, S(9), "AJMER · SMART CITY", dy=-70)
+H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(8):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(9):.2f});')
 
 # ---------- 8 ITIHAAS ----------
-theme(8, "08", "ITIHAAS", S(8), S(9))
-card("i1", "prithviraj_painting", wt(8, "Prithviraj") - .1, S(9) + .1, "PRITHVIRAJ CHAUHAN", "Ajmer ki rajdhani se raaj · painting", ("ITIHAAS", "#B98CFF"), maxh=600, info="12vi sadi ke Chauhan raja, rajdhani Ajmer.<br/>Tarain ke yuddh (1191, 1192) ke liye mashhoor.")
+theme(8, "08", "ITIHAAS", S(9), S(10))
+card("i1", "prithviraj_painting", wt(9, "Prithviraj") - .1, S(10) + .1, "PRITHVIRAJ CHAUHAN", "Ajmer ki rajdhani se raaj · painting", ("ITIHAAS", "#B98CFF"), maxh=600, info="12vi sadi ke Chauhan raja, rajdhani Ajmer.<br/>Tarain ke yuddh (1191, 1192) ke liye mashhoor.")
 H.append('<div id="ajay"><b>AJAYAMERU</b> &rarr; <b>AJMER</b><span>Chauhan raja Ajayaraja ne basaya</span></div>')
-J.append(f'tl.fromTo("#ajay", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3}}, {S(8) + .1:.2f}); tl.to("#ajay", {{opacity:0, duration:.2}}, {wt(8, "Prithviraj") - .1:.2f});')
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(8):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(9):.2f});')
+J.append(f'tl.fromTo("#ajay", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3}}, {S(9) + .1:.2f}); tl.to("#ajay", {{opacity:0, duration:.2}}, {wt(9, "Prithviraj") - .1:.2f});')
+J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(9):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(10):.2f});')
 
 # ---------- 9 CONNECT ----------
-theme(9, "09", "CONNECTIVITY", S(9), S(10))
+theme(9, "09", "CONNECTIVITY", S(10), S(11))
 JPR = wp(26.9124, 75.7873); DUDU = wp(26.6811, 75.2321)
 NH2 = [W["ajmer"], W["kishangarh"], DUDU, JPR]
 SVG.append(f'<path id="nh2g" d="{pd(NH2)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:14;stroke-opacity:.35;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
            f'<path id="nh2" d="{pd(NH2)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:6;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
            f'<g id="jpin" style="opacity:0"><circle cx="{JPR[0]:.1f}" cy="{JPR[1]:.1f}" r="60" style="fill:{PINK};opacity:.3"/><circle cx="{JPR[0]:.1f}" cy="{JPR[1]:.1f}" r="26" style="fill:{PINK};stroke:#fff;stroke-width:9"/></g>')
 CC_C, CC_W = fitb((W["brahma"][0], min(JPR[1], W["kishangarh"][1]), JPR[0], W["mayo"][1]), 760, 1340, 1.3)
-cam(S(9) - .2, CC_C, CC_W, 1.1); CAMS.append((S(9) - .2, 1.1, CC_C, CC_W))
-J.append(f'tl.to(["#nh2", "#nh2g"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(9) + .4:.2f}); tl.to("#jpin", {{opacity:1, duration:.3}}, {S(9) + 1.4:.2f}); tl.to("#bout", {{opacity:0, duration:.1}}, {S(9):.2f});')
-x, y = scr(JPR, S(9) + 1.2); H.append(f'<div class="pl" id="ljp" style="left:{min(x, 900):.0f}px;top:{y - 60:.0f}px">JAIPUR</div>')
-J.append(f'tl.fromTo("#ljp", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(9) + 1.4:.2f}); tl.to("#ljp", {{opacity:0, duration:.2}}, {S(10) - .1:.2f});')
-x, y = scr(W["ajmer"], S(9) + 1.2); H.append(f'<div class="pl" id="lajc" style="left:{max(x, 160):.0f}px;top:{y + 60:.0f}px">AJMER</div>')
-J.append(f'tl.fromTo("#lajc", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(9) + .3:.2f}); tl.to("#lajc", {{opacity:0, duration:.2}}, {S(10) - .1:.2f});')
-H.append('<div id="jp">JAIPUR &rarr; <b>135 KM</b><span>NH-48</span></div>'); J.append(f'tl.fromTo("#jp", {{opacity:0, x:60}}, {{opacity:1, x:0, duration:.3, ease:"back.out(2)"}}, {S(9) + .2:.2f}); tl.to("#jp", {{opacity:0, duration:.2}}, {S(10):.2f});')
-sfx("whoosh", S(9) - .2, .3)
+cam(S(10) - .2, CC_C, CC_W, 1.1); CAMS.append((S(10) - .2, 1.1, CC_C, CC_W))
+J.append(f'tl.to(["#nh2", "#nh2g"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(10) + .4:.2f}); tl.to("#jpin", {{opacity:1, duration:.3}}, {S(10) + 1.4:.2f}); tl.to("#bout", {{opacity:0, duration:.1}}, {S(10):.2f});')
+x, y = scr(JPR, S(10) + 1.2); H.append(f'<div class="pl" id="ljp" style="left:{min(x, 900):.0f}px;top:{y - 60:.0f}px">JAIPUR</div>')
+J.append(f'tl.fromTo("#ljp", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(10) + 1.4:.2f}); tl.to("#ljp", {{opacity:0, duration:.2}}, {S(11) - .1:.2f});')
+x, y = scr(W["ajmer"], S(10) + 1.2); H.append(f'<div class="pl" id="lajc" style="left:{max(x, 160):.0f}px;top:{y + 60:.0f}px">AJMER</div>')
+J.append(f'tl.fromTo("#lajc", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(10) + .3:.2f}); tl.to("#lajc", {{opacity:0, duration:.2}}, {S(11) - .1:.2f});')
+H.append('<div id="jp">JAIPUR &rarr; <b>135 KM</b><span>NH-48</span></div>'); J.append(f'tl.fromTo("#jp", {{opacity:0, x:60}}, {{opacity:1, x:0, duration:.3, ease:"back.out(2)"}}, {S(10) + .2:.2f}); tl.to("#jp", {{opacity:0, duration:.2}}, {S(11):.2f});')
+sfx("whoosh", S(10) - .2, .3)
 
 # ---------- 10 CTA ----------
-H.append('<div id="cta"><b>AAP AJMER SE HO?</b><span>COMMENT KARO</span><em>NEXT EPISODE: <i>ALWAR</i></em></div>')
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(10):.2f}); tl.fromTo("#cta", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(10):.2f}); tl.from("#cta b", {{opacity:0, scale:.6, duration:.3, ease:"back.out(2)"}}, {S(10):.2f});'
-         f'tl.from("#cta span", {{opacity:0, y:30, duration:.3}}, {wt(10, "Comment"):.2f}); tl.from("#cta em", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(10, "Next"):.2f});')
-sfx("sparkle", wt(10, "Next"), .3)
+H.append('<div id="cta"><b>AAP AJMER SE HO?</b><span>COMMENT &ldquo;AJMER&rdquo;</span><em>NEXT EPISODE: <i>ALWAR</i></em></div>')
+J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(11):.2f}); tl.fromTo("#cta", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(11):.2f}); tl.from("#cta b", {{opacity:0, scale:.6, duration:.3, ease:"back.out(2)"}}, {S(11):.2f});'
+         f'tl.from("#cta span", {{opacity:0, y:30, duration:.3}}, {wt(11, "Comment"):.2f}); tl.from("#cta em", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(11, "Next"):.2f});')
+sfx("sparkle", wt(11, "Next"), .3)
 
 
 # ---- card exits: each photo stays until the next one arrives (capped at map moments)
-CAPS_T = sorted([S(7), S(9), S(10), S(8) + .2])
+CAPS_T = sorted([S(8), S(10), S(11), S(9) + .2])
 CARDS.sort(key=lambda c: c[1])
 for i, (cid, t0, t1) in enumerate(CARDS):
     nxt = CARDS[i + 1][1] if i + 1 < len(CARDS) else END
@@ -341,10 +358,15 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .hb b{display:block;font:400 92px/1 Anton;color:#fff}.hb span{display:block;margin-top:6px;font:800 30px Mont;color:#3CDCFF}.hb img{width:330px;height:220px;object-fit:cover;border-radius:16px;flex:none}.hb b{font-size:70px!important}#hq i{display:block;font:900 70px/1.1 Mont;color:#FFC42E;font-style:normal}
 #hq em{display:block;margin-top:22px;font-style:normal;font:900 38px Mont;color:#fff;letter-spacing:.1em}#hq strong{display:block;font:400 180px/1 Anton;color:#FF4FA3}
 #nums{position:absolute;left:50px;right:50px;top:340px;opacity:0;z-index:9}.nb{display:flex;align-items:center;gap:22px;margin-bottom:14px;padding:14px 26px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #FFC42E}.nb i{font-style:normal;font-size:64px}.nb b{display:block;white-space:nowrap;font:400 74px/1 Anton;color:#FFC42E}.nb span{display:block;margin-top:6px;font:900 28px Mont;color:#fff;letter-spacing:.06em}#nums em{position:absolute;left:0;right:0;top:1265px;display:block;font-style:normal;font:700 21px Mont;color:rgba(255,255,255,.8);text-align:center}
-.mlab{position:absolute;opacity:0;translate:-50% -50%;padding:8px 22px;border-radius:30px;background:rgba(8,10,15,.85);font:400 54px/1 Anton;color:#fff;letter-spacing:.06em;z-index:6}.mlab.pk{color:#FF4FA3}.mlab.yl{color:#111;background:#FFC42E}
+.mlab{position:absolute;opacity:0;translate:-50% -50%;padding:8px 22px;border-radius:6px;background:#fff;font:700 50px/1 Mont;color:#111;box-shadow:0 6px 18px rgba(0,0,0,.5);letter-spacing:.06em;z-index:6}.mlab.pk{color:#111}.mlab.yl{color:#111;background:#fff}
 #ov{position:absolute;inset:0;opacity:0;z-index:7}#ovlist{position:absolute;left:50px;right:50px;top:330px;padding:14px 22px;border-radius:24px;background:rgba(8,10,15,.88);border:3px solid #FF4FA3;display:grid;grid-template-columns:1fr 1fr;gap:4px 14px}#ovlist p{display:flex;align-items:center;gap:10px;height:50px;font:800 27px Mont;color:#fff;white-space:nowrap}#ovlist p b{width:36px;height:36px;flex:none;border-radius:50%;background:#FF4FA3;color:#111;display:flex;align-items:center;justify-content:center;font:900 20px Mont}
 #hqb{position:absolute;left:40px;right:40px;top:1300px;opacity:0;text-align:center;padding:14px;border-radius:22px;background:#FF4FA3;font:900 40px Mont;color:#111;z-index:12}#hqb b{font:400 54px Anton}
 .cpan{position:absolute;right:30px;top:860px;width:450px;opacity:0;padding:22px 20px 18px;border-radius:28px;background:rgba(8,10,15,.88);border:4px solid;z-index:9;text-align:center;display:flex;flex-direction:column;align-items:center}.fchip{position:absolute;left:18px;top:18px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,.6)}.cpan b{display:block;margin-top:8px;font:400 60px/1 Anton;color:#fff;letter-spacing:.04em}.cpan span{display:block;margin-top:6px;font:900 24px Mont;color:#FFC42E}
+#clouds{position:absolute;inset:0;z-index:15;pointer-events:none;overflow:hidden}#clouds img{position:absolute;left:-260px;top:-240px;width:1600px;height:2400px}
+#follow{position:absolute;left:60px;right:60px;top:560px;opacity:0;z-index:30;padding:30px;border-radius:30px;background:#16181d;box-shadow:0 30px 80px rgba(0,0,0,.7);color:#fff;font-family:Mont}
+.fhead{display:flex;align-items:center;gap:30px}.fav{width:170px;height:170px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FF4FA3,#FFC42E);font:400 70px Anton;color:#111;box-shadow:0 0 0 6px #16181d,0 0 0 10px #FF4FA3}
+.fst{display:flex;flex:1;justify-content:space-around}.fst p{text-align:center}.fst b{display:block;font:900 40px Mont}.fst span{font:700 26px Mont;color:#bbb}
+.fname{margin-top:22px;font:900 40px Mont}.fbio{margin-top:8px;font:700 30px/1.35 Mont;color:#ddd}.fbtn{margin-top:24px;padding:18px;border-radius:16px;background:#0095F6;text-align:center;font:900 38px Mont}.fbtn #fb2{display:none}
 #ajay{position:absolute;left:60px;right:60px;top:430px;opacity:0;text-align:center;padding:30px;border-radius:26px;background:rgba(8,10,15,.92);border:3px solid #B98CFF;font:400 96px/1.1 Anton;color:#fff;z-index:9}
 #ajay b{color:#FFC42E;font-weight:400}#ajay span{display:block;margin-top:10px;font:800 34px Mont;color:#ddd}
 #jp{position:absolute;right:50px;top:560px;opacity:0;padding:20px 28px;border-radius:24px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;font:400 70px/1 Anton;color:#fff;z-index:9;text-align:right}#jp b{color:#FFC42E;font-weight:400}#jp span{display:block;font:900 30px Mont;color:#ccc;margin-top:6px}
@@ -352,7 +374,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cta span{display:inline-block;margin-top:20px;padding:14px 34px;border-radius:30px;background:#FF4FA3;color:#111;font:900 44px Mont}#cta em{display:block;margin:26px auto 0;font-style:normal;font:900 40px Mont;color:#fff}#cta em i{font-style:normal;color:#FFC42E;font:400 80px Anton;display:block}
 .foot{position:absolute;left:40px;right:40px;top:1600px;text-align:center;opacity:0;font:700 22px Mont;color:rgba(255,255,255,.7);z-index:6}
 .cp{position:absolute;left:40px;right:130px;top:1420px;text-align:center;opacity:0;z-index:35}
-.cp div{display:inline-block;font:900 60px/1.12 Mont;color:#fff;-webkit-text-stroke:7px #000;paint-order:stroke fill;text-shadow:0 6px 18px rgba(0,0,0,.8)}"""
+.cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 62px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}.cp .y{color:#111;background:#FFC42E;border-radius:6px;padding:0 6px}"""
 audio = ('<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio>' if VOICE
          else f'<audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.55" data-fade-out="1.5"></audio>')
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
