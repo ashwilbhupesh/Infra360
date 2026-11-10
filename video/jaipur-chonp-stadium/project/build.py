@@ -4,21 +4,21 @@ import json, math, os
 P = "proj"
 ASP = json.load(open("aspects.json"))
 LINES = [
-    "Duniya ka teesra sabse bada cricket stadium, Jaipur mein ban raha hai. Par kaam ruka kyun?",
-    "Jaipur se 25 km door, Chonp gaon mein, 100 acre par, 75 hazaar logon ki seating.",
-    "Isse bade sirf do stadium hain: Ahmedabad ka Narendra Modi Stadium aur Australia ka Melbourne Cricket Ground.",
-    "Naam: Anil Agarwal International Cricket Stadium. Vedanta ke 300 crore, aur baaki RCA ka paisa.",
-    "February 2022 mein neev rakhi gayi, lekin karib 191 crore kharch hone ke baad kaam do saal ruka raha.",
-    "Ab 2026 mein IIT Bombay iska structure check kar rahi hai, aur RCA ka plan hai ki do saal mein yeh poora ho.",
-    "Aur jab yeh banega, toh Delhi highway ke paas Chonp aur aas-paas ka ilaaka: hotels, restaurants, aur zameen ke daam, sab badlega.",
-    "Aapko kya lagta hai, yeh stadium kab tak taiyaar hoga? Comment karo.",
+    "Duniya ka teesra sabse bada cricket stadium, Jaipur mein. Par kaam ruka kyun?",
+    "Chonp mein, 100 acre, 75 hazaar seats.",
+    "Aage sirf Ahmedabad aur Melbourne.",
+    "Vedanta ke 300 crore, baaki RCA ka.",
+    "2022 mein neev, lekin 191 crore ke baad kaam ruka.",
+    "Ab IIT Bombay jaanch kar rahi hai, RCA ka plan do saal.",
+    "Banega toh hotels, restaurants, zameen ke daam, sab badlega.",
+    "Kab tak banega? Comment karo.",
 ]
 VOICE = os.path.exists("rec/phrases.json")
 if VOICE: PH = json.load(open("rec/phrases.json"))
 else:
     PH = []; t = .3
     for l in LINES:
-        d = len(l) / 14 + .2; PH.append({"s": round(t, 2), "e": round(t + d, 2), "t": l}); t += d + .45
+        d = len(l) / 15 + .2; PH.append({"s": round(t, 2), "e": round(t + d, 2), "t": l}); t += d + .35
 def S(k): return PH[k]["s"]
 def E(k): return PH[k]["e"]
 def wt(k, w):
@@ -106,7 +106,7 @@ H.append('<div id="series">JAIPUR KA MEGA PROJECT</div>')
 J.append(f'tl.fromTo("#series", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3}}, .1); tl.to("#series", {{opacity:0, duration:.3}}, {S(1) - .1:.2f});')
 H.append('<div id="hook"><small>DUNIYA KA</small><b>3RD</b><span>SABSE BADA CRICKET STADIUM</span><i>JAIPUR MEIN</i></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, .2); tl.from("#hook i", {{opacity:0, y:30, duration:.3}}, {wt(0, "Jaipur") - .1:.2f}); tl.to("#hook", {{opacity:0, duration:.2}}, {wt(0, "Par kaam") - .1:.2f});')
-card("h1", "render", wt(0, "Par kaam") - .1, S(1) + .3, "KAAM RUKA KYUN?", "", ("?", PINK), top=420, maxw=900, maxh=520)
+card("h1", "render", wt(0, "Par kaam") - .1, S(1) - .4, "KAAM RUKA KYUN?", "", ("?", PINK), top=420, maxw=900, maxh=520)
 sfx("impact-bass-1", .2, .5); sfx("impact-bass-1", wt(0, "Par kaam"), .4)
 
 # ---------- 1 LOCATION ----------
@@ -173,12 +173,12 @@ sfx("sparkle", wt(7, "Comment"), .3)
 CARDS.sort(key=lambda c: c[1])
 for i, (cid, t0, t1) in enumerate(CARDS):
     nxt = CARDS[i + 1][1] if i + 1 < len(CARDS) else END
-    out = max(t1, min(nxt + .3, t1 + .6))
+    out = t1 if cid == 'h1' else max(t1, min(nxt + .3, t1 + .6))
     J.append(f'tl.set("#{cid}", {{zIndex:{10 + i}}}, 0); tl.to("#{cid}", {{opacity:0, scale:.9, duration:.2, ease:"power2.in"}}, {out - .2:.2f});')
 
 # captions
-HI = ["teesra", "cricket stadium", "Jaipur", "kaam ruka", "25 km", "Chonp", "100 acre", "75 hazaar", "Ahmedabad", "Narendra Modi Stadium", "Melbourne Cricket Ground", "Anil Agarwal",
-      "Vedanta", "300 crore", "RCA", "February 2022", "191 crore", "do saal", "2026", "IIT Bombay", "Delhi highway", "hotels", "restaurants", "zameen ke daam", "Comment"]
+HI = ["teesra", "cricket stadium", "Jaipur", "kaam ruka", "25 km", "Chonp", "100 acre", "75 hazaar seats", "Ahmedabad", "Narendra Modi Stadium", "Melbourne Cricket Ground", "Anil Agarwal",
+      "Vedanta", "300 crore", "RCA", "2022", "191 crore", "do saal", "2026", "IIT Bombay", "Delhi highway", "hotels", "restaurants", "zameen ke daam", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
