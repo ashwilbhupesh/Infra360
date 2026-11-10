@@ -4,18 +4,15 @@ import json, math, os
 P = "proj"
 ASP = json.load(open("aspects.json"))
 LINES = [
-    "Aayiye Ajmer ko jaante hain. Iski aabadi lagbhag 26 lakh hai, yaani Botswana desh se bhi zyada, aur economy 70 hazaar crore ki, yaani Maldives desh se bhi badi.",
-    "Yahan hai Ajmer Sharif Dargah, Pushkar ka Brahma mandir, aur duniya bhar mein mashhoor Pushkar mela.",
-    "Ghoomne ke liye hai Ana Sagar jheel, Adhai Din ka Jhonpra aur Soniji ki Nasiyan.",
-    "Khaane mein zaroor try karo Ajmer ka sohan halwa, Pushkar ke malpue aur gulkand.",
-    "Kishangarh ki Bani-Thani painting ko kehte hain Rajasthan ki Mona Lisa, aur Mayo College 1875 se chal raha hai.",
-    "Har district ki aisi jaankari ke liye, Digital Banjaaraa ko follow karo.",
-    "Aur Rajasthan Board aur RPSC, dono ka headquarters Ajmer mein hi hai.",
-    "Shopping ke liye Pushkar ka bazaar, aur marble ke liye Kishangarh ki mandi.",
-    "Kotputli-Kishangarh expressway aa raha hai, Kishangarh mein airport hai, aur Ajmer Smart City bhi hai.",
-    "Ajmer ko Chauhan raja Ajayaraja ne basaya tha, aur yeh Prithviraj Chauhan ki rajdhani rahi.",
-    "Jaipur se sirf 135 km, NH-48 par.",
-    "Aap Ajmer se ho? Comment karo Ajmer. Next episode mein: Alwar.",
+    "Aayiye Ajmer ko jaante hain. Iski aabadi lagbhag 26 lakh, yaani Botswana desh se zyada, aur economy 70 hazaar crore, yaani Maldives se bhi badi.",
+    "Yahan hai Ajmer Sharif Dargah, Pushkar ka Brahma mandir, aur Pushkar mela.",
+    "Ghoomne ko Ana Sagar, Adhai Din ka Jhonpra aur Soniji ki Nasiyan.",
+    "Khaane mein sohan halwa, malpue aur gulkand.",
+    "Bani-Thani painting, Rajasthan ki Mona Lisa, aur 1875 ka Mayo College.",
+    "Har district ke liye Digital Banjaaraa ko follow karo.",
+    "Rajasthan Board aur RPSC, dono ka headquarters Ajmer mein.",
+    "Kotputli-Kishangarh expressway, Kishangarh airport, aur Smart City: Ajmer badh raha hai.",
+    "Aap Ajmer se ho? Comment karo Ajmer. Next: Alwar.",
 ]
 VOICE = os.path.exists("rec/phrases.json")
 if VOICE:
@@ -23,15 +20,15 @@ if VOICE:
 else:
     PH = []; t = .4
     for i, l in enumerate(LINES):
-        d = len(l) / 13.5 + .2
-        PH.append({"s": round(t, 2), "e": round(t + d, 2), "t": l}); t += d + (.55 if i else .45)
+        d = len(l) / 15.5 + .15
+        PH.append({"s": round(t, 2), "e": round(t + d, 2), "t": l}); t += d + (.35 if i else .3)
 def S(k): return PH[k]["s"]
 def E(k): return PH[k]["e"]
 def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower())
     assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(11) + 1.3, 2)
+END = round(E(8) + 1.3, 2)
 
 def wp(lat, lon):
     n = 2 ** 13
@@ -207,22 +204,12 @@ card("g2", "adhai_din", wt(2, "Adhai"), wt(2, "Soniji"), "ADHAI DIN KA JHONPRA",
 card("g3", "soniji_nasiyan", wt(2, "Soniji"), S(3) + .2, "SONIJI KI NASIYAN", "Sone ka Jain mandir", ("GHOOMNA", CYAN), info="1865 mein bana Digambar Jain mandir.<br/>Andar 'Swarna Nagari': sone ki parat chadhi lakdi se bani Jain duniya.")
 
 # ---------- 5 MASHHOOR ----------
-theme(5, "04", "MASHHOOR", S(4), S(6))
+theme(5, "04", "MASHHOOR", S(4), S(5))
 fly("kishangarh", S(4) - .3, 900)
 card("m1", "bani_thani", S(4) + .1, wt(4, "Mayo") - .1, "BANI-THANI", "Rajasthan ki Mona Lisa · Kishangarh", ("MASHHOOR", GOLD), maxh=600, info="Kishangarh shaili, chitrakar Nihal Chand (lagbhag 1750).<br/>1973 mein is par India Post ka stamp bhi aaya.")
 fly("mayo", wt(4, "Mayo") - .4, 420)
 card("m2", "mayo_college", wt(4, "Mayo") - .1, S(6) + .1, "MAYO COLLEGE", "1875 se", ("MASHHOOR", GOLD), info="Lord Mayo ke naam par, 1875 mein shuru.<br/>Desh ke sabse purane boarding schools mein se ek.")
 label("lm2", "mayo", wt(4, "Mayo") - .4, S(6), dy=60)
-
-# ---------- 6 SHOPPING ----------
-theme(6, "06", "SHOPPING", S(7), S(8))
-fly("bazaar", S(7) - .3, 520)
-card("s1", "pushkar_bazaar", wt(7, "Pushkar"), wt(7, "marble"), "PUSHKAR BAZAAR", "", ("SHOP", PINK), info="Kadhai wale bags, kapde, chandi ke gehne<br/>aur rang-birangi Rajasthani cheezein.")
-label("ls1", "bazaar", S(7) - .3, wt(7, "marble"))
-fly("mandi", wt(7, "marble") - .3, 700)
-card("s2", ["kishangarh_mandi", "marble_quarry"], wt(7, "marble"), S(8) + .1, "KISHANGARH MARBLE MANDI", "Desh ki sabse badi marble mandiyon mein se ek", ("SHOP", PINK), info="Desh bhar se builders yahan marble lene aate hain.<br/>Saath mein granite aur stone ka bada kaarobaar.")
-label("ls2", "mandi", wt(7, "marble") - .3, S(8))
-
 
 # ---------- NUMBERS (inside hook) ----------
 TN0 = max(wt(0, "aabadi") - .1, TZ2 + 1.3)
@@ -261,53 +248,29 @@ cpanel("cmv", "Maldives", MV_FLAG, TM, S(1) - .05, 380, 380, "MALDIVES", "Econom
 J.append(f'tl.to("#nb0 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Botswana") - .1:.2f}); tl.to("#nb1 span", {{color:"#FFC42E", duration:.2}}, {wt(0, "Maldives") - .1:.2f});')
 
 # ---------- 8 FUTURE ----------
-theme(70, "07", "FUTURE", S(8), S(9))
-W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][0] + EXP[0][0]) / 2, (W["ajmer"][1] + EXP[0][1]) / 2 + FW * .12); cam(S(8) - .2, FC, FW, .9); CAMS.append((S(8) - .2, .9, FC, FW))
-J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(8) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(8) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(10) + 1:.2f});')
-label("lf1", "expmid", S(8) + .6, S(9), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
-J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(8, "airport") - .3:.2f});')
-card("fair", "airport", wt(8, "airport") - .1, wt(8, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520, info="October 2017 se shuru.<br/>Ajmer, Pushkar aur Kishangarh ka hawai rasta."); label("lf2", "airport", wt(8, "airport") - .5, S(9), "&#9992; Kishangarh Airport")
-J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(8, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(8, "Smart City") - .5, S(9), "AJMER · SMART CITY", dy=-70)
-H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(8):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(9):.2f});')
-
-# ---------- 8 ITIHAAS ----------
-theme(8, "08", "ITIHAAS", S(9), S(10))
-card("i1", "prithviraj_painting", wt(9, "Prithviraj") - .1, S(10) + .1, "PRITHVIRAJ CHAUHAN", "Ajmer ki rajdhani se raaj · painting", ("ITIHAAS", "#B98CFF"), maxh=600, info="12vi sadi ke Chauhan raja, rajdhani Ajmer.<br/>Tarain ke yuddh (1191, 1192) ke liye mashhoor.")
-H.append('<div id="ajay"><b>AJAYAMERU</b> &rarr; <b>AJMER</b><span>Chauhan raja Ajayaraja ne basaya</span></div>')
-J.append(f'tl.fromTo("#ajay", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3}}, {S(9) + .1:.2f}); tl.to("#ajay", {{opacity:0, duration:.2}}, {wt(9, "Prithviraj") - .1:.2f});')
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(9):.2f}); tl.to("#dim", {{opacity:.15, duration:.3}}, {S(10):.2f});')
-
-# ---------- 9 CONNECT ----------
-theme(9, "09", "CONNECTIVITY", S(10), S(11))
-JPR = wp(26.9124, 75.7873); DUDU = wp(26.6811, 75.2321)
-NH2 = [W["ajmer"], W["kishangarh"], DUDU, JPR]
-SVG.append(f'<path id="nh2g" d="{pd(NH2)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:14;stroke-opacity:.35;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
-           f'<path id="nh2" d="{pd(NH2)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:6;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
-           f'<g id="jpin" style="opacity:0"><circle cx="{JPR[0]:.1f}" cy="{JPR[1]:.1f}" r="60" style="fill:{PINK};opacity:.3"/><circle cx="{JPR[0]:.1f}" cy="{JPR[1]:.1f}" r="26" style="fill:{PINK};stroke:#fff;stroke-width:9"/></g>')
-CC_C, CC_W = fitb((W["brahma"][0], min(JPR[1], W["kishangarh"][1]), JPR[0], W["mayo"][1]), 760, 1340, 1.3)
-cam(S(10) - .2, CC_C, CC_W, 1.1); CAMS.append((S(10) - .2, 1.1, CC_C, CC_W))
-J.append(f'tl.to(["#nh2", "#nh2g"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(10) + .4:.2f}); tl.to("#jpin", {{opacity:1, duration:.3}}, {S(10) + 1.4:.2f}); tl.to("#bout", {{opacity:0, duration:.1}}, {S(10):.2f});')
-x, y = scr(JPR, S(10) + 1.2); H.append(f'<div class="pl" id="ljp" style="left:{min(x, 900):.0f}px;top:{y - 60:.0f}px">JAIPUR</div>')
-J.append(f'tl.fromTo("#ljp", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(10) + 1.4:.2f}); tl.to("#ljp", {{opacity:0, duration:.2}}, {S(11) - .1:.2f});')
-x, y = scr(W["ajmer"], S(10) + 1.2); H.append(f'<div class="pl" id="lajc" style="left:{max(x, 160):.0f}px;top:{y + 60:.0f}px">AJMER</div>')
-J.append(f'tl.fromTo("#lajc", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {S(10) + .3:.2f}); tl.to("#lajc", {{opacity:0, duration:.2}}, {S(11) - .1:.2f});')
-H.append('<div id="jp">JAIPUR &rarr; <b>135 KM</b><span>NH-48</span></div>'); J.append(f'tl.fromTo("#jp", {{opacity:0, x:60}}, {{opacity:1, x:0, duration:.3, ease:"back.out(2)"}}, {S(10) + .2:.2f}); tl.to("#jp", {{opacity:0, duration:.2}}, {S(11):.2f});')
-sfx("whoosh", S(10) - .2, .3)
+theme(70, "06", "FUTURE", S(7), S(8))
+W["expmid"] = EXP[1]; FW = (EXP[0][0] - W["ajmer"][0]) * 1.3; FC = ((W["ajmer"][0] + EXP[0][0]) / 2, (W["ajmer"][1] + EXP[0][1]) / 2 + FW * .12); cam(S(7) - .2, FC, FW, .9); CAMS.append((S(7) - .2, .9, FC, FW))
+J.append(f'tl.to(["#exp", "#expb", "#expg"], {{strokeDashoffset:0, duration:1.2, ease:"power2.out"}}, {S(7) + .1:.2f}); tl.to("#expg", {{strokeOpacity:.6, duration:.35, yoyo:true, repeat:5}}, {S(7) + 1.3:.2f}); tl.to(["#exp", "#expb", "#expg"], {{opacity:.5, duration:.4}}, {S(8) + 1:.2f});')
+label("lf1", "expmid", S(7) + .6, S(8), "Kotputli-Kishangarh<br/>Expressway", dy=-20)
+J.append(f'tl.to("#pin_airport", {{opacity:1, duration:.2}}, {wt(7, "airport") - .3:.2f});')
+card("fair", "airport", wt(7, "airport") - .1, wt(7, "Smart City") - .2, "KISHANGARH AIRPORT", "", ("FUTURE", "#FF8A00"), top=420, maxw=640, maxh=520, info="October 2017 se shuru.<br/>Ajmer, Pushkar aur Kishangarh ka hawai rasta."); label("lf2", "airport", wt(7, "airport") - .5, S(8), "&#9992; Kishangarh Airport")
+J.append(f'tl.to(["#pin_dargah", "#pin_mayo"], {{opacity:1, duration:.2}}, {wt(7, "Smart City") - .3:.2f});'); label("lf3", "ajmer", wt(7, "Smart City") - .5, S(8), "AJMER · SMART CITY", dy=-70)
+H.append('<div class="foot" id="ff">Expressway alignment indicative</div>'); J.append(f'tl.fromTo("#ff", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(7):.2f}); tl.to("#ff", {{opacity:0, duration:.2}}, {S(8):.2f});')
 
 # ---------- 10 CTA ----------
 H.append('<div id="cta"><b>AAP AJMER SE HO?</b><span>COMMENT &ldquo;AJMER&rdquo;</span><em>NEXT EPISODE: <i>ALWAR</i></em></div>')
-J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(11):.2f}); tl.fromTo("#cta", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(11):.2f}); tl.from("#cta b", {{opacity:0, scale:.6, duration:.3, ease:"back.out(2)"}}, {S(11):.2f});'
-         f'tl.from("#cta span", {{opacity:0, y:30, duration:.3}}, {wt(11, "Comment"):.2f}); tl.from("#cta em", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(11, "Next"):.2f});')
-sfx("sparkle", wt(11, "Next"), .3)
+J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(8):.2f}); tl.fromTo("#cta", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(8):.2f}); tl.from("#cta b", {{opacity:0, scale:.6, duration:.3, ease:"back.out(2)"}}, {S(8):.2f});'
+         f'tl.from("#cta span", {{opacity:0, y:30, duration:.3}}, {wt(8, "Comment"):.2f}); tl.from("#cta em", {{opacity:0, scale:.5, duration:.3, ease:"back.out(2)"}}, {wt(8, "Next"):.2f});')
+sfx("sparkle", wt(8, "Next"), .3)
 
 
 # ---- card exits: each photo stays until the next one arrives (capped at map moments)
-CAPS_T = sorted([S(8), S(10), S(11), S(9) + .2])
+CAPS_T = sorted([S(5), S(7), S(8)])
 CARDS.sort(key=lambda c: c[1])
 for i, (cid, t0, t1) in enumerate(CARDS):
     nxt = CARDS[i + 1][1] if i + 1 < len(CARDS) else END
     cap = min([c for c in CAPS_T if c > t0 + .3] + [END])
-    out = max(t1, min(nxt + .3, cap))
+    out = t1 if cid in ('fair',) else min(max(t1, min(nxt + .3, cap)), cap)
     J.append(f'tl.set("#{cid}", {{zIndex:{10 + i}}}, 0); tl.to("#{cid}", {{opacity:0, scale:.9, duration:.2, ease:"power2.in"}}, {out - .2:.2f});')
 
 # ---------- captions ----------
