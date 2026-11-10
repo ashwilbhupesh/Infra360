@@ -240,7 +240,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
-H.append('<div id="wm">DIGITAL BANJAARAA</div><div id="cred">Routes indicative &middot; Sources: NHSRCL plans via Patrika, Metro Rail News, News On AIR &middot; Imagery: NASA Blue Marble &middot; States: Natural Earth</div>')
+H.append('<div id="cred">Routes indicative &middot; Sources: NHSRCL plans via Patrika, Metro Rail News, News On AIR &middot; Imagery: NASA Blue Marble &middot; States: Natural Earth</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#1b1b1d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#111;background:#FFC42E;border-radius:6px;padding:0 6px}
