@@ -88,15 +88,41 @@ def pl(i, p, text, t, until, at, dy=-60, cls=""):
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)"}}, {t:.2f}); tl.to("#{i}", {{opacity:0, duration:.2}}, {until - .2:.2f});')
 
 # ---------- 3D stadium (CSS 3D, sits on the map plane at Chonp) ----------
-NR = 16; BW, BH = 300, 250
-rings = []
-for i in range(NR):
-    f = i / (NR - 1); w = BW + 150 * f ** .8; h = BH + 130 * f ** .8
-    col = "#F2EFE8" if i >= NR - 3 else (f"hsl(212, 45%, {34 + 10 * (i % 2) + 8 * f:.0f}%)")
-    rings.append(f'<div class="rg" style="width:{w:.0f}px;height:{h:.0f}px;margin:{-h / 2:.0f}px 0 0 {-w / 2:.0f}px;border-color:{col}"></div>')
-lights = "".join(f'<div class="fl" style="transform:translate({x}px,{y}px) rotateX(-90deg)"><i></i></div>' for x, y in [(-260, -200), (260, -200), (-260, 200), (260, 200)])
-ST = (f'<div id="std"><div class="gr"></div><div class="pitch"><i></i></div>{"".join(rings)}'
-      f'<div class="roof" style="width:{BW + 170}px;height:{BH + 150}px;margin:{-(BH + 150) / 2}px 0 0 {-(BW + 170) / 2}px"></div></div>')
+# modelled on the RCA design render: oval bowl full of crowd, white ribbed roof ring, white V-column facade on blue glass,
+# plaza + two practice grounds + parking around it (illustrative, not to scale)
+A, B = 250, 205          # outer half-axes of the stadium (px, before plane scale)
+FH = 64                  # facade height
+NT = 9                   # seating tiers
+def ell(cls, a, b, z=0, extra="", inner=None):
+    m = f"-webkit-mask:radial-gradient(closest-side,transparent {inner * 100:.1f}%,#000 {inner * 100 + .6:.1f}%);mask:radial-gradient(closest-side,transparent {inner * 100:.1f}%,#000 {inner * 100 + .6:.1f}%);" if inner else ""
+    return f'<div class="{cls}" style="width:{2 * a:.0f}px;height:{2 * b:.0f}px;margin:{-b:.0f}px 0 0 {-a:.0f}px;{m}{extra}" data-z="{z}"></div>'
+parts = []
+# site: plaza, roads, practice grounds, parking
+parts.append(ell("plaza", A * 1.45, B * 1.5))
+parts.append('<div class="road" style="width:60px;height:900px;margin:-450px 0 0 -500px"></div><div class="road" style="width:1100px;height:50px;margin:300px 0 0 -560px"></div>')
+for (cx, cy) in [(-430, -170), (-420, 120)]:
+    parts.append(f'<div class="prac" style="width:200px;height:200px;margin:{cy - 100}px 0 0 {cx - 100}px"><i></i></div>')
+for (cx, cy, w, h) in [(330, -230, 220, 150), (340, 140, 200, 190), (-60, 330, 300, 120)]:
+    parts.append(f'<div class="park" style="width:{w}px;height:{h}px;margin:{cy - h / 2}px 0 0 {cx - w / 2}px"></div>')
+# field
+parts.append(ell("field", A * .5, B * .5, extra=""))
+parts.append('<div class="pitch2"></div>')
+# seating bowl (stepped annuli with crowd texture)
+tiers = []
+for i in range(NT):
+    f = (i + 1) / NT; a = A * (.54 + .40 * f); b = B * (.54 + .40 * f); prev = (.54 + .40 * i / NT) / (.54 + .40 * f)
+    tiers.append(ell("tier", a, b, z=round(4 + i * FH / NT, 1), inner=prev - .02))
+# facade: V-column panels standing around the oval
+NP = 44; pan = []
+for k in range(NP):
+    th = 2 * math.pi * k / NP; x = A * math.cos(th); y = B * math.sin(th)
+    seg = 2 * math.pi * math.sqrt((A * A + B * B) / 2) / NP + 1
+    ph = math.degrees(math.atan2(B * math.cos(th), -A * math.sin(th)))
+    pan.append(f'<div class="fac" style="width:{seg:.1f}px;height:{FH}px;margin:{-FH}px 0 0 {-seg / 2:.1f}px;transform:translate({x:.1f}px,{y:.1f}px) rotateZ({ph:.1f}deg) rotateX(-90deg)"></div>')
+roof = ell("roof", A * 1.04, B * 1.05, z=FH + 3, inner=.80)
+screen = f'<div class="scr" style="transform:translate({-A * .62:.0f}px,{-B * .62:.0f}px) rotateZ(-50deg) rotateX(-90deg)"></div>'
+ST = f'<div id="std">{"".join(parts)}{"".join(tiers)}{"".join(pan)}{screen}{roof}</div>'
+
 
 # ---------- 0 HOOK: aerial -> connectivity -> picture -> 3D stadium ----------
 IND_C, IND_W = fitb(bbw(BD["india"]), 700, 1400, 1.08)
@@ -135,14 +161,16 @@ J.append(f'tl.to(["#jpin", "#rt", "#rtg"], {{opacity:0, duration:.3}}, {T3 - .3:
 H.insert(0, '<div id="fog"></div>')
 J.append(f'tl.to("#fog", {{opacity:1, duration:1}}, {T3 + .2:.2f}); tl.to("#fog", {{opacity:0, duration:.6}}, {S(3) - .3:.2f}); tl.to("#fog", {{opacity:1, duration:.8}}, {S(4) - .1:.2f});')
 J.append(f'tl.fromTo("#plane", {{rotationX:0, scale:1}}, {{rotationX:58, scale:1.35, duration:1.2, ease:"power2.inOut"}}, {T3:.2f});')
-J.append(f'tl.set("#std", {{opacity:1}}, {T3 + .6:.2f}); tl.fromTo("#std .gr", {{scale:0}}, {{scale:1, duration:.4, ease:"back.out(2)"}}, {T3 + .6:.2f}); tl.fromTo("#std .pitch", {{scale:0}}, {{scale:1, duration:.4, ease:"back.out(2)"}}, {T3 + .8:.2f});')
-J.append(f'tl.fromTo("#std .rg", {{z:0, opacity:0}}, {{z:(i)=>i * 9, opacity:1, duration:.5, stagger:.06, ease:"back.out(1.6)"}}, {T3 + .9:.2f});')
-J.append(f'tl.fromTo("#std .roof", {{z:0, opacity:0}}, {{z:{NR * 9 + 6}, opacity:1, duration:.5, ease:"back.out(2)"}}, {T3 + 1.9:.2f});')
+J.append(f'tl.set("#std", {{opacity:1}}, {T3 + .5:.2f}); tl.fromTo(["#std .plaza", "#std .road", "#std .park"], {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, stagger:.05, ease:"back.out(1.6)"}}, {T3 + .5:.2f}); tl.fromTo("#std .prac", {{scale:0}}, {{scale:1, duration:.35, stagger:.12, ease:"back.out(2.5)"}}, {T3 + .8:.2f});')
+J.append(f'tl.fromTo(["#std .field", "#std .pitch2"], {{scale:0}}, {{scale:1, duration:.35, ease:"back.out(2)"}}, {T3 + .7:.2f});')
+J.append(f'tl.fromTo("#std .tier", {{z:0, opacity:0}}, {{z:(i, el)=>parseFloat(el.dataset.z), opacity:1, duration:.45, stagger:.07, ease:"back.out(1.5)"}}, {T3 + .9:.2f});')
+J.append(f'tl.fromTo("#std .fac", {{scaleY:0}}, {{scaleY:1, duration:.35, stagger:{{each:.02, from:"start"}}, ease:"back.out(2)"}}, {T3 + 1.3:.2f}); tl.fromTo("#std .scr", {{scaleY:0}}, {{scaleY:1, duration:.3, ease:"back.out(2)"}}, {T3 + 1.9:.2f});')
+J.append(f'tl.fromTo("#std .roof", {{z:{FH + 160}, opacity:0}}, {{z:{FH + 3}, opacity:1, duration:.55, ease:"bounce.out"}}, {T3 + 2.0:.2f});')
 
 J.append(f'tl.fromTo("#std", {{rotationZ:-20}}, {{rotationZ:340, duration:{END - T3:.2f}, ease:"none"}}, {T3 + .6:.2f});')
 sfx("riser", T3, .35); sfx("impact-bass-1", T3 + 1.9, .45); sfx("sparkle", T3 + 2.5, .3)
 H.append('<div id="name3d"><small>ANIL AGARWAL</small><b>INTERNATIONAL CRICKET STADIUM</b><span>Chonp &middot; Jaipur</span></div>')
-J.append(f'tl.fromTo("#name3d", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.35, ease:"back.out(2)"}}, {T3 + 1.9:.2f}); tl.to("#name3d", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
+J.append(f'tl.fromTo("#name3d", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.35, ease:"back.out(2)"}}, {T3 + 1.9:.2f}); tl.to("#name3d", {{opacity:0, duration:.2}}, {wt(1, "Vedanta") - .3:.2f});')
 
 # ---------- 1 MoU ----------
 H.append('<div id="mou"><div class="mrow"><span>VEDANTA</span><b>&#129309;</b><span>RCA</span></div><div class="mbig">&#8377;300 CR</div><div class="msub">MoU &middot; 30 MARCH 2023</div></div>')
@@ -181,7 +209,7 @@ H.append('<div id="evs">' + "".join(f'<div class="ev" id="ev{i}"><i>{ic}</i><b>{
 J.append(f'tl.set("#evs", {{opacity:1}}, {S(4):.2f}); tl.to("#evs", {{opacity:0, duration:.2}}, {wt(4, "hotels") - .3:.2f});')
 for i, (_, _, w_) in enumerate(EV):
     t = wt(4, w_) - .1; J.append(f'tl.fromTo("#ev{i}", {{opacity:0, scale:.3, y:40}}, {{opacity:1, scale:1, y:0, duration:.3, ease:"back.out(2.5)"}}, {t:.2f});'); sfx("pop", t, .3)
-J.append(f'tl.to("#std .roof", {{boxShadow:"0 0 90px rgba(255,79,163,.95), inset 0 0 40px rgba(60,220,255,.8)", duration:.15, yoyo:true, repeat:9}}, {wt(4, "concerts"):.2f});')
+J.append(f'tl.to("#std .roof", {{filter:"drop-shadow(0 0 30px rgba(255,79,163,1)) brightness(1.3)", duration:.15, yoyo:true, repeat:9}}, {wt(4, "concerts"):.2f});')
 IC = [("&#127976;", "HOTELS", (-330, 330), "hotels"), ("&#127869;", "RESTAURANTS", (330, 330), "restaurants"), ("&#127968;", "ZAMEEN KI DEMAND &#9650;", (0, 560), "zameen")]
 for i, (ic, nm, (dx, dy), w_) in enumerate(IC):
     H.append(f'<div class="wpin" id="wp{i}" style="left:{540 + dx}px;top:{620 + dy}px"><i>{ic}</i><b>{nm}</b></div>')
@@ -244,15 +272,20 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 35%;overflow:hidden}#plane{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 55%}
 #fog{position:absolute;left:0;right:0;top:0;height:900px;background:linear-gradient(180deg,rgba(201,138,90,.0) 0%,rgba(201,138,90,.55) 55%,rgba(201,138,90,0) 100%);opacity:0;z-index:3;pointer-events:none}
 #std{position:absolute;left:540px;top:960px;width:0;height:0;transform-style:preserve-3d;opacity:0}
-#std .gr{position:absolute;width:560px;height:480px;margin:-240px 0 0 -280px;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,0))}
-#std .pitch{position:absolute;width:300px;height:250px;margin:-125px 0 0 -150px;border-radius:50%;background:repeating-linear-gradient(90deg,#3e9b3a 0 30px,#47a842 30px 60px);box-shadow:inset 0 0 30px rgba(0,0,0,.4)}
-#std .pitch i{position:absolute;left:50%;top:50%;width:22px;height:80px;margin:-40px 0 0 -11px;background:#d8c38a}
-#std .rg{position:absolute;border-radius:50%;border:12px solid #aaa;box-shadow:0 0 0 2px rgba(0,0,0,.25),inset 0 0 0 2px rgba(255,255,255,.25)}
-#std .roof{position:absolute;border-radius:50%;border:26px solid #F4F1EA;box-shadow:0 0 40px rgba(255,196,46,.7),inset 0 0 20px rgba(255,196,46,.5)}
-#std .fl{position:absolute;left:-4px;top:0;width:8px;height:260px;background:#ccc;transform-origin:50% 0}#std .fl i{position:absolute;left:-26px;top:-30px;width:60px;height:34px;border-radius:6px;background:#fff8d0;box-shadow:0 0 40px 18px rgba(255,240,170,.9);opacity:0}
+#std > div{position:absolute;left:0;top:0}
+#std .plaza{border-radius:50%;background:radial-gradient(closest-side,#d9d4c9 0 92%,#bfb8aa 93% 100%);box-shadow:0 0 0 6px rgba(0,0,0,.15)}
+#std .road{background:#4a4d55;border-left:3px dashed #ddd}
+#std .prac{border-radius:50%;background:repeating-linear-gradient(90deg,#3f9a3b 0 22px,#49a944 22px 44px);box-shadow:0 0 0 8px #2f6d2c}#std .prac i{position:absolute;left:50%;top:50%;width:12px;height:44px;margin:-22px 0 0 -6px;background:#d8c38a}
+#std .park{background:#8d9097;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.7) 0 2px,transparent 2px 16px);border:4px solid #6c6f77}
+#std .field{border-radius:50%;background:repeating-linear-gradient(90deg,#3e9b3a 0 26px,#48a843 26px 52px);box-shadow:inset 0 0 0 4px rgba(255,255,255,.8),inset 0 0 30px rgba(0,0,0,.35)}
+#std .pitch2{width:20px;height:66px;margin:-33px 0 0 -10px;background:#d8c38a}
+#std .tier{border-radius:50%;background:url(assets/img/crowd.png);background-size:180px;box-shadow:inset 0 0 0 3px rgba(255,255,255,.35)}
+#std .fac{transform-origin:50% 100%;background-color:#3c5878;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 64' preserveAspectRatio='none'><path d='M0 0 L20 64 L40 0' fill='none' stroke='white' stroke-width='5'/><rect x='0' y='0' width='40' height='5' fill='white'/></svg>");background-size:100% 100%;backface-visibility:visible}
+#std .scr{width:90px;height:44px;margin:-44px 0 0 -45px;transform-origin:50% 100%;background:#111;border:4px solid #ddd}
+#std .roof{border-radius:50%;background:repeating-conic-gradient(from 0deg,#f6f4ee 0 3.6deg,#c9ced6 3.6deg 4.4deg);box-shadow:0 0 30px rgba(255,255,255,.35)}
 #name3d{position:absolute;left:40px;right:40px;top:300px;text-align:center;opacity:0;z-index:12}#name3d small{display:inline-block;padding:8px 26px;border-radius:30px;background:#FFC42E;color:#111;font:900 40px Mont}
 #name3d b{display:block;margin-top:12px;font:400 76px/1.05 Anton;color:#fff;text-shadow:0 6px 24px #000}#name3d span{display:inline-block;margin-top:10px;padding:6px 20px;border-radius:20px;background:rgba(8,10,15,.85);border:2px solid #3CFF96;color:#3CFF96;font:800 30px Mont}
-#mou{position:absolute;left:90px;right:90px;top:1080px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
+#mou{position:absolute;left:90px;right:90px;top:260px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
 #evs{position:absolute;left:40px;right:40px;top:300px;display:grid;grid-template-columns:1fr 1fr;gap:18px;opacity:0;z-index:12}.ev{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:22px;background:rgba(8,10,15,.9);border:3px solid #FFC42E;opacity:0}
 .ev i{font-style:normal;font-size:64px}.ev b{font:400 40px/1.05 Anton;color:#fff}
