@@ -160,13 +160,33 @@ PTS = [
   ("RASTA + MASTER PLAN", "Pakka rasta &middot; residential use", '<div class="stamps"><span>PAKKA RASTA ' + OK + '</span><span>MASTER PLAN: RESIDENTIAL ' + OK + '</span></div>', "rasta"),
   ("PAYMENT", "Likhit agreement &middot; bank se payment", '<div class="pay"><div class="cash">CASH BAYANA ' + NO + '</div><div class="bank">BANK PAYMENT ' + OK + '</div><div class="agr">LIKHIT AGREEMENT ' + OK + '</div></div>', "Agreement"),
 ]
+def card(cid, img, t0, t1, title, sub="", tag=None, top=400, maxw=900, maxh=600):
+    a = ASP[img]; w = maxw; h = w / a
+    if h > maxh: h = maxh; w = h * a
+    cw = w + 28; lx = (1080 - cw) / 2
+    tg = f'<div class="tg" style="background:{tag[1]}">{tag[0]}</div>' if tag else ''
+    H.append(f'<div class="card" id="{cid}" style="left:{lx:.0f}px;top:{top}px;width:{cw:.0f}px">{tg}<div class="iw" style="width:{w:.0f}px;height:{h:.0f}px"><img src="assets/img/{img}.jpg" style="width:{w:.0f}px;height:{h:.0f}px"/><i class="scan"></i></div>'
+             f'<div class="ct">{title}</div>' + (f'<div class="cs">{sub}</div>' if sub else '') + '</div>')
+    J.append(f'tl.fromTo("#{cid}", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.2}}, {t0:.2f}); tl.fromTo("#{cid} img", {{clipPath:"inset(0 100% 0 0)"}}, {{clipPath:"inset(0 0% 0 0)", duration:.55, ease:"power2.inOut"}}, {t0:.2f});'
+             f'tl.fromTo("#{cid} .scan", {{left:"0%", opacity:1}}, {{left:"100%", duration:.55, ease:"power2.inOut"}}, {t0:.2f}); tl.to("#{cid} .scan", {{opacity:0, duration:.15}}, {t0 + .55:.2f}); tl.to("#{cid}", {{opacity:0, duration:.2}}, {t1 - .2:.2f});')
+    sfx("pop", t0, .25)
+PHOTOS = {1: [("jamabandi", "JAMABANDI", "Prati-lipi &middot; details blurred")], 4: [("stamp", "PURANI REGISTRIES", "Har kagaz ki chain")],
+          9: [("jdamap", "MASTER PLAN", "JDA &middot; Land utilization, Jaipur region")], 5: [("subreg", "REGISTRATION OFFICE", "Up-panjiyak karyalaya")],
+          8: [("farm", "KHETI KI ZAMEEN", "Conversion ke bina colony = risk"), ("layout", "LAYOUT APPROVAL", "Approved scheme &middot; RERA no. check karo")]}
 for k, o in enumerate(ORDER, 1):
     title, sub, vis, kw = PTS[o - 1]; n = k; cid = f"pt{o}"; t0 = S(k) - .05; t1 = S(k + 1)
+    VS = t0 + .35
+    if o in PHOTOS:
+        ph = PHOTOS[o]; mid = t0 + (t1 - t0) * (.55 if len(ph) == 1 else .7); seg = (mid - t0 - .3) / len(ph)
+        for j, (img, ttl, sb) in enumerate(ph):
+            a_ = t0 + .3 + seg * j; card(f"ph{o}{j}", img, a_, a_ + seg + .15, ttl, sb, top=520, maxw=880, maxh=760)
+        VS = mid + .1
+        J.append(f'tl.set("#{cid} .vis", {{opacity:0}}, 0); tl.set("#{cid} .vis", {{opacity:1}}, {VS:.2f});')
     H.append(f'<div class="pt" id="{cid}"><div class="num">{n}<small>/10</small></div><b>{title}</b><p>{sub}</p><div class="vis">{vis}</div></div>')
     J.append(f'tl.fromTo("#{cid}", {{opacity:0, x:120}}, {{opacity:1, x:0, duration:.3, ease:"power3.out"}}, {t0:.2f}); tl.fromTo("#{cid} .num", {{scale:2.2, rotation:-12}}, {{scale:1, rotation:0, duration:.35, ease:"back.out(2.5)"}}, {t0:.2f});'
-             f'tl.fromTo("#{cid} .vis > *", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, stagger:.12, ease:"back.out(1.8)"}}, {t0 + .35:.2f});'
+             f'tl.fromTo("#{cid} .vis > *", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, stagger:.12, ease:"back.out(1.8)"}}, {VS:.2f});'
              f'tl.to("#{cid}", {{opacity:0, x:-120, duration:.22, ease:"power2.in"}}, {t1 - .2:.2f});')
-    tk = max(t0 + .7, wt(k, kw) - .05)
+    tk = max(VS + .4, wt(k, kw) - .05)
     J.append(f'tl.fromTo("#{cid} .ok", {{opacity:0, scale:3}}, {{opacity:1, scale:1, duration:.25, stagger:.15, ease:"back.out(3)"}}, {tk:.2f}); tl.fromTo("#{cid} .no", {{opacity:0, scale:3}}, {{opacity:1, scale:1, duration:.25, stagger:.15, ease:"back.out(3)"}}, {tk:.2f});')
     sfx("whoosh-short", t0, .3); sfx("pop", t0 + .05, .3); sfx("click-soft", tk, .45)
 # per-point extras
@@ -184,8 +204,8 @@ for t_, cam in sorted([(S(P9) - .25, ROADC), (S(P9 + 1) - .25, CITYC), (S(P8) - 
 # ---------- CTA ----------
 H.append('<div id="cta"><b>JAIPUR MEIN ZAMEEN DHUNDH RAHE HO?</b><span>COMMENT &ldquo;PLOT&rdquo;</span></div>')
 J.append(f'tl.to("#dim", {{opacity:.55, duration:.3}}, {S(11):.2f}); tl.fromTo("#cta", {{opacity:0, scale:.8}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(11, "Jaipur"):.2f}); tl.to("#cta span", {{scale:1.08, duration:.4, yoyo:true, repeat:3}}, {wt(11, "Comment"):.2f});')
-H.append('<div id="trust">&#10004; MAIN YEH SAB KHUD CHECK KARTA HOON</div>')
-J.append(f'tl.fromTo("#trust", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {S(11) - .05:.2f}); tl.to("#trust", {{opacity:0, duration:.2}}, {wt(11, "Jaipur") - .1:.2f});')
+card("phme", "me", S(11) - .05, wt(11, "Jaipur") + .1, "&#10004; MAIN YEH SAB KHUD CHECK KARTA HOON", "Ashwil Bhupesh &middot; site par", top=300, maxw=760, maxh=900)
+card("phig", "insta", wt(11, "Comment") - .4, END + 1, "FOLLOW @ASHWILLPOWER", "", top=800, maxw=620, maxh=540)
 sfx("sparkle", S(11), .3); sfx("sparkle", wt(11, "Comment"), .3)
 
 # captions
