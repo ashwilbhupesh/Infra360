@@ -121,33 +121,31 @@ JP_C, JP_W = fitb(bbr(BD["jaipur"]), 700, 1380, 1.1)
 def ccam(rkm, cy=1120): w = 2 * rkm * PXKM * 1.08; return (CEN[0], CEN[1] - (cy - 960) * w / 1080), w
 def fitp(pts, top, bot, pad): return fitb(pts, top, bot, pad)
 CITYC = fitp(CITY, 720, 1400, 1.2); REGC = fitp(REG, 500, 1420, 1.08); AGC = fitp(REG, 500, 1420, 1.5); MID = ccam(30); ROADC = ccam(38)
-J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb((IND_C[0], IND_C[1] - IND_W * .2), IND_W * 2.4)}"}}}}, 0);')
+J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(RAJ_C, RAJ_W * 1.15)}"}}}}, 0);')
 J.append('const VB = document.getElementById("world"); function setDots(w){ document.querySelectorAll(".dc").forEach(e=>e.setAttribute("r", w/90)); document.querySelectorAll(".dg").forEach(e=>e.setAttribute("r", w/40)); document.querySelectorAll(".mvc").forEach(e=>e.setAttribute("r", w/70)); document.querySelectorAll(".mvg").forEach(e=>e.setAttribute("r", w/26)); }'
          'function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = Math.abs(w0 - w1) < 1e-6 ? o.z : (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); setDots(w); }}, t); }')
-CAMS.append((0, 0, (IND_C[0], IND_C[1] - IND_W * .2), IND_W * 2.4))
-zoom(0, IND_C, IND_W, .9); zoom(.95, RAJ_C, RAJ_W, .9); zoom(1.9, JP_C, JP_W, .9); zoom(2.85, *CITYC, 1.0)
+CAMS.append((0, 0, RAJ_C, RAJ_W * 1.15))
+zoom(0, RAJ_C, RAJ_W, .5); zoom(1.0, JP_C, JP_W, .9); zoom(2.0, *CITYC, 1.0)
 zoom(S(1) - .2, *AGC, .8); zoom(S(3) - .2, *REGC, .8); zoom(S(4) - .2, *ROADC, .8); zoom(S(6) - .3, *REGC, .8)
-J.append('tl.to("#bind", {fillOpacity:.7, duration:.3}, .3); tl.to("#bind", {fillOpacity:0, opacity:.5, duration:.3}, 1.0); tl.to("#braj", {opacity:1, fillOpacity:.75, duration:.3}, 1.0); tl.to("#braj", {fillOpacity:.1, duration:.3}, 1.95);'
-         'tl.to("#bjp", {opacity:1, fillOpacity:.6, duration:.3}, 1.95); tl.to("#bjp", {fillOpacity:0, opacity:.4, duration:.4}, 2.9); tl.to(["#bind", "#braj"], {opacity:0, duration:.3}, 2.9); tl.to("#bjp", {opacity:0, duration:.3}, 3.9);')
-sfx("whoosh", 0, .4); sfx("whoosh", .95, .3); sfx("whoosh", 1.9, .3); sfx("whoosh", 2.85, .3)
+J.append('tl.set("#bind", {opacity:0}, 0); tl.to("#braj", {opacity:1, fillOpacity:.75, duration:.3}, .05); tl.to("#braj", {fillOpacity:.1, duration:.3}, 1.0);'
+         'tl.to("#bjp", {opacity:1, fillOpacity:.6, duration:.3}, 1.0); tl.to("#bjp", {fillOpacity:0, opacity:.4, duration:.4}, 2.0); tl.to("#braj", {opacity:0, duration:.3}, 2.0); tl.to("#bjp", {opacity:0, duration:.3}, 3.0);')
+sfx("whoosh", 1.0, .3); sfx("whoosh", 2.0, .3)
 
 def lab(i, p, text, t, until, at, dx=0, dy=0, cls="", style=""):
     x, y = scr(p, at); H.append(f'<div class="ml {cls}" id="{i}" style="left:{min(max(x + dx, 60 + len(text) * 11), 1020 - len(text) * 11):.0f}px;top:{y + dy:.0f}px;opacity:0;{style}">{text}</div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)", immediateRender:false}}, {t:.2f}); tl.fromTo("#{i}", {{opacity:1}}, {{opacity:0, duration:.2, immediateRender:false}}, {until - .2:.2f});')
 
 # ---------- 0 HOOK ----------
-H.append('<div id="clouds"><img id="cld0" src="assets/img/cloud0.png"/><img id="cld1" src="assets/img/cloud1.png"/></div>')
-J.append('tl.fromTo("#cld0", {scale:1, y:0, opacity:1}, {scale:2.4, y:500, opacity:0, duration:1.2, ease:"power2.in"}, 0); tl.fromTo("#cld1", {scale:1, y:0, opacity:1}, {scale:2.6, y:-600, opacity:0, duration:1.0, ease:"power2.in"}, 0);')
 H.append('<div id="title"><small>JAIPUR MEIN APNA PEHLA</small><b>&#8377;1 CRORE<br/>KAHAN LAGAYE?</b></div>')
 J.append(f'tl.fromTo("#title", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, .2); tl.to("#title b", {{opacity:.55, duration:.06, yoyo:true, repeat:5}}, {wt(0, "1 crore"):.2f}); tl.to("#title", {{opacity:0, duration:.2}}, {S(1) - .1:.2f});')
 sfx("impact-bass-1", .2, .45); sfx("impact-bass-1", wt(0, "1 crore"), .4)
 H.append('<div id="ask"><span class="r">RISK?</span><span class="h">HOLDING?</span></div>')
 J.append(f'tl.fromTo("#ask .r", {{opacity:0, scale:2}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2.5)"}}, {wt(0, "risk") - .05:.2f}); tl.fromTo("#ask .h", {{opacity:0, scale:2}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2.5)"}}, {wt(0, "holding") - .05:.2f}); tl.to("#ask", {{opacity:0, duration:.2}}, {S(1) - .1:.2f});')
 sfx("pop", wt(0, "risk") - .05, .3); sfx("pop", wt(0, "holding") - .05, .3)
-J.append(f'tl.to("#zco", {{opacity:1, fillOpacity:.22, duration:.4}}, 3.6); tl.to("#zco", {{fillOpacity:.08, duration:.4}}, {S(1):.2f});')
-lab("lcity", CEN, "SHEHAR &middot; NAGAR NIGAM", 3.7, S(1) - .1, 3.9)
-H.append('<div class="ml mlab" id="mi">INDIA</div><div class="ml mlab" id="mr">RAJASTHAN</div><div class="ml mlab" id="mj">JAIPUR</div>')
-for k, t_ in [("mi", .4), ("mr", 1.25), ("mj", 2.2)]:
+J.append(f'tl.to("#zco", {{opacity:1, fillOpacity:.22, duration:.4}}, 2.8); tl.to("#zco", {{fillOpacity:.08, duration:.4}}, {S(1):.2f});')
+lab("lcity", CEN, "SHEHAR &middot; NAGAR NIGAM", 2.9, S(1) - .1, 3.1)
+H.append('<div class="ml mlab" id="mr">RAJASTHAN</div><div class="ml mlab" id="mj">JAIPUR</div>')
+for k, t_ in [("mr", .2), ("mj", 1.25)]:
     J.append(f'tl.fromTo("#{k}", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.25}}, {t_:.2f}); tl.to("#{k}", {{opacity:0, duration:.15}}, {t_ + .6:.2f});')
 
 # ---------- preference cards ----------
