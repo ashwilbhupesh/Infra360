@@ -69,22 +69,48 @@ PXKM = 256 * 2 ** 13 / 40075 / math.cos(math.radians(26.9))
 CEN = wp(26.9124, 75.7873)
 def km(b, d): return (CEN[0] + math.sin(math.radians(b)) * d * PXKM, CEN[1] - math.cos(math.radians(b)) * d * PXKM)
 AGRI, FAR, NEAR = "#E0A040", "#3D8BFF", "#3CE65A"
-# illustrative zones (rings around the city)
-ZONES = [("zag", 28, 46, AGRI), ("zfa", 15, 28, FAR), ("zne", 6, 15, NEAR)]
-for zid, r0, r1, col in ZONES:
-    rm, bw = (r0 + r1) / 2 * PXKM, (r1 - r0) * PXKM
-    SVG.append(f'<circle id="{zid}" cx="{CEN[0]:.1f}" cy="{CEN[1]:.1f}" r="{rm:.1f}" style="fill:none;stroke:{col};stroke-width:{bw:.1f};stroke-opacity:0"/>')
-    SVG.append(f'<circle id="{zid}o" cx="{CEN[0]:.1f}" cy="{CEN[1]:.1f}" r="{r1 * PXKM:.1f}" pathLength="1" transform="rotate(-90 {CEN[0]:.1f} {CEN[1]:.1f})" style="fill:none;stroke:{col};stroke-width:5;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1"/>')
-SVG.append(f'<circle id="zco" cx="{CEN[0]:.1f}" cy="{CEN[1]:.1f}" r="{6 * PXKM:.1f}" style="fill:#fff;fill-opacity:0;stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke;stroke-dasharray:12 10;opacity:0"/>')
-# main roads (indicative directions)
-ROADS = [("Sikar Rd", 345), ("Delhi Rd", 35), ("Agra Rd", 100), ("Tonk Rd", 178), ("Ajmer Rd", 250)]
-for i, (nm, b) in enumerate(ROADS):
-    pts = [km(b, d) for d in (1, 44)]
-    SVG.append(f'<path id="rdg{i}" d="{pd(pts)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:22;stroke-opacity:.35;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
-               f'<path id="rd{i}" d="{pd(pts)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:8;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
-    for k, d in enumerate((11, 22)):
-        x, y = km(b, d)
-        SVG.append(f'<g class="shop" id="sh{i}{k}" style="opacity:0"><circle cx="{x:.1f}" cy="{y:.1f}" r="1" class="dg" style="fill:{GOLD};opacity:.4"/><circle cx="{x:.1f}" cy="{y:.1f}" r="1" class="dc" style="fill:#fff;stroke:{GOLD};stroke-width:3;vector-effect:non-scaling-stroke"/></g>')
+def from11(p): return ((p[0] + 1450 * 256) * 4 - 5791 * 256, (p[1] + 860 * 256) * 4 - 3466 * 256)
+def pdz(pts): return "M" + " L".join(f"{x:.1f} {y:.1f}" for x, y in pts) + " Z"
+JZ = json.load(open("data/jda_zones_world.json"))
+REG = [from11(p) for p in JZ["region"]]
+NEWZ = ["15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25"]
+ZN = {"15": "Shahpura", "16": "Chomu", "17": "Jalsoo", "18": "Jobner", "19": "Mozmabad", "20": "Dudu", "21": "Phagi", "22": "Madhorajpura", "23": "Chaksu", "24": "Bassi", "25": "Andhi"}
+CB = json.load(open("data/jaipur_boundary.geojson"))["features"][0]["geometry"]["coordinates"][0]
+CITY = [wp(la, lo) for lo, la in CB[::2]]
+SVG.append(f'<defs><mask id="outside" maskUnits="userSpaceOnUse" x="-900000" y="-900000" width="2000000" height="2000000"><rect x="-900000" y="-900000" width="2000000" height="2000000" fill="#fff"/><path d="{pdz(REG)}" fill="#000"/></mask></defs>')
+# agri: everything outside the JDA region (illustrative)
+SVG.append(f'<rect id="zag" x="-900000" y="-900000" width="2000000" height="2000000" mask="url(#outside)" style="fill:{AGRI};opacity:0"/>')
+# far: band just outside the JDA region edge (illustrative)
+SVG.append(f'<path id="zfa" d="{pdz(REG)}" mask="url(#outside)" style="fill:none;stroke:{FAR};stroke-width:{18 * PXKM:.0f};stroke-linejoin:round;opacity:0"/>')
+# near: the new JDA zones (2025)
+for k in NEWZ:
+    SVG.append(f'<path class="nz" id="nz{k}" d="{pdz([from11(p) for p in JZ["zones"][k]["poly"]])}" style="fill:{NEAR};fill-opacity:.45;stroke:#fff;stroke-width:2.5;vector-effect:non-scaling-stroke;opacity:0"/>')
+SVG.append(f'<path id="jreg" d="{pdz(REG)}" style="fill:none;stroke:#fff;stroke-width:4;stroke-dasharray:14 10;vector-effect:non-scaling-stroke;opacity:0"/>')
+SVG.append(f'<path id="zco" d="{pdz(CITY)}" style="fill:#fff;fill-opacity:0;stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke;stroke-linejoin:round;opacity:0"/>')
+# highways (OSM NH lines) + state / city roads (approx.)
+NH = json.load(open("data/nh_jaipur.json"))
+def bearing(p): return math.degrees(math.atan2(-(p[1] - CEN[1]), p[0] - CEN[0]))
+RD = {k: [] for k in ["nh48", "nh52", "nh21", "ring"]}
+for f in NH:
+    nm = (f["name"] or "").strip()
+    for L in f["lines"]:
+        pts = [wp(la, lo) for lo, la in L]
+        mx = sum(p[0] for p in pts) / len(pts); my = sum(p[1] for p in pts) / len(pts)
+        if math.hypot(mx - CEN[0], my - CEN[1]) / PXKM > 70: continue
+        if nm == "NH 148C": RD["ring"].append(pts)
+        elif nm.startswith("NH 48"): RD["nh48"].append(pts)
+        elif nm == "NH 52": RD["nh52"].append(pts)
+        elif nm == "NH 21": RD["nh21"].append(pts)
+WPT = {"kalwar": [(26.948, 75.760), (26.975, 75.66), (26.972, 75.50), (26.972, 75.388)],
+       "sirsi": [(26.928, 75.735), (26.948, 75.680), (26.962, 75.620), (26.975, 75.560)],
+       "diggi": [(26.826, 75.790), (26.76, 75.735), (26.66, 75.65), (26.570, 75.563)]}
+for k, v in WPT.items(): RD[k] = [smooth([wp(*p) for p in v], 8)]
+RCOL = {"nh48": GOLD, "nh52": GOLD, "nh21": GOLD, "ring": "#3CE65A", "kalwar": "#FFFFFF", "sirsi": "#FFFFFF", "diggi": "#FFFFFF"}
+for k, segs in RD.items():
+    for pts in segs:
+        d_ = pd(pts); w_ = 7 if k.startswith("nh") else 5
+        SVG.append(f'<path class="r_{k} rr" d="{d_}" pathLength="1" style="fill:none;stroke:{RCOL[k]};stroke-width:{w_ * 3};stroke-opacity:.3;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+                   f'<path class="r_{k} rr" d="{d_}" pathLength="1" style="fill:none;stroke:{RCOL[k]};stroke-width:{w_};vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
 SVG.append('<rect id="dim" x="-900000" y="-900000" width="2000000" height="2000000" style="fill:#000;opacity:0"/>')
 
 # ---------- cameras ----------
@@ -93,13 +119,14 @@ IND_C, IND_W = fitb(bbr(BD["india"]), 640, 1420, 1.08)
 RAJ_C, RAJ_W = fitb(bbr(BD["raj"]), 700, 1380, 1.1)
 JP_C, JP_W = fitb(bbr(BD["jaipur"]), 700, 1380, 1.1)
 def ccam(rkm, cy=1120): w = 2 * rkm * PXKM * 1.08; return (CEN[0], CEN[1] - (cy - 960) * w / 1080), w
-WIDE = ccam(47); MID = ccam(30); CLOSE = ccam(16); ROADC = ccam(36)
+def fitp(pts, top, bot, pad): return fitb(pts, top, bot, pad)
+CITYC = fitp(CITY, 720, 1400, 1.2); REGC = fitp(REG, 500, 1420, 1.08); AGC = fitp(REG, 500, 1420, 1.5); MID = ccam(30); ROADC = ccam(38)
 J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb((IND_C[0], IND_C[1] - IND_W * .2), IND_W * 2.4)}"}}}}, 0);')
 J.append('const VB = document.getElementById("world"); function setDots(w){ document.querySelectorAll(".dc").forEach(e=>e.setAttribute("r", w/90)); document.querySelectorAll(".dg").forEach(e=>e.setAttribute("r", w/40)); document.querySelectorAll(".mvc").forEach(e=>e.setAttribute("r", w/70)); document.querySelectorAll(".mvg").forEach(e=>e.setAttribute("r", w/26)); }'
          'function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = Math.abs(w0 - w1) < 1e-6 ? o.z : (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); setDots(w); }}, t); }')
 CAMS.append((0, 0, (IND_C[0], IND_C[1] - IND_W * .2), IND_W * 2.4))
-zoom(0, IND_C, IND_W, .9); zoom(.95, RAJ_C, RAJ_W, .9); zoom(1.9, JP_C, JP_W, .9); zoom(2.85, *MID, 1.0)
-zoom(S(1) - .2, *WIDE, .8); zoom(S(3) - .2, *CLOSE, .8); zoom(S(4) - .2, *ROADC, .8); zoom(S(6) - .3, *MID, .8)
+zoom(0, IND_C, IND_W, .9); zoom(.95, RAJ_C, RAJ_W, .9); zoom(1.9, JP_C, JP_W, .9); zoom(2.85, *CITYC, 1.0)
+zoom(S(1) - .2, *AGC, .8); zoom(S(3) - .2, *REGC, .8); zoom(S(4) - .2, *ROADC, .8); zoom(S(6) - .3, *REGC, .8)
 J.append('tl.to("#bind", {fillOpacity:.7, duration:.3}, .3); tl.to("#bind", {fillOpacity:0, opacity:.5, duration:.3}, 1.0); tl.to("#braj", {opacity:1, fillOpacity:.75, duration:.3}, 1.0); tl.to("#braj", {fillOpacity:.1, duration:.3}, 1.95);'
          'tl.to("#bjp", {opacity:1, fillOpacity:.6, duration:.3}, 1.95); tl.to("#bjp", {fillOpacity:0, opacity:.4, duration:.4}, 2.9); tl.to(["#bind", "#braj"], {opacity:0, duration:.3}, 2.9); tl.to("#bjp", {opacity:0, duration:.3}, 3.9);')
 sfx("whoosh", 0, .4); sfx("whoosh", .95, .3); sfx("whoosh", 1.9, .3); sfx("whoosh", 2.85, .3)
@@ -117,8 +144,8 @@ sfx("impact-bass-1", .2, .45); sfx("impact-bass-1", wt(0, "1 crore"), .4)
 H.append('<div id="ask"><span class="r">RISK?</span><span class="h">HOLDING?</span></div>')
 J.append(f'tl.fromTo("#ask .r", {{opacity:0, scale:2}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2.5)"}}, {wt(0, "risk") - .05:.2f}); tl.fromTo("#ask .h", {{opacity:0, scale:2}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2.5)"}}, {wt(0, "holding") - .05:.2f}); tl.to("#ask", {{opacity:0, duration:.2}}, {S(1) - .1:.2f});')
 sfx("pop", wt(0, "risk") - .05, .3); sfx("pop", wt(0, "holding") - .05, .3)
-J.append(f'tl.to("#zco", {{opacity:1, fillOpacity:.12, duration:.4}}, 3.6);')
-lab("lcity", CEN, "SHEHAR", 3.7, S(1) - .1, 3.9)
+J.append(f'tl.to("#zco", {{opacity:1, fillOpacity:.22, duration:.4}}, 3.6); tl.to("#zco", {{fillOpacity:.08, duration:.4}}, {S(1):.2f});')
+lab("lcity", CEN, "SHEHAR &middot; NAGAR NIGAM", 3.7, S(1) - .1, 3.9)
 H.append('<div class="ml mlab" id="mi">INDIA</div><div class="ml mlab" id="mr">RAJASTHAN</div><div class="ml mlab" id="mj">JAIPUR</div>')
 for k, t_ in [("mi", .4), ("mr", 1.25), ("mj", 2.2)]:
     J.append(f'tl.fromTo("#{k}", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.25}}, {t_:.2f}); tl.to("#{k}", {{opacity:0, duration:.15}}, {t_ + .6:.2f});')
@@ -132,33 +159,41 @@ def pref(k, cid, risk, hold, title, col, sub, t1):
     J.append(f'tl.fromTo("#{cid}", {{opacity:0, y:-40}}, {{opacity:1, y:0, duration:.3, ease:"back.out(2)"}}, {t0:.2f}); tl.fromTo("#{cid} .tags span", {{opacity:0, scale:1.8}}, {{opacity:1, scale:1, duration:.25, stagger:.25, ease:"back.out(2.5)"}}, {t0 + .1:.2f});'
              f'tl.fromTo("#{cid} b", {{opacity:0, scale:1.6}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2.2)"}}, {t0 + .75:.2f}); tl.fromTo("#{cid} p", {{opacity:0}}, {{opacity:1, duration:.3}}, {t0 + 1.2:.2f}); tl.to("#{cid}", {{opacity:0, duration:.2}}, {t1 - .15:.2f});')
     sfx("pop", t0 + .1, .3); sfx("pop", t0 + .35, .25); sfx("impact-bass-1", t0 + .75, .35)
-def zone(zid, k, t1):
-    t0 = S(k) + .1
-    J.append(f'tl.to("#{zid}o", {{strokeDashoffset:0, duration:.9, ease:"power2.inOut"}}, {t0:.2f}); tl.to("#{zid}", {{strokeOpacity:.38, duration:.5}}, {t0 + .5:.2f}); tl.to("#{zid}", {{strokeOpacity:.2, duration:.35, yoyo:true, repeat:3}}, {t0 + 1.1:.2f});'
-             f'tl.to(["#{zid}", "#{zid}o"], {{opacity:.18, duration:.3}}, {t1 - .1:.2f});')
-    sfx("whoosh-short", t0, .3)
-
 pref(1, "p1", "HIGH", "LAMBI", "AGRICULTURE LAND", AGRI, "Sasta &middot; par conversion / approval ka risk", S(2))
-zone("zag", 1, S(2)); lab("l1", km(275, 37), "KHETI KI ZAMEEN", S(1) + .9, S(2), S(1) + .9, style=f"background:{AGRI}")
+J.append(f'tl.to("#jreg", {{opacity:1, duration:.4}}, {S(1) + .2:.2f}); tl.to("#zag", {{opacity:.42, duration:.6}}, {S(1) + .5:.2f}); tl.to("#zag", {{opacity:.25, duration:.35, yoyo:true, repeat:3}}, {S(1) + 1.2:.2f}); tl.to("#zag", {{opacity:0, duration:.3}}, {S(2) - .1:.2f});')
+sfx("whoosh-short", S(1) + .5, .3)
+lab("l1", wp(27.30, 75.45), "KHETI KI ZAMEEN", S(1) + .9, S(2), S(1) + .9, style=f"background:{AGRI}")
+lab("lj1", wp(26.72, 75.80), "JDA REGION", S(1) + .5, S(2), S(1) + .9, style="font-size:28px")
 pref(2, "p2", "LOW", "LAMBI", "SHEHAR SE DOOR PLOTS", FAR, "JDA approved &middot; growth ki direction dekho", S(3))
-zone("zfa", 2, S(3)); lab("l2", km(275, 21.5), "DOOR KE PLOTS", S(2) + .9, S(3), S(2) + .9, style=f"background:{FAR};color:#fff")
-# growth arrows outward in far zone
+J.append(f'tl.to("#zfa", {{opacity:.5, duration:.6}}, {S(2) + .3:.2f}); tl.to("#zfa", {{opacity:.3, duration:.35, yoyo:true, repeat:3}}, {S(2) + 1:.2f}); tl.to("#zfa", {{opacity:0, duration:.3}}, {S(3) - .1:.2f});')
+sfx("whoosh-short", S(2) + .3, .3)
+lab("l2", wp(27.33, 75.45), "DOOR KE PLOTS", S(2) + .9, S(3), S(2) + .9, style=f"background:{FAR};color:#fff")
 for i, b in enumerate((300, 120, 210)):
-    a0, a1 = km(b, 9), km(b, 24)
+    a0, a1 = km(b, 14), km(b, 46)
     SVG.append(f'<path id="ga{i}" d="{pd([a0, a1])}" pathLength="1" marker-end="url(#ah)" style="fill:none;stroke:#fff;stroke-width:6;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;opacity:0"/>')
     J.append(f'tl.set("#ga{i}", {{opacity:.9}}, {wt(2, "badh") + i * .15:.2f}); tl.to("#ga{i}", {{strokeDashoffset:0, duration:.6, ease:"power2.out"}}, {wt(2, "badh") + i * .15:.2f}); tl.to("#ga{i}", {{opacity:0, duration:.2}}, {S(3) - .2:.2f});')
 SVG.insert(0, '<defs><marker id="ah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#fff"/></marker></defs>')
-pref(3, "p3", "LOW", "KAM", "SHEHAR KE PAAS PLOTS", NEAR, "Infra ready &middot; resale aasaan", S(4))
-zone("zne", 3, S(4)); lab("l3", km(250, 10.5), "PAAS KE PLOTS", S(3) + .9, S(4), S(3) + .9, style=f"background:{NEAR}")
+pref(3, "p3", "LOW", "KAM", "SHEHAR KE PAAS PLOTS", NEAR, "Naye JDA zones &middot; infra aa raha hai", S(4))
+step = 1.6 / len(NEWZ)
+for i, k in enumerate(NEWZ):
+    t = S(3) + .4 + step * i
+    J.append(f'tl.fromTo("#nz{k}", {{opacity:0}}, {{opacity:1, duration:.2, immediateRender:false}}, {t:.2f}); tl.fromTo("#nz{k}", {{fillOpacity:.85}}, {{fillOpacity:.45, duration:.5, immediateRender:false}}, {t + .2:.2f});')
+    sfx("click-soft", t, .15)
+    c_ = from11(JZ["zones"][k]["ctr"]); lab(f"lz{k}", c_, ZN[k], t + .05, S(4), S(3) + 1, style="font-size:24px;padding:3px 10px")
+H.append('<div id="newz">NAYE JDA ZONES &middot; 2025</div>')
+J.append(f'tl.fromTo("#newz", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.3}}, {S(3) + .4:.2f}); tl.to("#newz", {{opacity:0, duration:.2}}, {S(4) - .1:.2f});')
+J.append(f'tl.to(".nz", {{opacity:.15, duration:.3}}, {S(4):.2f}); tl.to("#jreg", {{opacity:.3, duration:.3}}, {S(4):.2f});')
 pref(4, "p4", "COMMERCIAL", "", "MAIN ROAD PLOTS", GOLD, "Commercial &middot; frontage = value", S(5))
-J.append(f'tl.to(["#zag", "#zfa", "#zne", "#zago", "#zfao", "#zneo"], {{opacity:.08, duration:.3}}, {S(4):.2f});')
-for i in range(len(ROADS)):
-    J.append(f'tl.to(["#rd{i}", "#rdg{i}"], {{strokeDashoffset:0, duration:.7, ease:"power2.out"}}, {S(4) + .2 + i * .18:.2f});')
-    J.append(f'tl.to(["#sh{i}0", "#sh{i}1"], {{opacity:1, duration:.2, stagger:.12}}, {wt(4, "Main") + .2 + i * .1:.2f});')
-sfx("whoosh", S(4) + .2, .3); sfx("ping", wt(4, "Main") + .2, .3)
-for i, (nm, b) in enumerate(ROADS):
-    lab(f"rl{i}", km(b, 33), nm.upper(), S(4) + .6 + i * .18, S(5), S(4) + .6, cls="y")
-J.append(f'tl.to(["#rd0","#rd1","#rd2","#rd3","#rd4","#rdg0","#rdg1","#rdg2","#rdg3","#rdg4",".shop"], {{opacity:.25, duration:.3}}, {S(5):.2f});')
+pref(4, "p4", "COMMERCIAL", "", "MAIN ROAD PLOTS", GOLD, "NH &middot; State Highway &middot; City main roads", S(5))
+for i, k in enumerate(["nh48", "nh52", "nh21", "ring", "kalwar", "sirsi", "diggi"]):
+    J.append(f'tl.to(".r_{k}", {{strokeDashoffset:0, duration:.7, ease:"power2.out"}}, {S(4) + .3 + i * .2:.2f});')
+sfx("whoosh", S(4) + .3, .3)
+RL = [("NH 48", (27.10, 75.97), "y"), ("NH 48", (26.78, 75.55), "y"), ("NH 52", (27.13, 75.70), "y"), ("NH 52", (26.70, 75.875), "y"), ("NH 21", (26.95, 76.08), "y"),
+      ("RING ROAD", (26.78, 75.70), "g"), ("STATE / CITY ROADS", (27.02, 75.48), "w")]
+for i, (nm, ll, c_) in enumerate(RL):
+    st = {"y": "", "g": "background:#3CE65A", "w": "background:#fff"}[c_]
+    lab(f"rl{i}", wp(*ll), nm, S(4) + .7 + i * .2, S(5), S(4) + .8, cls="y" if c_ == "y" else "", style=st + ";font-size:28px")
+J.append(f'tl.to(".rr", {{opacity:.25, duration:.3}}, {S(5):.2f});')
 
 # ---------- 5 CHECKLIST ----------
 H.append('<div id="chk"><b>KHARIDNE SE PEHLE</b><ul><li>&#10004; PATTA</li><li>&#10004; JDA / APPROVAL</li><li>&#10004; RERA</li></ul></div>')
@@ -167,14 +202,14 @@ for w_, i in (("patta", 0), ("approval", 1), ("RERA", 2)):
     J.append(f'tl.fromTo("#chk li:nth-child({i + 1})", {{opacity:0, x:-60}}, {{opacity:1, x:0, duration:.25, ease:"back.out(2)"}}, {wt(5, w_) - .05:.2f});'); sfx("click-soft", wt(5, w_) - .05, .4)
 
 # ---------- 6 CTA ----------
-J.append(f'tl.to(["#zag", "#zfa", "#zne", "#zago", "#zfao", "#zneo"], {{opacity:.6, duration:.4}}, {S(6):.2f});')
+J.append(f'tl.to(".nz", {{opacity:.8, duration:.4}}, {S(6):.2f});')
 H.append('<div id="cta"><b>AAPKI PREFERENCE KYA HAI?</b><span>COMMENT &ldquo;CRORE&rdquo;</span></div>')
 J.append(f'tl.to("#dim", {{opacity:.45, duration:.3}}, {S(6):.2f}); tl.fromTo("#cta", {{opacity:0, scale:.8}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {S(6):.2f}); tl.to("#cta span", {{scale:1.08, duration:.4, yoyo:true, repeat:3}}, {wt(6, "Comment"):.2f});')
 sfx("sparkle", wt(6, "Comment"), .3)
 
 
 # captions
-HI = ["1 crore", "risk", "holding", "High risk", "Low risk", "Agriculture land", "JDA approved", "Shehar se door", "Shehar ke paas", "Commercial", "Main road", "frontage", "patta", "approval", "RERA", "Crore"]
+HI = ["1 crore", "risk", "holding", "High risk", "Low risk", "Agriculture land", "JDA approved", "Shehar se door", "Shehar ke paas", "JDA approved", "Main road", "Commercial", "Main road", "frontage", "patta", "approval", "RERA", "Crore"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -197,7 +232,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
-H.append('<div id="cred">Zones &amp; road lines illustrative &middot; Educational, not financial advice &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
+H.append('<div id="cred">City boundary: Jaipur Nagar Nigam &middot; JDA zones: 2025 zone map (approx.) &middot; highways: OSM &middot; agri / door bands illustrative &middot; Educational, not financial advice &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#1b1b1d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#111;background:#FFC42E;border-radius:6px;padding:0 6px}
@@ -205,9 +240,10 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #clouds{position:absolute;inset:0;z-index:15;pointer-events:none;overflow:hidden}#clouds img{position:absolute;left:-260px;top:-240px;width:1600px;height:2400px}
 #cred{position:absolute;left:40px;right:40px;top:1650px;text-align:center;font:700 17px Mont;color:rgba(255,255,255,.6);z-index:20}
 #rate{position:absolute;left:0;right:0;top:640px;text-align:center;opacity:0;z-index:16}#rate b{display:inline-block;padding:12px 30px;border-radius:14px;background:#19C25A;color:#fff;font:400 78px/1 Anton;box-shadow:0 8px 30px rgba(0,0,0,.6)}
-#ask{position:absolute;left:0;right:0;top:700px;text-align:center;z-index:16;display:flex;gap:24px;justify-content:center}#ask span{opacity:0;padding:12px 28px;border-radius:14px;font:400 72px/1 Anton;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.6)}#ask .r{background:#E53935}#ask .h{background:#3D8BFF}
+#ask{position:absolute;left:0;right:0;top:690px;text-align:center;z-index:16;display:flex;gap:24px;justify-content:center}#ask span{opacity:0;padding:12px 28px;border-radius:14px;font:400 72px/1 Anton;color:#fff;box-shadow:0 8px 30px rgba(0,0,0,.6)}#ask .r{background:#E53935}#ask .h{background:#3D8BFF}
 .pref{position:absolute;left:50px;right:50px;top:250px;opacity:0;text-align:center;z-index:12}.pref .tags{display:flex;gap:16px;justify-content:center}.pref .tags span{padding:10px 22px;border-radius:30px;font:900 32px Mont;color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.5)}
 .pref b{display:block;margin-top:18px;font:400 112px/1 Anton;font-weight:400;text-shadow:0 0 26px rgba(0,0,0,.6),0 6px 24px #000}.pref p{display:inline-block;margin-top:14px;padding:8px 22px;border-radius:10px;background:#fff;color:#111;font:900 32px Mont}
+#newz{position:absolute;left:0;right:0;top:1330px;margin:0 auto;width:max-content;opacity:0;padding:8px 22px;border-radius:12px;background:#111;color:#3CE65A;font:900 32px Mont;z-index:9}
 #chk{position:absolute;left:110px;right:110px;top:330px;opacity:0;padding:34px 40px;border-radius:28px;background:#fff;z-index:12;box-shadow:0 30px 70px rgba(0,0,0,.7)}#chk b{display:block;text-align:center;font:400 76px/1 Anton;color:#111;font-weight:400}#chk ul{list-style:none;margin-top:22px}#chk li{opacity:0;margin-top:14px;font:900 52px Mont;color:#0E8A3A}
 #title{position:absolute;left:0;right:0;top:280px;text-align:center;opacity:0;z-index:16}#title small{display:inline-block;padding:8px 22px;border-radius:10px;background:#fff;color:#111;font:900 34px Mont}
 #title b{display:block;margin-top:14px;font:400 130px/1 Anton;color:#FFC42E;text-shadow:0 0 30px rgba(255,196,46,.6),0 6px 30px #000;font-weight:400}
