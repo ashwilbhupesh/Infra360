@@ -138,7 +138,6 @@ RAJ_C, RAJ_W = fitb(bbw(BD["raj"]), 720, 1380, 1.1)
 JP_C, JP_W = fitb(bbw(BD["jaipur"]), 760, 1380, 1.15)
 LC_C, LC_W = fitb((JPR[0] - 60, CHP[1] - 40, JPR[0] + 220, JPR[1] + 40), 760, 1330, 1.25)
 C3, W3 = (CHP[0], CHP[1]), 150
-J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(IND_C, IND_W)}"}}}}, 0);')
 J.append('const VB = document.getElementById("world"); function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = Math.abs(w0 - w1) < 1e-6 ? o.z : (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); }}, t); }')
 CAMS.append((0, 0, IND_C, IND_W))
 def zm(t, c1, w1, d):
@@ -147,30 +146,33 @@ def zm(t, c1, w1, d):
 def bbp(pts, pad):
     xs = [p[0] for p in pts]; ys = [p[1] for p in pts]; return fitb((min(xs), min(ys), max(xs), max(ys)), 640, 1380, pad)
 WD_C, WD_W = bbp(DLR, 1.3)
-zm(.2, RAJ_C, RAJ_W, .8); zm(1.05, WD_C, WD_W, .8)
-J.append('tl.to("#braj", {opacity:1, fillOpacity:.4, duration:.3}, .2); tl.to("#braj", {fillOpacity:.06, duration:.4}, 1.0); tl.to(["#braj", "#bind"], {opacity:0, duration:.4}, 2.6);')
-sfx("whoosh", .2, .3); sfx("whoosh", 1.05, .3)
+CAMS[0] = (0, 0, WD_C, WD_W); J.append(f'tl.set("#world", {{attr:{{viewBox:"{vb(WD_C, WD_W)}"}}}}, 0);')
+IND_C, IND_W = WD_C, WD_W
+J.append('tl.set(["#braj", "#bind"], {opacity:0}, 0);')
 # connectivity: wide Delhi + Jaipur, thick Delhi Road strip, Jaipur border, then circle Chonp
-TC = 1.9
-J.append(f'tl.to("#jcb", {{opacity:1, duration:.3}}, {TC:.2f}); tl.fromTo("#jcb", {{fillOpacity:.6}}, {{fillOpacity:.22, duration:.6, immediateRender:false}}, {TC + .3:.2f}); tl.to(["#dl", "#dlg"], {{strokeDashoffset:0, duration:1.0, ease:"power2.inOut"}}, {TC + .2:.2f}); tl.to("#dpin", {{opacity:1, duration:.25}}, {TC + 1.1:.2f});')
-pl("ljp", JPR, "JAIPUR", TC + .1, TC + 1.5, TC + .1, dy=60)
-pl("ldl", DLP, "DELHI", TC + 1.0, TC + 1.5, TC + .1, cls="")
-pl("lrd", DLR[6], "DELHI ROAD &middot; NH-48", TC + .6, TC + 1.5, TC + .1, dy=0, cls="y")
-sfx("whoosh-short", TC + .2, .3); sfx("pop", TC + 1.1, .3)
-zm(TC + 1.2, LC_C, LC_W, .8)
-TCH = TC + 2.0
+TC = 0.0
+J.append(f'tl.to("#jcb", {{opacity:1, duration:.3}}, {TC:.2f}); tl.fromTo("#jcb", {{fillOpacity:.6}}, {{fillOpacity:.22, duration:.6, immediateRender:false}}, {TC + .3:.2f}); tl.to(["#dl", "#dlg"], {{strokeDashoffset:0, duration:.55, ease:"power2.inOut"}}, {TC + .05:.2f}); tl.to("#dpin", {{opacity:1, duration:.2}}, {TC + .45:.2f});')
+pl("ljp", JPR, "JAIPUR", TC + .05, TC + .75, TC, dy=60)
+pl("ldl", DLP, "DELHI", TC + .4, TC + .75, TC, cls="")
+pl("lrd", DLR[6], "DELHI ROAD &middot; NH-48", TC + .25, TC + .75, TC, dy=0, cls="y")
+sfx("whoosh-short", TC + .05, .3); sfx("pop", TC + .45, .3)
+zm(TC + .6, LC_C, LC_W, .55)
+TCH = TC + 1.1
 J.append(f'tl.fromTo("#chl", {{opacity:0, scale:3, svgOrigin:"{CHP[0]:.1f} {CHP[1]:.1f}"}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {TCH:.2f}); tl.fromTo("#ring", {{attr:{{r:6}}, opacity:1}}, {{attr:{{r:120}}, opacity:0, duration:.8, repeat:1, immediateRender:false}}, {TCH:.2f});')
-pl("ljp1", JPR, "JAIPUR", TCH - .5, TCH + .9, TCH, dy=60)
-pl("lrd1", DLR[2], "DELHI ROAD", TCH - .5, TCH + .9, TCH, dy=0, cls="y")
-pl("lch", CHP, "CHONP", TCH, TCH + .9, TCH, dy=-90, cls="g")
+pl("ljp1", JPR, "JAIPUR", TCH - .1, TCH + .6, TCH + .2, dy=60)
+pl("lch", CHP, "CHONP", TCH, TCH + .6, TCH + .2, dy=-90, cls="g")
 sfx("pop", TCH, .35)
 # hook title
 H.append('<div id="hook"><small>DUNIYA KA</small><b>3RD</b><span>SABSE BADA CRICKET STADIUM</span><i>JAIPUR MEIN</i></div>')
-J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, .15); tl.to("#hook", {{opacity:0, y:-40, duration:.25}}, {TC + .3:.2f});')
+J.append(f'tl.fromTo("#hook", {{opacity:1, scale:1.15}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, .0); tl.to("#hook", {{opacity:0, y:-40, duration:.2}}, {TC + .55:.2f});')
 sfx("impact-bass-1", .15, .5)
 # picture (render) at Chonp
-TPIC = TCH + .8
-card("pic", "render", TPIC, TPIC + 1.5, "ANIL AGARWAL INTERNATIONAL CRICKET STADIUM", "Design render", ("PLAN", GOLD), top=400, maxw=900, maxh=520)
+TPIC = TCH + .35
+H.append('<div id="hero"><img src="assets/img/render.jpg"/><div>ANIL AGARWAL INTERNATIONAL CRICKET STADIUM</div><span>PLAN &middot; DESIGN RENDER</span></div>')
+J.append(f'tl.fromTo("#hero", {{opacity:1, scale:1.12}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, 0);'
+         f'tl.to("#hero", {{left:600, top:250, width:440, duration:.45, ease:"power2.inOut"}}, {TC + .55:.2f});'
+         f'tl.to("#hero", {{left:40, top:380, width:1000, duration:.45, ease:"power2.inOut"}}, {TPIC:.2f});'
+         f'tl.to("#hero", {{opacity:0, scale:.6, y:300, duration:.4, ease:"power2.in"}}, {TPIC + 1.35:.2f});')
 # 3D: zoom to Chonp, tilt the ground, stadium rises
 T3 = TPIC + 1.4
 zm(T3 - .4, C3, W3, 1.0)
@@ -192,10 +194,10 @@ J.append(f'tl.fromTo("#name3d", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration
 # ---------- 1 MoU ----------
 H.append('<div id="mou"><div class="mrow"><span>VEDANTA</span><b>&#129309;</b><span>RCA</span></div><div class="mbig">&#8377;300 CR</div><div class="msub">MoU &middot; 30 MARCH 2023</div></div>')
 TM = max(S(1), T3 + 2.6)
-J.append(f'tl.fromTo("#mou", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(1, "Vedanta") - .1:.2f}); tl.fromTo("#mou .mbig", {{scale:2.5, opacity:0}}, {{scale:1, opacity:1, duration:.35, ease:"back.out(2.5)"}}, {wt(1, "300") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
+J.append(f'tl.fromTo("#mou", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(1, "300") - .2:.2f}); tl.fromTo("#mou .mbig", {{scale:2.5, opacity:0}}, {{scale:1, opacity:1, duration:.35, ease:"back.out(2.5)"}}, {wt(1, "300") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
 sfx("pop", wt(1, "Vedanta"), .3); sfx("impact-bass-1", wt(1, "300"), .4)
 
-card("clip", "statesman2", wt(1, "MoU") - .1, S(2), "RCA + VEDANTA MoU", "The Statesman &middot; 30 March 2023", ("NEWS", "#FF4646"), top=220, maxw=700, maxh=560)
+card("clip", "statesman2", wt(1, "MoU") - .15, wt(1, "300") - .15, "RCA + VEDANTA MoU", "The Statesman &middot; 30 March 2023", ("NEWS", "#FF4646"), top=170, maxw=1000, maxh=1120)
 
 # ---------- 2 TOP 3 ----------
 J.append(f'tl.to("#dim", {{opacity:.65, duration:.3}}, {S(2) - .1:.2f}); tl.to("#dim", {{opacity:.12, duration:.3}}, {S(3):.2f});')
@@ -247,7 +249,9 @@ PH4 = [("ipl", "IPL", "IPL", "Representative &middot; Narendra Modi Stadium"), (
        ("concert1", "concerts", "CONCERTS", "Representative stadium concert"), ("concert2", "events", "BADE EVENTS", "Representative")]
 for i, (img, w_, ttl, sb) in enumerate(PH4):
     t0 = wt(4, w_) - .05; t1 = wt(4, PH4[i + 1][1]) - .05 if i + 1 < len(PH4) else wt(4, "hotels") - .1
-    card(f"pc{i}", img, t0, t1, ttl, sb, top=600, maxw=900, maxh=560)
+    POS4 = [(30, 600, -4), (545, 640, 3), (40, 1000, 3), (545, 1030, -4)]
+    lx, ty, rt = POS4[i]
+    card(f"pc{i}", img, t0, wt(4, "hotels") - .1, ttl, "", top=ty, maxw=470, maxh=300, rot=rt, left=lx)
 
 # ---------- 5 STATUS ----------
 J.append(f'tl.to("#std", {{filter:"grayscale(1) brightness(.6)", duration:.5}}, {S(5):.2f}); tl.to("#dim", {{opacity:.5, duration:.3}}, {S(5):.2f});')
@@ -319,7 +323,9 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #std .roof{border-radius:50%;background:repeating-conic-gradient(from 0deg,#f6f4ee 0 3.6deg,#c9ced6 3.6deg 4.4deg);box-shadow:0 0 30px rgba(255,255,255,.35)}
 #name3d{position:absolute;left:40px;right:40px;top:300px;text-align:center;opacity:0;z-index:12}#name3d small{display:inline-block;padding:8px 26px;border-radius:30px;background:#FFC42E;color:#111;font:900 40px Mont}
 #name3d b{display:block;margin-top:12px;font:400 76px/1.05 Anton;color:#fff;text-shadow:0 6px 24px #000}#name3d span{display:inline-block;margin-top:10px;padding:6px 20px;border-radius:20px;background:rgba(8,10,15,.85);border:2px solid #3CFF96;color:#3CFF96;font:800 30px Mont}
-#mou{position:absolute;left:90px;right:90px;top:1010px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
+#hook b{font-size:170px !important}#hook span{font-size:56px !important}#hook i{font-size:52px !important;margin-top:8px !important}#hook{padding:16px 10px !important}
+#hero{position:absolute;left:160px;top:760px;width:760px;opacity:1;z-index:13;padding:12px 12px 14px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);text-align:center}#hero img{display:block;width:100%;border-radius:14px}#hero div{margin-top:8px;font:400 40px/1.05 Anton;color:#14161c}#hero span{font:800 22px Mont;color:#888}
+#mou{position:absolute;left:90px;right:90px;top:300px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
 #evs{position:absolute;left:40px;right:40px;top:300px;display:grid;grid-template-columns:1fr 1fr;gap:18px;opacity:0;z-index:12}.ev{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:22px;background:rgba(8,10,15,.9);border:3px solid #FFC42E;opacity:0}
 .ev i{font-style:normal;font-size:64px}.ev b{font:400 40px/1.05 Anton;color:#fff}
@@ -328,7 +334,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #wm{position:absolute;left:0;right:0;top:190px;text-align:center;font:800 24px Mont;letter-spacing:.34em;color:rgba(255,255,255,.55);z-index:20}
 #cred{position:absolute;left:40px;right:40px;top:1640px;text-align:center;font:700 17px Mont;color:rgba(255,255,255,.55);z-index:20}
 #series{position:absolute;left:0;right:0;top:250px;margin:0 auto;width:max-content;padding:8px 22px;border-radius:30px;background:#FFC42E;color:#111;font:900 28px Mont;letter-spacing:.06em;opacity:0;z-index:12}
-#hook{position:absolute;left:40px;right:40px;top:380px;text-align:center;opacity:0;z-index:12;padding:26px 10px;border-radius:30px;background:rgba(8,10,15,.86)}
+#hook{position:absolute;left:40px;right:40px;top:120px;text-align:center;opacity:0;z-index:12;padding:26px 10px;border-radius:30px;background:rgba(8,10,15,.86)}
 #hook small{display:block;font:900 44px Mont;color:#fff;letter-spacing:.14em}#hook b{display:block;font:400 240px/1 Anton;color:#FFC42E}#hook span{display:block;font:400 66px/1.05 Anton;color:#fff}
 #hook i{display:inline-block;margin-top:14px;padding:8px 30px;border-radius:40px;background:#FF4FA3;color:#111;font:400 64px/1.1 Anton;font-style:normal}
 .th{position:absolute;left:50px;top:250px;padding:10px 24px;border-radius:40px;background:rgba(8,10,15,.9);border:2px solid #FFC42E;font:400 44px/1 Anton;color:#fff;letter-spacing:.03em;opacity:0;z-index:30}
