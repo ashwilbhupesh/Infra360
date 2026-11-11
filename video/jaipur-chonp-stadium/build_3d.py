@@ -67,6 +67,14 @@ SVG.append(f'<path id="rtg" d="{pd(ROUTE)}" pathLength="1" style="fill:none;stro
 for k, p, c in [("jpin", JPR, PINK), ("cpin", CHP, GRN)]:
     SVG.append(f'<g id="{k}" style="opacity:0"><circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="22" style="fill:{c};opacity:.3"/><circle cx="{p[0]:.1f}" cy="{p[1]:.1f}" r="9" style="fill:{c};stroke:#fff;stroke-width:3"/></g>')
 SVG.append(f'<circle id="ring" cx="{CHP[0]:.1f}" cy="{CHP[1]:.1f}" r="10" style="fill:none;stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke;opacity:0"/>')
+DLR = [JPR, wp(26.99, 75.83), wp(27.06, 75.86), wp(27.12, 75.86), wp(27.20, 75.89), wp(27.39, 75.96), wp(27.70, 76.20), wp(27.89, 76.29), wp(27.99, 76.38), wp(28.21, 76.79), wp(28.46, 77.03), wp(28.61, 77.21)]
+DLP = wp(28.61, 77.21)
+SVG.append(f'<path id="dlg" d="{pd(DLR)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:46;stroke-opacity:.35;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+           f'<path id="dl" d="{pd(DLR)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:18;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 8px {GOLD})"/>')
+CB = json.load(open("data/jaipur_boundary.geojson"))["features"][0]["geometry"]["coordinates"][0]
+SVG.append(f'<path id="jcb" d="M{" L".join(f"{wp(la, lo)[0]:.1f} {wp(la, lo)[1]:.1f}" for lo, la in CB[::2])} Z" style="fill:{PINK};fill-opacity:.22;stroke:{PINK};stroke-width:6;vector-effect:non-scaling-stroke;stroke-linejoin:round;opacity:0;filter:drop-shadow(0 0 10px {PINK})"/>')
+SVG.append(f'<g id="dpin" style="opacity:0"><circle cx="{DLP[0]:.1f}" cy="{DLP[1]:.1f}" r="300" style="fill:{CYAN};opacity:.3"/><circle cx="{DLP[0]:.1f}" cy="{DLP[1]:.1f}" r="140" style="fill:{CYAN};stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke"/></g>')
+SVG.append(f'<g id="chl" style="opacity:0"><circle cx="{CHP[0]:.1f}" cy="{CHP[1]:.1f}" r="110" style="fill:{GRN};fill-opacity:.25;stroke:{GRN};stroke-width:7;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 10px {GRN})"/></g>')
 SVG.append('<rect id="dim" x="-900000" y="-900000" width="2000000" height="2000000" style="fill:#000;opacity:.12"/>')
 
 # ---------- helpers ----------
@@ -136,28 +144,37 @@ CAMS.append((0, 0, IND_C, IND_W))
 def zm(t, c1, w1, d):
     c0, w0 = CAMS[-1][2], CAMS[-1][3]
     J.append(f'zoomTo({t:.2f}, [{c0[0]:.1f},{c0[1]:.1f}], {w0:.1f}, [{c1[0]:.1f},{c1[1]:.1f}], {w1:.1f}, {d});'); CAMS.append((t, d, c1, w1))
-zm(.2, RAJ_C, RAJ_W, .8); zm(1.05, JP_C, JP_W, .8); zm(1.9, LC_C, LC_W, .9)
-J.append('tl.to("#braj", {opacity:1, fillOpacity:.4, duration:.3}, .2); tl.to("#braj", {fillOpacity:.1, duration:.4}, 1.0); tl.to("#bjp", {opacity:1, fillOpacity:.45, duration:.3}, 1.1); tl.to("#bjp", {fillOpacity:.05, duration:.5}, 1.9);'
-         'tl.to(["#braj", "#bind"], {opacity:0, duration:.4}, 1.9); tl.to("#bjp", {opacity:0, duration:.4}, 2.6);')
-sfx("whoosh", .2, .3); sfx("whoosh", 1.05, .3); sfx("whoosh", 1.9, .35)
-# connectivity: Jaipur -> Chonp along Delhi Road
-TC = 2.7
-J.append(f'tl.to("#jpin", {{opacity:1, duration:.2}}, {TC:.2f}); tl.to(["#rt", "#rtg"], {{strokeDashoffset:0, duration:1.1, ease:"power2.out"}}, {TC + .1:.2f}); tl.to("#cpin", {{opacity:1, duration:.2}}, {TC + 1.1:.2f}); tl.fromTo("#ring", {{attr:{{r:6}}, opacity:1}}, {{attr:{{r:60}}, opacity:0, duration:.8, repeat:1, immediateRender:false}}, {TC + 1.1:.2f});')
-pl("ljp", JPR, "JAIPUR", TC, TC + 2.2, TC)
-pl("lrd", ROUTE[2], "DELHI ROAD", TC + .5, TC + 2.2, TC, dy=0, cls="y")
-pl("lch", CHP, "CHONP", TC + 1.1, TC + 2.2, TC, cls="g")
-sfx("whoosh-short", TC + .1, .3); sfx("pop", TC + 1.1, .3)
+def bbp(pts, pad):
+    xs = [p[0] for p in pts]; ys = [p[1] for p in pts]; return fitb((min(xs), min(ys), max(xs), max(ys)), 640, 1380, pad)
+WD_C, WD_W = bbp(DLR, 1.3)
+zm(.2, RAJ_C, RAJ_W, .8); zm(1.05, WD_C, WD_W, .8)
+J.append('tl.to("#braj", {opacity:1, fillOpacity:.4, duration:.3}, .2); tl.to("#braj", {fillOpacity:.06, duration:.4}, 1.0); tl.to(["#braj", "#bind"], {opacity:0, duration:.4}, 2.6);')
+sfx("whoosh", .2, .3); sfx("whoosh", 1.05, .3)
+# connectivity: wide Delhi + Jaipur, thick Delhi Road strip, Jaipur border, then circle Chonp
+TC = 1.9
+J.append(f'tl.to("#jcb", {{opacity:1, duration:.3}}, {TC:.2f}); tl.fromTo("#jcb", {{fillOpacity:.6}}, {{fillOpacity:.22, duration:.6, immediateRender:false}}, {TC + .3:.2f}); tl.to(["#dl", "#dlg"], {{strokeDashoffset:0, duration:1.0, ease:"power2.inOut"}}, {TC + .2:.2f}); tl.to("#dpin", {{opacity:1, duration:.25}}, {TC + 1.1:.2f});')
+pl("ljp", JPR, "JAIPUR", TC + .1, TC + 1.5, TC + .1, dy=60)
+pl("ldl", DLP, "DELHI", TC + 1.0, TC + 1.5, TC + .1, cls="")
+pl("lrd", DLR[6], "DELHI ROAD &middot; NH-48", TC + .6, TC + 1.5, TC + .1, dy=0, cls="y")
+sfx("whoosh-short", TC + .2, .3); sfx("pop", TC + 1.1, .3)
+zm(TC + 1.2, LC_C, LC_W, .8)
+TCH = TC + 2.0
+J.append(f'tl.fromTo("#chl", {{opacity:0, scale:3, svgOrigin:"{CHP[0]:.1f} {CHP[1]:.1f}"}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {TCH:.2f}); tl.fromTo("#ring", {{attr:{{r:6}}, opacity:1}}, {{attr:{{r:120}}, opacity:0, duration:.8, repeat:1, immediateRender:false}}, {TCH:.2f});')
+pl("ljp1", JPR, "JAIPUR", TCH - .5, TCH + .9, TCH, dy=60)
+pl("lrd1", DLR[2], "DELHI ROAD", TCH - .5, TCH + .9, TCH, dy=0, cls="y")
+pl("lch", CHP, "CHONP", TCH, TCH + .9, TCH, dy=-90, cls="g")
+sfx("pop", TCH, .35)
 # hook title
 H.append('<div id="hook"><small>DUNIYA KA</small><b>3RD</b><span>SABSE BADA CRICKET STADIUM</span><i>JAIPUR MEIN</i></div>')
-J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, .15); tl.to("#hook", {{opacity:0, y:-40, duration:.25}}, {TC - .1:.2f});')
+J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)"}}, .15); tl.to("#hook", {{opacity:0, y:-40, duration:.25}}, {TC + .3:.2f});')
 sfx("impact-bass-1", .15, .5)
 # picture (render) at Chonp
-TPIC = TC + 2.1
+TPIC = TCH + .8
 card("pic", "render", TPIC, TPIC + 1.5, "ANIL AGARWAL INTERNATIONAL CRICKET STADIUM", "Design render", ("PLAN", GOLD), top=400, maxw=900, maxh=520)
 # 3D: zoom to Chonp, tilt the ground, stadium rises
 T3 = TPIC + 1.4
 zm(T3 - .4, C3, W3, 1.0)
-J.append(f'tl.to(["#jpin", "#rt", "#rtg"], {{opacity:0, duration:.3}}, {T3 - .3:.2f}); tl.to("#cpin", {{opacity:0, duration:.3}}, {T3:.2f});')
+J.append(f'tl.to(["#dl", "#dlg", "#jcb", "#dpin", "#chl"], {{opacity:0, duration:.3}}, {T3 - .3:.2f});')
 H.insert(0, '<div id="fog"></div>')
 J.append(f'tl.to("#fog", {{opacity:1, duration:1}}, {T3 + .2:.2f}); tl.to("#fog", {{opacity:0, duration:.6}}, {S(3) - .3:.2f}); tl.to("#fog", {{opacity:1, duration:.8}}, {S(4) - .1:.2f});')
 J.append(f'tl.fromTo("#plane", {{rotationX:0, scale:1}}, {{rotationX:58, scale:1.35, duration:1.2, ease:"power2.inOut"}}, {T3:.2f});')
@@ -178,11 +195,13 @@ TM = max(S(1), T3 + 2.6)
 J.append(f'tl.fromTo("#mou", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(1, "Vedanta") - .1:.2f}); tl.fromTo("#mou .mbig", {{scale:2.5, opacity:0}}, {{scale:1, opacity:1, duration:.35, ease:"back.out(2.5)"}}, {wt(1, "300") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
 sfx("pop", wt(1, "Vedanta"), .3); sfx("impact-bass-1", wt(1, "300"), .4)
 
+card("clip", "statesman2", wt(1, "MoU") - .1, S(2), "RCA + VEDANTA MoU", "The Statesman &middot; 30 March 2023", ("NEWS", "#FF4646"), top=220, maxw=700, maxh=560)
+
 # ---------- 2 TOP 3 ----------
 J.append(f'tl.to("#dim", {{opacity:.65, duration:.3}}, {S(2) - .1:.2f}); tl.to("#dim", {{opacity:.12, duration:.3}}, {S(3):.2f});')
 H.append('<div id="rank">'
-         '<div class="rk" id="rk0"><img src="assets/img/modi.jpg"/><div><i>#1</i><b>NARENDRA MODI STADIUM</b><span>Ahmedabad, India</span></div></div>'
-         '<div class="rk" id="rk1"><img src="assets/img/mcg.jpg"/><div><i>#2</i><b>MELBOURNE CRICKET GROUND</b><span>Australia</span></div></div>'
+         '<div class="rk" id="rk0"><img src="assets/img/modi2.jpg"/><div><i>#1</i><b>NARENDRA MODI STADIUM</b><span>Ahmedabad, India</span></div></div>'
+         '<div class="rk" id="rk1"><img src="assets/img/mcg2.jpg"/><div><i>#2</i><b>MELBOURNE CRICKET GROUND</b><span>Australia</span></div></div>'
          '<div class="rk hot" id="rk2"><img src="assets/img/render.jpg"/><div><i>#3</i><b>JAIPUR &middot; CHONP</b><span>Anil Agarwal Intl. Stadium</span></div></div></div>')
 J.append(f'tl.fromTo("#rank", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(2):.2f}); tl.to("#rank", {{opacity:0, duration:.2}}, {S(3) - .1:.2f});')
 for i, t in enumerate([wt(2, "Ahmedabad"), wt(2, "Melbourne"), wt(2, "Melbourne") + 1.0]):
@@ -190,20 +209,29 @@ for i, t in enumerate([wt(2, "Ahmedabad"), wt(2, "Melbourne"), wt(2, "Melbourne"
 
 # ---------- 3 LOCATION (flatten, map) ----------
 J.append(f'tl.to("#plane", {{rotationX:0, scale:1, duration:.9, ease:"power2.inOut"}}, {S(3) - .3:.2f}); tl.to("#std", {{opacity:0, duration:.3}}, {S(3) - .3:.2f});')
-zm(S(3) - .3, LC_C, LC_W, .9)
-J.append(f'tl.to(["#jpin", "#rt", "#rtg", "#cpin"], {{opacity:1, duration:.3}}, {S(3) + .3:.2f}); tl.fromTo("#ring", {{attr:{{r:6}}, opacity:1}}, {{attr:{{r:60}}, opacity:0, duration:.8, repeat:2, immediateRender:false}}, {wt(3, "Chonp"):.2f});')
-pl("ljp2", JPR, "JAIPUR", S(3) + .3, S(4), S(3) + .8)
-pl("lch2", CHP, "CHONP &middot; STADIUM SITE", wt(3, "Chonp") - .1, S(4), S(3) + .8, cls="g")
-pl("lrd2", ROUTE[2], "DELHI ROAD (NH-48)", wt(3, "Delhi Road") - .1, S(4), S(3) + .8, dy=0, cls="y")
-pl("lkm2", ROUTE[1], "~25 KM", wt(3, "25 km") - .1, S(4), S(3) + .8, dy=0, cls="y")
+zm(S(3) - .3, WD_C, WD_W, .9)
+J.append(f'tl.to(["#dl", "#dlg", "#jcb", "#dpin"], {{opacity:1, duration:.3}}, {S(3) + .2:.2f}); tl.to("#chl", {{opacity:1, duration:.3}}, {wt(3, "Chonp"):.2f});')
+pl("ldl2", DLP, "DELHI", S(3) + .3, wt(3, "shehar") - .1, S(3) + .7)
+pl("ljpw", JPR, "JAIPUR", S(3) + .3, wt(3, "shehar") - .1, S(3) + .7, dy=60)
+pl("lrdw", DLR[6], "DELHI ROAD &middot; NH-48", wt(3, "Delhi Road") - .1, wt(3, "shehar") - .1, S(3) + .7, dy=0, cls="y")
+zm(wt(3, "shehar") - .2, LC_C, LC_W, .8)
+TL3 = wt(3, "shehar") + .7
+J.append(f'tl.fromTo("#ring", {{attr:{{r:6}}, opacity:1}}, {{attr:{{r:120}}, opacity:0, duration:.8, repeat:2, immediateRender:false}}, {TL3:.2f});')
+pl("ljp2", JPR, "JAIPUR", TL3 - .3, wt(3, "100") + .5, TL3, dy=60)
+pl("lch2", CHP, "CHONP &middot; STADIUM SITE", TL3 - .3, wt(3, "100") + .5, TL3, dy=-90, cls="g")
+pl("lkm2", DLR[1], "~25 KM", wt(3, "25 km") - .1, wt(3, "100") + .5, TL3, dy=0, cls="y")
 H.append('<div id="facts"><div><b>~25 KM</b><span>SHEHAR SE</span></div><div><b>100</b><span>ACRE</span></div></div>')
-J.append(f'tl.fromTo("#facts", {{opacity:0}}, {{opacity:1, duration:.2}}, {wt(3, "25 km") - .1:.2f}); tl.from("#facts div", {{opacity:0, scale:.4, duration:.3, stagger:{max(.2, wt(3, "100") - wt(3, "25 km")):.2f}, ease:"back.out(2.2)"}}, {wt(3, "25 km") - .1:.2f}); tl.to("#facts", {{opacity:0, duration:.2}}, {S(4) - .1:.2f});')
-J.append(f'tl.fromTo(["#rt", "#rtg"], {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:1.0, ease:"power2.out", immediateRender:false}}, {wt(3, "highway") - .2:.2f});')
+J.append(f'tl.fromTo("#facts", {{opacity:0}}, {{opacity:1, duration:.2}}, {wt(3, "25 km") - .1:.2f}); tl.from("#facts div", {{opacity:0, scale:.4, duration:.3, stagger:{max(.2, wt(3, "100") - wt(3, "25 km")):.2f}, ease:"back.out(2.2)"}}, {wt(3, "25 km") - .1:.2f}); tl.to("#facts", {{opacity:0, duration:.2}}, {wt(3, "100") + .5:.2f});')
+card("site", "aerial_route", wt(3, "100") + .5, wt(3, "Delhi highway") - .1, "100 ACRE CAMPUS", "Design render &middot; practice grounds, academy, parking", ("100 ACRE", GRN), top=420, maxw=960, maxh=560)
+zm(wt(3, "Delhi highway") - .3, WD_C, WD_W, .8)
+J.append(f'tl.fromTo(["#dl", "#dlg"], {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:1.0, ease:"power2.inOut", immediateRender:false}}, {wt(3, "highway"):.2f});')
+pl("ldl3", DLP, "DELHI", wt(3, "highway") + .8, S(4) - .2, wt(3, "highway") + .6)
+pl("ljp3", JPR, "JAIPUR", wt(3, "Delhi highway"), S(4) - .2, wt(3, "highway") + .6, dy=60)
 sfx("pop", wt(3, "25 km"), .3); sfx("pop", wt(3, "100"), .3); sfx("whoosh-short", wt(3, "highway") - .2, .3)
 
 # ---------- 4 POTENTIAL (3D again + icons) ----------
 zm(S(4) - .3, C3, W3, .9)
-J.append(f'tl.to(["#jpin", "#rt", "#rtg", "#cpin"], {{opacity:0, duration:.3}}, {S(4) - .3:.2f}); tl.to("#plane", {{rotationX:58, scale:1.35, duration:.9, ease:"power2.inOut"}}, {S(4) - .3:.2f}); tl.to("#std", {{opacity:1, duration:.3}}, {S(4) + .2:.2f});')
+J.append(f'tl.to(["#dl", "#dlg", "#jcb", "#dpin", "#chl"], {{opacity:0, duration:.3}}, {S(4) - .3:.2f}); tl.to("#plane", {{rotationX:58, scale:1.35, duration:.9, ease:"power2.inOut"}}, {S(4) - .3:.2f}); tl.to("#std", {{opacity:1, duration:.3}}, {S(4) + .2:.2f});')
 EV = [("&#127951;", "IPL", "IPL"), ("&#127758;", "INTERNATIONAL MATCHES", "international"), ("&#127908;", "CONCERTS", "concerts"), ("&#127881;", "BADE EVENTS", "events")]
 H.append('<div id="evs">' + "".join(f'<div class="ev" id="ev{i}"><i>{ic}</i><b>{nm}</b></div>' for i, (ic, nm, _) in enumerate(EV)) + '</div>')
 J.append(f'tl.set("#evs", {{opacity:1}}, {S(4):.2f}); tl.to("#evs", {{opacity:0, duration:.2}}, {wt(4, "hotels") - .3:.2f});')
@@ -214,6 +242,12 @@ IC = [("&#127976;", "HOTELS", (-330, 330), "hotels"), ("&#127869;", "RESTAURANTS
 for i, (ic, nm, (dx, dy), w_) in enumerate(IC):
     H.append(f'<div class="wpin" id="wp{i}" style="left:{540 + dx}px;top:{620 + dy}px"><i>{ic}</i><b>{nm}</b></div>')
     t = wt(4, w_); J.append(f'tl.fromTo("#wp{i}", {{opacity:0, scale:.2, y:30}}, {{opacity:1, scale:1, y:0, duration:.3, ease:"back.out(2.5)"}}, {t:.2f}); tl.to("#wp{i}", {{opacity:0, duration:.2}}, {S(5) - .1:.2f});'); sfx("pop", t, .25)
+
+PH4 = [("ipl", "IPL", "IPL", "Representative &middot; Narendra Modi Stadium"), ("lightshow", "international", "INTERNATIONAL MATCHES", "Light show &middot; Ahmedabad"),
+       ("concert1", "concerts", "CONCERTS", "Representative stadium concert"), ("concert2", "events", "BADE EVENTS", "Representative")]
+for i, (img, w_, ttl, sb) in enumerate(PH4):
+    t0 = wt(4, w_) - .05; t1 = wt(4, PH4[i + 1][1]) - .05 if i + 1 < len(PH4) else wt(4, "hotels") - .1
+    card(f"pc{i}", img, t0, t1, ttl, sb, top=600, maxw=900, maxh=560)
 
 # ---------- 5 STATUS ----------
 J.append(f'tl.to("#std", {{filter:"grayscale(1) brightness(.6)", duration:.5}}, {S(5):.2f}); tl.to("#dim", {{opacity:.5, duration:.3}}, {S(5):.2f});')
@@ -263,7 +297,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
-H.append('<div id="vig"></div><div id="flash"></div><div id="cred">Renders: RCA design (image supplied) &middot; Sources: Hindustan Zinc (Vedanta) release, Business Standard, Times Now, ETV Bharat &middot; 3D model illustrative &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
+H.append('<div id="vig"></div><div id="flash"></div><div id="cred">Renders: RCA design &middot; photos: news / social media (supplied) &middot; Sources: Hindustan Zinc (Vedanta) release, Business Standard, Times Now, ETV Bharat &middot; 3D model illustrative &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#07090d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#FFC42E}
@@ -285,7 +319,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #std .roof{border-radius:50%;background:repeating-conic-gradient(from 0deg,#f6f4ee 0 3.6deg,#c9ced6 3.6deg 4.4deg);box-shadow:0 0 30px rgba(255,255,255,.35)}
 #name3d{position:absolute;left:40px;right:40px;top:300px;text-align:center;opacity:0;z-index:12}#name3d small{display:inline-block;padding:8px 26px;border-radius:30px;background:#FFC42E;color:#111;font:900 40px Mont}
 #name3d b{display:block;margin-top:12px;font:400 76px/1.05 Anton;color:#fff;text-shadow:0 6px 24px #000}#name3d span{display:inline-block;margin-top:10px;padding:6px 20px;border-radius:20px;background:rgba(8,10,15,.85);border:2px solid #3CFF96;color:#3CFF96;font:800 30px Mont}
-#mou{position:absolute;left:90px;right:90px;top:260px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
+#mou{position:absolute;left:90px;right:90px;top:1010px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
 #evs{position:absolute;left:40px;right:40px;top:300px;display:grid;grid-template-columns:1fr 1fr;gap:18px;opacity:0;z-index:12}.ev{display:flex;align-items:center;gap:14px;padding:16px 18px;border-radius:22px;background:rgba(8,10,15,.9);border:3px solid #FFC42E;opacity:0}
 .ev i{font-style:normal;font-size:64px}.ev b{font:400 40px/1.05 Anton;color:#fff}
