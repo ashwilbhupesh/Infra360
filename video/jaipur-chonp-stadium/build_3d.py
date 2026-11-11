@@ -160,7 +160,7 @@ zm(TC + .6, LC_C, LC_W, .55)
 TCH = TC + 1.1
 J.append(f'tl.fromTo("#chl", {{opacity:0, scale:3, svgOrigin:"{CHP[0]:.1f} {CHP[1]:.1f}"}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {TCH:.2f}); tl.fromTo("#ring", {{attr:{{r:6}}, opacity:1}}, {{attr:{{r:120}}, opacity:0, duration:.8, repeat:1, immediateRender:false}}, {TCH:.2f});')
 pl("ljp1", JPR, "JAIPUR", TCH - .1, TCH + .6, TCH + .2, dy=60)
-pl("lch", CHP, "CHONP", TCH, TCH + .6, TCH + .2, dy=-90, cls="g")
+pl("lch", CHP, "CHONP &middot; STADIUM SITE", TCH, TCH + 1.55, TCH + .2, dy=-90, cls="g")
 sfx("pop", TCH, .35)
 # hook title
 H.append('<div id="hook"><small>DUNIYA KA</small><b>3RD</b><span>SABSE BADA CRICKET STADIUM</span><i>JAIPUR MEIN</i></div>')
@@ -171,8 +171,8 @@ TPIC = TCH + .35
 H.append('<div id="hero"><img src="assets/img/render.jpg"/><div>ANIL AGARWAL INTERNATIONAL CRICKET STADIUM</div><span>PLAN &middot; DESIGN RENDER</span></div>')
 J.append(f'tl.fromTo("#hero", {{opacity:1, scale:1.12}}, {{opacity:1, scale:1, duration:.35, ease:"power2.out"}}, 0);'
          f'tl.to("#hero", {{left:600, top:250, width:440, duration:.45, ease:"power2.inOut"}}, {TC + .55:.2f});'
-         f'tl.to("#hero", {{left:40, top:380, width:1000, duration:.45, ease:"power2.inOut"}}, {TPIC:.2f});'
-         f'tl.to("#hero", {{opacity:0, scale:.6, y:300, duration:.4, ease:"power2.in"}}, {TPIC + 1.35:.2f});')
+         f'tl.to("#hero", {{left:190, top:70, width:700, duration:.45, ease:"power2.inOut"}}, {TPIC:.2f});'
+         f'tl.to("#hero", {{opacity:0, scale:.6, y:500, duration:.4, ease:"power2.in"}}, {TPIC + 1.35:.2f});')
 # 3D: zoom to Chonp, tilt the ground, stadium rises
 T3 = TPIC + 1.4
 zm(T3 - .4, C3, W3, 1.0)
