@@ -147,13 +147,13 @@ J.append(f'tl.fromTo("#title", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, d
 sfx("impact-bass-1", .1, .45); sfx("impact-bass-1", wt(0, "10"), .4)
 # hook illustration: a plot with pillars + sale board, then money gets locked
 H.append('''<div id="hk"><svg viewBox="0 0 800 560" width="800" height="560">
-<path id="hkplot" d="M120 300 L520 230 L700 330 L300 420 Z" pathLength="1" style="fill:rgba(255,196,46,.12);stroke:#FFC42E;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:1"/>
+<path id="hkplot" d="M120 300 L520 230 L700 330 L300 420 Z" pathLength="1" style="fill:rgba(242,178,62,.12);stroke:#F2B23E;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:1"/>
 <g class="pil"><rect x="112" y="270" width="16" height="34" fill="#fff"/><rect x="512" y="200" width="16" height="34" fill="#fff"/><rect x="692" y="300" width="16" height="34" fill="#fff"/><rect x="292" y="390" width="16" height="34" fill="#fff"/></g>
 <g id="hkboard"><rect x="388" y="150" width="10" height="160" fill="#ddd"/><rect x="300" y="70" width="200" height="100" rx="10" fill="#fff"/><text x="400" y="115" text-anchor="middle" font-family="Anton" font-size="38" fill="#111">PLOT FOR</text><text x="400" y="155" text-anchor="middle" font-family="Anton" font-size="38" fill="#E53935">SALE</text></g>
 <g id="hknotes"><g class="nt"><rect x="0" y="0" width="120" height="60" rx="6" fill="#7CB342"/><text x="60" y="42" text-anchor="middle" font-family="Anton" font-size="34" fill="#fff">&#8377;500</text></g>
 <g class="nt"><rect x="0" y="0" width="120" height="60" rx="6" fill="#7CB342"/><text x="60" y="42" text-anchor="middle" font-family="Anton" font-size="34" fill="#fff">&#8377;500</text></g>
 <g class="nt"><rect x="0" y="0" width="120" height="60" rx="6" fill="#7CB342"/><text x="60" y="42" text-anchor="middle" font-family="Anton" font-size="34" fill="#fff">&#8377;500</text></g></g>
-<g id="hklock" transform="translate(560 380)"><path d="M30 50 V30 a40 40 0 0 1 80 0 V50" fill="none" stroke="#FFC42E" stroke-width="12"/><rect x="10" y="50" width="120" height="100" rx="14" fill="#E53935"/><circle cx="70" cy="95" r="12" fill="#fff"/><rect x="65" y="100" width="10" height="26" fill="#fff"/></g>
+<g id="hklock" transform="translate(560 380)"><path d="M30 50 V30 a40 40 0 0 1 80 0 V50" fill="none" stroke="#F2B23E" stroke-width="12"/><rect x="10" y="50" width="120" height="100" rx="14" fill="#E53935"/><circle cx="70" cy="95" r="12" fill="#fff"/><rect x="65" y="100" width="10" height="26" fill="#fff"/></g>
 </svg></div>''')
 J.append(f'tl.fromTo("#hk", {{opacity:0}}, {{opacity:1, duration:.2}}, .3); tl.to("#hkplot", {{strokeDashoffset:0, duration:.9, ease:"power2.inOut"}}, .35); tl.fromTo("#hk .pil rect", {{scaleY:0, transformOrigin:"50% 100%"}}, {{scaleY:1, duration:.25, stagger:.12, ease:"back.out(3)"}}, 1.0);'
          f'tl.fromTo("#hkboard", {{y:-300, opacity:0}}, {{y:0, opacity:1, duration:.45, ease:"bounce.out"}}, 1.4);'
@@ -186,7 +186,7 @@ def x1(c, a, b): return [f'tl.fromTo("#{c} .mag", {{x:-300, y:-260, opacity:0}},
 X[1] = x1
 V[3] = f'''<svg class="tree" viewBox="0 0 900 520" width="900" height="520">
 <path class="tl" d="M450 110 V180 M150 180 H750 M150 180 V240 M450 180 V240 M750 180 V240" pathLength="1" style="fill:none;stroke:#fff;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:1"/>
-<g class="nd n0"><rect x="320" y="30" width="260" height="80" rx="14" fill="#FFC42E"/><text x="450" y="82" text-anchor="middle" font-family="Mont" font-weight="900" font-size="34" fill="#111">PITA JI (late)</text></g>
+<g class="nd n0"><rect x="320" y="30" width="260" height="80" rx="14" fill="#F2B23E"/><text x="450" y="82" text-anchor="middle" font-family="Mont" font-weight="900" font-size="34" fill="#111">PITA JI (late)</text></g>
 <g class="nd n1"><rect x="40" y="240" width="220" height="80" rx="14" fill="#fff"/><text x="150" y="292" text-anchor="middle" font-family="Mont" font-weight="900" font-size="36" fill="#111">BETA</text></g>
 <g class="nd n2"><rect x="340" y="240" width="220" height="80" rx="14" fill="#fff"/><text x="450" y="292" text-anchor="middle" font-family="Mont" font-weight="900" font-size="36" fill="#111">BETI</text></g>
 <g class="nd n3"><rect x="640" y="240" width="220" height="80" rx="14" fill="#fff"/><text x="750" y="292" text-anchor="middle" font-family="Mont" font-weight="900" font-size="36" fill="#111">BETA</text></g>
@@ -209,9 +209,9 @@ def x4(c, a, b):
             f'tl.to("#{c} .miss", {{scale:1.15, duration:.15, yoyo:true, repeat:5}}, {a + 1.4:.2f});']
 X[4] = x4
 V[7] = '''<svg class="naap" viewBox="0 0 900 600" width="900" height="600">
-<rect class="pl" x="150" y="120" width="560" height="340" pathLength="1" style="fill:rgba(255,196,46,.12);stroke:#FFC42E;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:1"/>
+<rect class="pl" x="150" y="120" width="560" height="340" pathLength="1" style="fill:rgba(242,178,62,.12);stroke:#F2B23E;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:1"/>
 <g class="dim"><line x1="150" y1="500" x2="710" y2="500" stroke="#fff" stroke-width="4"/><line x1="150" y1="485" x2="150" y2="515" stroke="#fff" stroke-width="4"/><line x1="710" y1="485" x2="710" y2="515" stroke="#fff" stroke-width="4"/><text x="430" y="560" text-anchor="middle" font-family="Mont" font-weight="900" font-size="38" fill="#fff">KAGAZ: 200 GAJ</text></g>
-<g class="tape"><rect x="120" y="60" width="70" height="70" rx="14" fill="#FFC42E"/><circle cx="155" cy="95" r="18" fill="#111"/><rect class="tb" x="190" y="86" width="0" height="18" fill="#FFD95A"/></g>
+<g class="tape"><rect x="120" y="60" width="70" height="70" rx="14" fill="#F2B23E"/><circle cx="155" cy="95" r="18" fill="#111"/><rect class="tb" x="190" y="86" width="0" height="18" fill="#FFD95A"/></g>
 <g class="kb"><rect x="590" y="120" width="120" height="340" fill="url(#hatch)"/><rect x="590" y="120" width="120" height="340" fill="none" stroke="#E53935" stroke-width="6"/><text x="650" y="300" text-anchor="middle" font-family="Anton" font-size="44" fill="#fff" transform="rotate(-90 650 300)">KABZA!</text></g>
 <g class="site"><rect x="210" y="20" width="440" height="70" rx="35" fill="#E53935"/><text x="430" y="68" text-anchor="middle" font-family="Mont" font-weight="900" font-size="36" fill="#fff">SITE PAR: SIRF 160 GAJ</text></g>
 <defs><pattern id="hatch" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="20" height="20" fill="rgba(229,57,53,.35)"/><rect width="8" height="20" fill="rgba(229,57,53,.75)"/></pattern></defs></svg>
@@ -224,7 +224,7 @@ X[7] = x7
 V[9] = '''<svg class="rasta" viewBox="0 0 900 520" width="900" height="520">
 <rect x="0" y="330" width="900" height="150" fill="#3a3d45"/><line class="ln" x1="0" y1="405" x2="900" y2="405" stroke="#fff" stroke-width="6" stroke-dasharray="40 30"/>
 <rect class="pl" x="300" y="60" width="300" height="250" rx="6" style="fill:rgba(60,230,90,.18);stroke:#3CE65A;stroke-width:6"/><text x="450" y="200" text-anchor="middle" font-family="Anton" font-size="56" fill="#fff">PLOT</text>
-<g class="wd"><line x1="820" y1="335" x2="820" y2="475" stroke="#FFC42E" stroke-width="6"/><path d="M805 350 L820 330 L835 350 M805 460 L820 480 L835 460" fill="none" stroke="#FFC42E" stroke-width="6"/><rect x="640" y="372" width="160" height="66" rx="12" fill="#FFC42E"/><text x="720" y="417" text-anchor="middle" font-family="Anton" font-size="38" fill="#111">? FT</text></g>
+<g class="wd"><line x1="820" y1="335" x2="820" y2="475" stroke="#F2B23E" stroke-width="6"/><path d="M805 350 L820 330 L835 350 M805 460 L820 480 L835 460" fill="none" stroke="#F2B23E" stroke-width="6"/><rect x="640" y="372" width="160" height="66" rx="12" fill="#F2B23E"/><text x="720" y="417" text-anchor="middle" font-family="Anton" font-size="38" fill="#111">? FT</text></g>
 </svg><div class="zones"><span class="zr">RESIDENTIAL ''' + OK + '</span><span class="zg">GREEN / ECO ZONE ' + NO + '</span></div>'
 def x9(c, a, b):
     return [f'tl.fromTo("#{c} .ln", {{strokeDashoffset:0}}, {{strokeDashoffset:-280, duration:2, ease:"none"}}, {a:.2f});',
@@ -241,7 +241,7 @@ def x6(c, a, b):
     return out
 X[6] = x6
 V[5] = '''<svg class="dbl" viewBox="0 0 900 460" width="900" height="460">
-<rect x="330" y="40" width="240" height="180" rx="10" style="fill:rgba(255,196,46,.18);stroke:#FFC42E;stroke-width:6;stroke-dasharray:18 12"/><text x="450" y="148" text-anchor="middle" font-family="Anton" font-size="56" fill="#fff">PLOT</text>
+<rect x="330" y="40" width="240" height="180" rx="10" style="fill:rgba(242,178,62,.18);stroke:#F2B23E;stroke-width:6;stroke-dasharray:18 12"/><text x="450" y="148" text-anchor="middle" font-family="Anton" font-size="56" fill="#fff">PLOT</text>
 <g class="b1"><circle cx="120" cy="120" r="34" fill="#fff"/><path d="M70 220 a50 50 0 0 1 100 0 Z" fill="#fff"/><rect x="40" y="250" width="170" height="60" rx="10" fill="#fff"/><text x="125" y="291" text-anchor="middle" font-family="Mont" font-weight="900" font-size="26" fill="#111">REGISTRY 1</text></g>
 <g class="b2"><circle cx="780" cy="120" r="34" fill="#FFB4B4"/><path d="M730 220 a50 50 0 0 1 100 0 Z" fill="#FFB4B4"/><rect x="690" y="250" width="170" height="60" rx="10" fill="#FFB4B4"/><text x="775" y="291" text-anchor="middle" font-family="Mont" font-weight="900" font-size="26" fill="#111">REGISTRY 2</text></g>
 <g class="bang"><circle cx="450" cy="340" r="60" fill="#E53935"/><text x="450" y="365" text-anchor="middle" font-family="Anton" font-size="70" fill="#fff">!</text></g></svg>
@@ -255,7 +255,7 @@ def x2(c, a, b): return [f'tl.to("#{c} .hb polyline", {{strokeDashoffset:0, dura
 X[2] = x2
 V[8] = '''<svg class="conv" viewBox="0 0 900 520" width="900" height="520">
 <g class="fld">''' + "".join(f'<rect x="{80 + i * 92}" y="40" width="80" height="380" rx="6" fill="{"#4CAF50" if i % 2 else "#7CB342"}"/>' for i in range(8)) + '''</g>
-<g class="col">''' + "".join(f'<rect x="{80 + (i % 5) * 150}" y="{40 + (i // 5) * 130}" width="130" height="110" rx="6" fill="#fff" stroke="#FFC42E" stroke-width="4"/>' for i in range(15)) + '''</g>
+<g class="col">''' + "".join(f'<rect x="{80 + (i % 5) * 150}" y="{40 + (i // 5) * 130}" width="130" height="110" rx="6" fill="#fff" stroke="#F2B23E" stroke-width="4"/>' for i in range(15)) + '''</g>
 <g class="st1"><rect x="120" y="440" width="300" height="70" rx="35" fill="#19C25A"/><text x="270" y="488" text-anchor="middle" font-family="Mont" font-weight="900" font-size="32" fill="#fff">90-A &#10004;</text></g>
 <g class="st2"><rect x="460" y="440" width="340" height="70" rx="35" fill="#19C25A"/><text x="630" y="488" text-anchor="middle" font-family="Mont" font-weight="900" font-size="32" fill="#fff">LAYOUT &#10004;</text></g></svg>'''
 def x8(c, a, b):
@@ -288,7 +288,7 @@ for k, o in enumerate(ORDER, 1):
         for j, (img, ttl, sb) in enumerate(ph):
             a_ = t0 + .3 + seg * j; card(f"ph{o}{j}", img, a_, a_ + seg + .15, ttl, sb, top=590, maxw=880, maxh=680)
         VS = mid + .1
-    H.append(f'<div class="pt" id="{cid}"><div class="num">{k}<small>/10</small></div><b>{title}</b><p>{sub}</p><div class="vis" style="opacity:0">{V[o]}</div></div>')
+    H.append(f'<div class="pt" id="{cid}"><div class="num">{k}<small>/10</small></div><b style="font-size:{92 if len(title) <= 15 else 70}px">{title}</b><p>{sub}</p><div class="vis" style="opacity:0">{V[o]}</div></div>')
     J.append(f'tl.fromTo("#{cid}", {{opacity:0, x:120}}, {{opacity:1, x:0, duration:.3, ease:"power3.out"}}, {t0:.2f}); tl.fromTo("#{cid} .num", {{scale:2.2, rotation:-12}}, {{scale:1, rotation:0, duration:.35, ease:"back.out(2.5)"}}, {t0:.2f});'
              f'tl.fromTo("#{cid} .vis", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.3, ease:"back.out(1.6)", immediateRender:false}}, {VS:.2f});'
              f'tl.to("#{cid}", {{opacity:0, x:-120, duration:.22, ease:"power2.in"}}, {t1 - .2:.2f});')
@@ -302,7 +302,7 @@ for k, o in enumerate(ORDER, 1):
 card("phme", "me", S(11) - .05, wt(11, "Jaipur") + .1, "&#10004; MAIN YEH SAB KHUD CHECK KARTA HOON", "Ashwil Bhupesh &middot; site par", top=300, maxw=760, maxh=900)
 H.append('<div id="cta"><b>JAIPUR MEIN ZAMEEN DHUNDH RAHE HO?</b><span>COMMENT &ldquo;PLOT&rdquo;</span></div>')
 J.append(f'tl.fromTo("#cta", {{opacity:0, scale:.8}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(11, "Jaipur"):.2f}); tl.to("#cta span", {{scale:1.08, duration:.4, yoyo:true, repeat:3}}, {wt(11, "Comment"):.2f});')
-card("phig", "insta", wt(11, "Comment") - .4, END + 1, "FOLLOW @ASHWILLPOWER", "", top=800, maxw=620, maxh=540)
+card("phig", "insta", wt(11, "Comment") - .4, END + 1, "FOLLOW @ASHWILLPOWER", "", top=880, maxw=600, maxh=480)
 sfx("sparkle", S(11), .3); sfx("sparkle", wt(11, "Comment"), .3)
 
 # captions
@@ -353,7 +353,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .tree{display:flex;flex-direction:column;align-items:center}.tn{padding:14px 24px;border-radius:14px;background:#fff;font:900 34px Mont;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.5)}.tn.top{background:#FFC42E}.tl{width:6px;height:40px;background:#fff}
 .trow{display:flex;gap:16px;border-top:6px solid #fff;padding-top:26px}.tn.nm{margin-top:30px;background:#19C25A;color:#fff}
 .chain{display:flex;align-items:center;gap:8px}.chain span{padding:14px 12px;border-radius:14px;background:#fff;font:900 30px Mont;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.5)}.chain b{font:900 34px Mont;color:#FFC42E}.chain .you{background:#FFC42E}
-.dbl{position:relative;width:820px;height:420px}.dbl .plot{position:absolute;left:290px;top:20px;width:240px;height:200px;line-height:200px;border:6px dashed #FFC42E;border-radius:14px;background:rgba(255,196,46,.25);font:400 60px Anton;color:#fff}
+.dbl{position:relative;width:820px;height:420px}.dbl .plot{position:absolute;left:290px;top:20px;width:240px;height:200px;line-height:200px;border:6px dashed #FFC42E;border-radius:14px;background:rgba(242,178,62,.25);font:400 60px Anton;color:#fff}
 .dbl .by{position:absolute;top:280px;padding:16px 24px;border-radius:14px;background:#fff;font:900 34px Mont;color:#111}.dbl .b1{left:20px}.dbl .b2{right:0;background:#FFE1E1}
 .chips{display:flex;gap:12px}.chips span{padding:14px 16px;border-radius:14px;background:#fff;font:900 30px Mont;color:#111}.clear{padding:16px 40px;border-radius:16px;background:#19C25A;color:#fff;font:400 70px/1 Anton}
 .naap{display:flex;flex-direction:column;align-items:center;gap:20px}.naap .pl{width:560px;height:300px;border:6px solid #fff;border-radius:10px;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center}.naap .w{font:900 40px Mont;font-style:normal;color:#FFC42E}
@@ -378,10 +378,10 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .stp{position:absolute;padding:14px 30px;border:8px solid #E53935;border-radius:14px;font:400 72px/1 Anton;color:#E53935;opacity:0;background:rgba(255,255,255,.6)}.s1{left:70px;top:130px}.s2{left:300px;top:270px}.s3{left:120px;top:420px}
 .clr{position:absolute;left:0;right:0;margin:0 auto;width:max-content;top:250px;padding:20px 40px;border-radius:20px;background:#19C25A;color:#fff;font:400 84px/1 Anton;opacity:0}.clr .ok{background:#fff;color:#19C25A}
 #title{position:absolute;left:0;right:0;top:280px;text-align:center;opacity:0;z-index:16}#title small{display:inline-block;padding:8px 22px;border-radius:10px;background:#fff;color:#111;font:900 34px Mont}
-#title b{display:block;margin-top:14px;font:400 112px/1 Anton;color:#FFC42E;text-shadow:0 0 30px rgba(255,196,46,.6),0 6px 30px #000;font-weight:400}
+#title b{display:block;margin-top:14px;font:400 112px/1 Anton;color:#FFC42E;text-shadow:0 0 30px rgba(242,178,62,.6),0 6px 30px #000;font-weight:400}
 .ml{position:absolute;opacity:0;translate:-50% -50%;padding:6px 16px;border-radius:8px;background:#fff;font:900 34px Mont;color:#111;white-space:nowrap;box-shadow:0 6px 16px rgba(0,0,0,.5);z-index:6}.ml.y{background:#FFC42E}.ml.mlab{left:540px;top:1180px;font-size:46px}
 .big{position:absolute;left:40px;right:40px;top:290px;opacity:0;text-align:center;z-index:9}.big b{display:block;font:400 130px/1 Anton;color:#5EC8FF;text-shadow:0 0 24px rgba(46,168,255,.6),0 6px 20px #000;font-weight:400}
-#b2 b{color:#FFC42E;text-shadow:0 0 24px rgba(255,196,46,.6),0 6px 20px #000}
+#b2 b{color:#FFC42E;text-shadow:0 0 24px rgba(242,178,62,.6),0 6px 20px #000}
 .big span{display:inline-block;margin-top:8px;padding:8px 22px;border-radius:10px;background:#fff;color:#111;font:900 30px Mont}
 #legend{position:absolute;left:50px;top:1290px;opacity:0;display:flex;gap:20px;z-index:9}#legend span{display:flex;align-items:center;gap:10px;padding:8px 16px;border-radius:12px;background:rgba(10,10,12,.85);font:900 28px Mont;color:#fff}#legend i{display:inline-block;width:46px;height:10px;border-radius:5px}
 .card{position:absolute;opacity:0;padding:14px 14px 16px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);z-index:8;text-align:center}
@@ -392,7 +392,26 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cta{position:absolute;left:50px;right:50px;top:440px;opacity:0;text-align:center;z-index:12}#cta b{display:block;padding:24px;border-radius:26px;background:#5EC8FF;color:#111;font:400 86px/1.02 Anton;font-weight:400}
 #cta span{display:inline-block;margin-top:24px;padding:16px 34px;border-radius:30px;background:#fff;color:#111;font:900 46px Mont}
 .cp{position:absolute;left:40px;right:130px;top:1440px;text-align:center;opacity:0;z-index:35}
-.cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
+.cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+/* ---- channel theme: warm dark brown, cream + amber ---- */
+body,#root{background:#15110d}
+#bg{background:radial-gradient(ellipse at 50% 28%,#3a2c1e 0%,#1c1610 55%,#0f0c09 100%)}
+#grid{background-image:linear-gradient(rgba(242,178,62,.07) 2px,transparent 2px),linear-gradient(90deg,rgba(242,178,62,.07) 2px,transparent 2px)}
+#glow1{background:#F2B23E;opacity:.22}#glow2{background:#B5651D;opacity:.22}
+#title small{background:#1c1610;color:#F2B23E;border:2px solid #F2B23E;font-family:Mont;letter-spacing:.06em}
+#title b{font:900 104px/1 Mont;color:#EFE3CC;text-shadow:0 0 30px rgba(242,178,62,.35),0 6px 24px #000}
+#prog b{background:#F2B23E;box-shadow:0 0 12px #F2B23E}#prog i{background:rgba(239,227,204,.15)}
+.pt .num{background:#1c1610;color:#F2B23E;border:3px solid #F2B23E;box-shadow:0 0 20px rgba(242,178,62,.35)}
+.pt > b{font:900 92px/1 Mont;color:#EFE3CC;text-shadow:0 0 26px rgba(242,178,62,.25),0 6px 24px #000}
+.pt p{background:#1c1610;color:#F2B23E;border:2px solid #F2B23E}
+.card{background:#1c1610;border:3px solid #F2B23E;box-shadow:0 0 40px rgba(242,178,62,.25),0 30px 70px rgba(0,0,0,.7)}.ct{color:#EFE3CC}.cs{color:#F2B23E}
+.cp div{background:rgba(20,16,12,.88);color:#fff;border:2px solid rgba(242,178,62,.5)}.cp .y{background:none;color:#F2B23E;padding:0}
+#warn{background:#1c1610;color:#FF6B5A;border:3px solid #FF6B5A}
+.verdict,.mc,.cn,.zr{background:#EFE3CC}.cn.you{background:#F2B23E}.note{background:#F2B23E}
+.vchain .ca{background:#F2B23E}.eq{color:#F2B23E}.mag{border-color:#F2B23E}.mag:after{background:#F2B23E}
+#cta b{background:#F2B23E;color:#15110d;font:900 66px/1.05 Mont}#cta span{background:#1c1610;color:#F2B23E;border:3px solid #F2B23E}
+#cred{color:rgba(239,227,204,.55);font-family:"Courier New",monospace}
+"""
 audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio>' if VOICE
          else f'<audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.55" data-fade-out="1.5"></audio>')
 c0, w0 = CAMS[0][2], CAMS[0][3]
