@@ -6,8 +6,8 @@ LINES = [
     "Jaipur mein apna pehla 1 crore kahan lagaye? Jawab aapki risk aur holding par depend karta hai.",
     "High risk aur lambi holding? Agriculture land. Sasta milta hai, par conversion aur approval ka risk hai.",
     "Low risk aur lambi holding? Shehar se door JDA approved plots. Shehar jis taraf badh raha hai, wahan dekho.",
-    "Low risk aur kam holding? Shehar ke paas plots. Infra ready hai, aur resale aasaan hai.",
-    "Commercial chahiye? Main road par plot lo. Road ki frontage hi asli value hai.",
+    "Low risk aur kam holding? Shehar ke paas, naye JDA zones mein plots. Infra aa raha hai, aur resale aasaan hai.",
+    "Commercial chahiye? National highway, state highway ya city ke main road par plot lo. Frontage hi asli value hai.",
     "Kuch bhi lo, patta, approval aur RERA zaroor check karo.",
     "Aapki preference kya hai? Comment karo Crore.",
 ]
@@ -188,7 +188,7 @@ pref(4, "p4", "COMMERCIAL", "", "MAIN ROAD PLOTS", GOLD, "NH &middot; State High
 for i, k in enumerate(["nh48", "nh52", "nh21", "ring", "kalwar", "sirsi", "diggi"]):
     J.append(f'tl.to(".r_{k}", {{strokeDashoffset:0, duration:.7, ease:"power2.out"}}, {S(4) + .3 + i * .2:.2f});')
 sfx("whoosh", S(4) + .3, .3)
-RL = [("NH 48", (27.10, 75.97), "y"), ("NH 48", (26.78, 75.55), "y"), ("NH 52", (27.13, 75.70), "y"), ("NH 52", (26.70, 75.875), "y"), ("NH 21", (26.95, 76.08), "y"),
+RL = [("NH 48", (27.10, 75.97), "y"), ("NH 48", (26.78, 75.55), "y"), ("NH 52", (27.13, 75.70), "y"), ("NH 21", (26.95, 76.08), "y"),
       ("RING ROAD", (26.78, 75.70), "g"), ("STATE / CITY ROADS", (27.02, 75.48), "w")]
 for i, (nm, ll, c_) in enumerate(RL):
     st = {"y": "", "g": "background:#3CE65A", "w": "background:#fff"}[c_]
@@ -209,7 +209,7 @@ sfx("sparkle", wt(6, "Comment"), .3)
 
 
 # captions
-HI = ["1 crore", "risk", "holding", "High risk", "Low risk", "Agriculture land", "JDA approved", "Shehar se door", "Shehar ke paas", "JDA approved", "Main road", "Commercial", "Main road", "frontage", "patta", "approval", "RERA", "Crore"]
+HI = ["1 crore", "risk", "holding", "High risk", "Low risk", "Agriculture land", "JDA approved", "Shehar se door", "Shehar ke paas", "naye JDA zones", "National highway", "state highway", "main road", "Commercial", "Main road", "frontage", "patta", "approval", "RERA", "Crore"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
