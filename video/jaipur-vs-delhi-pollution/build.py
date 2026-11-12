@@ -2,16 +2,7 @@
 Wind/smoke/inversion graphics are explanatory illustrations, not measured data."""
 import json, math, os
 P = "proj"
-LINES = [
-    "Har sardi Delhi gas chamber ban jaati hai, par Jaipur ka haal utna bura nahi hota. Iske peeche 4 reason hain.",
-    "Pehla, hawa ki disha. Sardiyon mein hawa north-west se, Punjab aur Haryana ki taraf se aati hai. Wahan parali jalti hai, aur yeh dhuaan seedha Delhi ki taraf jaata hai. Jaipur is raste mein nahi padta.",
-    "Doosra, Delhi Indo-Gangetic maidan mein hai. Hawa dheemi chalti hai, aur pollution jaise ek katori mein band ho jaata hai.",
-    "Teesra, sardi mein high pressure aur thandi hawa zameen ke paas ek dhakkan bana deti hai, jo dhuaan ko upar jaane hi nahi deta.",
-    "Chautha, Jaipur samudra tal se karib 430 meter upar hai, jabki Delhi sirf 215 meter. Aravali ki pahadiyon ke beech, aas paas khula ilaka hai, toh hawa chalti rehti hai aur pollution jaldi saaf hota hai.",
-    "Par dhyaan rahe, sardiyon mein Jaipur ka AQI bhi kharab hota hai, khaaskar dhool aur traffic se. Bas Delhi jitna nahi.",
-    "Saaf hawa bhi ek wajah hai ki log rehne ke liye Jaipur ko pasand kar rahe hain.",
-    "Aapko Jaipur ki hawa kaisi lagti hai? Comment karo.",
-]
+LINES = [""] * 9
 VOICE = os.path.exists("rec/phrases.json")
 if VOICE: PH = json.load(open("rec/phrases.json"))
 else:
@@ -23,7 +14,7 @@ def E(k): return PH[k]["e"]
 def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower()); assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(7) + 1.0, 2)
+END = round(E(8) + .9, 2)
 def wp(lat, lon):
     n = 2 ** 13
     return (((lon + 180) / 360 * n) - 5791) * 256, (((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n) - 3466) * 256
@@ -118,10 +109,10 @@ J.append('tl.set("#plane", {rotationX:48, scale:1.0, x:0, y:0, transformOrigin:"
 # ---------- 0 HOOK: smog Delhi vs clean Jaipur ----------
 J.append(f'tl.to("#smog", {{opacity:1, duration:.6}}, .1); tl.fromTo("#smog", {{attr:{{r:{U * 120:.0f}}}}}, {{attr:{{r:{U * 300:.0f}}}, duration:1.4, ease:"power2.out", immediateRender:false}}, .1); tl.to("#smog", {{attr:{{r:{U * 270:.0f}}}, duration:1.2, yoyo:true, repeat:5, ease:"sine.inOut"}}, 1.5);')
 J.append(f'tl.to("#clean", {{opacity:1, duration:.6}}, {wt(0, "Jaipur") - .1:.2f}); tl.to(["#dring"], {{opacity:1, duration:.3}}, .2); tl.to("#jring", {{opacity:1, duration:.3}}, {wt(0, "Jaipur") - .1:.2f});')
-bb("bdel", .2, S(5)); bb("bjpr", wt(0, "Jaipur") - .1, S(7))
-H.append('<div id="hook"><small>HAR SARDI</small><div class="vs"><div class="d"><b>DELHI</b><span>GAS CHAMBER</span></div><i>vs</i><div class="j"><b>JAIPUR</b><span>UTNA BURA NAHI</span></div></div><em>4 REASONS</em></div>')
+bb("bdel", .2, S(6)); bb("bjpr", wt(0, "Jaipur") - .1, S(8))
+H.append('<div id="hook"><small>DELHI SE JAIPUR SHIFT &middot; KYUN?</small><div class="vs"><div class="d"><b>DELHI</b><span>GAS CHAMBER</span></div><i>vs</i><div class="j"><b>JAIPUR</b><span>UTNA BURA NAHI</span></div></div><em>4 REASONS</em></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:1, scale:1.1}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.fromTo("#hook .d", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.4}}, .1);'
-         f'tl.fromTo(["#hook i", "#hook .j"], {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4, stagger:.1}}, {wt(0, "Jaipur") - .15:.2f}); tl.fromTo("#hook em", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.35}}, {wt(0, "4 reason") - .1:.2f}); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .2:.2f});')
+         f'tl.fromTo(["#hook i", "#hook .j"], {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4, stagger:.1}}, {wt(0, "Jaipur") - .15:.2f}); tl.fromTo("#hook em", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.35}}, {wt(1, "chaar") - .1:.2f}); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(2) - .2:.2f});')
 sfx("impact-bass-1", 0, .45); sfx("whoosh", wt(0, "Jaipur") - .15, .3)
 
 def chapter(k, n, title):
@@ -130,17 +121,17 @@ def chapter(k, n, title):
     sfx("whoosh-short", S(k), .3)
 
 # ---------- 1 wind + stubble ----------
-chapter(1, 1, "HAWA KI DISHA")
-plane(S(1) - .2, 50, 1.15, 120, 260, 1.0)
-bb("bpun", wt(1, "Punjab") - .1, S(2))
+chapter(2, 1, "HAWA KI DISHA")
+plane(S(2) - .2, 50, 1.15, 120, 260, 1.0)
+bb("bpun", wt(2, "Punjab") - .1, S(3))
 for i in range(len(PUN)):
-    t = wt(1, "parali") - .1 + i * .06
-    J.append(f'tl.to("#fr{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.fromTo("#fr{i} .fc", {{attr:{{r:{U * 8:.0f}}}}}, {{attr:{{r:{U * 15:.0f}}}, duration:.25, yoyo:true, repeat:-1, ease:"sine.inOut"}}, {t:.2f}); tl.to("#fr{i}", {{opacity:0, duration:.3}}, {S(3):.2f});')
-sfx("riser", wt(1, "parali") - .1, .25)
+    t = wt(2, "parali") - .1 + i * .06
+    J.append(f'tl.to("#fr{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.fromTo("#fr{i} .fc", {{attr:{{r:{U * 8:.0f}}}}}, {{attr:{{r:{U * 15:.0f}}}, duration:.25, yoyo:true, repeat:-1, ease:"sine.inOut"}}, {t:.2f}); tl.to("#fr{i}", {{opacity:0, duration:.3}}, {S(4):.2f});')
+sfx("riser", wt(2, "parali") - .1, .25)
 for k in range(len(WIND)):
-    J.append(f'tl.set("#wd{k}", {{opacity:.9}}, {wt(1, "north-west") - .1 + k * .15:.2f}); tl.to("#wd{k}", {{strokeDashoffset:0, duration:.9, ease:"power2.out"}}, {wt(1, "north-west") - .1 + k * .15:.2f}); tl.to("#wd{k}", {{opacity:0, duration:.3}}, {S(2) + .3:.2f});')
-lux(1, "<b>&#8600;</b> NORTH-WEST WINDS", wt(1, "north-west") - .1, wt(1, "parali") - .1, 60, 1290)
-T0 = wt(1, "dhuaan") - .3
+    J.append(f'tl.set("#wd{k}", {{opacity:.9}}, {wt(2, "north-west") - .1 + k * .15:.2f}); tl.to("#wd{k}", {{strokeDashoffset:0, duration:.9, ease:"power2.out"}}, {wt(2, "north-west") - .1 + k * .15:.2f}); tl.to("#wd{k}", {{opacity:0, duration:.3}}, {S(3) + .3:.2f});')
+lux(1, "<b>&#8600;</b> NORTH-WEST WINDS", wt(2, "north-west") - .1, wt(2, "parali") - .1, 60, 1290)
+T0 = wt(2, "dhuaan") - .3
 for k in range(NPART):
     p0, m, p1 = WIND[k % len(WIND)]
     st = T0 + (k // len(WIND)) * .35 + (k % len(WIND)) * .08; dur = 2.2
@@ -150,18 +141,18 @@ for k in range(NPART):
         J.append(f'tl.to("#pt{k}", {{attr:{{cx:{pts[s][0]:.0f}, cy:{pts[s][1]:.0f}}}, duration:{dur / 10:.3f}, ease:"none"}}, {st + dur * (s - 1) / 10:.3f});')
     J.append(f'tl.to("#pt{k}", {{opacity:0, duration:.4}}, {st + dur:.2f});')
 J.append(f'tl.to("#smog", {{opacity:1, attr:{{r:{U * 290:.0f}}}, duration:1.2}}, {T0 + 1.6:.2f});')
-lux(2, "<b>&#10006;</b> JAIPUR IS RAASTE MEIN NAHI", wt(1, "Jaipur") - .1, S(2), 60, 1290, "grn")
-J.append(f'tl.fromTo("#jring", {{attr:{{r:{U * 40:.0f}}}}}, {{attr:{{r:{U * 120:.0f}}}, opacity:0, duration:.9, repeat:2, immediateRender:false}}, {wt(1, "Jaipur") - .1:.2f}); tl.set("#jring", {{opacity:1, attr:{{r:{U * 60:.0f}}}}}, {wt(1, "Jaipur") + 2.6:.2f});')
+lux(2, "<b>&#10006;</b> JAIPUR IS RAASTE MEIN NAHI", wt(2, "Jaipur") - .1, S(3), 60, 1290, "grn")
+J.append(f'tl.fromTo("#jring", {{attr:{{r:{U * 40:.0f}}}}}, {{attr:{{r:{U * 120:.0f}}}, opacity:0, duration:.9, repeat:2, immediateRender:false}}, {wt(2, "Jaipur") - .1:.2f}); tl.set("#jring", {{opacity:1, attr:{{r:{U * 60:.0f}}}}}, {wt(2, "Jaipur") + 2.6:.2f});')
 
 # ---------- 2 bowl (Indo-Gangetic plain + Himalaya) ----------
-chapter(2, 2, "DELHI KI KATORI")
-plane(S(2) - .2, 58, 1.05, 0, 330, 1.0)
-J.append(f'tl.fromTo(".him", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.5, stagger:.03, ease:"back.out(1.6)", immediateRender:false}}, {S(2) + .2:.2f});')
-bb("bhim", S(2) + .7, S(5))
-J.append(f'tl.to("#bowl", {{fillOpacity:.55, strokeOpacity:.8, duration:1.0}}, {wt(2, "maidan") - .2:.2f}); tl.to("#bowl", {{fillOpacity:.7, duration:.6, yoyo:true, repeat:3}}, {wt(2, "katori") - .1:.2f}); tl.to("#bowl", {{fillOpacity:.3, strokeOpacity:0, duration:.5}}, {S(4) - .1:.2f});')
-lux(3, "INDO-GANGETIC PLAIN &middot; <b>BOWL</b>", wt(2, "Indo") - .1, wt(2, "katori") - .4, 60, 1290)
-lux(4, "HAWA DHEEMI &middot; POLLUTION <b>TRAPPED</b>", wt(2, "dheemi") - .1, S(3), 60, 1190, "red")
-sfx("impact-bass-1", wt(2, "katori"), .35)
+chapter(3, 2, "DELHI KI KATORI")
+plane(S(3) - .2, 58, 1.05, 0, 330, 1.0)
+J.append(f'tl.fromTo(".him", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.5, stagger:.03, ease:"back.out(1.6)", immediateRender:false}}, {S(3) + .2:.2f});')
+bb("bhim", S(3) + .7, S(6))
+J.append(f'tl.to("#bowl", {{fillOpacity:.55, strokeOpacity:.8, duration:1.0}}, {wt(3, "maidan") - .2:.2f}); tl.to("#bowl", {{fillOpacity:.7, duration:.6, yoyo:true, repeat:3}}, {wt(3, "katori") - .1:.2f}); tl.to("#bowl", {{fillOpacity:.3, strokeOpacity:0, duration:.5}}, {S(5) - .1:.2f});')
+lux(3, "INDO-GANGETIC PLAIN &middot; <b>BOWL</b>", wt(3, "Indo") - .1, wt(3, "katori") - .4, 60, 1290)
+lux(4, "HAWA DHEEMI &middot; POLLUTION <b>TRAPPED</b>", wt(3, "dheemi") - .1, S(4), 60, 1190, "red")
+sfx("impact-bass-1", wt(3, "katori"), .35)
 H.append(f'''<div id="arc"><svg viewBox="0 0 960 600" width="960" height="600">
 <defs><linearGradient id="arcsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2740"/><stop offset="1" stop-color="#3b4a63"/></linearGradient>
 <linearGradient id="arcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b5a3e"/><stop offset="1" stop-color="#2a2218"/></linearGradient>
@@ -179,8 +170,8 @@ H.append(f'''<div id="arc"><svg viewBox="0 0 960 600" width="960" height="600">
 <text x="430" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">INDO-GANGETIC KATORI</text><text x="940" y="40" text-anchor="end" font-family="Mont" font-weight="700" font-size="18" letter-spacing="3" fill="#C9A24A">SAMUDRA TAL SE OONCHAI</text>
 <text x="820" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">ARAVALI &middot; OONCHAI</text>
 </svg></div>''')
-TK = wt(2, "katori")
-J.append(f'tl.fromTo("#arc", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {TK - .5:.2f}); tl.to("#arc", {{opacity:0, duration:.3}}, {S(3) - .1:.2f});'
+TK = wt(3, "katori")
+J.append(f'tl.fromTo("#arc", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {TK - .5:.2f}); tl.to("#arc", {{opacity:0, duration:.3}}, {S(4) - .1:.2f});'
          f'tl.set("#arc .plat", {{scaleY:.35, transformOrigin:"50% 100%"}}, 0); tl.set(["#arc .jp", "#arc .dl"], {{opacity:0}}, 0); tl.fromTo("#arc .smog", {{opacity:0, scale:.4, transformOrigin:"50% 80%"}}, {{opacity:1, scale:1, duration:.8, ease:"power2.out", immediateRender:false}}, {TK - .2:.2f});'
          f'tl.fromTo("#arc .dl", {{opacity:0, y:-60}}, {{opacity:1, y:0, duration:.5, ease:"bounce.out", immediateRender:false}}, {TK - .3:.2f}); tl.to("#arc .smog", {{scaleY:1.08, duration:.6, yoyo:true, repeat:3, transformOrigin:"50% 80%"}}, {TK + .6:.2f});'
          f'tl.to("#arc .plat", {{scaleY:1, duration:.7, ease:"back.out(1.6)"}}, {TK + .7:.2f}); tl.fromTo("#arc .jp", {{opacity:0, y:120}}, {{opacity:1, y:0, duration:.7, ease:"back.out(1.6)", immediateRender:false}}, {TK + .7:.2f});'
@@ -188,7 +179,7 @@ J.append(f'tl.fromTo("#arc", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45
 sfx("whoosh", TK - .5, .3); sfx("riser", TK + .7, .25)
 
 # ---------- 3 inversion lid (2D cross-section) ----------
-chapter(3, 3, "HIGH PRESSURE KA DHAKKAN")
+chapter(4, 3, "HIGH PRESSURE KA DHAKKAN")
 H.append(f'''<div id="inv"><svg viewBox="0 0 960 760" width="960" height="760">
 <defs><linearGradient id="skyg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#25324d"/><stop offset="1" stop-color="#41506b"/></linearGradient>
 <linearGradient id="lidg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8964A" stop-opacity=".0"/><stop offset=".5" stop-color="#E8964A" stop-opacity=".85"/><stop offset="1" stop-color="#E8964A" stop-opacity=".0"/></linearGradient></defs>
@@ -204,49 +195,49 @@ H.append(f'''<div id="inv"><svg viewBox="0 0 960 760" width="960" height="760">
 ''' + "".join(f'<rect x="{60 + i * 85}" y="{680 - h}" width="56" height="{h}" fill="#4a4237"/>' for i, h in enumerate([90, 140, 70, 180, 110, 160, 80, 130, 100, 150])) +
 ''.join(f'<circle class="sm" cx="{90 + (i * 61) % 820}" cy="660" r="{10 + i % 3 * 4}" fill="#b3ada3" opacity=".8"/>' for i in range(22)) +
 '</svg></div>')
-J.append(f'tl.fromTo("#inv", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(3) + .1:.2f}); tl.to("#inv", {{opacity:0, duration:.3}}, {S(4) - .1:.2f});'
-         f'tl.fromTo("#inv .hp", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.4}}, {wt(3, "high") - .1:.2f}); tl.fromTo("#inv .cold, #inv .coldt", {{opacity:0}}, {{opacity:1, duration:.4}}, {wt(3, "thandi") - .1:.2f});'
-         f'tl.fromTo(["#inv .lid", "#inv .lidt"], {{opacity:0, scaleX:.2, transformOrigin:"50% 50%"}}, {{opacity:1, scaleX:1, duration:.5, ease:"power3.out"}}, {wt(3, "dhakkan") - .1:.2f});')
+J.append(f'tl.fromTo("#inv", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(4) + .1:.2f}); tl.to("#inv", {{opacity:0, duration:.3}}, {S(5) - .1:.2f});'
+         f'tl.fromTo("#inv .hp", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.4}}, {wt(4, "high") - .1:.2f}); tl.fromTo("#inv .cold, #inv .coldt", {{opacity:0}}, {{opacity:1, duration:.4}}, {wt(4, "thandi") - .1:.2f});'
+         f'tl.fromTo(["#inv .lid", "#inv .lidt"], {{opacity:0, scaleX:.2, transformOrigin:"50% 50%"}}, {{opacity:1, scaleX:1, duration:.5, ease:"power3.out"}}, {wt(4, "dhakkan") - .1:.2f});')
 for i in range(22):
-    st = S(3) + .4 + (i % 7) * .18
+    st = S(4) + .4 + (i % 7) * .18
     top = 455 + (i * 37) % 50
     J.append(f'tl.fromTo("#inv .sm:nth-of-type({i + 1})", {{attr:{{cy:660}}}}, {{attr:{{cy:{top}}}, duration:{1.2 + (i % 3) * .2:.2f}, ease:"power1.out", repeat:2, immediateRender:false}}, {st:.2f});')
-sfx("whoosh", S(3) + .1, .3); sfx("impact-bass-1", wt(3, "dhakkan"), .35)
+sfx("whoosh", S(4) + .1, .3); sfx("impact-bass-1", wt(4, "dhakkan"), .35)
 
 # ---------- 4 Aravalli + open land, Jaipur breathes ----------
-chapter(4, 4, "ARAVALI &middot; OONCHAI &middot; KHULI HAWA")
+chapter(5, 4, "ARAVALI &middot; OONCHAI &middot; KHULI HAWA")
 rx, sc, x, y = jp_focus(55, 1.45)
-plane(S(4) - .2, rx, sc, x, y, 1.1)
-J.append(f'tl.fromTo(".arv", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.45, stagger:.03, ease:"back.out(1.6)", immediateRender:false}}, {wt(4, "Aravali") - .1:.2f});')
-bb("barv", wt(4, "Aravali") + .3, S(5))
-J.append(f'tl.to(["#smog", "#bowl"], {{opacity:.3, duration:.5}}, {S(4):.2f}); tl.to(".fire", {{opacity:0, duration:.3}}, {S(4):.2f}); tl.to("#clean", {{opacity:1, attr:{{r:{U * 260:.0f}}}, duration:1}}, {wt(4, "hawa") - .2:.2f});')
+plane(S(5) - .2, rx, sc, x, y, 1.1)
+J.append(f'tl.fromTo(".arv", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.45, stagger:.03, ease:"back.out(1.6)", immediateRender:false}}, {wt(5, "Aravali") - .1:.2f});')
+bb("barv", wt(5, "Aravali") + .3, S(6))
+J.append(f'tl.to(["#smog", "#bowl"], {{opacity:.3, duration:.5}}, {S(5):.2f}); tl.to(".fire", {{opacity:0, duration:.3}}, {S(5):.2f}); tl.to("#clean", {{opacity:1, attr:{{r:{U * 260:.0f}}}, duration:1}}, {wt(5, "hawa") - .2:.2f});')
 for k in range(3):
-    J.append(f'tl.to("#cw{k}", {{opacity:1, duration:.3}}, {wt(4, "hawa") - .2 + k * .12:.2f}); tl.fromTo("#cw{k}", {{strokeDashoffset:0}}, {{strokeDashoffset:-1.33, duration:2.4, ease:"none", repeat:2, immediateRender:false}}, {wt(4, "hawa") - .2:.2f}); tl.to("#cw{k}", {{opacity:0, duration:.3}}, {S(5):.2f});')
-lux(5, "JAIPUR <b>~430 M</b> &nbsp;&middot;&nbsp; DELHI <b>~215 M</b>", wt(4, "430") - .1, wt(4, "hawa") - .1, 60, 1290)
-lux(6, "<b>&#10004;</b> HAWA CHALTI RAHE &middot; JALDI SAAF", wt(4, "hawa") - .1, S(5), 60, 1290, "grn")
-sfx("whoosh", wt(4, "hawa") - .2, .3)
+    J.append(f'tl.to("#cw{k}", {{opacity:1, duration:.3}}, {wt(5, "hawa") - .2 + k * .12:.2f}); tl.fromTo("#cw{k}", {{strokeDashoffset:0}}, {{strokeDashoffset:-1.33, duration:2.4, ease:"none", repeat:2, immediateRender:false}}, {wt(5, "hawa") - .2:.2f}); tl.to("#cw{k}", {{opacity:0, duration:.3}}, {S(6):.2f});')
+lux(5, "JAIPUR <b>~430 M</b> &nbsp;&middot;&nbsp; DELHI <b>~215 M</b>", wt(5, "430") - .1, wt(5, "hawa") - .1, 60, 1290)
+lux(6, "<b>&#10004;</b> HAWA CHALTI RAHE &middot; JALDI SAAF", wt(5, "hawa") - .1, S(6), 60, 1290, "grn")
+sfx("whoosh", wt(5, "hawa") - .2, .3)
 
 # ---------- 5 honesty: Jaipur AQI also poor in winter ----------
-plane(S(5) - .2, 48, 1.0, 0, 0, 1.0)
-J.append(f'tl.to("#clean", {{opacity:.35, duration:.4}}, {S(5):.2f}); tl.to("#bdel", {{opacity:1, duration:.2}}, {S(5):.2f});')
+plane(S(6) - .2, 48, 1.0, 0, 0, 1.0)
+J.append(f'tl.to("#clean", {{opacity:.35, duration:.4}}, {S(6):.2f}); tl.to("#bdel", {{opacity:1, duration:.2}}, {S(6):.2f});')
 H.append(f'<div id="aqi"><small>SARDIYON MEIN</small><div class="row"><div class="c j"><b>JAIPUR</b><span>KABHI KABHI &lsquo;POOR&rsquo;</span><i>dhool &middot; traffic</i></div><div class="c d"><b>DELHI</b><span>&lsquo;SEVERE&rsquo; TAK</span><i>har saal</i></div></div></div>')
-J.append(f'tl.fromTo("#aqi", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(5, "AQI") - .2:.2f}); tl.fromTo("#aqi .d", {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4}}, {wt(5, "Delhi jitna") - .1:.2f}); tl.to("#aqi", {{opacity:0, duration:.3}}, {S(6) - .1:.2f});')
+J.append(f'tl.fromTo("#aqi", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(6, "AQI") - .2:.2f}); tl.fromTo("#aqi .d", {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4}}, {wt(6, "Delhi jitna") - .1:.2f}); tl.to("#aqi", {{opacity:0, duration:.3}}, {S(7) - .1:.2f});')
 
 # ---------- 6 real estate ----------
 rx, sc, x, y = jp_focus(50, 2.4)
-plane(S(6) - .2, rx, sc, x, y, 1.0)
-J.append(f'tl.to("#clean", {{opacity:1, attr:{{r:{U * 160:.0f}}}, duration:.8}}, {S(6):.2f}); tl.fromTo("#jring", {{attr:{{r:{U * 20:.0f}}}, opacity:1}}, {{attr:{{r:{U * 90:.0f}}}, opacity:0, duration:1, repeat:2, immediateRender:false}}, {S(6):.2f});')
+plane(S(7) - .2, rx, sc, x, y, 1.0)
+J.append(f'tl.to("#clean", {{opacity:1, attr:{{r:{U * 160:.0f}}}, duration:.8}}, {S(7):.2f}); tl.fromTo("#jring", {{attr:{{r:{U * 20:.0f}}}, opacity:1}}, {{attr:{{r:{U * 90:.0f}}}, opacity:0, duration:1, repeat:2, immediateRender:false}}, {S(7):.2f});')
 H.append('<div id="re"><span>SAAF HAWA</span><b>+</b><span>BEHTAR LIVING</span><em>JAIPUR &#9650;</em></div>')
-J.append(f'tl.fromTo("#re", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(6) + .1:.2f}); tl.fromTo("#re em", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.4}}, {wt(6, "Jaipur") - .1:.2f}); tl.to("#re", {{opacity:0, duration:.3}}, {S(7) - .1:.2f});')
-sfx("sparkle", wt(6, "Jaipur"), .3)
+J.append(f'tl.fromTo("#re", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7) + .1:.2f}); tl.fromTo("#re em", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.4}}, {wt(7, "Jaipur") - .1:.2f}); tl.to("#re", {{opacity:0, duration:.3}}, {S(8) - .1:.2f});')
+sfx("sparkle", wt(7, "Jaipur"), .3)
 
 # ---------- 7 CTA ----------
-H.append('<div id="cta"><b>AAPKO JAIPUR KI HAWA KAISI LAGTI HAI?</b><span>COMMENT KARO</span></div>')
-J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(7, "Comment"):.2f});')
-sfx("sparkle", wt(7, "Comment"), .3)
+H.append('<div id="cta"><b>KYA AAP BHI DELHI SE JAIPUR SHIFT HONE KA SOCH RAHE HO?</b><span>COMMENT KARO</span></div>')
+J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(8):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(8):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(8, "Comment"):.2f});')
+sfx("sparkle", wt(8, "Comment"), .3)
 
 # ---------- captions ----------
-HI = ["gas chamber", "Jaipur", "4 reason", "north-west", "Punjab", "Haryana", "parali", "dhuaan", "Delhi", "Indo-Gangetic", "katori", "high pressure", "dhakkan", "Aravali", "oonchai", "430 meter", "215 meter",
+HI = ["gas chamber", "Jaipur", "chaar", "shift", "Reason two", "Reason three", "Reason four", "Number one", "north-west", "Punjab", "Haryana", "parali", "dhuaan", "Delhi", "Indo-Gangetic", "katori", "high pressure", "dhakkan", "Aravali", "oonchai", "430 meter", "215 meter",
       "khula ilaka", "jaldi saaf", "AQI", "dhool", "traffic", "Saaf hawa", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
@@ -269,7 +260,7 @@ for n, ph in enumerate(PH):
         t += d; ci += 1
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
-    J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .85);')
+    J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .8);')
 H.append('<div id="cred">Wind, smoke &amp; inversion graphics are explanatory illustrations &middot; 3D terrain not to scale &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
 
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
