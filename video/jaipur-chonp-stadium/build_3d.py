@@ -212,7 +212,11 @@ TM = max(S(1), T3 + 2.6)
 J.append(f'tl.fromTo("#mou", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(1, "300") - .2:.2f}); tl.fromTo("#mou .mbig", {{letterSpacing:"0.4em", opacity:0}}, {{letterSpacing:"0.02em", opacity:1, duration:.6, ease:"power3.out"}}, {wt(1, "300") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
 sfx("pop", wt(1, "Vedanta"), .3); sfx("impact-bass-1", wt(1, "300"), .4)
 
-card("clip", "statesman2", wt(1, "2023") - .1, wt(1, "300") - .15, "RCA + VEDANTA MoU", "The Statesman &middot; 30 March 2023", ("NEWS", "#C9A24A"), top=170, maxw=1000, maxh=1120)
+card("clip", "statesman2", wt(1, "2023") - .1, wt(1, "300") - .15, "RCA + VEDANTA MoU", "The Statesman &middot; 30 March 2023", ("NEWS", "#C9A24A"), top=140, maxw=1000, maxh=740)
+
+H.append('<div id="parties"><div class="pv"><img src="assets/img/vedanta_aa.jpg"/><b>VEDANTA</b></div><i>&times;</i><div class="pr"><img src="assets/img/rca_logo.jpg"/><b>RCA</b></div></div>')
+J.append(f'tl.set("#parties", {{opacity:1}}, {wt(1, "Vedanta") - .1:.2f}); tl.fromTo("#parties .pv", {{opacity:0, x:-80}}, {{opacity:1, x:0, duration:.45, ease:"power3.out"}}, {wt(1, "Vedanta") - .1:.2f}); tl.fromTo("#parties i", {{opacity:0, scale:.4}}, {{opacity:1, scale:1, duration:.3}}, {wt(1, "RCA") - .2:.2f}); tl.fromTo("#parties .pr", {{opacity:0, x:80}}, {{opacity:1, x:0, duration:.45, ease:"power3.out"}}, {wt(1, "RCA") - .1:.2f}); tl.to("#parties", {{opacity:0, duration:.25}}, {wt(1, "300") - .25:.2f});')
+sfx("click-soft", wt(1, "Vedanta") - .1, .35); sfx("click-soft", wt(1, "RCA") - .1, .35)
 
 # ---------- 2 TOP 3 ----------
 J.append(f'tl.to("#dim", {{opacity:.65, duration:.3}}, {S(2) - .1:.2f}); tl.to("#dim", {{opacity:.12, duration:.3}}, {S(3):.2f});')
@@ -221,7 +225,7 @@ H.append('<div id="rank">'
          '<div class="rk" id="rk1"><img src="assets/img/mcg2.jpg"/><div><i>#2</i><b>MELBOURNE CRICKET GROUND</b><span>Australia</span></div></div>'
          '<div class="rk hot" id="rk2"><img src="assets/img/render.jpg"/><div><i>#3</i><b>JAIPUR &middot; CHONP</b><span>Anil Agarwal Intl. Stadium</span></div></div></div>')
 J.append(f'tl.fromTo("#rank", {{opacity:0}}, {{opacity:1, duration:.2}}, {S(2):.2f}); tl.to("#rank", {{opacity:0, duration:.2}}, {S(3) - .1:.2f});')
-for i, t in enumerate([wt(2, "Ahmedabad"), wt(2, "Melbourne"), wt(2, "Melbourne") + 1.0]):
+for i, t in enumerate([wt(2, "Ahmedabad"), wt(2, "aur Melbourne") - .2, wt(2, "Melbourne") + 1.0]):
     J.append(f'tl.fromTo("#rk{i}", {{opacity:0, x:-80}}, {{opacity:1, x:0, duration:.3, ease:"back.out(2)"}}, {t - .1:.2f});'); sfx("pop", t, .3)
 
 # ---------- 3 LOCATION (flatten, map) ----------
@@ -390,6 +394,15 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cta b{border-radius:6px !important;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95)) !important;border:1.5px solid #C9A24A;color:#F3E6C8 !important}
 .opts span{border-radius:4px !important;border:1.5px solid #C9A24A !important;color:#F7E3A8 !important;background:rgba(14,12,9,.9) !important}
 #cta em{border-radius:4px !important;background:#C9A24A !important;color:#111 !important;letter-spacing:.22em}
+#parties{position:absolute;left:30px;right:30px;top:1090px;opacity:0;z-index:13;display:flex;align-items:center;justify-content:center;gap:18px}
+#parties .pv,#parties .pr{padding:10px;border-radius:6px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95));text-align:center}
+#parties .pv img{display:block;width:400px;height:220px;object-fit:cover;border-radius:4px}#parties .pr img{display:block;width:220px;height:220px;object-fit:contain;border-radius:4px;background:#fff}
+#parties b{display:block;margin-top:8px;font:700 24px Mont;letter-spacing:.24em;color:#F3E6C8}#parties i{font:300 70px Mont;color:#C9A24A;font-style:normal}
+#rank{display:grid !important;grid-template-columns:1fr 1fr;gap:16px;top:250px !important}
+#rank .rk{flex-direction:column;align-items:stretch;margin:0 !important;padding:10px !important;border-radius:6px !important;border:1.5px solid #C9A24A !important;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95)) !important}
+#rank #rk0 img,#rank #rk1 img{width:100% !important;height:560px !important;border-radius:4px !important}
+#rank .rk.hot{grid-column:1 / span 2;flex-direction:row;align-items:center}#rank .rk.hot img{width:260px !important;height:150px !important}
+#rank .rk i{color:#C9A24A !important}#rank .rk b{color:#F3E6C8 !important}
 #hero{position:absolute;left:160px;top:760px;width:760px;opacity:1;z-index:13;padding:12px 12px 14px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);text-align:center}#hero img{display:block;width:100%;border-radius:14px}#hero div{margin-top:8px;font:400 40px/1.05 Anton;color:#14161c}#hero span{font:800 22px Mont;color:#888}
 #mou{position:absolute;left:90px;right:90px;top:300px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
