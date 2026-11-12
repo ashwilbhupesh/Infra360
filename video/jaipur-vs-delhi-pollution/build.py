@@ -275,7 +275,7 @@ H.append('<svg id="parr" width="1080" height="1920" viewBox="0 0 1080 1920"><def
          '<path d="M640 860 Q 560 960 450 990" pathLength="1" style="fill:none;stroke:#F2B23E;stroke-width:8;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1" marker-end="url(#pah)"/></svg>')
 J.append(f'tl.set("#parr", {{opacity:1}}, {TJ:.2f}); tl.to("#parr path", {{strokeDashoffset:0, duration:.5, ease:"power2.out"}}, {TJ + .1:.2f}); tl.to("#parr", {{opacity:0, duration:.25}}, {S(2) - .35:.2f}); tl.set("#parr", {{opacity:0}}, 0);')
 pop("ppstb", "stubble", wt(2, "parali") - .1, S(3) - .1, "PARALI JALANA", 500, 520, 500, 300, "red")
-pop("pparv", "aravali", wt(5, "Aravali") - .1, S(6) - .1, "ARAVALI KI PAHADIYAN", 260, 300, 560, 340, "grn")
+pop("pparv", "aravali", wt(5, "430") - .1, S(6) - .1, "JAIPUR &middot; ARAVALI", 30, 270, 440, 250, "grn")
 
 # ---------- captions ----------
 HI = ["gas chamber", "Jaipur", "chaar", "shift", "Reason two", "Reason three", "Reason four", "Number one", "north-west", "Punjab", "Haryana", "parali", "dhuaan", "Delhi", "Indo-Gangetic", "katori", "high pressure", "dhakkan", "Aravali", "oonchai", "430 meter", "215 meter",
