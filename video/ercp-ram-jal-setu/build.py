@@ -223,7 +223,7 @@ J.append(f'tl.fromTo("#stat", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.4
 sfx("click-soft", wt(8, "4%"), .4)
 
 # ---------- 7 CTA ----------
-H.append('<div id="cta"><b>ISKA PAANI AAPKE ZILE MEIN BHI AAYEGA?</b><span>COMMENT KARO</span></div>')
+H.append('<div id="cta"><b>KYA ISKA PAANI AAPKE ZILE MEIN BHI AAYEGA?</b><span>COMMENT KARO</span></div>')
 J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(9):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(9):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(9, "Comment"):.2f});')
 sfx("sparkle", wt(9, "Comment"), .3)
 
