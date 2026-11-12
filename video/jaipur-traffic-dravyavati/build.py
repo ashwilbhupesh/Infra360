@@ -101,7 +101,7 @@ def card(cid, img, t0, t1, title, sub="", tag=None, top=400, maxw=900, maxh=600)
              f'tl.fromTo("#{cid} .scan", {{left:"0%", opacity:1}}, {{left:"100%", duration:.55, ease:"power2.inOut"}}, {t0:.2f}); tl.to("#{cid} .scan", {{opacity:0, duration:.15}}, {t0 + .55:.2f}); tl.to("#{cid}", {{opacity:0, duration:.2}}, {t1 - .2:.2f});')
     sfx("pop", t0, .25)
 def lab(i, p, text, t, until, at, dx=0, dy=0, cls=""):
-    x, y = scr(p, at); H.append(f'<div class="ml {cls}" id="{i}" style="left:{min(max(x + dx, 40 + len(text) * 9), 1040 - len(text) * 9):.0f}px;top:{y + dy:.0f}px;opacity:0">{text}</div>')
+    x, y = scr(p, at); H.append(f'<div class="ml {cls}" id="{i}" style="left:{min(max(x + dx, 30 + len(text) * 11), 1050 - len(text) * 11):.0f}px;top:{y + dy:.0f}px;opacity:0">{text}</div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)", immediateRender:false}}, {t:.2f}); tl.fromTo("#{i}", {{opacity:1}}, {{opacity:0, duration:.2, immediateRender:false}}, {until - .2:.2f});')
 def mover(mid, pts, t0, d, col, until, N=70):
     L = [0.0]
@@ -140,7 +140,7 @@ SVG.insert(-1, f'<path id="zz" d="{pd(ZZ)}" pathLength="1" style="fill:none;stro
 JAMS = [(26.935, 75.81), (26.926, 75.822), (26.917, 75.828), (26.90, 75.815), (26.875, 75.817), (26.848, 75.814), (26.815, 75.834)]
 for i, (la, lo) in enumerate(JAMS):
     x, y = wp(la, lo)
-    SVG.insert(-1, f'<g class="jam" id="jm{i}" style="opacity:0"><circle cx="{x:.1f}" cy="{y:.1f}" r="1" class="dg" style="fill:#E5484D;opacity:.45"/><circle cx="{x:.1f}" cy="{y:.1f}" r="1" class="dc" style="fill:#E5484D;stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke"/></g>')
+    pass
 AREAS = [("SIKAR ROAD", 26.932, 75.795), ("SODALA", 26.904, 75.779), ("MANSAROVAR", 26.868, 75.782), ("SANGANER", 26.818, 75.799), ("SITAPURA", 26.786, 75.872)]
 for i, (nm, la, lo) in enumerate(AREAS):
     x, y = wp(la, lo)
@@ -151,6 +151,14 @@ def bbr(rings): return [wp(la, lo) for r in rings for lo, la in r]
 RAJ_C, RAJ_W = fitb(bbr(BD["raj"]), 700, 1380, 1.1)
 ALL = [p for P_ in EWP.values() for p in P_]
 CT_C, CT_W = fitb(ALL, 420, 1380, 1.25)
+SG = CT_W / 1080 * 1.6   # world px per screen px
+for i, (la, lo) in enumerate(JAMS):
+    x, y = wp(la, lo)
+    SVG.insert(-1, f'<g class="jam" id="jm{i}" style="opacity:0" transform="translate({x:.1f},{y:.1f}) scale({SG:.3f})">'
+                   '<rect x="-3" y="0" width="6" height="34" fill="#2b2b2b"/>'
+                   '<rect x="-15" y="-74" width="30" height="76" rx="7" fill="#151515" stroke="#C9A24A" stroke-width="2"/>'
+                   '<circle class="lit" cx="0" cy="-60" r="9" fill="#FF3B30"/><circle cx="0" cy="-36" r="9" fill="#4a3a10"/><circle cx="0" cy="-12" r="9" fill="#123a1c"/>'
+                   '<circle class="glow" cx="0" cy="-60" r="20" fill="#FF3B30" opacity=".35"/></g>')
 RV_C, RV_W = fitb(ELV, 420, 1380, 1.2)
 J.append('const VB = document.getElementById("world"); function setDots(w){ document.querySelectorAll(".dc").forEach(e=>e.setAttribute("r", w/90)); document.querySelectorAll(".dg").forEach(e=>e.setAttribute("r", w/40)); document.querySelectorAll(".mvc").forEach(e=>e.setAttribute("r", w/70)); document.querySelectorAll(".mvg").forEach(e=>e.setAttribute("r", w/26)); }'
          'function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = Math.abs(w0 - w1) < 1e-6 ? o.z : (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); setDots(w); }}, t); }')
@@ -177,9 +185,9 @@ sfx("impact-bass-1", 0, .45); sfx("whoosh", .25, .3); sfx("sparkle", wt(0, "daam
 zoom(S(1) - .3, CT_C, CT_W, .9)
 J.append(f'tl.to("#city", {{opacity:1, duration:.4}}, {S(1):.2f}); tl.to(["#rv", "#rvg"], {{opacity:.35, duration:.3}}, {S(1):.2f});')
 for i, nm in enumerate(EW):
-    t = wt(1, {"NH 52": "NH 52"}.get(nm, nm.title().replace("Nh 52", "NH 52").split(" Road")[0].split(" Marg")[0])) - .1
+    t = S(1) + .15 + i * .04
     J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{strokeDashoffset:0, duration:.6, ease:"power2.out"}}, {t:.2f});'); sfx("whoosh-short", t, .25)
-    P_ = EWP[nm]; lab(f"lew{i}", P_[1], nm, t + .2, S(2) - .1, S(1) + .8, dx=-1000 if i % 2 == 0 else 1000, dy=0, cls="y sm")
+    P_ = EWP[nm]; lab(f"lew{i}", P_[1], nm, t + .1, S(2) - .1, S(1) + .8, dx=-1000 if i % 2 == 0 else 1000, dy=0, cls="y md")
 lux(0, "<b>90&deg;</b> NADI KO KAAT-TI SADKEIN", wt(1, "90") - .1, S(2), 200, 300)
 
 # ---------- 2 gap ----------
@@ -193,7 +201,7 @@ J.append(f'tl.to("#zz", {{strokeDashoffset:0, duration:{E(3) - S(3) - .6:.2f}, e
 mover("car1", ZZ, S(3) + .2, E(3) - S(3) - .6, "#E5484D", S(4) - .1, 60)
 for i in range(len(JAMS)):
     t = S(3) + .5 + i * (E(3) - S(3) - .8) / len(JAMS)
-    J.append(f'tl.to("#jm{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#jm{i} .dg", {{opacity:.6}}, {{opacity:.15, duration:.35, yoyo:true, repeat:-1}}, {t:.2f});'); sfx("click-soft", t, .2)
+    J.append(f'tl.to("#jm{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#jm{i}", {{scale:0, svgOrigin:"{wp(*JAMS[i])[0]:.1f} {wp(*JAMS[i])[1]:.1f}"}}, {{scale:1, duration:.3, ease:"back.out(2.5)", immediateRender:false}}, {t:.2f}); tl.fromTo("#jm{i} .glow", {{opacity:.5}}, {{opacity:.05, duration:.35, yoyo:true, repeat:9}}, {t:.2f});'); sfx("click-soft", t, .2)
 lab("lsk", ZZ[0], "SIKAR ROAD", S(3) + .1, S(4) - .1, S(3) + .5, dx=-150)
 lab("lst", ZZ[-1], "SITAPURA", S(3) + .1, S(4) - .1, S(3) + .5, dy=50)
 lux(2, "JAM &bull; JAM &bull; JAM", wt(3, "jam") - .2, S(4), 330, 300, "red")
@@ -222,7 +230,7 @@ for i, nm in enumerate(CROSS):
     J.append(f'tl.to("#cx{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.to("#cx{i}", {{opacity:0, duration:.3}}, {S(6) + .2:.2f});')
     lab(f"rl{i}", wp(*CROSS[nm]), nm.upper(), t, S(6), S(5), dx=-1000 if i % 2 == 0 else 1000, cls="y sm"); sfx("pop", t, .25)
     J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{opacity:1, duration:.3}}, {t:.2f});')
-J.append(f'tl.to(".jam", {{opacity:0, duration:.4, stagger:.1}}, {wt(5, "jam kam"):.2f});')
+J.append(f'tl.to(".jam .lit, .jam .glow", {{attr:{{fill:"#3a0f0c"}}, duration:.15}}, {wt(5, "jam kam") - .3:.2f}); tl.to(".jam circle:nth-of-type(3)", {{attr:{{fill:"#34C759"}}, duration:.15}}, {wt(5, "jam kam") - .3:.2f}); tl.to(".jam", {{opacity:0, duration:.4, stagger:.1}}, {wt(5, "jam kam") + .6:.2f});')
 lux(4, "<b>&#10004;</b> JAM KAM", wt(5, "jam kam") - .1, S(6), 340, 300, "grn")
 
 # ---------- 6 real estate ----------
@@ -294,7 +302,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #xsec{position:absolute;left:90px;top:1020px;opacity:0;z-index:14;padding:10px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94));transform-origin:50% 50%}#xsec svg{display:block}
 #cta b{border-radius:6px !important;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95)) !important;border:1.5px solid #C9A24A;color:#F3E6C8 !important;font:400 76px/1.05 Anton !important}
 #cta span{border-radius:4px !important;background:#C9A24A !important;color:#111 !important;letter-spacing:.22em}
-.ml.sm{font-size:24px;padding:4px 12px}
+.ml.sm{font-size:24px;padding:4px 12px}.ml.md{font-size:31px;padding:5px 14px}
 .ml.blue{background:#2EA8FF;color:#fff}
 .cp{position:absolute;left:40px;right:130px;top:1440px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
