@@ -231,7 +231,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}.y{color:#111;background:#F2B23E;border-radius:6px;padding:0 6px}
 #sky{position:absolute;inset:0;background:linear-gradient(180deg,#081428 0%,#16294a 22%,#3d4a5c 40%,#1d1a15 58%)}
 #stage{position:absolute;inset:0;perspective:1500px;perspective-origin:50% 26%;overflow:hidden}#plane{position:absolute;inset:0;transform-style:preserve-3d}
-#world{position:absolute;inset:0;width:1080px;height:1920px}
+#world{position:absolute;left:-2160px;top:-3840px;width:5400px;height:9600px}
 .bb{position:absolute;white-space:nowrap}
 .bb span{display:inline-block;padding:6px 14px;border-radius:4px;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94));border:1.5px solid #C9A24A;color:#F3E6C8;font:700 30px Mont;letter-spacing:.12em}
 .bb.sm span{font-size:24px;padding:4px 10px;border-color:#3FB4FF;color:#D6F1FF}.bb.blue span{border-color:#3FB4FF;color:#9BE3FF}.bb.wht span{border-color:#bbb;color:#ddd}.bb.gold span{color:#F7E3A8;font-size:36px}
@@ -270,7 +270,7 @@ audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" 
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script><style>{CSS}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{END}" data-width="1080" data-height="1920" data-fps="30">
-<div id="sky"></div><div id="stage"><div id="plane"><svg id="world" viewBox="{VB}" preserveAspectRatio="xMidYMid slice">{"".join(SVG)}</svg>{"".join(IN)}</div></div><div id="dim"></div>
+<div id="sky"></div><div id="stage"><div id="plane"><svg id="world" viewBox="{CX - 2.5 * CW:.0f} {CY - 2.5 * CH:.0f} {5 * CW:.0f} {5 * CH:.0f}" preserveAspectRatio="xMidYMid slice">{"".join(SVG)}</svg>{"".join(IN)}</div></div><div id="dim"></div>
 {"".join(H)}
 {audio}
 {"".join(SFX)}
