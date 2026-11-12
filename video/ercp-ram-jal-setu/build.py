@@ -214,22 +214,22 @@ sfx("riser", wt(6, "growth") - .3, .3)
 H.append('<div id="mou"><small>FUNDING</small>'
          '<div class="bar"><div class="k"><b>90%</b> KENDRA</div><div class="r">10%</div></div><div class="cost"><b>~&#8377;91,000 CR</b><span>PROJECT LAGAT</span></div></div>')
 J.append(f'tl.to("#dim", {{opacity:.45, duration:.3}}, {S(7) - .1:.2f}); tl.fromTo("#mou", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7):.2f});'
-                  f'tl.set("#mou .bar .k", {{width:"0%"}}, 0); tl.set("#mou .cost", {{opacity:0}}, 0); tl.fromTo("#mou .bar .k", {{width:"0%"}}, {{width:"90%", duration:.8, ease:"power3.out", immediateRender:false}}, {wt(7, "90") - .1:.2f}); tl.fromTo("#mou .cost", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.4, immediateRender:false}}, {wt(7, "lagat") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.3}}, {S(8) - .1:.2f});')
+                  f'tl.set("#mou .bar .k", {{width:"0%"}}, 0); tl.set("#mou .cost", {{opacity:0}}, 0); tl.fromTo("#mou .bar .k", {{width:"0%"}}, {{width:"90%", duration:.8, ease:"power3.out", immediateRender:false}}, {wt(7, "90") - .1:.2f}); tl.fromTo("#mou .cost", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.4, immediateRender:false}}, {wt(7, "91,000") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.3}}, {S(8) - .1:.2f});')
 sfx("click-soft", wt(7, "Kendra") - .1, .35); sfx("impact-bass-1", wt(7, "91"), .35)
 
 # ---------- 6 status ----------
 H.append('<div id="stat"><small>ZAMEEN PAR KAAM</small><div class="track"><div class="fill"></div><em>~4%</em></div><span>July 2026 tak kharch &middot; Vidhan Sabha data</span><i>SHURUAATI DAUR</i></div>')
-J.append(f'tl.fromTo("#stat", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(8):.2f}); tl.fromTo("#stat .fill", {{width:"0%"}}, {{width:"4%", duration:1.0, ease:"power2.out", immediateRender:false}}, {wt(8, "4 percent") - .3:.2f}); tl.fromTo("#stat em", {{opacity:0}}, {{opacity:1, duration:.3, immediateRender:false}}, {wt(8, "4 percent") - .1:.2f}); tl.set("#stat em", {{opacity:0}}, 0); tl.set("#stat .fill", {{width:"0%"}}, 0); tl.to("#stat", {{opacity:0, duration:.3}}, {S(9) - .1:.2f});')
-sfx("click-soft", wt(8, "4 percent"), .4)
+J.append(f'tl.fromTo("#stat", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(8):.2f}); tl.fromTo("#stat .fill", {{width:"0%"}}, {{width:"4%", duration:1.0, ease:"power2.out", immediateRender:false}}, {wt(8, "4%") - .3:.2f}); tl.fromTo("#stat em", {{opacity:0}}, {{opacity:1, duration:.3, immediateRender:false}}, {wt(8, "4%") - .1:.2f}); tl.set("#stat em", {{opacity:0}}, 0); tl.set("#stat .fill", {{width:"0%"}}, 0); tl.to("#stat", {{opacity:0, duration:.3}}, {S(9) - .1:.2f});')
+sfx("click-soft", wt(8, "4%"), .4)
 
 # ---------- 7 CTA ----------
-H.append('<div id="cta"><b>AAPKE ZILE MEIN PAANI KI KYA SITUATION HAI?</b><span>COMMENT KARO</span></div>')
+H.append('<div id="cta"><b>ISKA PAANI AAPKE ZILE MEIN BHI AAYEGA?</b><span>COMMENT KARO</span></div>')
 J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(9):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(9):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(9, "Comment"):.2f});')
 sfx("sparkle", wt(9, "Comment"), .3)
 
 # ---------- captions ----------
 HI = ["17 zilon", "Ram Jal Setu Link", "ERCP", "Chambal", "Parbati", "Kalisindh", "barrages", "canals", "3.25 crore", "2.8 lakh hectare", "jahan paani, wahan growth", "kheti", "industry", "nayi colonies",
-      "90 percent", "Kendra", "pyaas", "91 hazaar crore", "4 percent", "Comment"]
+      "90%", "Kendra", "91,000 crore", "4%", "pyaas", "91 hazaar crore", "4 percent", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
