@@ -93,6 +93,10 @@ def pin(i, p, text, cls=""):
 pin("bdel", DEL, "DELHI", "red"); pin("bjpr", JPR, "JAIPUR", "grn"); pin("bpun", wp(30.8, 75.3), "PUNJAB &middot; HARYANA", "org")
 pin("bhim", wp(32.2, 76.6), "HIMALAYA", "wht"); pin("barv", wp(26.45, 75.45), "ARAVALI", "gold")
 
+# 3D elevation columns (Jaipur 430 m vs Delhi 215 m)
+for cid, p, h, col, txt in [("colj", JPR, 400, "#3CE65A", ""), ("cold", DEL, 200, "#E5484D", "")]:
+    x, y = scr(p)
+    IN.append(f'<div class="col3" id="{cid}" style="left:{x - 55:.0f}px;top:{y - h:.0f}px;width:110px;height:{h}px;background:linear-gradient(90deg,{col}aa,{col} 45%,{col}88);box-shadow:0 0 50px {col};border:2px solid #fff"></div>')
 def lux(i, html, t, until, x, y, cls=""):
     H.append(f'<div class="lx {cls}" id="lx{i}" style="left:{x}px;top:{y}px">{html}</div>')
     J.append(f'tl.fromTo("#lx{i}", {{opacity:0, y:24, clipPath:"inset(0 100% 0 0)"}}, {{opacity:1, y:0, clipPath:"inset(0 0% 0 0)", duration:.45, ease:"power3.out"}}, {t:.2f}); tl.to("#lx{i}", {{opacity:0, y:-14, duration:.3}}, {until - .3:.2f});')
@@ -104,6 +108,7 @@ def plane(t, rx, sc, x, y, d=1.0):
 def jp_focus(rx, sc):
     x, y = scr(JPR); return rx, sc, (540 - x) * sc, (1060 - y) * sc
 
+J.append('tl.set(".col3", {scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}, 0);')
 J.append('tl.set("#plane", {rotationX:48, scale:1.0, x:0, y:0, transformOrigin:"50% 55%"}, 0); tl.set(".mt", {scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}, 0); tl.set(".bb", {opacity:0, xPercent:-50, yPercent:-100, rotationX:-48, transformOrigin:"50% 100%"}, 0); tl.set(".wind", {opacity:0}, 0);')
 
 # ---------- 0 HOOK: smog Delhi vs clean Jaipur ----------
@@ -205,7 +210,7 @@ H.append(f'''<div id="inv"><svg viewBox="0 0 960 760" width="960" height="760">
 <rect class="lid" x="0" y="340" width="960" height="110" fill="url(#lidg)"/>
 <text class="lidt" x="480" y="402" text-anchor="middle" font-family="Mont" font-weight="700" font-size="30" letter-spacing="8" fill="#fff">GARAM HAWA KA DHAKKAN</text>
 <text class="coldt" x="40" y="520" font-family="Mont" font-weight="700" font-size="24" letter-spacing="6" fill="#cfe6ff">THANDI HAWA</text>
-<g class="hp"><circle cx="820" cy="150" r="70" fill="none" stroke="{GOLD}" stroke-width="4"/><text x="820" y="168" text-anchor="middle" font-family="Anton" font-size="56" fill="{GOLD}">H</text>
+<g class="press"><g class="cl" transform="translate(130 40)"><ellipse cx="0" cy="40" rx="70" ry="30" fill="#e9edf3"/><ellipse cx="-45" cy="48" rx="45" ry="24" fill="#dfe4ec"/><ellipse cx="45" cy="50" rx="48" ry="22" fill="#dfe4ec"/><ellipse cx="5" cy="22" rx="42" ry="26" fill="#f4f6f9"/></g><g class="cl" transform="translate(400 40)"><ellipse cx="0" cy="40" rx="70" ry="30" fill="#e9edf3"/><ellipse cx="-45" cy="48" rx="45" ry="24" fill="#dfe4ec"/><ellipse cx="45" cy="50" rx="48" ry="22" fill="#dfe4ec"/><ellipse cx="5" cy="22" rx="42" ry="26" fill="#f4f6f9"/></g><g class="cl" transform="translate(640 40)"><ellipse cx="0" cy="40" rx="70" ry="30" fill="#e9edf3"/><ellipse cx="-45" cy="48" rx="45" ry="24" fill="#dfe4ec"/><ellipse cx="45" cy="50" rx="48" ry="22" fill="#dfe4ec"/><ellipse cx="5" cy="22" rx="42" ry="26" fill="#f4f6f9"/></g><g class="pa" transform="translate(90 120)"><rect x="-9" y="0" width="18" height="120" rx="6" fill="#F2B23E"/><path d="M-30 110 L0 160 L30 110 Z" fill="#F2B23E"/></g><g class="pa" transform="translate(230 120)"><rect x="-9" y="0" width="18" height="120" rx="6" fill="#F2B23E"/><path d="M-30 110 L0 160 L30 110 Z" fill="#F2B23E"/></g><g class="pa" transform="translate(370 120)"><rect x="-9" y="0" width="18" height="120" rx="6" fill="#F2B23E"/><path d="M-30 110 L0 160 L30 110 Z" fill="#F2B23E"/></g><g class="pa" transform="translate(510 120)"><rect x="-9" y="0" width="18" height="120" rx="6" fill="#F2B23E"/><path d="M-30 110 L0 160 L30 110 Z" fill="#F2B23E"/></g><g class="pa" transform="translate(650 120)"><rect x="-9" y="0" width="18" height="120" rx="6" fill="#F2B23E"/><path d="M-30 110 L0 160 L30 110 Z" fill="#F2B23E"/></g></g><g class="hp"><circle cx="820" cy="150" r="70" fill="none" stroke="{GOLD}" stroke-width="4"/><text x="820" y="168" text-anchor="middle" font-family="Anton" font-size="56" fill="{GOLD}">H</text>
 <path d="M820 230 L820 300" stroke="{GOLD}" stroke-width="5" marker-end="url(#ahg)"/><text x="820" y="60" text-anchor="middle" font-family="Mont" font-weight="700" font-size="22" letter-spacing="5" fill="{CREAM}">HIGH PRESSURE</text></g>
 <defs><marker id="ahg" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="{GOLD}"/></marker></defs>
 <rect x="0" y="680" width="960" height="80" fill="#2f281d"/>
@@ -213,7 +218,7 @@ H.append(f'''<div id="inv"><svg viewBox="0 0 960 760" width="960" height="760">
 ''.join(f'<circle class="sm" cx="{90 + (i * 61) % 820}" cy="660" r="{10 + i % 3 * 4}" fill="#b3ada3" opacity=".8"/>' for i in range(22)) +
 '</svg></div>')
 J.append(f'tl.fromTo("#inv", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(4) + .1:.2f}); tl.to("#inv", {{opacity:0, duration:.3}}, {S(5) - .1:.2f});'
-         f'tl.fromTo("#inv .hp", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.4}}, {wt(4, "high") - .1:.2f}); tl.fromTo("#inv .cold, #inv .coldt", {{opacity:0}}, {{opacity:1, duration:.4}}, {wt(4, "thandi") - .1:.2f});'
+         f'tl.fromTo("#inv .hp", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.4}}, {wt(4, "high") - .1:.2f}); tl.set("#inv .press", {{opacity:0}}, 0); tl.to("#inv .press", {{opacity:1, duration:.3}}, {wt(4, "high") - .1:.2f}); tl.fromTo("#inv .cl", {{y:-30}}, {{y:0, duration:.6, stagger:.1, ease:"power2.out", immediateRender:false}}, {wt(4, "high") - .1:.2f}); tl.fromTo("#inv .pa", {{y:-40, opacity:0}}, {{y:110, opacity:1, duration:.7, stagger:{{each:.1, repeat:5}}, ease:"power1.in", immediateRender:false}}, {wt(4, "high"):.2f}); tl.to("#inv .pa", {{opacity:.25, duration:.3}}, {wt(4, "dhakkan") + .4:.2f}); tl.fromTo("#inv .cold, #inv .coldt", {{opacity:0}}, {{opacity:1, duration:.4}}, {wt(4, "thandi") - .1:.2f});'
          f'tl.fromTo(["#inv .lid", "#inv .lidt"], {{opacity:0, scaleX:.2, transformOrigin:"50% 50%"}}, {{opacity:1, scaleX:1, duration:.5, ease:"power3.out"}}, {wt(4, "dhakkan") - .1:.2f});')
 for i in range(22):
     st = S(4) + .4 + (i % 7) * .18
@@ -253,6 +258,25 @@ H.append('<div id="cta"><b>KYA AAP BHI DELHI SE JAIPUR SHIFT HONE KA SOCH RAHE H
 J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(8):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(8):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(8, "Comment"):.2f});')
 sfx("sparkle", wt(8, "Comment"), .3)
 
+
+# columns rise
+J.append(f'tl.to("#colj", {{scaleY:1, rotationX:-90, duration:.7, ease:"back.out(1.6)"}}, {wt(5, "430") - .1:.2f}); tl.to("#cold", {{scaleY:1, rotationX:-90, duration:.6, ease:"back.out(1.6)"}}, {wt(5, "215") - .1:.2f}); tl.to(".col3", {{scaleY:0.001, rotationX:-90, duration:.35}}, {wt(5, "Aravali") - .2:.2f});')
+sfx("riser", wt(5, "430") - .1, .3); sfx("impact-bass-1", wt(5, "215"), .3)
+J.append(f'tl.to(["#bjpr", "#bdel"], {{opacity:0, duration:.2}}, {wt(5, "430") - .2:.2f}); tl.to(["#bjpr", "#bdel"], {{opacity:1, duration:.3}}, {wt(5, "Aravali"):.2f});')
+# ---------- photo pop-ups ----------
+def pop(pid, img, t0, t1, cap, left, top, w, h, cls=""):
+    H.append(f'<div class="pp {cls}" id="{pid}" style="left:{left}px;top:{top}px;width:{w + 16}px"><div class="iw" style="height:{h}px"><img src="assets/img/{img}.jpg"/></div><div class="pc">{cap}</div></div>')
+    J.append(f'tl.fromTo("#{pid}", {{opacity:0, y:30, scale:.85}}, {{opacity:1, y:0, scale:1, duration:.4, ease:"back.out(1.7)"}}, {t0:.2f}); tl.fromTo("#{pid} img", {{scale:1.12}}, {{scale:1, duration:{t1 - t0 + .3:.2f}, ease:"none"}}, {t0:.2f}); tl.to("#{pid}", {{opacity:0, scale:.9, duration:.25}}, {t1 - .25:.2f});')
+    sfx("pop", t0, .3)
+TD, TJ = wt(0, "Delhi") - .05, wt(0, "Jaipur") - .1
+pop("ppdel", "delhi_smog", TD, S(2) - .1, "DELHI &middot; SMOG", 560, 520, 420, 280, "red")
+pop("ppjp", "jaipur_gate", TJ, S(2) - .1, "JAIPUR &middot; SAAF ASMAAN", 30, 820, 380, 250, "grn")
+H.append('<svg id="parr" width="1080" height="1920" viewBox="0 0 1080 1920"><defs><marker id="pah" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="#F2B23E"/></marker></defs>'
+         '<path d="M640 860 Q 560 960 450 990" pathLength="1" style="fill:none;stroke:#F2B23E;stroke-width:8;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1" marker-end="url(#pah)"/></svg>')
+J.append(f'tl.set("#parr", {{opacity:1}}, {TJ:.2f}); tl.to("#parr path", {{strokeDashoffset:0, duration:.5, ease:"power2.out"}}, {TJ + .1:.2f}); tl.to("#parr", {{opacity:0, duration:.25}}, {S(2) - .35:.2f}); tl.set("#parr", {{opacity:0}}, 0);')
+pop("ppstb", "stubble", wt(2, "parali") - .1, S(3) - .1, "PARALI JALANA", 500, 520, 500, 300, "red")
+pop("pparv", "aravali", wt(5, "Aravali") - .1, S(6) - .1, "ARAVALI KI PAHADIYAN", 260, 300, 560, 340, "grn")
+
 # ---------- captions ----------
 HI = ["gas chamber", "Jaipur", "chaar", "shift", "Reason two", "Reason three", "Reason four", "Number one", "north-west", "Punjab", "Haryana", "parali", "dhuaan", "Delhi", "Indo-Gangetic", "katori", "high pressure", "dhakkan", "Aravali", "oonchai", "430 meter", "215 meter",
       "khula ilaka", "jaldi saaf", "AQI", "dhool", "traffic", "Saaf hawa", "Comment"]
@@ -278,7 +302,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .8);')
-H.append('<div id="cred">Wind, smoke &amp; inversion graphics are explanatory illustrations &middot; 3D terrain not to scale &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
+H.append('<div id="cred">Wind, smoke &amp; inversion graphics are explanatory illustrations &middot; 3D terrain not to scale &middot; photos: supplied &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
 
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0d0b09}
@@ -293,6 +317,11 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #dim{position:absolute;inset:0;background:#000;opacity:0;z-index:5;pointer-events:none}
 #face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:40}
 #cred{position:absolute;left:40px;right:40px;top:1650px;text-align:center;font:700 17px Mont;color:rgba(255,255,255,.6);z-index:20}
+.pp{position:absolute;opacity:0;z-index:15;padding:8px 8px 10px;border-radius:8px;background:linear-gradient(135deg,rgba(14,12,9,.96),rgba(34,27,18,.96));border:1.5px solid #C9A24A;box-shadow:0 24px 60px rgba(0,0,0,.7)}
+.pp.red{border-color:#E5484D}.pp.grn{border-color:#3CE65A}.pp .iw{overflow:hidden;border-radius:4px}.pp img{display:block;width:100%;height:100%;object-fit:cover}
+.pp .pc{margin-top:8px;text-align:center;font:700 22px Mont;letter-spacing:.18em;color:#F3E6C8}
+.col3{position:absolute;border-radius:6px 6px 0 0;transform-origin:50% 100%}.col3 span{position:absolute;left:50%;top:-56px;transform:translateX(-50%);white-space:nowrap;padding:6px 14px;border-radius:4px;background:rgba(14,12,9,.92);font:400 38px Anton;letter-spacing:.04em}
+#parr{position:absolute;left:0;top:0;z-index:14;opacity:0;pointer-events:none}
 #hook{position:absolute;left:50px;right:50px;top:150px;z-index:16;text-align:center;padding:24px 20px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.93),rgba(34,27,18,.93))}
 #hook small{display:block;font:700 28px Mont;letter-spacing:.3em;color:#F3E6C8}#hook .vs{display:flex;align-items:center;justify-content:center;gap:26px;margin-top:14px}
 #hook .vs b{display:block;font:400 92px/1 Anton}#hook .d b{color:#FF7A7A}#hook .j b{background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}
