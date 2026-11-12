@@ -4,11 +4,11 @@ P = "proj"
 ASP = json.load(open("aspects.json"))
 LINES = [
     "Nadi ke upar yeh road ab aapke area ke daam badha sakti hai.",
-    "Jaipur ki zyada sadkein, jaise Sikar Road, Khatipura Road, Ajmer Road, Shyam Nagar Janpath, New Sanganer Road, Gopalpura Road, Jaipur Jodhpur Road, Haldighati Marg, NH 52 aur Mahal Road, nadi ko 90 degree par kaat ke east se west jaati hain.",
-    "Par west Jaipur mein, Dravyavati nadi ke saath, north se south jaane ka koi seedha aur tez raasta nahi hai.",
+    "Jaipur mein east se west cross karne wali kaafi saari sadkein hain.",
+    "Lekin north se south aane ke liye, Dravyavati nadi ke saath, koi seedha raasta nahi hai.",
     "Isliye Sikar Road se Sitapura jaana ho, toh gaadiyan shehar ke beech se ghoom ke jaati hain, aur har chauraahe par jam lagta hai.",
     "Ab Dravyavati nadi ke upar 25 se 30 km ka 6 lane elevated road prastavit hai, single pillar par.",
-    "Yeh road in sabhi das sadkon ko seedha jodega. Shehar ke andar jam kam hoga.",
+    "Yeh road in sabhi sadkon ko seedha jodega. Shehar ke andar jam kam hoga.",
     "Aur jahan connectivity aati hai, wahan ke areas ki demand aur daam badhte hain.",
     "Aapko kis road par sabse zyada jam milta hai? Comment karo.",
 ]
@@ -188,7 +188,7 @@ for i, nm in enumerate(EW):
     t = S(1) + .15 + i * .04
     J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{strokeDashoffset:0, duration:.6, ease:"power2.out"}}, {t:.2f});'); sfx("whoosh-short", t, .25)
     P_ = EWP[nm]; lab(f"lew{i}", P_[1], nm, t + .1, S(2) - .1, S(1) + .8, dx=-1000 if i % 2 == 0 else 1000, dy=0, cls="y md")
-lux(0, "<b>90&deg;</b> NADI KO KAAT-TI SADKEIN", wt(1, "90") - .1, S(2), 200, 300)
+lux(0, "<b>&#8596;</b> EAST &ndash; WEST: KAAFI SADKEIN", wt(1, "east") - .1, S(2), 200, 300)
 
 # ---------- 2 gap ----------
 J.append(f'tl.to(".ew", {{opacity:.25, duration:.3}}, {S(2):.2f}); tl.to(["#rv", "#rvg"], {{opacity:1, duration:.3}}, {S(2):.2f}); tl.fromTo(["#rvg"], {{strokeWidth:22}}, {{strokeWidth:46, duration:.4, yoyo:true, repeat:3}}, {S(2) + .2:.2f});')
@@ -226,7 +226,7 @@ J.append(f'tl.fromTo("#xsec", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.4
 
 # ---------- 5 connections, jams fade ----------
 for i, nm in enumerate(CROSS):
-    t = wt(5, "das sadkon") - .1 + i * .18
+    t = wt(5, "sabhi sadkon") - .1 + i * .18
     J.append(f'tl.to("#cx{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.to("#cx{i}", {{opacity:0, duration:.3}}, {S(6) + .2:.2f});')
     lab(f"rl{i}", wp(*CROSS[nm]), nm.upper(), t, S(6), S(5), dx=-1000 if i % 2 == 0 else 1000, cls="y sm"); sfx("pop", t, .25)
     J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{opacity:1, duration:.3}}, {t:.2f});')
@@ -246,7 +246,7 @@ J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#c
 sfx("sparkle", wt(7, "Comment"), .3)
 
 # captions
-HI = ["daam", "Ajmer Road", "Khatipura", "Shyam Nagar Janpath", "Janpath", "Gopalpura", "New Sanganer", "90 degree", "Jaipur Jodhpur Road", "Haldighati Marg", "NH 52", "Mahal Road", "das sadkon", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "Comment"]
+HI = ["daam", "Ajmer Road", "Khatipura", "Shyam Nagar Janpath", "Janpath", "Gopalpura", "New Sanganer", "90 degree", "Jaipur Jodhpur Road", "Haldighati Marg", "NH 52", "Mahal Road", "kaafi saari sadkein", "sabhi sadkon", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
