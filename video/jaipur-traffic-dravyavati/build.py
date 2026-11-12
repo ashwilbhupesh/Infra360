@@ -178,8 +178,8 @@ J.append(f'tl.to(["#rv", "#rvg"], {{strokeDashoffset:0, duration:.6, ease:"power
 mover("car0", ELV, .3, 1.6, GOLD, S(1) - .2, 50)
 H.append('<div id="hook"><small>NADI KE UPAR YEH ROAD</small><b>AAPKE AREA KE DAAM</b><span>BADHA SAKTI HAI &#9650;</span></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:1, scale:1.12}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.fromTo("#hook span", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.4, ease:"power3.out"}}, {wt(0, "daam") - .1:.2f}); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .2:.2f});')
-lab("lriv", RP[25], "DRAVYAVATI", .4, S(1) - .1, 1.0, dx=-190, cls="blue")
-lab("lelv", ELV[60], "ELEVATED ROAD", .9, S(1) - .1, 1.0, dx=200, cls="y")
+lab("lriv", RP[25], "DRAVYAVATI", .4, wt(0, "aapke") + .1, 1.0, dx=-190, cls="blue")
+lab("lelv", ELV[60], "ELEVATED ROAD", .9, wt(0, "aapke") + .1, 1.0, dx=200, cls="y")
 sfx("impact-bass-1", 0, .45); sfx("whoosh", .25, .3); sfx("sparkle", wt(0, "daam"), .3)
 
 # ---------- 4 solution: elevated road ----------
@@ -209,6 +209,13 @@ J.append(f'tl.set("#deck", {{opacity:0, z:{HZ}}}, 0); tl.set("#deck", {{opacity:
 sfx("whoosh", T3, .3); sfx("impact-bass-1", T3 + 1.0, .35)
 card("ctoi", "toi", wt(1, "JDA") - .1, wt(1, "25") - .1, "JDA PLANS ELEVATED CORRIDOR", "Times of India &middot; 19 March 2026", ("NEWS", "#C9A24A"), top=180, maxw=880, maxh=430)
 card("cbh", "bhaskar", wt(1, "elevated") + .2, S(2) + .1, "JDA + ADANI GROUP TEAM KI SITE VISIT", "Dainik Bhaskar &middot; DPR stage", ("NEWS", "#C9A24A"), top=180, maxw=640, maxh=520)
+# hook: "aapke areas" -> riverside areas pop
+TA0 = wt(0, "aapke") - .1
+for i, (nm, la, lo) in enumerate(AREAS):
+    side = -1 if i % 2 == 0 else 1
+    lab(f"hb{i}", wp(la, lo), nm + " &#9650;", TA0 + i * .07, S(1) - .05, TA0 + .5, dx=1000 * side, cls="md ar")
+J.append(f'tl.to(".ar", {{opacity:.8, duration:.25, stagger:.07}}, {TA0:.2f}); tl.to(".ar", {{opacity:0, duration:.25}}, {S(1) - .1:.2f});')
+sfx("riser", TA0, .25)
 # ---------- 1 E-W roads ----------
 J.append(f'tl.to(["#el", "#elg", "#elp"], {{opacity:0, duration:.3}}, {S(2) - .25:.2f}); tl.to(".ew", {{opacity:1, duration:.01}}, {S(2):.2f}); tl.to(["#el", "#elg", "#elp"], {{opacity:1, duration:.4}}, {S(5) - .1:.2f}); tl.to(["#city", ".ew"], {{opacity:.15, duration:.4}}, {S(5) - .2:.2f});')
 zoom(S(5) - .3, RV_C, RV_W, .9)
@@ -311,7 +318,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .lx{position:absolute;opacity:0;z-index:14;padding:16px 28px;border-radius:6px;background:linear-gradient(135deg,rgba(14,12,9,.93),rgba(34,27,18,.93));border:1.5px solid #C9A24A;color:#F3E6C8;font:700 32px/1.1 Mont;letter-spacing:.14em;box-shadow:0 18px 50px rgba(0,0,0,.55);white-space:nowrap}
 .lx b{font:400 46px/1 Anton;letter-spacing:.04em;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}
 .lx.red{border-color:#E5484D;font-size:26px}.lx.red b{background:none;color:#E5484D}.lx.grn{border-color:#3CE65A}.lx.grn b{background:none;color:#3CE65A}
-#hook{position:absolute;left:60px;right:60px;top:240px;z-index:16;text-align:center;padding:26px 20px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.92),rgba(34,27,18,.92))}
+#hook{position:absolute;left:60px;right:60px;top:120px;z-index:16;text-align:center;padding:26px 20px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.92),rgba(34,27,18,.92))}
 #hook small{display:block;font:700 30px Mont;letter-spacing:.24em;color:#F3E6C8}#hook b{display:block;margin-top:10px;font:400 96px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}
 #hook span{display:inline-block;margin-top:12px;padding:8px 24px;border-radius:4px;background:#3CE65A;color:#0d0d0d;font:400 58px/1 Anton;letter-spacing:.04em}
 #clock{position:absolute;left:60px;top:1250px;opacity:0;z-index:14;padding:14px 26px;border-radius:6px;border:1.5px solid #E5484D;background:rgba(14,12,9,.92);color:#E5484D;font:400 48px/1 Anton}
