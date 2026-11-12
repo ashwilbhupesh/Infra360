@@ -7,7 +7,7 @@ LINES = [
     "Jaipur mein east se west cross karne wali kaafi saari sadkein hain.",
     "Lekin north se south aane ke liye, Dravyavati nadi ke saath, koi seedha raasta nahi hai.",
     "Isliye Sikar Road se Sitapura jaana ho, toh gaadiyan shehar ke beech se ghoom ke jaati hain, aur har chauraahe par jam lagta hai.",
-    "Ab Dravyavati nadi ke upar 25 se 30 km ka 6 lane elevated road prastavit hai, single pillar par.",
+    "Ab JDA Dravyavati nadi ke upar 25 se 30 km ka 6 lane elevated road plan kar rahi hai, single pillar par. DPR ban rahi hai, aur Adani group ki team site visit bhi kar chuki hai.",
     "Yeh road in sabhi sadkon ko seedha jodega. Shehar ke andar jam kam hoga.",
     "Aur jahan connectivity aati hai, wahan ke areas ki demand aur daam badhte hain.",
     "Aapko kis road par sabse zyada jam milta hai? Comment karo.",
@@ -211,19 +211,31 @@ J.append(f'tl.fromTo("#clock", {{opacity:0, scale:.7}}, {{opacity:1, scale:1, du
 # ---------- 4 solution: elevated road ----------
 zoom(S(4) - .3, RV_C, RV_W, .9)
 J.append(f'tl.to(["#city", ".ew"], {{opacity:.15, duration:.4}}, {S(4) - .2:.2f}); tl.to(["#el", "#elg", "#elp"], {{strokeDashoffset:0, duration:1.4, ease:"power2.inOut"}}, {S(4) + .1:.2f});')
-mover("car2", ELV, S(4) + .3, 1.6, GOLD, S(5) + 2, 50)
 sfx("riser", S(4), .3)
-lux(3, "<b>25&ndash;30 KM</b> &middot; 6 LANE &middot; SINGLE PILLAR", wt(4, "25") - .1, S(5) - .2, 60, 300)
-H.append('''<div id="xsec"><svg viewBox="0 0 900 380" width="900" height="380">
-<rect x="0" y="300" width="900" height="80" fill="#2E8FD8"/><path d="M0 300 Q 225 285 450 300 T 900 300" fill="none" stroke="#7FD0FF" stroke-width="4"/>
-<rect class="pil" x="415" y="140" width="70" height="165" fill="#C9C2B4"/>
-<g class="deck"><rect x="60" y="110" width="780" height="34" fill="#E9E3D6"/><rect x="60" y="104" width="780" height="8" fill="#C9A24A"/>
-<rect class="cr a" x="100" y="86" width="60" height="22" rx="5" fill="#F3E6C8"/><rect class="cr b" x="640" y="86" width="60" height="22" rx="5" fill="#C9A24A"/></g>
-<text x="450" y="60" text-anchor="middle" font-family="Mont" font-weight="700" font-size="30" letter-spacing="6" fill="#F3E6C8">SINGLE PILLAR &middot; 6 LANE</text>
-<text x="450" y="355" text-anchor="middle" font-family="Mont" font-weight="700" font-size="26" letter-spacing="6" fill="#fff">DRAVYAVATI</text></svg></div>''')
-J.append(f'tl.fromTo("#xsec", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(4, "single") - .4:.2f}); tl.fromTo("#xsec .pil", {{scaleY:0, transformOrigin:"50% 100%"}}, {{scaleY:1, duration:.4, ease:"power3.out"}}, {wt(4, "single") - .3:.2f}); tl.fromTo("#xsec .deck", {{opacity:0, y:-40}}, {{opacity:1, y:0, duration:.4, ease:"power3.out"}}, {wt(4, "single"):.2f});'
-         f'tl.fromTo("#xsec .a", {{x:0}}, {{x:620, duration:2.2, ease:"none", repeat:2}}, {wt(4, "single") + .2:.2f}); tl.fromTo("#xsec .b", {{x:0}}, {{x:-560, duration:2.0, ease:"none", repeat:2}}, {wt(4, "single") + .2:.2f}); tl.to("#xsec", {{opacity:0, duration:.25}}, {S(5) - .1:.2f});')
-
+lux(3, "<b>25&ndash;30 KM</b> &middot; 6 LANE &middot; SINGLE PILLAR", wt(4, "25") - .1, wt(4, "DPR") - .1, 60, 300)
+lux(6, "<b>JDA</b> &middot; PLANNING &middot; DPR STAGE", wt(4, "JDA") - .1, wt(4, "25") - .1, 60, 300)
+# ---- 3D: tilt the map, raise pillars + deck over the river ----
+T3 = S(4) + .9; TF = S(5) - .5; HZ = 70
+NPIL = 34; idx = [int(k * (len(ELV) - 1) / (NPIL - 1)) for k in range(NPIL)]
+PIL_ = []
+for k, j in enumerate(idx):
+    x, y = scr(ELV[j], T3)
+    PIL_.append(f'<div class="pl3" style="left:{x - 5:.0f}px;top:{y - HZ:.0f}px;height:{HZ}px"></div>')
+DECK = (f'<div id="deck"><svg viewBox="{vb(RV_C, RV_W)}" preserveAspectRatio="xMidYMid slice" width="1080" height="1920">'
+        f'<path d="{pd(ELV)}" pathLength="1" class="dk0" style="fill:none;stroke:#2a2620;stroke-width:30;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+        f'<path d="{pd(ELV)}" pathLength="1" class="dk1" style="fill:none;stroke:#E9E3D6;stroke-width:22;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
+        f'<path d="{pd(ELV)}" pathLength="1" class="dk2" style="fill:none;stroke:{GOLD};stroke-width:3;vector-effect:non-scaling-stroke;stroke-dasharray:.012 .012;opacity:0"/>'
+        + "".join(f'<path d="{pd(ELV)}" pathLength="1" class="car3" style="fill:none;stroke:{c};stroke-width:9;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:.006 .994;stroke-dashoffset:{o};opacity:0"/>' for c, o in [("#fff", 0), ("#FFC42E", .33), ("#fff", .66), ("#E5484D", .15), ("#fff", .5)])
+        + '</svg></div>')
+PLANE3 = "".join(PIL_) + DECK
+J.append(f'tl.fromTo("#plane", {{rotationX:0, scale:1}}, {{rotationX:55, scale:1.25, duration:1.1, ease:"power2.inOut"}}, {T3:.2f}); tl.to("#plane", {{rotationX:0, scale:1, duration:.8, ease:"power2.inOut"}}, {TF:.2f});')
+J.append(f'tl.to(["#el", "#elg", "#elp"], {{opacity:.25, duration:.4}}, {T3 + .4:.2f}); tl.to(["#el", "#elg", "#elp"], {{opacity:1, duration:.4}}, {TF:.2f});')
+J.append(f'tl.fromTo(".pl3", {{scaleY:0, opacity:1}}, {{scaleY:1, duration:.35, stagger:.03, ease:"power3.out", immediateRender:false}}, {T3 + .8:.2f}); tl.set(".pl3", {{opacity:0}}, 0); tl.to(".pl3", {{opacity:0, duration:.3}}, {TF:.2f});')
+J.append(f'tl.set("#deck", {{opacity:0, z:{HZ}}}, 0); tl.set("#deck", {{opacity:1}}, {T3 + 1.0:.2f}); tl.to(["#deck .dk0", "#deck .dk1"], {{strokeDashoffset:0, duration:1.2, ease:"power2.inOut"}}, {T3 + 1.0:.2f}); tl.to("#deck .dk2", {{opacity:.9, duration:.3}}, {T3 + 2.0:.2f});'
+         f'tl.set("#deck .car3", {{opacity:1}}, {T3 + 2.1:.2f}); tl.to("#deck .car3", {{strokeDashoffset:"-=1", duration:3.2, ease:"none", repeat:3}}, {T3 + 2.1:.2f}); tl.to("#deck", {{opacity:0, duration:.3}}, {TF:.2f});')
+sfx("whoosh", T3, .3); sfx("impact-bass-1", T3 + 1.0, .35)
+card("ctoi", "toi", wt(4, "DPR") - .05, wt(4, "Adani") - .1, "JDA PLANS ELEVATED CORRIDOR", "Times of India &middot; 19 March 2026", ("NEWS", "#C9A24A"), top=200, maxw=900, maxh=520)
+card("cbh", "bhaskar", wt(4, "Adani") - .1, S(5) + .1, "ADANI GROUP TEAM KI SITE VISIT", "Dainik Bhaskar", ("NEWS", "#C9A24A"), top=200, maxw=760, maxh=640)
 # ---------- 5 connections, jams fade ----------
 for i, nm in enumerate(CROSS):
     t = wt(5, "sabhi sadkon") - .1 + i * .18
@@ -246,7 +258,7 @@ J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#c
 sfx("sparkle", wt(7, "Comment"), .3)
 
 # captions
-HI = ["daam", "Ajmer Road", "Khatipura", "Shyam Nagar Janpath", "Janpath", "Gopalpura", "New Sanganer", "90 degree", "Jaipur Jodhpur Road", "Haldighati Marg", "NH 52", "Mahal Road", "kaafi saari sadkein", "sabhi sadkon", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "Comment"]
+HI = ["daam", "Ajmer Road", "Khatipura", "Shyam Nagar Janpath", "Janpath", "Gopalpura", "New Sanganer", "90 degree", "Jaipur Jodhpur Road", "Haldighati Marg", "NH 52", "Mahal Road", "kaafi saari sadkein", "sabhi sadkon", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "JDA", "DPR", "Adani group", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -269,7 +281,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
-H.append('<div id="cred">River traced from Google Maps (approx.) &middot; road crossings approximate &middot; elevated road proposed (DPR stage), alignment indicative &middot; Source: Dainik Bhaskar &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
+H.append('<div id="cred">River traced from Google Maps (approx.) &middot; road crossings approximate &middot; elevated road proposed (DPR stage), alignment indicative &middot; Sources: Times of India, Dainik Bhaskar &middot; 3D illustrative &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#1b1b1d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#111;background:#FFC42E;border-radius:6px;padding:0 6px}
@@ -304,6 +316,10 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cta span{border-radius:4px !important;background:#C9A24A !important;color:#111 !important;letter-spacing:.22em}
 .ml.sm{font-size:24px;padding:4px 12px}.ml.md{font-size:31px;padding:5px 14px}
 .ml.blue{background:#2EA8FF;color:#fff}
+#sky{position:absolute;inset:0;background:linear-gradient(180deg,#0b1730 0%,#2b3f66 28%,#c98a5a 44%,#3a3226 60%)}
+#stage{position:absolute;inset:0;perspective:1600px;perspective-origin:50% 30%;overflow:hidden}#plane{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 55%}
+.pl3{position:absolute;width:10px;background:linear-gradient(90deg,#9c968a,#e4ddcf,#9c968a);transform-origin:50% 100%;transform:rotateX(-90deg);box-shadow:0 0 6px rgba(0,0,0,.5)}
+#deck{position:absolute;inset:0;transform-style:preserve-3d;filter:drop-shadow(0 18px 14px rgba(0,0,0,.55))}#deck svg{position:absolute;inset:0}
 .cp{position:absolute;left:40px;right:130px;top:1440px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
 audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio>' if VOICE
@@ -312,7 +328,7 @@ c0, w0 = CAMS[0][2], CAMS[0][3]
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script><style>{CSS}</style></head><body>
 <div id="root" data-composition-id="main" data-start="0" data-duration="{END}" data-width="1080" data-height="1920" data-fps="30">
-<svg id="world" viewBox="{vb(c0, w0)}" preserveAspectRatio="xMidYMid slice">{"".join(SVG)}</svg>
+<div id="sky"></div><div id="stage"><div id="plane"><svg id="world" viewBox="{vb(c0, w0)}" preserveAspectRatio="xMidYMid slice">{"".join(SVG)}</svg>{PLANE3}</div></div>
 {"".join(H)}
 {audio}
 {"".join(SFX)}
