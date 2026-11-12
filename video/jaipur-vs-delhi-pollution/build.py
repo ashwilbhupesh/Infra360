@@ -109,11 +109,28 @@ J.append('tl.set("#plane", {rotationX:48, scale:1.0, x:0, y:0, transformOrigin:"
 # ---------- 0 HOOK: smog Delhi vs clean Jaipur ----------
 J.append(f'tl.to("#smog", {{opacity:1, duration:.6}}, .1); tl.fromTo("#smog", {{attr:{{r:{U * 120:.0f}}}}}, {{attr:{{r:{U * 300:.0f}}}, duration:1.4, ease:"power2.out", immediateRender:false}}, .1); tl.to("#smog", {{attr:{{r:{U * 270:.0f}}}, duration:1.2, yoyo:true, repeat:5, ease:"sine.inOut"}}, 1.5);')
 J.append(f'tl.to("#clean", {{opacity:1, duration:.6}}, {wt(0, "Jaipur") - .1:.2f}); tl.to(["#dring"], {{opacity:1, duration:.3}}, .2); tl.to("#jring", {{opacity:1, duration:.3}}, {wt(0, "Jaipur") - .1:.2f});')
-bb("bdel", .2, S(6)); bb("bjpr", wt(0, "Jaipur") - .1, S(8))
+bb("bdel", .2, S(6)); bb("bjpr", wt(0, "Jaipur") - .2, S(8))
 H.append('<div id="hook"><small>DELHI SE JAIPUR SHIFT &middot; KYUN?</small><div class="vs"><div class="d"><b>DELHI</b><span>GAS CHAMBER</span></div><i>vs</i><div class="j"><b>JAIPUR</b><span>UTNA BURA NAHI</span></div></div><em>4 REASONS</em></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:1, scale:1.1}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.fromTo("#hook .d", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.4}}, .1);'
          f'tl.fromTo(["#hook i", "#hook .j"], {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4, stagger:.1}}, {wt(0, "Jaipur") - .15:.2f}); tl.fromTo("#hook em", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.35}}, {wt(1, "chaar") - .1:.2f}); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(2) - .2:.2f});')
 sfx("impact-bass-1", 0, .45); sfx("whoosh", wt(0, "Jaipur") - .15, .3)
+
+
+# Delhi -> Jaipur migration dots on "shift ho rahe hain"
+MIG_M = ((DEL[0] + JPR[0]) / 2 - U * 90, (DEL[1] + JPR[1]) / 2 - U * 40)
+SVG.append(f'<path id="migp" d="M{DEL[0]:.0f} {DEL[1]:.0f} Q{MIG_M[0]:.0f} {MIG_M[1]:.0f} {JPR[0]:.0f} {JPR[1]:.0f}" pathLength="1" marker-end="url(#ah)" style="fill:none;stroke:#F2B23E;stroke-width:6;stroke-dasharray:.02 .02;vector-effect:non-scaling-stroke;opacity:0"/>')
+TM0 = wt(0, "shift") - .25
+J.append(f'tl.to("#migp", {{opacity:.9, duration:.3}}, {TM0:.2f}); tl.fromTo("#migp", {{strokeDashoffset:0}}, {{strokeDashoffset:-.4, duration:1.6, ease:"none", immediateRender:false}}, {TM0:.2f}); tl.to("#migp", {{opacity:0, duration:.3}}, {S(1) + 1.2:.2f});')
+for k in range(16):
+    SVG.append(f'<circle class="mig" id="mg{k}" r="{U * (9 + (k % 3) * 3):.0f}" cx="{DEL[0]:.0f}" cy="{DEL[1]:.0f}" style="fill:{"#F2B23E" if k % 2 else "#3CE65A"};stroke:#fff;stroke-width:2;vector-effect:non-scaling-stroke;opacity:0"/>')
+    st = TM0 + k * .08; dur = 1.0
+    pts = [qb(DEL, MIG_M, JPR, s_ / 10) for s_ in range(11)]
+    J.append(f'tl.set("#mg{k}", {{opacity:1}}, {st:.2f});')
+    for s_ in range(1, 11):
+        J.append(f'tl.to("#mg{k}", {{attr:{{cx:{pts[s_][0]:.0f}, cy:{pts[s_][1]:.0f}}}, duration:{dur / 10:.3f}, ease:"none"}}, {st + dur * (s_ - 1) / 10:.3f});')
+    J.append(f'tl.to("#mg{k}", {{opacity:0, duration:.25}}, {st + dur:.2f});')
+J.append(f'tl.fromTo("#jring", {{attr:{{r:{U * 40:.0f}}}, opacity:1}}, {{attr:{{r:{U * 130:.0f}}}, opacity:0, duration:.7, repeat:2, immediateRender:false}}, {TM0 + 1.2:.2f}); tl.set("#jring", {{opacity:1, attr:{{r:{U * 60:.0f}}}}}, {TM0 + 3.4:.2f});')
+sfx("whoosh", TM0, .3)
 
 def chapter(k, n, title):
     H.append(f'<div class="ch" id="ch{k}"><b>0{n}</b><span>{title}</span></div>')
