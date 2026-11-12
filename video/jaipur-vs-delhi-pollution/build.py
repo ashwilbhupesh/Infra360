@@ -7,7 +7,7 @@ LINES = [
     "Pehla, hawa ki disha. Sardiyon mein hawa north-west se, Punjab aur Haryana ki taraf se aati hai. Wahan parali jalti hai, aur yeh dhuaan seedha Delhi ki taraf jaata hai. Jaipur is raste mein nahi padta.",
     "Doosra, Delhi Indo-Gangetic maidan mein hai. Hawa dheemi chalti hai, aur pollution jaise ek katori mein band ho jaata hai.",
     "Teesra, sardi mein high pressure aur thandi hawa zameen ke paas ek dhakkan bana deti hai, jo dhuaan ko upar jaane hi nahi deta.",
-    "Chautha, Jaipur Aravali ki pahadiyon ke beech, thodi oonchai par hai, aur aas paas khula ilaka hai, toh hawa chalti rehti hai aur pollution jaldi saaf hota hai.",
+    "Chautha, Jaipur samudra tal se karib 430 meter upar hai, jabki Delhi sirf 215 meter. Aravali ki pahadiyon ke beech, aas paas khula ilaka hai, toh hawa chalti rehti hai aur pollution jaldi saaf hota hai.",
     "Par dhyaan rahe, sardiyon mein Jaipur ka AQI bhi kharab hota hai, khaaskar dhool aur traffic se. Bas Delhi jitna nahi.",
     "Saaf hawa bhi ek wajah hai ki log rehne ke liye Jaipur ko pasand kar rahe hain.",
     "Aapko Jaipur ki hawa kaisi lagti hai? Comment karo.",
@@ -171,12 +171,12 @@ H.append(f'''<div id="arc"><svg viewBox="0 0 960 600" width="960" height="600">
 <path class="bowl" d="M200 600 L200 230 Q 300 520 430 520 Q 560 520 640 360 L640 600 Z" fill="url(#arcg)"/>
 <path class="plat" d="M630 600 L630 370 Q 660 330 700 318 L760 300 L790 268 L815 300 L850 285 L875 262 L900 296 L960 290 L960 600 Z" fill="#7a6544"/>
 <ellipse class="smog" cx="430" cy="440" rx="230" ry="120" fill="url(#arcsm)"/>
-<g class="dl"><circle cx="430" cy="512" r="12" fill="#E5484D"/><rect x="370" y="452" width="120" height="40" rx="4" fill="#1a1510" stroke="#E5484D" stroke-width="2"/><text x="430" y="480" text-anchor="middle" font-family="Mont" font-weight="700" font-size="22" letter-spacing="4" fill="#FFB4B4">DELHI</text></g>
-<g class="jp"><circle cx="820" cy="292" r="12" fill="#3CE65A"/><rect x="755" y="226" width="130" height="40" rx="4" fill="#1a1510" stroke="#3CE65A" stroke-width="2"/><text x="820" y="254" text-anchor="middle" font-family="Mont" font-weight="700" font-size="22" letter-spacing="4" fill="#B8FFC6">JAIPUR</text>
+<g class="dl"><circle cx="430" cy="512" r="12" fill="#E5484D"/><rect x="370" y="452" width="120" height="40" rx="4" fill="#1a1510" stroke="#E5484D" stroke-width="2"/><text x="430" y="480" text-anchor="middle" font-family="Mont" font-weight="700" font-size="22" letter-spacing="4" fill="#FFB4B4">DELHI</text><text x="452" y="522" text-anchor="start" font-family="Anton" font-size="30" fill="#FFB4B4">~215 M</text></g>
+<g class="jp"><circle cx="820" cy="292" r="12" fill="#3CE65A"/><rect x="755" y="226" width="130" height="40" rx="4" fill="#1a1510" stroke="#3CE65A" stroke-width="2"/><text x="820" y="254" text-anchor="middle" font-family="Mont" font-weight="700" font-size="22" letter-spacing="4" fill="#B8FFC6">JAIPUR</text><text x="820" y="340" text-anchor="middle" font-family="Anton" font-size="30" fill="#B8FFC6">~430 M</text>
 <path class="jw" d="M640 200 Q 800 170 950 210" fill="none" stroke="{SKY}" stroke-width="5" stroke-dasharray="26 14" marker-end="url(#ahb2)"/></g>
 <defs><marker id="ahb2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="{SKY}"/></marker></defs>
 <text x="115" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">HIMALAYA</text>
-<text x="430" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">INDO-GANGETIC KATORI</text>
+<text x="430" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">INDO-GANGETIC KATORI</text><text x="940" y="40" text-anchor="end" font-family="Mont" font-weight="700" font-size="18" letter-spacing="3" fill="#C9A24A">SAMUDRA TAL SE OONCHAI</text>
 <text x="820" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">ARAVALI &middot; OONCHAI</text>
 </svg></div>''')
 TK = wt(2, "katori")
@@ -222,7 +222,7 @@ bb("barv", wt(4, "Aravali") + .3, S(5))
 J.append(f'tl.to(["#smog", "#bowl"], {{opacity:.3, duration:.5}}, {S(4):.2f}); tl.to(".fire", {{opacity:0, duration:.3}}, {S(4):.2f}); tl.to("#clean", {{opacity:1, attr:{{r:{U * 260:.0f}}}, duration:1}}, {wt(4, "hawa") - .2:.2f});')
 for k in range(3):
     J.append(f'tl.to("#cw{k}", {{opacity:1, duration:.3}}, {wt(4, "hawa") - .2 + k * .12:.2f}); tl.fromTo("#cw{k}", {{strokeDashoffset:0}}, {{strokeDashoffset:-1.33, duration:2.4, ease:"none", repeat:2, immediateRender:false}}, {wt(4, "hawa") - .2:.2f}); tl.to("#cw{k}", {{opacity:0, duration:.3}}, {S(5):.2f});')
-lux(5, "<b>~430 M</b> OONCHAI &middot; KHULA ILAKA", wt(4, "oonchai") - .1, wt(4, "hawa") - .1, 60, 1290)
+lux(5, "JAIPUR <b>~430 M</b> &nbsp;&middot;&nbsp; DELHI <b>~215 M</b>", wt(4, "430") - .1, wt(4, "hawa") - .1, 60, 1290)
 lux(6, "<b>&#10004;</b> HAWA CHALTI RAHE &middot; JALDI SAAF", wt(4, "hawa") - .1, S(5), 60, 1290, "grn")
 sfx("whoosh", wt(4, "hawa") - .2, .3)
 
@@ -246,7 +246,7 @@ J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#c
 sfx("sparkle", wt(7, "Comment"), .3)
 
 # ---------- captions ----------
-HI = ["gas chamber", "Jaipur", "4 reason", "north-west", "Punjab", "Haryana", "parali", "dhuaan", "Delhi", "Indo-Gangetic", "katori", "high pressure", "dhakkan", "Aravali", "oonchai",
+HI = ["gas chamber", "Jaipur", "4 reason", "north-west", "Punjab", "Haryana", "parali", "dhuaan", "Delhi", "Indo-Gangetic", "katori", "high pressure", "dhakkan", "Aravali", "oonchai", "430 meter", "215 meter",
       "khula ilaka", "jaldi saaf", "AQI", "dhool", "traffic", "Saaf hawa", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
