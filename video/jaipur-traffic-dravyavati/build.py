@@ -4,11 +4,11 @@ P = "proj"
 ASP = json.load(open("aspects.json"))
 LINES = [
     "Nadi ke upar yeh road ab aapke area ke daam badha sakti hai.",
-    "Jaipur ki zyada badi sadkein, jaise Ajmer Road, Sirsi Road, Kalwar Road, Gopalpura Bypass aur Agra Road, east se west jaati hain.",
+    "Jaipur ki zyada sadkein, jaise Sikar Road, Khatipura Road, Ajmer Road, Shyam Nagar Janpath, New Sanganer Road, Gopalpura Road, Jaipur Jodhpur Road, Haldighati Marg, NH 52 aur Mahal Road, nadi ko 90 degree par kaat ke east se west jaati hain.",
     "Par west Jaipur mein, Dravyavati nadi ke saath, north se south jaane ka koi seedha aur tez raasta nahi hai.",
     "Isliye Sikar Road se Sitapura jaana ho, toh gaadiyan shehar ke beech se ghoom ke jaati hain, aur har chauraahe par jam lagta hai.",
     "Ab Dravyavati nadi ke upar 25 se 30 km ka 6 lane elevated road prastavit hai, single pillar par.",
-    "Yeh Sikar Road, Ajmer Road, New Sanganer Road aur Tonk Road ko seedha jodega. Shehar ke andar jam kam hoga.",
+    "Yeh road in sabhi das sadkon ko seedha jodega. Shehar ke andar jam kam hoga.",
     "Aur jahan connectivity aati hai, wahan ke areas ki demand aur daam badhte hain.",
     "Aapko kis road par sabse zyada jam milta hai? Comment karo.",
 ]
@@ -84,7 +84,7 @@ SVG.append(f'<path id="bufz" d="{pd(ELV)}" style="fill:none;stroke:#3CE65A;strok
 SVG.append(f'<path id="elg" d="{pd(ELV)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:20;stroke-opacity:.35;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
            f'<path id="el" d="{pd(ELV)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:6;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
            f'<path id="eld" d="{pd(ELV)}" style="fill:none;stroke:#111;stroke-width:6;vector-effect:non-scaling-stroke;stroke-dasharray:10 10;opacity:0"/>')
-CROSS = {"Sikar Road": (26.932, 75.795), "Ajmer Road": (26.905, 75.779), "New Sanganer Road": (26.880, 75.772), "Tonk Road": (26.795, 75.827)}
+CROSS = {"Sikar Road": (26.932, 75.795), "Khatipura Road": (26.919, 75.784), "Ajmer Road": (26.905, 75.779), "Shyam Nagar Janpath": (26.892, 75.771), "New Sanganer Road": (26.880, 75.772), "Gopalpura Road": (26.861, 75.786), "Jaipur Jodhpur Road": (26.835, 75.792), "Haldighati Marg": (26.806, 75.808), "NH 52": (26.795, 75.827), "Mahal Road": (26.788, 75.862)}
 for i, (nm, (la, lo)) in enumerate(CROSS.items()):
     x, y = wp(la, lo)
     SVG.append(f'<g id="cx{i}" style="opacity:0"><circle cx="{x:.1f}" cy="{y:.1f}" r="1" class="dg" style="fill:#fff;opacity:.35"/><circle cx="{x:.1f}" cy="{y:.1f}" r="1" class="dc" style="fill:#fff;stroke:{GOLD};stroke-width:3;vector-effect:non-scaling-stroke"/></g>')
@@ -101,7 +101,7 @@ def card(cid, img, t0, t1, title, sub="", tag=None, top=400, maxw=900, maxh=600)
              f'tl.fromTo("#{cid} .scan", {{left:"0%", opacity:1}}, {{left:"100%", duration:.55, ease:"power2.inOut"}}, {t0:.2f}); tl.to("#{cid} .scan", {{opacity:0, duration:.15}}, {t0 + .55:.2f}); tl.to("#{cid}", {{opacity:0, duration:.2}}, {t1 - .2:.2f});')
     sfx("pop", t0, .25)
 def lab(i, p, text, t, until, at, dx=0, dy=0, cls=""):
-    x, y = scr(p, at); H.append(f'<div class="ml {cls}" id="{i}" style="left:{min(max(x + dx, 60 + len(text) * 11), 1020 - len(text) * 11):.0f}px;top:{y + dy:.0f}px;opacity:0">{text}</div>')
+    x, y = scr(p, at); H.append(f'<div class="ml {cls}" id="{i}" style="left:{min(max(x + dx, 40 + len(text) * 9), 1040 - len(text) * 9):.0f}px;top:{y + dy:.0f}px;opacity:0">{text}</div>')
     J.append(f'tl.fromTo("#{i}", {{opacity:0, scale:.5}}, {{opacity:1, scale:1, duration:.25, ease:"back.out(2)", immediateRender:false}}, {t:.2f}); tl.fromTo("#{i}", {{opacity:1}}, {{opacity:0, duration:.2, immediateRender:false}}, {until - .2:.2f});')
 def mover(mid, pts, t0, d, col, until, N=70):
     L = [0.0]
@@ -120,14 +120,15 @@ def mover(mid, pts, t0, d, col, until, N=70):
 CB = json.load(open("data/jaipur_boundary.geojson"))["features"][0]["geometry"]["coordinates"][0]
 CITYP = [wp(la, lo) for lo, la in CB[::2]]
 SVG.insert(-1, f'<path id="city" d="M{" L".join(f"{x:.1f} {y:.1f}" for x, y in CITYP)} Z" style="fill:#fff;fill-opacity:.05;stroke:#F3E6C8;stroke-width:3;stroke-dasharray:10 8;vector-effect:non-scaling-stroke;opacity:0"/>')
-EW = {"AJMER ROAD": [(26.912, 75.785), (26.895, 75.74), (26.875, 75.69), (26.86, 75.64)],
-      "SIRSI ROAD": [(26.925, 75.775), (26.935, 75.73), (26.945, 75.68)],
-      "KALWAR ROAD": [(26.945, 75.775), (26.965, 75.72), (26.975, 75.67)],
-      "GOPALPURA BYPASS": [(26.866, 75.758), (26.862, 75.775), (26.858, 75.80), (26.856, 75.815)],
-      "AGRA ROAD": [(26.918, 75.835), (26.912, 75.87), (26.905, 75.91), (26.90, 75.96)]}
+def perp(la, lo, km_):
+    p = wp(la, lo); j = min(range(len(RP)), key=lambda k: (RP[k][0] - p[0]) ** 2 + (RP[k][1] - p[1]) ** 2)
+    a_, b_ = RP[max(0, j - 3)], RP[min(len(RP) - 1, j + 3)]; dx, dy = b_[0] - a_[0], b_[1] - a_[1]; L = math.hypot(dx, dy)
+    nx, ny = -dy / L, dx / L; c = RP[j]; d = km_ * PXKM
+    return [(c[0] - nx * d, c[1] - ny * d), c, (c[0] + nx * d, c[1] + ny * d)]
+EW = {nm.upper(): ll for nm, ll in CROSS.items()}
 EWP = {}
 for i, (nm, pts) in enumerate(EW.items()):
-    P_ = smooth([wp(*p) for p in pts], 8); EWP[nm] = P_
+    P_ = perp(*pts, 2.6); EWP[nm] = P_
     SVG.insert(-1, f'<path class="ew" id="ew{i}" d="{pd(P_)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:30;stroke-opacity:.3;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>'
                        f'<path class="ew" id="ewc{i}" d="{pd(P_)}" pathLength="1" style="fill:none;stroke:{GOLD};stroke-width:11;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1"/>')
 # red "gap" strip along the river (no direct N-S route)
@@ -148,8 +149,8 @@ for i, (nm, la, lo) in enumerate(AREAS):
 # ---------- cameras ----------
 def bbr(rings): return [wp(la, lo) for r in rings for lo, la in r]
 RAJ_C, RAJ_W = fitb(bbr(BD["raj"]), 700, 1380, 1.1)
-ALL = [p for P_ in EWP.values() for p in P_] + RP[:int(len(RP) * .8)]
-CT_C, CT_W = fitb(ALL, 420, 1380, 1.08)
+ALL = [p for P_ in EWP.values() for p in P_]
+CT_C, CT_W = fitb(ALL, 420, 1380, 1.25)
 RV_C, RV_W = fitb(ELV, 420, 1380, 1.2)
 J.append('const VB = document.getElementById("world"); function setDots(w){ document.querySelectorAll(".dc").forEach(e=>e.setAttribute("r", w/90)); document.querySelectorAll(".dg").forEach(e=>e.setAttribute("r", w/40)); document.querySelectorAll(".mvc").forEach(e=>e.setAttribute("r", w/70)); document.querySelectorAll(".mvg").forEach(e=>e.setAttribute("r", w/26)); }'
          'function zoomTo(t, c0, w0, c1, w1, d){ const o = {z:0}; tl.to(o, {z:1, duration:d, ease:"power2.inOut", onUpdate:()=>{ const w = Math.exp(Math.log(w0) + (Math.log(w1) - Math.log(w0)) * o.z); const f = Math.abs(w0 - w1) < 1e-6 ? o.z : (w0 - w) / (w0 - w1); const cx = c0[0] + (c1[0] - c0[0]) * f, cy = c0[1] + (c1[1] - c0[1]) * f; const h = w * 1920 / 1080; VB.setAttribute("viewBox", (cx - w / 2) + " " + (cy - h / 2) + " " + w + " " + h); setDots(w); }}, t); }')
@@ -175,12 +176,11 @@ sfx("impact-bass-1", 0, .45); sfx("whoosh", .25, .3); sfx("sparkle", wt(0, "daam
 # ---------- 1 E-W roads ----------
 zoom(S(1) - .3, CT_C, CT_W, .9)
 J.append(f'tl.to("#city", {{opacity:1, duration:.4}}, {S(1):.2f}); tl.to(["#rv", "#rvg"], {{opacity:.35, duration:.3}}, {S(1):.2f});')
-LBL = {"AJMER ROAD": 2, "SIRSI ROAD": 2, "KALWAR ROAD": 2, "GOPALPURA BYPASS": 1, "AGRA ROAD": 2}
 for i, nm in enumerate(EW):
-    t = wt(1, nm.split()[0].title()) - .1
+    t = wt(1, {"NH 52": "NH 52"}.get(nm, nm.title().replace("Nh 52", "NH 52").split(" Road")[0].split(" Marg")[0])) - .1
     J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{strokeDashoffset:0, duration:.6, ease:"power2.out"}}, {t:.2f});'); sfx("whoosh-short", t, .25)
-    P_ = EWP[nm]; lab(f"lew{i}", P_[-1], nm, t + .3, S(2) - .1, S(1) + .8, dy=-34, cls="y")
-lux(0, "<b>&#8596;</b> EAST &ndash; WEST", wt(1, "east") - .1, S(2), 300, 300)
+    P_ = EWP[nm]; lab(f"lew{i}", P_[1], nm, t + .2, S(2) - .1, S(1) + .8, dx=-1000 if i % 2 == 0 else 1000, dy=0, cls="y sm")
+lux(0, "<b>90&deg;</b> NADI KO KAAT-TI SADKEIN", wt(1, "90") - .1, S(2), 200, 300)
 
 # ---------- 2 gap ----------
 J.append(f'tl.to(".ew", {{opacity:.25, duration:.3}}, {S(2):.2f}); tl.to(["#rv", "#rvg"], {{opacity:1, duration:.3}}, {S(2):.2f}); tl.fromTo(["#rvg"], {{strokeWidth:22}}, {{strokeWidth:46, duration:.4, yoyo:true, repeat:3}}, {S(2) + .2:.2f});')
@@ -218,9 +218,10 @@ J.append(f'tl.fromTo("#xsec", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.4
 
 # ---------- 5 connections, jams fade ----------
 for i, nm in enumerate(CROSS):
-    t = wt(5, nm.split()[0] if nm != "New Sanganer Road" else "New Sanganer") - .05
+    t = wt(5, "das sadkon") - .1 + i * .18
     J.append(f'tl.to("#cx{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.to("#cx{i}", {{opacity:0, duration:.3}}, {S(6) + .2:.2f});')
-    lab(f"rl{i}", wp(*CROSS[nm]), nm.upper(), t, S(6), S(5), dx=-200 if i % 2 == 0 else 200, cls="y"); sfx("pop", t, .25)
+    lab(f"rl{i}", wp(*CROSS[nm]), nm.upper(), t, S(6), S(5), dx=-1000 if i % 2 == 0 else 1000, cls="y sm"); sfx("pop", t, .25)
+    J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{opacity:1, duration:.3}}, {t:.2f});')
 J.append(f'tl.to(".jam", {{opacity:0, duration:.4, stagger:.1}}, {wt(5, "jam kam"):.2f});')
 lux(4, "<b>&#10004;</b> JAM KAM", wt(5, "jam kam") - .1, S(6), 340, 300, "grn")
 
@@ -237,7 +238,7 @@ J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#c
 sfx("sparkle", wt(7, "Comment"), .3)
 
 # captions
-HI = ["daam", "Ajmer Road", "Sirsi Road", "Kalwar Road", "Gopalpura Bypass", "Agra Road", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "Comment"]
+HI = ["daam", "Ajmer Road", "Khatipura", "Shyam Nagar Janpath", "Janpath", "Gopalpura", "New Sanganer", "90 degree", "Jaipur Jodhpur Road", "Haldighati Marg", "NH 52", "Mahal Road", "das sadkon", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -260,7 +261,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
-H.append('<div id="cred">River traced from Google Maps (approx.) &middot; road lines approximate &middot; elevated road proposed (DPR stage), alignment indicative &middot; Source: Dainik Bhaskar &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
+H.append('<div id="cred">River traced from Google Maps (approx.) &middot; road crossings approximate &middot; elevated road proposed (DPR stage), alignment indicative &middot; Source: Dainik Bhaskar &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#1b1b1d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#111;background:#FFC42E;border-radius:6px;padding:0 6px}
@@ -293,6 +294,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #xsec{position:absolute;left:90px;top:1020px;opacity:0;z-index:14;padding:10px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94));transform-origin:50% 50%}#xsec svg{display:block}
 #cta b{border-radius:6px !important;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95)) !important;border:1.5px solid #C9A24A;color:#F3E6C8 !important;font:400 76px/1.05 Anton !important}
 #cta span{border-radius:4px !important;background:#C9A24A !important;color:#111 !important;letter-spacing:.22em}
+.ml.sm{font-size:24px;padding:4px 12px}
 .ml.blue{background:#2EA8FF;color:#fff}
 .cp{position:absolute;left:40px;right:130px;top:1440px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
