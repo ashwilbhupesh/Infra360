@@ -186,7 +186,7 @@ sfx("impact-bass-1", 0, .45); sfx("whoosh", .25, .3); sfx("sparkle", wt(0, "daam
 zoom(S(1) - .3, RV_C, RV_W, .9)
 J.append(f'tl.to(["#city", ".ew"], {{opacity:.15, duration:.4}}, {S(1) - .2:.2f}); tl.to(["#el", "#elg", "#elp"], {{strokeDashoffset:0, duration:1.4, ease:"power2.inOut"}}, {S(1) + .1:.2f});')
 sfx("riser", S(1), .3)
-lux(3, "<b>25&ndash;30 KM</b> &middot; 6 LANE &middot; SINGLE PILLAR", wt(1, "25") - .1, wt(1, "elevated") + .2, 60, 300)
+lux(3, "<b>25&ndash;30 KM</b> &middot; 6 LANE &middot; SINGLE PILLAR", wt(1, "25") + .45, S(2) - .1, 60, 300)
 # ---- 3D: tilt the map, raise pillars + deck over the river ----
 T3 = S(1) + .4; TF = S(2) - .35; HZ = 70
 NPIL = 34; idx = [int(k * (len(ELV) - 1) / (NPIL - 1)) for k in range(NPIL)]
@@ -207,8 +207,7 @@ J.append(f'tl.fromTo(".pl3", {{scaleY:0, opacity:1}}, {{scaleY:1, duration:.35, 
 J.append(f'tl.set("#deck", {{opacity:0, z:{HZ}}}, 0); tl.set("#deck", {{opacity:1}}, {T3 + 1.0:.2f}); tl.to(["#deck .dk0", "#deck .dk1"], {{strokeDashoffset:0, duration:1.2, ease:"power2.inOut"}}, {T3 + 1.0:.2f}); tl.to("#deck .dk2", {{opacity:.9, duration:.3}}, {T3 + 2.0:.2f});'
          f'tl.set("#deck .car3", {{opacity:1}}, {T3 + 2.1:.2f}); tl.to("#deck .car3", {{strokeDashoffset:"-=1", duration:3.2, ease:"none", repeat:3}}, {T3 + 2.1:.2f}); tl.to("#deck", {{opacity:0, duration:.3}}, {TF:.2f});')
 sfx("whoosh", T3, .3); sfx("impact-bass-1", T3 + 1.0, .35)
-card("ctoi", "toi", wt(1, "JDA") - .1, wt(1, "25") - .1, "JDA PLANS ELEVATED CORRIDOR", "Times of India &middot; 19 March 2026", ("NEWS", "#C9A24A"), top=180, maxw=880, maxh=430)
-card("cbh", "bhaskar", wt(1, "elevated") + .2, S(2) + .1, "JDA + ADANI GROUP TEAM KI SITE VISIT", "Dainik Bhaskar &middot; DPR stage", ("NEWS", "#C9A24A"), top=180, maxw=640, maxh=520)
+card("cbf", "bhaskar_full", wt(1, "JDA") - .15, wt(1, "25") + .5, "JDA + ADANI GROUP TEAM KI SITE VISIT", "Dainik Bhaskar &middot; DPR stage", ("NEWS", "#C9A24A"), top=170, maxw=760, maxh=900)
 # hook: "aapke areas" -> riverside areas pop
 TA0 = wt(0, "aapke") - .1
 for i, (nm, la, lo) in enumerate(AREAS):
@@ -292,7 +291,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .85);')
-H.append('<div id="cred">River traced from Google Maps (approx.) &middot; road crossings approximate &middot; elevated road proposed (DPR stage), alignment indicative &middot; Sources: Times of India, Dainik Bhaskar &middot; 3D illustrative &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
+H.append('<div id="cred">River traced from Google Maps (approx.) &middot; road crossings approximate &middot; elevated road proposed (DPR stage), alignment indicative &middot; Source: Dainik Bhaskar &middot; 3D illustrative &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#1b1b1d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#111;background:#FFC42E;border-radius:6px;padding:0 6px}
