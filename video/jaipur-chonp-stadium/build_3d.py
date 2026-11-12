@@ -194,25 +194,25 @@ J.append(f'tl.fromTo("#name3d", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration
 # ---------- hook pop-ups (keep the first seconds busy) ----------
 def sticker(i, html, t, until, x, y, rot, cls=""):
     H.append(f'<div class="stk {cls}" id="stk{i}" style="left:{x}px;top:{y}px;rotate:{rot}deg">{html}</div>')
-    J.append(f'tl.fromTo("#stk{i}", {{opacity:0, scale:2.2}}, {{opacity:1, scale:1, duration:.28, ease:"back.out(2.6)"}}, {t:.2f}); tl.to("#stk{i}", {{opacity:0, scale:.6, duration:.2, ease:"power2.in"}}, {until - .2:.2f});')
-    sfx("pop", t, .3)
-sticker(0, "&#127758; <b>#3</b> DUNIYA MEIN", wt(0, "teesra") - .1, wt(0, "teesra") + 1.3, 50, 1080, -7)
-sticker(1, "&#127951; CRICKET STADIUM", wt(0, "cricket") - .1, wt(0, "cricket") + 1.2, 560, 1180, 6, "w")
-for i, (txt, dt, x, y) in enumerate([("100 ACRE", 1.0, 60, 1240), ("PRACTICE GROUNDS", 1.35, 560, 1290), ("PARKING", 1.7, 120, 1330)]):
-    sticker(10 + i, txt, T3 + dt, T3 + dt + 1.3, x, y, (-1) ** i * 4, "chip")
+    J.append(f'tl.fromTo("#stk{i}", {{opacity:0, y:24, clipPath:"inset(0 100% 0 0)"}}, {{opacity:1, y:0, clipPath:"inset(0 0% 0 0)", duration:.45, ease:"power3.out"}}, {t:.2f}); tl.to("#stk{i}", {{opacity:0, y:-16, duration:.3, ease:"power2.in"}}, {until - .3:.2f});')
+    sfx("click-soft", t, .3)
+sticker(0, "<b>No. 3</b> DUNIYA MEIN", wt(0, "teesra") - .1, wt(0, "teesra") + 1.3, 60, 1080, 0)
+sticker(1, "CRICKET STADIUM", wt(0, "cricket") - .1, wt(0, "cricket") + 1.2, 520, 1180, 0)
+for i, (txt, dt, x, y) in enumerate([("100 ACRE", 1.0, 60, 1240), ("PRACTICE GROUNDS", 1.35, 470, 1290), ("PARKING", 1.7, 120, 1330)]):
+    sticker(10 + i, txt, T3 + dt, T3 + dt + 1.3, x, y, 0, "chip")
 # Anil Agarwal portrait on his name
 TA = wt(0, "Anil Agarwal") - .1
 H.append('<div id="anil"><img src="assets/img/anil.jpg"/><div><b>ANIL AGARWAL</b><span>Chairman, Vedanta</span></div></div>')
-J.append(f'tl.fromTo("#anil", {{opacity:0, x:-300}}, {{opacity:1, x:0, duration:.35, ease:"back.out(1.8)"}}, {TA:.2f}); tl.fromTo("#anil img", {{scale:.4}}, {{scale:1, duration:.4, ease:"back.out(2.5)"}}, {TA:.2f}); tl.to("#anil", {{opacity:0, x:-300, duration:.25, ease:"power2.in"}}, {wt(1, "MoU") - .3:.2f});')
+J.append(f'tl.fromTo("#anil", {{opacity:0, x:-60}}, {{opacity:1, x:0, duration:.5, ease:"power3.out"}}, {TA:.2f}); tl.fromTo("#anil img", {{scale:1.15}}, {{scale:1, duration:.8, ease:"power2.out"}}, {TA:.2f}); tl.to("#anil", {{opacity:0, x:-60, duration:.3, ease:"power2.in"}}, {wt(1, "2023") - .2:.2f});')
 sfx("whoosh-short", TA, .35)
 
 # ---------- 1 MoU ----------
-H.append('<div id="mou"><div class="mrow"><span>VEDANTA</span><b>&#129309;</b><span>RCA</span></div><div class="mbig">&#8377;300 CR</div><div class="msub">MoU &middot; 30 MARCH 2023</div></div>')
+H.append('<div id="mou"><div class="mrow"><span>VEDANTA</span><b>&times;</b><span>RCA</span></div><div class="mbig">&#8377;300 CR</div><div class="msub">MoU &middot; 30 MARCH 2023</div></div>')
 TM = max(S(1), T3 + 2.6)
-J.append(f'tl.fromTo("#mou", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)"}}, {wt(1, "300") - .2:.2f}); tl.fromTo("#mou .mbig", {{scale:2.5, opacity:0}}, {{scale:1, opacity:1, duration:.35, ease:"back.out(2.5)"}}, {wt(1, "300") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
+J.append(f'tl.fromTo("#mou", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(1, "300") - .2:.2f}); tl.fromTo("#mou .mbig", {{letterSpacing:"0.4em", opacity:0}}, {{letterSpacing:"0.02em", opacity:1, duration:.6, ease:"power3.out"}}, {wt(1, "300") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.2}}, {S(2) - .1:.2f});')
 sfx("pop", wt(1, "Vedanta"), .3); sfx("impact-bass-1", wt(1, "300"), .4)
 
-card("clip", "statesman2", wt(1, "MoU") - .15, wt(1, "300") - .15, "RCA + VEDANTA MoU", "The Statesman &middot; 30 March 2023", ("NEWS", "#FF4646"), top=170, maxw=1000, maxh=1120)
+card("clip", "statesman2", wt(1, "2023") - .1, wt(1, "300") - .15, "RCA + VEDANTA MoU", "The Statesman &middot; 30 March 2023", ("NEWS", "#C9A24A"), top=170, maxw=1000, maxh=1120)
 
 # ---------- 2 TOP 3 ----------
 J.append(f'tl.to("#dim", {{opacity:.65, duration:.3}}, {S(2) - .1:.2f}); tl.to("#dim", {{opacity:.12, duration:.3}}, {S(3):.2f});')
@@ -249,13 +249,13 @@ sfx("pop", wt(3, "25 km"), .3); sfx("pop", wt(3, "100"), .3); sfx("whoosh-short"
 # ---------- 4 POTENTIAL (3D again + icons) ----------
 zm(S(4) - .3, C3, W3, .9)
 J.append(f'tl.to(["#dl", "#dlg", "#jcb", "#dpin", "#chl"], {{opacity:0, duration:.3}}, {S(4) - .3:.2f}); tl.to("#plane", {{rotationX:58, scale:1.35, duration:.9, ease:"power2.inOut"}}, {S(4) - .3:.2f}); tl.to("#std", {{opacity:1, duration:.3}}, {S(4) + .2:.2f});')
-EV = [("&#127951;", "IPL", "IPL"), ("&#127758;", "INTERNATIONAL MATCHES", "international"), ("&#127908;", "CONCERTS", "concerts"), ("&#127881;", "BADE EVENTS", "events")]
+EV = [("01", "IPL", "IPL"), ("02", "INTERNATIONAL MATCHES", "international"), ("03", "CONCERTS", "concerts"), ("04", "BADE EVENTS", "events")]
 H.append('<div id="evs">' + "".join(f'<div class="ev" id="ev{i}"><i>{ic}</i><b>{nm}</b></div>' for i, (ic, nm, _) in enumerate(EV)) + '</div>')
 J.append(f'tl.set("#evs", {{opacity:1}}, {S(4):.2f}); tl.to("#evs", {{opacity:0, duration:.2}}, {wt(4, "hotels") - .3:.2f});')
 for i, (_, _, w_) in enumerate(EV):
     t = wt(4, w_) - .1; J.append(f'tl.fromTo("#ev{i}", {{opacity:0, scale:.3, y:40}}, {{opacity:1, scale:1, y:0, duration:.3, ease:"back.out(2.5)"}}, {t:.2f});'); sfx("pop", t, .3)
 J.append(f'tl.to("#std .roof", {{filter:"drop-shadow(0 0 30px rgba(255,79,163,1)) brightness(1.3)", duration:.15, yoyo:true, repeat:9}}, {wt(4, "concerts"):.2f});')
-IC = [("&#127976;", "HOTELS", (-330, 330), "hotels"), ("&#127869;", "RESTAURANTS", (330, 330), "restaurants"), ("&#127968;", "ZAMEEN KI DEMAND &#9650;", (0, 560), "zameen")]
+IC = [("&#9670;", "HOTELS", (-330, 330), "hotels"), ("&#9670;", "RESTAURANTS", (330, 330), "restaurants"), ("&#9670;", "ZAMEEN KI DEMAND &#9650;", (0, 560), "zameen")]
 for i, (ic, nm, (dx, dy), w_) in enumerate(IC):
     H.append(f'<div class="wpin" id="wp{i}" style="left:{540 + dx}px;top:{620 + dy}px"><i>{ic}</i><b>{nm}</b></div>')
     t = wt(4, w_); J.append(f'tl.fromTo("#wp{i}", {{opacity:0, scale:.2, y:30}}, {{opacity:1, scale:1, y:0, duration:.3, ease:"back.out(2.5)"}}, {t:.2f}); tl.to("#wp{i}", {{opacity:0, duration:.2}}, {S(5) - .1:.2f});'); sfx("pop", t, .25)
@@ -264,7 +264,7 @@ PH4 = [("ipl", "IPL", "IPL", "Representative &middot; Narendra Modi Stadium"), (
        ("concert1", "concerts", "CONCERTS", "Representative stadium concert"), ("concert2", "events", "BADE EVENTS", "Representative")]
 for i, (img, w_, ttl, sb) in enumerate(PH4):
     t0 = wt(4, w_) - .05; t1 = wt(4, PH4[i + 1][1]) - .05 if i + 1 < len(PH4) else wt(4, "hotels") - .1
-    POS4 = [(30, 600, -4), (545, 640, 3), (40, 1000, 3), (545, 1030, -4)]
+    POS4 = [(30, 600, 0), (545, 600, 0), (30, 1000, 0), (545, 1000, 0)]
     lx, ty, rt = POS4[i]
     card(f"pc{i}", img, t0, wt(4, "hotels") - .1, ttl, "", top=ty, maxw=470, maxh=300, rot=rt, left=lx)
 
@@ -342,6 +342,20 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .stk{position:absolute;opacity:0;z-index:14;padding:14px 26px;border-radius:18px;background:#FFC42E;color:#111;font:400 50px/1 Anton;box-shadow:0 10px 30px rgba(0,0,0,.6)}.stk b{font-size:64px}.stk.w{background:#fff}.stk.chip{padding:10px 22px;border-radius:40px;background:rgba(8,10,15,.9);border:3px solid #3CFF96;color:#3CFF96;font:900 34px Mont}
 #anil{position:absolute;left:40px;top:1020px;opacity:0;z-index:15;display:flex;align-items:center;gap:18px;padding:12px 28px 12px 12px;border-radius:120px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;box-shadow:0 20px 50px rgba(0,0,0,.6)}
 #anil img{width:200px;height:200px;border-radius:50%;object-fit:cover;border:5px solid #FFC42E}#anil b{display:block;font:400 64px/1 Anton;color:#fff}#anil span{display:block;margin-top:6px;font:800 30px Mont;color:#FFC42E}
+
+/* ---- luxury styling ---- */
+.stk{padding:16px 30px !important;border-radius:6px !important;background:linear-gradient(135deg,rgba(14,12,9,.92),rgba(30,24,16,.92)) !important;border:1.5px solid #C9A24A !important;color:#F3E6C8 !important;font:600 34px/1 Mont !important;letter-spacing:.22em;box-shadow:0 18px 50px rgba(0,0,0,.55) !important;backdrop-filter:blur(6px)}
+.stk b{font:400 58px/1 Anton;letter-spacing:.04em;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent;margin-right:10px}
+.stk.chip{padding:10px 22px !important;font:700 26px Mont !important;letter-spacing:.24em;border-radius:4px !important}
+#anil{border-radius:8px !important;border:1.5px solid #C9A24A !important;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94)) !important;padding:14px 34px 14px 14px !important}
+#anil img{border-radius:6px !important;border:none !important;width:190px !important;height:190px !important}#anil b{letter-spacing:.06em;color:#F3E6C8 !important}#anil span{color:#C9A24A !important;letter-spacing:.18em;font:600 24px Mont !important;text-transform:uppercase}
+#mou{border-radius:8px !important;border:1.5px solid #C9A24A !important;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94)) !important}
+.mrow span{color:#F3E6C8 !important;letter-spacing:.12em}.mrow b{font:300 60px Mont !important;color:#C9A24A}.mbig{background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent !important}.msub{color:#C9A24A !important;letter-spacing:.3em !important}
+.ev{border-radius:6px !important;border:1.5px solid #C9A24A !important;background:linear-gradient(135deg,rgba(14,12,9,.92),rgba(34,27,18,.92)) !important}.ev i{font:400 46px Anton !important;color:#C9A24A}.ev b{color:#F3E6C8 !important;letter-spacing:.06em}
+.wpin i{font-size:40px !important;color:#C9A24A}.wpin b{border-radius:4px !important;border:1.5px solid #C9A24A !important;color:#F3E6C8 !important;letter-spacing:.16em;font:700 26px Mont !important}
+.card{border-radius:10px !important}.card img{border-radius:6px !important}.tg{border-radius:3px !important;letter-spacing:.2em;color:#111 !important}
+#hook{border-radius:8px !important;border:1.5px solid #C9A24A}#hook b{background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent !important}#hook i{border-radius:4px !important;background:#C9A24A !important;letter-spacing:.06em}
+#name3d small{border-radius:3px !important;background:#C9A24A !important;letter-spacing:.2em}#name3d span{border-radius:3px !important;border-color:#C9A24A !important;color:#F3E6C8 !important}
 #hero{position:absolute;left:160px;top:760px;width:760px;opacity:1;z-index:13;padding:12px 12px 14px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);text-align:center}#hero img{display:block;width:100%;border-radius:14px}#hero div{margin-top:8px;font:400 40px/1.05 Anton;color:#14161c}#hero span{font:800 22px Mont;color:#888}
 #mou{position:absolute;left:90px;right:90px;top:300px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
