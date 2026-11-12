@@ -77,6 +77,8 @@ DIST = [("Jaipur", 26.91, 75.79), ("Ajmer", 26.45, 74.64), ("Tonk", 26.17, 75.79
         ("Jhalawar", 24.60, 76.16), ("Sawai Madhopur", 26.02, 76.35), ("Dausa", 26.89, 76.34), ("Karauli", 26.50, 77.02), ("Dholpur", 26.70, 77.89), ("Bharatpur", 27.22, 77.49),
         ("Deeg", 27.47, 77.33), ("Alwar", 27.55, 76.61), ("Khairthal-Tijara", 27.80, 76.64), ("Kotputli-Behror", 27.70, 76.20), ("Beawar", 26.10, 74.32)]
 DP = {nm: wp(la, lo) for nm, la, lo in DIST}
+_DG = {f["properties"]["district"]: f for f in json.load(open("data/rajasthan_districts.geojson"))["features"]}
+for nm in DP: DP[nm] = wp(_DG[nm]["properties"]["label"][1], _DG[nm]["properties"]["label"][0])
 # canals (illustrative): from barrages fan out to districts
 SRC = {"Jaipur": 2, "Ajmer": 2, "Tonk": 2, "Beawar": 2, "Kota": 0, "Bundi": 0, "Baran": 0, "Jhalawar": 0, "Sawai Madhopur": 1, "Dausa": 1, "Karauli": 1,
        "Dholpur": 1, "Bharatpur": 1, "Deeg": 1, "Alwar": 1, "Khairthal-Tijara": 1, "Kotputli-Behror": 1}
@@ -91,6 +93,14 @@ for i, (nm, la, lo) in enumerate(DIST):
 for i, (nm, la, lo) in enumerate(DIST):
     x, y = DP[nm]
     SVG.append(f'<g class="dt" id="dt{i}" style="opacity:0"><circle class="dgl" cx="{x:.0f}" cy="{y:.0f}" r="{U * 46:.0f}" style="fill:url(#dg)"/><circle cx="{x:.0f}" cy="{y:.0f}" r="{U * 11:.0f}" style="fill:{WATER2};stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke"/></g>')
+# district boundaries (highlight on name)
+DG = {f["properties"]["district"]: f for f in json.load(open("data/rajasthan_districts.geojson"))["features"]}
+def gpath(g):
+    polys = g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
+    return " ".join(pd([wp(la, lo) for lo, la in r], True) for poly in polys for r in poly[:1])
+for i, (nm, la, lo) in enumerate(DIST):
+    SVG.append(f'<path class="dz" id="dz{i}" d="{gpath(DG[nm]["geometry"])}" style="fill:{WATER};fill-opacity:0;stroke:#fff;stroke-width:3;stroke-opacity:0;vector-effect:non-scaling-stroke;stroke-linejoin:round"/>')
+    lo2, la2 = DG[nm]["properties"]["label"]; DP[nm] = wp(la2, lo2)
 # green growth halos (real estate)
 for i, (nm, la, lo) in enumerate(DIST):
     x, y = DP[nm]
@@ -99,7 +109,9 @@ for i, (nm, la, lo) in enumerate(DIST):
 # billboard labels in the plane
 def pin(i, p, text, cls=""):
     x, y = scr(p); IN.append(f'<div class="bb {cls}" id="{i}" style="left:{x:.0f}px;top:{y - 18:.0f}px"><span>{text}</span></div>')
-for i, (nm, la, lo) in enumerate(DIST): pin(f"dl{i}", DP[nm], nm.upper(), "sm")
+OFF = {"Beawar": (40, 0), "Tonk": (-40, 0), "Sawai Madhopur": (50, 26), "Karauli": (-30, 0), "Dholpur": (40, 0), "Dausa": (20, 10), "Deeg": (30, 0), "Alwar": (-20, 0)}
+for i, (nm, la, lo) in enumerate(DIST):
+    ox, oy = OFF.get(nm, (0, 0)); x0, y0 = DP[nm]; pin(f"dl{i}", (x0 + ox * U, y0 + oy * U), nm.upper(), "sm")
 pin("lchm", wp(25.95, 76.95), "CHAMBAL", "blue"); pin("lpar", wp(24.75, 76.95), "PARBATI", "blue"); pin("lkal", wp(24.55, 76.20), "KALISINDH", "blue")
 pin("lmp", wp(24.30, 77.60), "MADHYA PRADESH", "wht"); pin("lraj", wp(27.70, 74.55), "RAJASTHAN", "gold")
 # 3D water towers rising in districts (real-estate beat) — standing elements
@@ -154,11 +166,13 @@ for i, (nm, la, lo) in enumerate(DIST):
 sfx("whoosh", wt(1, "canals") - .1, .35)
 
 # ---------- 2 districts light up ----------
-plane(S(2) - .3, 46, 1.0, 0, 40, 1.0)
+rx, sc, x, y = focus(wp(26.15, 75.8), 38, 1.15, 800)
+plane(S(2) - .3, rx, sc, x, y, 1.0)
 for i, (nm, la, lo) in enumerate(DIST):
     t = wt(2, nm.split("-")[0]) - .08
     J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 15:.0f}}}}}, {{attr:{{r:{U * 60:.0f}}}, duration:.45, ease:"power3.out", immediateRender:false}}, {t:.2f});')
     bb(f"dl{i}", t, S(4) - .1); sfx("click-soft", t, .18)
+    J.append(f'tl.to("#dz{i}", {{fillOpacity:.55, strokeOpacity:1, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:.22, duration:.5}}, {t + .35:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.35, duration:.4}}, {S(4) - .1:.2f});')
 lux(2, "<b>17</b> ZILE", S(2) + .1, S(3), 60, 300)
 
 # ---------- 3 numbers ----------
@@ -234,7 +248,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #world{position:absolute;left:-2160px;top:-3840px;width:5400px;height:9600px}
 .bb{position:absolute;white-space:nowrap}
 .bb span{display:inline-block;padding:6px 14px;border-radius:4px;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94));border:1.5px solid #C9A24A;color:#F3E6C8;font:700 30px Mont;letter-spacing:.12em}
-.bb.sm span{font-size:24px;padding:4px 10px;border-color:#3FB4FF;color:#D6F1FF}.bb.blue span{border-color:#3FB4FF;color:#9BE3FF}.bb.wht span{border-color:#bbb;color:#ddd}.bb.gold span{color:#F7E3A8;font-size:36px}
+.bb.sm span{font-size:26px;padding:5px 12px;background:rgba(6,18,31,.92);border-color:#3FB4FF;color:#D6F1FF}.bb.blue span{border-color:#3FB4FF;color:#9BE3FF}.bb.wht span{border-color:#bbb;color:#ddd}.bb.gold span{color:#F7E3A8;font-size:36px}
 .tw{position:absolute;transform-origin:50% 100%;transform:rotateX(-90deg);background:linear-gradient(90deg,#2a8fd8,#9BE3FF 50%,#2a8fd8);border-radius:4px 4px 0 0;box-shadow:0 0 18px rgba(63,180,255,.7)}
 #dim{position:absolute;inset:0;background:#000;opacity:0;z-index:5;pointer-events:none}
 #face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:40}
