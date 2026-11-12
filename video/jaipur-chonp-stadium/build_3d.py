@@ -8,7 +8,7 @@ LINES = [
     "2023 mein Vedanta aur RCA ke beech MoU hua, aur Vedanta ne 300 crore dene ka vaada kiya.",
     "Duniya mein isse bade sirf do hain: Ahmedabad ka Narendra Modi Stadium, aur Melbourne Cricket Ground.",
     "Yeh ban raha hai Chonp mein, Delhi Road par, shehar se karib 25 km door, 100 acre mein. Delhi highway seedha jodta hai.",
-    "Yahan IPL, international matches, bade concerts aur events honge. Aur saath mein aas paas hotels, restaurants, aur zameen ki demand badhegi.",
+    "Yahan IPL, international matches, bade concerts aur events honge. Aur saath mein aas paas hotels, restaurants, cafe, aur zameen ki demand badhegi.",
     "Par abhi kaam ruka hua hai. 2022 mein neev rakhi gayi, karib 191 crore kharch hue, phir kaam ruk gaya.",
     "Ab IIT Bombay jaanch kar rahi hai. Aapko kya lagta hai, kab tak banega? Comment karo.",
 ]
@@ -255,11 +255,6 @@ J.append(f'tl.set("#evs", {{opacity:1}}, {S(4):.2f}); tl.to("#evs", {{opacity:0,
 for i, (_, _, w_) in enumerate(EV):
     t = wt(4, w_) - .1; J.append(f'tl.fromTo("#ev{i}", {{opacity:0, scale:.3, y:40}}, {{opacity:1, scale:1, y:0, duration:.3, ease:"back.out(2.5)"}}, {t:.2f});'); sfx("pop", t, .3)
 J.append(f'tl.to("#std .roof", {{filter:"drop-shadow(0 0 30px rgba(255,79,163,1)) brightness(1.3)", duration:.15, yoyo:true, repeat:9}}, {wt(4, "concerts"):.2f});')
-IC = [("&#9670;", "HOTELS", (-330, 330), "hotels"), ("&#9670;", "RESTAURANTS", (330, 330), "restaurants"), ("&#9670;", "ZAMEEN KI DEMAND &#9650;", (0, 560), "zameen")]
-for i, (ic, nm, (dx, dy), w_) in enumerate(IC):
-    H.append(f'<div class="wpin" id="wp{i}" style="left:{540 + dx}px;top:{620 + dy}px"><i>{ic}</i><b>{nm}</b></div>')
-    t = wt(4, w_); J.append(f'tl.fromTo("#wp{i}", {{opacity:0, scale:.2, y:30}}, {{opacity:1, scale:1, y:0, duration:.3, ease:"back.out(2.5)"}}, {t:.2f}); tl.to("#wp{i}", {{opacity:0, duration:.2}}, {S(5) - .1:.2f});'); sfx("pop", t, .25)
-
 PH4 = [("ipl", "IPL", "IPL", "Representative &middot; Narendra Modi Stadium"), ("lightshow", "international", "INTERNATIONAL MATCHES", "Light show &middot; Ahmedabad"),
        ("concert1", "concerts", "CONCERTS", "Representative stadium concert"), ("concert2", "events", "BADE EVENTS", "Representative")]
 for i, (img, w_, ttl, sb) in enumerate(PH4):
@@ -267,6 +262,36 @@ for i, (img, w_, ttl, sb) in enumerate(PH4):
     POS4 = [(30, 600, 0), (545, 600, 0), (30, 1000, 0), (545, 1000, 0)]
     lx, ty, rt = POS4[i]
     card(f"pc{i}", img, t0, wt(4, "hotels") - .1, ttl, "", top=ty, maxw=470, maxh=300, rot=rt, left=lx)
+
+
+# ---------- 4b AAS PAAS: top-down map, 5 km radius, pins + photos ----------
+TH = wt(4, "aas paas") - .3
+PXK = 256 * 2 ** 13 / 40075 / math.cos(math.radians(27.11)); RK = 5 * PXK
+RC_C, RC_W = (CHP[0], CHP[1] - 60 * 2 * RK * 1.25 / 1080), 2 * RK * 1.25
+SVG.insert(-1, f'<circle id="rad" cx="{CHP[0]:.1f}" cy="{CHP[1]:.1f}" r="{RK:.1f}" pathLength="1" style="fill:#C9A24A;fill-opacity:0;stroke:#C9A24A;stroke-width:4;stroke-dasharray:1;stroke-dashoffset:1;vector-effect:non-scaling-stroke;opacity:0"/>'
+               f'<circle id="radr" cx="{CHP[0]:.1f}" cy="{CHP[1]:.1f}" r="{RK:.1f}" style="fill:none;stroke:#F7E3A8;stroke-width:2;stroke-dasharray:8 10;vector-effect:non-scaling-stroke;opacity:0"/>'
+               f'<g id="sdot" style="opacity:0"><circle cx="{CHP[0]:.1f}" cy="{CHP[1]:.1f}" r="{RK * .09:.1f}" style="fill:#3CFF96;fill-opacity:.35;stroke:#3CFF96;stroke-width:3;vector-effect:non-scaling-stroke"/></g>')
+J.append(f'tl.to("#std", {{opacity:0, duration:.3}}, {TH:.2f}); tl.to("#plane", {{rotationX:0, scale:1, duration:.8, ease:"power2.inOut"}}, {TH:.2f}); tl.to("#fog", {{opacity:0, duration:.4}}, {TH:.2f});')
+zm(TH, RC_C, RC_W, .8)
+J.append(f'tl.to(["#dl", "#dlg", "#sdot"], {{opacity:1, duration:.3}}, {TH + .5:.2f}); tl.set(["#rad", "#radr"], {{opacity:1}}, {TH + .6:.2f}); tl.to("#rad", {{strokeDashoffset:0, duration:.8, ease:"power2.inOut"}}, {TH + .6:.2f}); tl.to("#rad", {{fillOpacity:.12, duration:.5}}, {TH + 1.2:.2f}); tl.fromTo("#radr", {{attr:{{r:{RK * .2:.1f}}}}}, {{attr:{{r:{RK:.1f}}}, duration:1.2, repeat:3, ease:"power1.out"}}, {TH + 1.0:.2f});')
+J.append(f'tl.to(["#rad", "#radr", "#sdot", "#dl", "#dlg"], {{opacity:0, duration:.3}}, {S(5) - .35:.2f});')
+sfx("whoosh", TH, .3); sfx("riser", TH + .6, .25)
+pl("lrad", (CHP[0] - RK * .62, CHP[1] - RK * .05), "5 KM RADIUS", TH + .9, S(5), TH + 1, dy=0, cls="lux")
+pl("lsite", CHP, "STADIUM", TH + .6, S(5), TH + 1, dy=-60, cls="lux g")
+PINS = [("HOTELS", (-.7, -.45), "hotels"), ("RESTAURANTS", (.62, -.55), "restaurants"), ("CAFE", (-.66, .35), "cafe"), ("PLOTS &middot; COLONIES", (.5, .62), "zameen")]
+for i, (nm, (fx, fy), w_) in enumerate(PINS):
+    p = (CHP[0] + fx * RK, CHP[1] + fy * RK); x, y = scr(p, TH + 1)
+    H.append(f'<div class="rpin" id="rp{i}" style="left:{x:.0f}px;top:{y:.0f}px"><i></i><b>{nm}</b></div>')
+    t = wt(4, w_) - .1
+    J.append(f'tl.fromTo("#rp{i}", {{opacity:0, y:-40}}, {{opacity:1, y:0, duration:.4, ease:"power3.out"}}, {t:.2f}); tl.to("#rp{i}", {{opacity:0, duration:.2}}, {S(5) - .3:.2f});'); sfx("click-soft", t, .35)
+card("hp0", "hotel", wt(4, "hotels") - .05, S(5) - .5, "HOTELS", "", top=200, maxw=320, maxh=240, left=20)
+card("hp1", "restaurant", wt(4, "restaurants") - .05, S(5) - .5, "RESTAURANTS", "", top=200, maxw=320, maxh=240, left=372)
+card("hp2", "hotel_lobby", wt(4, "cafe") - .05, S(5) - .5, "CAFE &middot; LOUNGES", "", top=200, maxw=320, maxh=240, left=724)
+H.append('<div id="dem"><span>ZAMEEN KI DEMAND</span><b>&#9650;</b></div>')
+J.append(f'tl.fromTo("#dem", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(4, "zameen") - .05:.2f}); tl.to("#dem b", {{y:-14, duration:.35, yoyo:true, repeat:5}}, {wt(4, "zameen") + .3:.2f}); tl.to("#dem", {{opacity:0, duration:.2}}, {S(5) - .2:.2f});')
+# back to 3D for status
+zm(S(5) - .3, C3, W3, .8)
+J.append(f'tl.to("#plane", {{rotationX:58, scale:1.35, duration:.8, ease:"power2.inOut"}}, {S(5) - .3:.2f}); tl.to("#std", {{opacity:1, duration:.3}}, {S(5):.2f}); tl.to("#fog", {{opacity:1, duration:.5}}, {S(5):.2f});')
 
 # ---------- 5 STATUS ----------
 J.append(f'tl.to("#std", {{filter:"grayscale(1) brightness(.6)", duration:.5}}, {S(5):.2f}); tl.to("#dim", {{opacity:.5, duration:.3}}, {S(5):.2f});')
@@ -293,7 +318,7 @@ for i, (cid, t0, t1) in enumerate(CARDS):
     J.append(f'tl.set("#{cid}", {{zIndex:{10 + i}}}, 0); tl.to("#{cid}", {{opacity:0, scale:.9, duration:.2, ease:"power2.in"}}, {out - .2:.2f});')
 
 # captions
-HI = ["teesra sabse bada", "Anil Agarwal International Cricket Stadium", "Vedanta", "RCA", "MoU", "300 crore", "Narendra Modi Stadium", "Melbourne Cricket Ground", "Chonp", "Delhi Road", "25 km", "100 acre", "IPL", "international matches", "concerts", "events", "hotels", "restaurants", "zameen ki demand", "kaam ruka", "2022", "191 crore", "IIT Bombay", "Comment"]
+HI = ["teesra sabse bada", "Anil Agarwal International Cricket Stadium", "Vedanta", "RCA", "MoU", "300 crore", "Narendra Modi Stadium", "Melbourne Cricket Ground", "Chonp", "Delhi Road", "25 km", "100 acre", "IPL", "international matches", "concerts", "events", "hotels", "restaurants", "zameen ki demand", "cafe", "kaam ruka", "2022", "191 crore", "IIT Bombay", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -316,7 +341,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
-H.append('<div id="vig"></div><div id="flash"></div><div id="cred">Renders: RCA design &middot; photos: news / social media (supplied) &middot; Sources: Hindustan Zinc (Vedanta) release, Business Standard, Times Now, ETV Bharat &middot; 3D model illustrative &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
+H.append('<div id="vig"></div><div id="flash"></div><div id="cred">Renders: RCA design &middot; hotel/restaurant photos: Gerd Eichmann, Wikimedia Commons, CC BY 4.0 &middot; 5 km radius illustrative &middot; photos: news / social media (supplied) &middot; Sources: Hindustan Zinc (Vedanta) release, Business Standard, Times Now, ETV Bharat &middot; 3D model illustrative &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#07090d}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif}#world{position:absolute;inset:0;width:1080px;height:1920px}.y{color:#FFC42E}
@@ -356,6 +381,10 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .card{border-radius:10px !important}.card img{border-radius:6px !important}.tg{border-radius:3px !important;letter-spacing:.2em;color:#111 !important}
 #hook{border-radius:8px !important;border:1.5px solid #C9A24A}#hook b{background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent !important}#hook i{border-radius:4px !important;background:#C9A24A !important;letter-spacing:.06em}
 #name3d small{border-radius:3px !important;background:#C9A24A !important;letter-spacing:.2em}#name3d span{border-radius:3px !important;border-color:#C9A24A !important;color:#F3E6C8 !important}
+.pl.lux{border-radius:4px;border:1.5px solid #C9A24A;background:rgba(14,12,9,.92);color:#F3E6C8;letter-spacing:.2em;font:700 26px Mont}.pl.lux.g{color:#3CFF96;border-color:#3CFF96}
+.rpin{position:absolute;opacity:0;translate:-50% -100%;display:flex;flex-direction:column;align-items:center;z-index:7}.rpin b{padding:10px 18px;border-radius:4px;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94));border:1.5px solid #C9A24A;color:#F3E6C8;font:700 24px Mont;letter-spacing:.18em;white-space:nowrap}
+.rpin i{order:2;width:3px;height:44px;background:linear-gradient(#C9A24A,rgba(201,162,74,0))}
+#dem{position:absolute;left:0;right:0;margin:0 auto;width:max-content;top:520px;opacity:0;z-index:12;display:flex;align-items:center;gap:14px;padding:18px 26px;border-radius:6px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94))}#dem span{font:400 40px/1.05 Anton;color:#F3E6C8;letter-spacing:.04em;width:240px}#dem b{font:400 70px Anton;color:#3CFF96}
 #hero{position:absolute;left:160px;top:760px;width:760px;opacity:1;z-index:13;padding:12px 12px 14px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);text-align:center}#hero img{display:block;width:100%;border-radius:14px}#hero div{margin-top:8px;font:400 40px/1.05 Anton;color:#14161c}#hero span{font:800 22px Mont;color:#888}
 #mou{position:absolute;left:90px;right:90px;top:300px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
