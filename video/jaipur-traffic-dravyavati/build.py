@@ -23,7 +23,7 @@ def E(k): return PH[k]["e"]
 def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower()); assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(7) + 1.3, 2)
+END = round(E(7) + .9, 2)
 def wp(lat, lon):
     n = 2 ** 13
     return (((lon + 180) / 360 * n) - 5791) * 256, (((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n) - 3466) * 256
@@ -174,48 +174,19 @@ def lux(i, html, t, until, x, y, cls=""):
 # ---------- 0 HOOK: river + elevated road + price ----------
 J.append(f'tl.to(["#rv", "#rvg"], {{strokeDashoffset:0, duration:.6, ease:"power2.out"}}, 0); tl.to(["#el", "#elg"], {{strokeDashoffset:0, duration:1.0, ease:"power2.inOut"}}, .25); tl.to("#elp", {{strokeDashoffset:0, duration:1.0, ease:"power2.inOut"}}, .25);')
 mover("car0", ELV, .3, 1.6, GOLD, S(1) - .2, 50)
-J.append(f'tl.to(["#el", "#elg", "#elp"], {{opacity:0, duration:.3}}, {S(1) - .2:.2f}); tl.set(["#el", "#elg", "#elp"], {{strokeDashoffset:1, opacity:1}}, {S(1) + .2:.2f});')
 H.append('<div id="hook"><small>NADI KE UPAR YEH ROAD</small><b>AAPKE AREA KE DAAM</b><span>BADHA SAKTI HAI &#9650;</span></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:1, scale:1.12}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.fromTo("#hook span", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.4, ease:"power3.out"}}, {wt(0, "daam") - .1:.2f}); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .2:.2f});')
 lab("lriv", RP[25], "DRAVYAVATI", .4, S(1) - .1, 1.0, dx=-190, cls="blue")
 lab("lelv", ELV[60], "ELEVATED ROAD", .9, S(1) - .1, 1.0, dx=200, cls="y")
 sfx("impact-bass-1", 0, .45); sfx("whoosh", .25, .3); sfx("sparkle", wt(0, "daam"), .3)
 
-# ---------- 1 E-W roads ----------
-zoom(S(1) - .3, CT_C, CT_W, .9)
-J.append(f'tl.to("#city", {{opacity:1, duration:.4}}, {S(1):.2f}); tl.to(["#rv", "#rvg"], {{opacity:.35, duration:.3}}, {S(1):.2f});')
-for i, nm in enumerate(EW):
-    t = S(1) + .15 + i * .04
-    J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{strokeDashoffset:0, duration:.6, ease:"power2.out"}}, {t:.2f});'); sfx("whoosh-short", t, .25)
-    P_ = EWP[nm]; lab(f"lew{i}", P_[1], nm, t + .1, S(2) - .1, S(1) + .8, dx=-1000 if i % 2 == 0 else 1000, dy=0, cls="y md")
-lux(0, "<b>&#8596;</b> EAST &ndash; WEST: KAAFI SADKEIN", wt(1, "east") - .1, S(2), 200, 300)
-
-# ---------- 2 gap ----------
-J.append(f'tl.to(".ew", {{opacity:.25, duration:.3}}, {S(2):.2f}); tl.to(["#rv", "#rvg"], {{opacity:1, duration:.3}}, {S(2):.2f}); tl.fromTo(["#rvg"], {{strokeWidth:22}}, {{strokeWidth:46, duration:.4, yoyo:true, repeat:3}}, {S(2) + .2:.2f});')
-J.append(f'tl.to("#gap", {{opacity:1, duration:.3}}, {wt(2, "north"):.2f}); tl.fromTo("#gap", {{strokeDashoffset:0}}, {{strokeDashoffset:-300, duration:2.5, ease:"none"}}, {wt(2, "north"):.2f}); tl.to("#gap", {{opacity:0, duration:.3}}, {S(3) - .1:.2f});')
-lux(1, "<b>&#10006;</b> NORTH &ndash; SOUTH: KOI SEEDHA RAASTA NAHI", wt(2, "north") - .1, S(3), 90, 300, "red")
-sfx("impact-bass-1", wt(2, "north"), .4)
-
-# ---------- 3 zig-zag + jams ----------
-J.append(f'tl.to("#zz", {{strokeDashoffset:0, duration:{E(3) - S(3) - .6:.2f}, ease:"none"}}, {S(3) + .2:.2f}); tl.to("#zz", {{opacity:0, duration:.3}}, {S(5) - .2:.2f});')
-mover("car1", ZZ, S(3) + .2, E(3) - S(3) - .6, "#E5484D", S(4) - .1, 60)
-for i in range(len(JAMS)):
-    t = S(3) + .5 + i * (E(3) - S(3) - .8) / len(JAMS)
-    J.append(f'tl.to("#jm{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#jm{i}", {{scale:0, svgOrigin:"{wp(*JAMS[i])[0]:.1f} {wp(*JAMS[i])[1]:.1f}"}}, {{scale:1, duration:.3, ease:"back.out(2.5)", immediateRender:false}}, {t:.2f}); tl.fromTo("#jm{i} .glow", {{opacity:.5}}, {{opacity:.05, duration:.35, yoyo:true, repeat:9}}, {t:.2f});'); sfx("click-soft", t, .2)
-lab("lsk", ZZ[0], "SIKAR ROAD", S(3) + .1, S(4) - .1, S(3) + .5, dx=-150)
-lab("lst", ZZ[-1], "SITAPURA", S(3) + .1, S(4) - .1, S(3) + .5, dy=50)
-lux(2, "JAM &bull; JAM &bull; JAM", wt(3, "jam") - .2, S(4), 330, 300, "red")
-H.append('<div id="clock">ZYADA TIME &bull; ZYADA FUEL</div>')
-J.append(f'tl.fromTo("#clock", {{opacity:0, scale:.7}}, {{opacity:1, scale:1, duration:.35, ease:"power3.out"}}, {wt(3, "ghoom"):.2f}); tl.to("#clock", {{opacity:0, duration:.2}}, {S(4) - .1:.2f});')
-
 # ---------- 4 solution: elevated road ----------
-zoom(S(4) - .3, RV_C, RV_W, .9)
-J.append(f'tl.to(["#city", ".ew"], {{opacity:.15, duration:.4}}, {S(4) - .2:.2f}); tl.to(["#el", "#elg", "#elp"], {{strokeDashoffset:0, duration:1.4, ease:"power2.inOut"}}, {S(4) + .1:.2f});')
-sfx("riser", S(4), .3)
-lux(3, "<b>25&ndash;30 KM</b> &middot; 6 LANE &middot; SINGLE PILLAR", wt(4, "25") - .1, wt(4, "DPR") - .1, 60, 300)
-lux(6, "<b>JDA</b> &middot; PLANNING &middot; DPR STAGE", wt(4, "JDA") - .1, wt(4, "25") - .1, 60, 300)
+zoom(S(1) - .3, RV_C, RV_W, .9)
+J.append(f'tl.to(["#city", ".ew"], {{opacity:.15, duration:.4}}, {S(1) - .2:.2f}); tl.to(["#el", "#elg", "#elp"], {{strokeDashoffset:0, duration:1.4, ease:"power2.inOut"}}, {S(1) + .1:.2f});')
+sfx("riser", S(1), .3)
+lux(3, "<b>25&ndash;30 KM</b> &middot; 6 LANE &middot; SINGLE PILLAR", wt(1, "25") - .1, wt(1, "elevated") + .2, 60, 300)
 # ---- 3D: tilt the map, raise pillars + deck over the river ----
-T3 = S(4) + .9; TF = S(5) - .5; HZ = 70
+T3 = S(1) + .4; TF = S(2) - .35; HZ = 70
 NPIL = 34; idx = [int(k * (len(ELV) - 1) / (NPIL - 1)) for k in range(NPIL)]
 PIL_ = []
 for k, j in enumerate(idx):
@@ -234,8 +205,37 @@ J.append(f'tl.fromTo(".pl3", {{scaleY:0, opacity:1}}, {{scaleY:1, duration:.35, 
 J.append(f'tl.set("#deck", {{opacity:0, z:{HZ}}}, 0); tl.set("#deck", {{opacity:1}}, {T3 + 1.0:.2f}); tl.to(["#deck .dk0", "#deck .dk1"], {{strokeDashoffset:0, duration:1.2, ease:"power2.inOut"}}, {T3 + 1.0:.2f}); tl.to("#deck .dk2", {{opacity:.9, duration:.3}}, {T3 + 2.0:.2f});'
          f'tl.set("#deck .car3", {{opacity:1}}, {T3 + 2.1:.2f}); tl.to("#deck .car3", {{strokeDashoffset:"-=1", duration:3.2, ease:"none", repeat:3}}, {T3 + 2.1:.2f}); tl.to("#deck", {{opacity:0, duration:.3}}, {TF:.2f});')
 sfx("whoosh", T3, .3); sfx("impact-bass-1", T3 + 1.0, .35)
-card("ctoi", "toi", wt(4, "DPR") - .05, wt(4, "Adani") - .1, "JDA PLANS ELEVATED CORRIDOR", "Times of India &middot; 19 March 2026", ("NEWS", "#C9A24A"), top=200, maxw=900, maxh=520)
-card("cbh", "bhaskar", wt(4, "Adani") - .1, S(5) + .1, "ADANI GROUP TEAM KI SITE VISIT", "Dainik Bhaskar", ("NEWS", "#C9A24A"), top=200, maxw=760, maxh=640)
+card("ctoi", "toi", wt(1, "JDA") - .1, wt(1, "25") - .1, "JDA PLANS ELEVATED CORRIDOR", "Times of India &middot; 19 March 2026", ("NEWS", "#C9A24A"), top=180, maxw=880, maxh=430)
+card("cbh", "bhaskar", wt(1, "elevated") + .2, S(2) + .1, "JDA + ADANI GROUP TEAM KI SITE VISIT", "Dainik Bhaskar &middot; DPR stage", ("NEWS", "#C9A24A"), top=180, maxw=640, maxh=520)
+# ---------- 1 E-W roads ----------
+J.append(f'tl.to(["#el", "#elg", "#elp"], {{opacity:0, duration:.3}}, {S(2) - .25:.2f}); tl.to(".ew", {{opacity:1, duration:.01}}, {S(2):.2f}); tl.to(["#el", "#elg", "#elp"], {{opacity:1, duration:.4}}, {S(5) - .1:.2f}); tl.to(["#city", ".ew"], {{opacity:.15, duration:.4}}, {S(5) - .2:.2f});')
+zoom(S(5) - .3, RV_C, RV_W, .9)
+zoom(S(2) - .3, CT_C, CT_W, .9)
+J.append(f'tl.to("#city", {{opacity:1, duration:.4}}, {S(2):.2f}); tl.to(["#rv", "#rvg"], {{opacity:.35, duration:.3}}, {S(2):.2f});')
+for i, nm in enumerate(EW):
+    t = S(2) + .15 + i * .04
+    J.append(f'tl.to(["#ew{i}", "#ewc{i}"], {{strokeDashoffset:0, duration:.6, ease:"power2.out"}}, {t:.2f});'); sfx("whoosh-short", t, .25)
+    P_ = EWP[nm]; lab(f"lew{i}", P_[1], nm, t + .1, S(3) - .1, S(2) + .8, dx=-1000 if i % 2 == 0 else 1000, dy=0, cls="y md")
+lux(0, "<b>&#8596;</b> EAST &ndash; WEST: KAAFI SADKEIN", wt(2, "east") - .1, S(3), 200, 300)
+
+# ---------- 2 gap ----------
+J.append(f'tl.to(".ew", {{opacity:.25, duration:.3}}, {S(3):.2f}); tl.to(["#rv", "#rvg"], {{opacity:1, duration:.3}}, {S(3):.2f}); tl.fromTo(["#rvg"], {{strokeWidth:22}}, {{strokeWidth:46, duration:.4, yoyo:true, repeat:3}}, {S(3) + .2:.2f});')
+J.append(f'tl.to("#gap", {{opacity:1, duration:.3}}, {wt(3, "north"):.2f}); tl.fromTo("#gap", {{strokeDashoffset:0}}, {{strokeDashoffset:-300, duration:2.5, ease:"none"}}, {wt(3, "north"):.2f}); tl.to("#gap", {{opacity:0, duration:.3}}, {S(4) - .1:.2f});')
+lux(1, "<b>&#10006;</b> NORTH &ndash; SOUTH: KOI SEEDHA RAASTA NAHI", wt(3, "north") - .1, S(4), 90, 300, "red")
+sfx("impact-bass-1", wt(3, "north"), .4)
+
+# ---------- 3 zig-zag + jams ----------
+J.append(f'tl.to("#zz", {{strokeDashoffset:0, duration:{E(4) - S(4) - .6:.2f}, ease:"none"}}, {S(4) + .2:.2f}); tl.to("#zz", {{opacity:0, duration:.3}}, {S(5) - .2:.2f});')
+mover("car1", ZZ, S(4) + .2, E(4) - S(4) - .6, "#E5484D", S(5) - .1, 60)
+for i in range(len(JAMS)):
+    t = S(4) + .5 + i * (E(4) - S(4) - .8) / len(JAMS)
+    J.append(f'tl.to("#jm{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#jm{i}", {{scale:0, svgOrigin:"{wp(*JAMS[i])[0]:.1f} {wp(*JAMS[i])[1]:.1f}"}}, {{scale:1, duration:.3, ease:"back.out(2.5)", immediateRender:false}}, {t:.2f}); tl.fromTo("#jm{i} .glow", {{opacity:.5}}, {{opacity:.05, duration:.35, yoyo:true, repeat:9}}, {t:.2f});'); sfx("click-soft", t, .2)
+lab("lsk", ZZ[0], "SIKAR ROAD", S(4) + .1, S(5) - .1, S(4) + .5, dx=-150)
+lab("lst", ZZ[-1], "SITAPURA", S(4) + .1, S(5) - .1, S(4) + .5, dy=50)
+lux(2, "JAM &bull; JAM &bull; JAM", wt(4, "jam") - .2, S(5), 330, 300, "red")
+H.append('<div id="clock">ZYADA TIME &bull; ZYADA FUEL</div>')
+J.append(f'tl.fromTo("#clock", {{opacity:0, scale:.7}}, {{opacity:1, scale:1, duration:.35, ease:"power3.out"}}, {wt(4, "ghoom"):.2f}); tl.to("#clock", {{opacity:0, duration:.2}}, {S(5) - .1:.2f});')
+
 # ---------- 5 connections, jams fade ----------
 for i, nm in enumerate(CROSS):
     t = wt(5, "sabhi sadkon") - .1 + i * .18
@@ -253,12 +253,12 @@ for i, (nm, la, lo) in enumerate(AREAS):
 lux(5, "DEMAND <b>&#9650;</b> &nbsp;DAAM <b>&#9650;</b>", wt(6, "demand") - .1, S(7), 290, 300, "grn")
 
 # ---------- 7 CTA ----------
-H.append('<div id="cta"><b>AAPKO KIS ROAD PAR SABSE ZYADA JAM MILTA HAI?</b><span>COMMENT KARO</span></div>')
-J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(7, "Comment"):.2f});')
-sfx("sparkle", wt(7, "Comment"), .3)
+H.append('<div id="cta"><b>IS ROAD SE AAPKO BHI RELIEF MILEGA?</b><span>COMMENT KARO</span></div>')
+J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(7, "comment"):.2f});')
+sfx("sparkle", wt(7, "comment"), .3)
 
 # captions
-HI = ["daam", "Ajmer Road", "Khatipura", "Shyam Nagar Janpath", "Janpath", "Gopalpura", "New Sanganer", "90 degree", "Jaipur Jodhpur Road", "Haldighati Marg", "NH 52", "Mahal Road", "kaafi saari sadkein", "sabhi sadkon", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "JDA", "DPR", "Adani group", "Comment"]
+HI = ["daam", "Ajmer Road", "Khatipura", "Shyam Nagar Janpath", "Janpath", "Gopalpura", "New Sanganer", "90 degree", "Jaipur Jodhpur Road", "Haldighati Marg", "NH 52", "Mahal Road", "kaafi saari sadkein", "sabhi sadkon", "east se west", "north se south", "Dravyavati", "jam", "25 se 30 km", "6 lane elevated road", "single pillar", "Sikar Road", "New Sanganer Road", "Tonk Road", "jam kam", "demand", "Sitapura", "JDA", "relief", "comment", "connectivity", "areas"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -279,8 +279,8 @@ for n, ph in enumerate(PH):
         J.append(f'tl.fromTo("#cp{ci}", {{opacity:0, scale:.88}}, {{opacity:1, scale:1, duration:.1}}, {a_:.2f}); tl.to("#cp{ci}", {{opacity:0, duration:.04}}, {b_ - .04:.2f});')
         t += d; ci += 1
 if os.path.exists(f"{P}/assets/face.mp4"):
-    H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
-    J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
+    H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
+    J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .85);')
 H.append('<div id="cred">River traced from Google Maps (approx.) &middot; road crossings approximate &middot; elevated road proposed (DPR stage), alignment indicative &middot; Sources: Times of India, Dainik Bhaskar &middot; 3D illustrative &middot; Imagery: Sentinel-2 (EOX), NASA Blue Marble</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#1b1b1d}
@@ -322,7 +322,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #deck{position:absolute;inset:0;transform-style:preserve-3d;filter:drop-shadow(0 18px 14px rgba(0,0,0,.55))}#deck svg{position:absolute;inset:0}
 .cp{position:absolute;left:40px;right:130px;top:1440px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
-audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio>' if VOICE
+audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio><audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.12" data-fade-out="1.5"></audio>' if VOICE
          else f'<audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.55" data-fade-out="1.5"></audio>')
 c0, w0 = CAMS[0][2], CAMS[0][3]
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
