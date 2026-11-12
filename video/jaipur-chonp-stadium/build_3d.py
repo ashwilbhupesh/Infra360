@@ -296,10 +296,10 @@ J.append(f'tl.to("#plane", {{rotationX:58, scale:1.35, duration:.8, ease:"power2
 # ---------- 5 STATUS ----------
 J.append(f'tl.to("#std", {{filter:"grayscale(1) brightness(.6)", duration:.5}}, {S(5):.2f}); tl.to("#dim", {{opacity:.5, duration:.3}}, {S(5):.2f});')
 H.append('<div id="stamp">KAAM RUKA</div>')
-J.append(f'tl.fromTo("#stamp", {{opacity:0, scale:3, rotation:-30}}, {{opacity:1, scale:1, rotation:-12, duration:.25, ease:"power4.in"}}, {S(5) + .1:.2f}); tl.to("#stamp", {{opacity:0, duration:.2}}, {wt(5, "2022") - .1:.2f});')
+J.append(f'tl.fromTo("#stamp", {{opacity:0, scale:1.6}}, {{opacity:1, scale:1, duration:.3, ease:"power4.out"}}, {S(5) + .1:.2f}); tl.to("#stamp", {{opacity:0, duration:.2}}, {wt(5, "2022") - .1:.2f});')
 sfx("impact-bass-1", S(5) + .35, .5)
-card("s1", "foundation", wt(5, "2022") - .1, wt(5, "191") - .1, "NEEV: FEBRUARY 2022", "Shilanyas", ("2022", CYAN), top=380, maxh=520)
-card("s2", "construction", wt(5, "191") - .1, S(6) + .2, "~&#8377;191 CR KHARCH, PHIR KAAM THAP", "Site ki tasveer", ("RUKA", "#FF4646"), top=380, maxh=520)
+card("s1", "foundation", wt(5, "2022") - .1, wt(5, "191") - .1, "NEEV: FEBRUARY 2022", "Shilanyas", ("2022", "#C9A24A"), top=380, maxh=520)
+card("s2", "construction", wt(5, "191") - .1, S(6) + .2, "~&#8377;191 CR KHARCH, PHIR KAAM THAP", "Site ki tasveer", ("RUKA", "#E5484D"), top=380, maxh=520)
 
 # ---------- 6 NOW + CTA ----------
 H.append('<div id="now"><p id="nw0"><b>IIT BOMBAY</b>Structure ki jaanch chal rahi hai</p></div>')
@@ -339,8 +339,8 @@ for n, ph in enumerate(PH):
         J.append(f'tl.fromTo("#cp{ci}", {{opacity:0, scale:.88}}, {{opacity:1, scale:1, duration:.1}}, {a_:.2f}); tl.to("#cp{ci}", {{opacity:0, duration:.04}}, {b_ - .04:.2f});')
         t += d; ci += 1
 if os.path.exists(f"{P}/assets/face.mp4"):
-    H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.8" data-track-index="2" muted playsinline></video>')
-    J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.15}, 1.45);')
+    H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
+    J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .8);')
 H.append('<div id="vig"></div><div id="flash"></div><div id="cred">Renders: RCA design &middot; hotel/restaurant photos: Gerd Eichmann, Wikimedia Commons, CC BY 4.0 &middot; 5 km radius illustrative &middot; photos: news / social media (supplied) &middot; Sources: Hindustan Zinc (Vedanta) release, Business Standard, Times Now, ETV Bharat &middot; 3D model illustrative &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#07090d}
@@ -385,6 +385,11 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .rpin{position:absolute;opacity:0;translate:-50% -100%;display:flex;flex-direction:column;align-items:center;z-index:7}.rpin b{padding:10px 18px;border-radius:4px;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94));border:1.5px solid #C9A24A;color:#F3E6C8;font:700 24px Mont;letter-spacing:.18em;white-space:nowrap}
 .rpin i{order:2;width:3px;height:44px;background:linear-gradient(#C9A24A,rgba(201,162,74,0))}
 #dem{position:absolute;left:0;right:0;margin:0 auto;width:max-content;top:520px;opacity:0;z-index:12;display:flex;align-items:center;gap:14px;padding:18px 26px;border-radius:6px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94))}#dem span{font:400 40px/1.05 Anton;color:#F3E6C8;letter-spacing:.04em;width:240px}#dem b{font:400 70px Anton;color:#3CFF96}
+#stamp{border:2px solid #E5484D !important;border-radius:4px !important;background:rgba(14,12,9,.88) !important;color:#E5484D !important;font:400 110px/1 Anton !important;letter-spacing:.08em;padding:22px 46px !important}
+#now p{border-radius:6px !important;border:1.5px solid #C9A24A !important;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94)) !important;color:#F3E6C8 !important}#now p b{color:#C9A24A !important;letter-spacing:.06em}
+#cta b{border-radius:6px !important;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95)) !important;border:1.5px solid #C9A24A;color:#F3E6C8 !important}
+.opts span{border-radius:4px !important;border:1.5px solid #C9A24A !important;color:#F7E3A8 !important;background:rgba(14,12,9,.9) !important}
+#cta em{border-radius:4px !important;background:#C9A24A !important;color:#111 !important;letter-spacing:.22em}
 #hero{position:absolute;left:160px;top:760px;width:760px;opacity:1;z-index:13;padding:12px 12px 14px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);text-align:center}#hero img{display:block;width:100%;border-radius:14px}#hero div{margin-top:8px;font:400 40px/1.05 Anton;color:#14161c}#hero span{font:800 22px Mont;color:#888}
 #mou{position:absolute;left:90px;right:90px;top:300px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
@@ -419,7 +424,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cta em{display:inline-block;margin-top:26px;padding:14px 34px;border-radius:30px;background:#FF4FA3;color:#111;font:900 44px Mont;font-style:normal}
 .cp{position:absolute;left:40px;right:130px;top:1440px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;font:900 60px/1.12 Mont;color:#fff;-webkit-text-stroke:7px #000;paint-order:stroke fill;text-shadow:0 6px 18px rgba(0,0,0,.8)}"""
-audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio>' if VOICE
+audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio><audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.13" data-fade-out="1.5"></audio>' if VOICE
          else f'<audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.55" data-fade-out="1.5"></audio>')
 open(f"{P}/index.html", "w").write(f"""<!doctype html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=1080, height=1920"/>
 <script src="assets/gsap.min.js"></script><style>{CSS}</style></head><body>
