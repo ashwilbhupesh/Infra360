@@ -227,6 +227,17 @@ H.append('<div id="cta"><b>KYA ISKA PAANI AAPKE ZILE MEIN BHI AAYEGA?</b><span>C
 J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(9):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(9):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(9, "Comment"):.2f});')
 sfx("sparkle", wt(9, "Comment"), .3)
 
+
+# ---------- photos ----------
+def photo(pid, img, t0, t1, cap, top=330, w=880, h=560, left=None):
+    lx = (1080 - w - 20) // 2 if left is None else left
+    H.append(f'<div class="ph" id="{pid}" style="left:{lx}px;top:{top}px;width:{w + 20}px"><div class="iw" style="height:{h}px"><img src="assets/img/{img}.jpg"/></div><div class="pc">{cap}</div></div>')
+    J.append(f'tl.fromTo("#{pid}", {{opacity:0, y:40, scale:.94}}, {{opacity:1, y:0, scale:1, duration:.4, ease:"power3.out"}}, {t0:.2f}); tl.fromTo("#{pid} img", {{scale:1.15}}, {{scale:1, duration:{t1 - t0 + .3:.2f}, ease:"none"}}, {t0:.2f}); tl.to("#{pid}", {{opacity:0, duration:.25}}, {t1 - .25:.2f});')
+    sfx("whoosh-short", t0, .25)
+photo("phdry", "dry", .9, wt(0, "pyaas") + .05, "AAJ: SOOKHI ZAMEEN", top=520, h=520)
+photo("phdrink", "drink", wt(0, "pyaas") - .05, S(1) + .1, "KAL: HAR GHAR PAANI", top=520, h=520)
+photo("phfield", "fields", wt(5, "2.8") - .1, S(6) - .1, "2.8 LAKH HECTARE &middot; SINCHAI", top=820, h=420)
+
 # ---------- captions ----------
 HI = ["17 zilon", "Ram Jal Setu Link", "ERCP", "Chambal", "Parbati", "Kalisindh", "barrages", "canals", "3.25 crore", "2.8 lakh hectare", "jahan paani, wahan growth", "kheti", "industry", "nayi colonies",
       "90%", "Kendra", "91,000 crore", "4%", "pyaas", "91 hazaar crore", "4 percent", "Comment"]
@@ -252,7 +263,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .85);')
-H.append('<div id="cred">River &amp; canal lines illustrative, not official alignment &middot; Sources: Rajasthan Vidhan Sabha data (Aug 2026), Patrika, HT &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
+H.append('<div id="cred">River &amp; canal lines illustrative, not official alignment &middot; Sources: Rajasthan Vidhan Sabha data (Aug 2026), Patrika, HT &middot; Photos representative &middot; Imagery: NASA Blue Marble, Sentinel-2 (EOX)</div>')
 
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0d0b09}
@@ -279,6 +290,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #name b{display:block;font:400 104px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}#name span{display:inline-block;margin-top:12px;font:700 32px Mont;letter-spacing:.14em;color:#F3E6C8}#name i{font-style:normal;padding:2px 14px;border-radius:4px;background:#3FB4FF;color:#06121f;font-weight:900}
 #drip{position:absolute;left:0;right:0;top:420px;height:900px;z-index:13;opacity:0;pointer-events:none}#drip i{position:absolute;top:0;width:20px;height:30px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(180deg,#E6F7FF,#3FB4FF);opacity:0}
 #crops{position:absolute;left:0;right:0;bottom:0;height:200px;z-index:12;opacity:0;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(20,60,20,.6))}#crops i{position:absolute;bottom:0;width:24px;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#8CF59B,#2E9E3E);transform-origin:50% 100%}
+.ph{position:absolute;opacity:0;z-index:15;padding:10px 10px 12px;border-radius:8px;background:linear-gradient(135deg,rgba(14,12,9,.96),rgba(34,27,18,.96));border:1.5px solid #C9A24A;box-shadow:0 30px 70px rgba(0,0,0,.7)}
+.ph .iw{overflow:hidden;border-radius:4px}.ph img{display:block;width:100%;height:100%;object-fit:cover}.ph .pc{margin-top:10px;text-align:center;font:700 28px Mont;letter-spacing:.2em;color:#F3E6C8}
 #nums{position:absolute;left:60px;right:60px;top:330px;z-index:14;display:flex;flex-direction:column;gap:26px;opacity:0}
 #nums > div{padding:26px 30px;border-radius:8px;border:1.5px solid #3FB4FF;background:linear-gradient(135deg,rgba(8,18,30,.95),rgba(14,30,46,.95));text-align:center;opacity:0}
 #nums b{display:block;font:400 120px/1 Anton;background:linear-gradient(180deg,#E6F7FF,#3FB4FF);-webkit-background-clip:text;color:transparent}#nums span{display:block;margin-top:10px;font:700 30px Mont;letter-spacing:.2em;color:#F3E6C8}
