@@ -214,7 +214,7 @@ TA0 = wt(0, "aapke") - .1
 for i, (nm, la, lo) in enumerate(AREAS):
     side = -1 if i % 2 == 0 else 1
     lab(f"hb{i}", wp(la, lo), nm + " &#9650;", TA0 + i * .07, S(1) - .05, TA0 + .5, dx=1000 * side, cls="md ar")
-J.append(f'tl.to(".ar", {{opacity:.8, duration:.25, stagger:.07}}, {TA0:.2f}); tl.to(".ar", {{opacity:0, duration:.25}}, {S(1) - .1:.2f});')
+J.append(f'tl.to("circle.ar", {{opacity:.8, duration:.25, stagger:.07}}, {TA0:.2f}); tl.to("circle.ar", {{opacity:0, duration:.25}}, {S(1) - .1:.2f});')
 sfx("riser", TA0, .25)
 # ---------- 1 E-W roads ----------
 J.append(f'tl.to(["#el", "#elg", "#elp"], {{opacity:0, duration:.3}}, {S(2) - .25:.2f}); tl.to(".ew", {{opacity:1, duration:.01}}, {S(2):.2f}); tl.to(["#el", "#elg", "#elp"], {{opacity:1, duration:.4}}, {S(5) - .1:.2f}); tl.to(["#city", ".ew"], {{opacity:.15, duration:.4}}, {S(5) - .2:.2f});')
