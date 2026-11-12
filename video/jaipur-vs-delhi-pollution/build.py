@@ -159,9 +159,33 @@ plane(S(2) - .2, 58, 1.05, 0, 330, 1.0)
 J.append(f'tl.fromTo(".him", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.5, stagger:.03, ease:"back.out(1.6)", immediateRender:false}}, {S(2) + .2:.2f});')
 bb("bhim", S(2) + .7, S(5))
 J.append(f'tl.to("#bowl", {{fillOpacity:.55, strokeOpacity:.8, duration:1.0}}, {wt(2, "maidan") - .2:.2f}); tl.to("#bowl", {{fillOpacity:.7, duration:.6, yoyo:true, repeat:3}}, {wt(2, "katori") - .1:.2f}); tl.to("#bowl", {{fillOpacity:.3, strokeOpacity:0, duration:.5}}, {S(4) - .1:.2f});')
-lux(3, "INDO-GANGETIC PLAIN &middot; <b>BOWL</b>", wt(2, "Indo") - .1, S(3), 60, 1290)
+lux(3, "INDO-GANGETIC PLAIN &middot; <b>BOWL</b>", wt(2, "Indo") - .1, wt(2, "katori") - .4, 60, 1290)
 lux(4, "HAWA DHEEMI &middot; POLLUTION <b>TRAPPED</b>", wt(2, "dheemi") - .1, S(3), 60, 1190, "red")
 sfx("impact-bass-1", wt(2, "katori"), .35)
+H.append(f'''<div id="arc"><svg viewBox="0 0 960 600" width="960" height="600">
+<defs><linearGradient id="arcsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2740"/><stop offset="1" stop-color="#3b4a63"/></linearGradient>
+<linearGradient id="arcg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6b5a3e"/><stop offset="1" stop-color="#2a2218"/></linearGradient>
+<radialGradient id="arcsm" cx=".5" cy=".7" r=".6"><stop offset="0" stop-color="#b9b3a8" stop-opacity="1"/><stop offset=".7" stop-color="#9a958b" stop-opacity=".8"/><stop offset="1" stop-color="#8a857c" stop-opacity="0"/></radialGradient></defs>
+<rect width="960" height="600" fill="url(#arcsky)"/>
+<path class="hm" d="M0 600 L0 120 L40 60 L80 130 L120 40 L170 150 L200 110 L230 230 L230 600 Z" fill="#6e7684"/><path d="M40 60 L58 92 L28 92 Z M120 40 L142 80 L98 80 Z" fill="#fff"/>
+<path class="bowl" d="M200 600 L200 230 Q 300 520 430 520 Q 560 520 640 360 L640 600 Z" fill="url(#arcg)"/>
+<path class="plat" d="M630 600 L630 370 Q 660 330 700 318 L760 300 L790 268 L815 300 L850 285 L875 262 L900 296 L960 290 L960 600 Z" fill="#7a6544"/>
+<ellipse class="smog" cx="430" cy="440" rx="230" ry="120" fill="url(#arcsm)"/>
+<g class="dl"><circle cx="430" cy="512" r="12" fill="#E5484D"/><rect x="370" y="452" width="120" height="40" rx="4" fill="#1a1510" stroke="#E5484D" stroke-width="2"/><text x="430" y="480" text-anchor="middle" font-family="Mont" font-weight="700" font-size="22" letter-spacing="4" fill="#FFB4B4">DELHI</text></g>
+<g class="jp"><circle cx="820" cy="292" r="12" fill="#3CE65A"/><rect x="755" y="226" width="130" height="40" rx="4" fill="#1a1510" stroke="#3CE65A" stroke-width="2"/><text x="820" y="254" text-anchor="middle" font-family="Mont" font-weight="700" font-size="22" letter-spacing="4" fill="#B8FFC6">JAIPUR</text>
+<path class="jw" d="M640 200 Q 800 170 950 210" fill="none" stroke="{SKY}" stroke-width="5" stroke-dasharray="26 14" marker-end="url(#ahb2)"/></g>
+<defs><marker id="ahb2" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="4" markerHeight="4" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="{SKY}"/></marker></defs>
+<text x="115" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">HIMALAYA</text>
+<text x="430" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">INDO-GANGETIC KATORI</text>
+<text x="820" y="590" text-anchor="middle" font-family="Mont" font-weight="700" font-size="20" letter-spacing="4" fill="#ddd">ARAVALI &middot; OONCHAI</text>
+</svg></div>''')
+TK = wt(2, "katori")
+J.append(f'tl.fromTo("#arc", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {TK - .5:.2f}); tl.to("#arc", {{opacity:0, duration:.3}}, {S(3) - .1:.2f});'
+         f'tl.set("#arc .plat", {{scaleY:.35, transformOrigin:"50% 100%"}}, 0); tl.set(["#arc .jp", "#arc .dl"], {{opacity:0}}, 0); tl.fromTo("#arc .smog", {{opacity:0, scale:.4, transformOrigin:"50% 80%"}}, {{opacity:1, scale:1, duration:.8, ease:"power2.out", immediateRender:false}}, {TK - .2:.2f});'
+         f'tl.fromTo("#arc .dl", {{opacity:0, y:-60}}, {{opacity:1, y:0, duration:.5, ease:"bounce.out", immediateRender:false}}, {TK - .3:.2f}); tl.to("#arc .smog", {{scaleY:1.08, duration:.6, yoyo:true, repeat:3, transformOrigin:"50% 80%"}}, {TK + .6:.2f});'
+         f'tl.to("#arc .plat", {{scaleY:1, duration:.7, ease:"back.out(1.6)"}}, {TK + .7:.2f}); tl.fromTo("#arc .jp", {{opacity:0, y:120}}, {{opacity:1, y:0, duration:.7, ease:"back.out(1.6)", immediateRender:false}}, {TK + .7:.2f});'
+         f'tl.fromTo("#arc .jw", {{strokeDashoffset:0}}, {{strokeDashoffset:-120, duration:1.5, ease:"none", repeat:2, immediateRender:false}}, {TK + 1.3:.2f});')
+sfx("whoosh", TK - .5, .3); sfx("riser", TK + .7, .25)
 
 # ---------- 3 inversion lid (2D cross-section) ----------
 chapter(3, 3, "HIGH PRESSURE KA DHAKKAN")
@@ -272,6 +296,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .lx b{font:400 44px/1 Anton;letter-spacing:.04em;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}
 .lx.red{border-color:#E5484D}.lx.red b{background:none;color:#FF7A7A}.lx.grn{border-color:#3CE65A}.lx.grn b{background:none;color:#3CE65A}
 #inv{position:absolute;left:60px;top:300px;opacity:0;z-index:13;border-radius:8px;overflow:hidden;border:1.5px solid #C9A24A;box-shadow:0 30px 70px rgba(0,0,0,.7)}#inv svg{display:block}
+#arc{position:absolute;left:60px;top:250px;opacity:0;z-index:13;border-radius:8px;overflow:hidden;border:1.5px solid #C9A24A;box-shadow:0 30px 70px rgba(0,0,0,.7)}#arc svg{display:block}
 #aqi{position:absolute;left:60px;right:60px;top:360px;opacity:0;z-index:14;text-align:center;padding:26px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95))}
 #aqi small{font:700 26px Mont;letter-spacing:.3em;color:#C9A24A}#aqi .row{display:flex;gap:20px;margin-top:18px}#aqi .c{flex:1;padding:18px;border-radius:6px;border:1.5px solid}
 #aqi .j{border-color:#F2B23E}#aqi .d{border-color:#E5484D}#aqi b{display:block;font:400 64px/1 Anton;color:#F3E6C8}#aqi span{display:block;margin-top:8px;font:800 30px Mont}#aqi .j span{color:#F2B23E}#aqi .d span{color:#FF7A7A}
