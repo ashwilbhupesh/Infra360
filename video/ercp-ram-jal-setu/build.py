@@ -2,12 +2,14 @@
 import json, math, os, random
 P = "proj"
 LINES = [
-    "Rajasthan ke 17 zilon ki pyaas bujhane wala project, aur iske saath aapke area ki zameen ka future bhi badal sakta hai. Naam hai Ram Jal Setu Link, purana naam ERCP.",
+    "Is project ka paani aapke zile ki pyaas bujhane wala hai.",
+    "Rajasthan ke 17 zilon tak yeh paani pahunchega.",
+    "Iska naam hai Ram Jal Setu Link, purana naam ERCP.",
     "Plan yeh hai ki Chambal aur uski nadiyon, Parbati aur Kalisindh, ka extra paani barrages aur canals se poorvi Rajasthan tak pahunchaya jaaye.",
     "Jaipur, Ajmer, Tonk, Kota, Bundi, Baran, Jhalawar, Sawai Madhopur, Dausa, Karauli, Dholpur, Bharatpur, Deeg, Alwar, Khairthal-Tijara, Kotputli-Behror aur Beawar.",
     "Karib 3.25 crore logon ko peene ka paani, aur lagbhag 2.8 lakh hectare zameen ko sinchai.",
-    "Real estate ka seedha funda hai, jahan paani, wahan growth. Paani aane se kheti, industry aur nayi colonies, teeno ko faayda hota hai, khaaskar un ilakon mein jahan aaj paani sabse badi dikkat hai.",
-    "2024 mein Kendra, Rajasthan aur MP ke beech MoU hua. 90 percent paisa Kendra dega, aur DPR ke hisaab se lagat karib 91 hazaar crore hai.",
+    "Real estate ka seedha funda hai, jahan paani, wahan growth.",
+    "Is project ka 90 percent paisa Kendra de raha hai, aur iski lagat karib 91 hazaar crore hai.",
     "Par kaam abhi shuruaati daur mein hai. July 2026 tak sirf karib 4 percent paisa kharch hua hai.",
     "Aapke zile mein paani ki kya situation hai? Comment karo.",
 ]
@@ -22,7 +24,7 @@ def E(k): return PH[k]["e"]
 def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower()); assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(7) + 1.0, 2)
+END = round(E(9) + 1.0, 2)
 def wp(lat, lon):
     n = 2 ** 13
     return (((lon + 180) / 360 * n) - 5791) * 256, (((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n) - 3466) * 256
@@ -133,89 +135,101 @@ def draw(sel, t, d=1.0): J.append(f'tl.to("{sel}", {{strokeDashoffset:0, duratio
 
 J.append('tl.set("#plane", {rotationX:44, scale:1.0, x:0, y:0, transformOrigin:"50% 55%"}, 0); tl.set(".bb", {opacity:0, xPercent:-50, yPercent:-100, rotationX:-44, transformOrigin:"50% 100%"}, 0); tl.set(".tw", {scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}, 0);')
 
-# ---------- 0 HOOK ----------
+# ---------- 0-2 HOOK ----------
 J.append('tl.fromTo("#plane", {rotationX:20, scale:.8}, {rotationX:44, scale:1.0, duration:1.6, ease:"power3.out"}, 0);')
 J.append(f'tl.to("#raj", {{fillOpacity:.12, duration:.6}}, .2); tl.to("#raj", {{fillOpacity:.04, duration:.6}}, 1.4);')
-bb("lraj", .3, S(1)); bb("lmp", .5, S(2))
-for k in RIV: draw(f"#rv_{k}, #rc_{k}", .3, 1.3)
+bb("lraj", .3, S(3)); bb("lmp", .5, S(4))
+for k in RIV: draw(f"#rv_{k}, #rc_{k}", .1, 1.1)
+H.append('<div id="hook"><small>IS PROJECT KA PAANI</small><b>AAPKE ZILE KI<br/>PYAAS BUJHAYEGA</b></div>')
+J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.12}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .15:.2f});')
+H.append('<div id="drip">' + "".join(f'<i style="left:{120 + k * 105}px"></i>' for k in range(8)) + '</div>')
+J.append(f'tl.set("#drip", {{opacity:1}}, 0); tl.fromTo("#drip i", {{y:-60, opacity:0}}, {{y:900, opacity:1, duration:1.1, stagger:{{each:.1, repeat:1}}, ease:"power1.in", immediateRender:false}}, .2); tl.to("#drip", {{opacity:0, duration:.3}}, {S(1) - .1:.2f});')
+sfx("impact-bass-1", 0, .45)
+# line 1: 17 zile flash
 for i in range(len(DIST)):
-    t = .9 + i * .07
-    J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 10:.0f}}}}}, {{attr:{{r:{U * 46:.0f}}}, duration:.5, immediateRender:false}}, {t:.2f}); tl.to("#dt{i}", {{opacity:.35, duration:.3}}, {S(1) - .2:.2f});')
-sfx("riser", .9, .3)
-H.append('<div id="hook"><small>17 ZILE &middot; 3.25 CRORE LOG</small><b>RAM JAL SETU</b><span>purana naam <i>ERCP</i></span></div>')
-J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.12}}, {{opacity:1, scale:1, duration:.45, ease:"power3.out"}}, 0); tl.fromTo("#hook span", {{opacity:0, y:16}}, {{opacity:1, y:0, duration:.35}}, {wt(0, "Naam") - .1:.2f}); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .2:.2f});')
-lux(0, "ZAMEEN KA <b>FUTURE</b> &#9650;", wt(0, "zameen") - .1, wt(0, "Naam") - .1, 270, 1270, "grn")
-sfx("impact-bass-1", 0, .45); sfx("impact-bass-1", wt(0, "Ram Jal"), .35)
+    t = S(1) + .1 + i * .06
+    J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 10:.0f}}}}}, {{attr:{{r:{U * 46:.0f}}}, duration:.5, immediateRender:false}}, {t:.2f}); tl.to("#dt{i}", {{opacity:.35, duration:.3}}, {S(3) - .2:.2f});')
+    J.append(f'tl.to("#dz{i}", {{fillOpacity:.4, strokeOpacity:.9, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:0, duration:.4}}, {S(2) + .3:.2f});')
+H.append('<div id="z17"><b>17</b><span>ZILE</span></div>')
+J.append(f'tl.fromTo("#z17", {{opacity:0, scale:1.6}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, {wt(1, "17") - .1:.2f}); tl.to("#z17", {{opacity:0, y:-30, duration:.3}}, {S(2) - .1:.2f});')
+sfx("riser", S(1), .3); sfx("impact-bass-1", wt(1, "17"), .4)
+# line 2: name
+H.append('<div id="name"><b>RAM JAL SETU LINK</b><span>purana naam <i>ERCP</i></span></div>')
+J.append(f'tl.fromTo("#name", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(2, "Ram") - .15:.2f}); tl.fromTo("#name span", {{opacity:0}}, {{opacity:1, duration:.3}}, {wt(2, "purana") - .1:.2f}); tl.to("#name", {{opacity:0, y:-30, duration:.3}}, {S(3) - .1:.2f});')
+sfx("impact-bass-1", wt(2, "Ram") - .1, .4)
 
 # ---------- 1 rivers -> barrages -> canals ----------
 rx, sc, x, y = focus(wp(25.4, 76.3), 50, 1.35, 1000)
-plane(S(1) - .2, rx, sc, x, y, 1.1)
+plane(S(3) - .2, rx, sc, x, y, 1.1)
 for k, w in [("chambal", "Chambal"), ("parbati", "Parbati"), ("kalisindh", "Kalisindh")]:
-    t = wt(1, w) - .1
+    t = wt(3, w) - .1
     J.append(f'tl.fromTo("#rc_{k}", {{strokeWidth:7}}, {{strokeWidth:16, duration:.35, yoyo:true, repeat:1, immediateRender:false}}, {t:.2f}); tl.set("#fl_{k}", {{opacity:1}}, {t:.2f}); tl.fromTo("#fl_{k}", {{strokeDashoffset:0}}, {{strokeDashoffset:-2, duration:4, ease:"none", repeat:6, immediateRender:false}}, {t:.2f});')
-    bb({"chambal": "lchm", "parbati": "lpar", "kalisindh": "lkal"}[k], t, S(2) + .2); sfx("pop", t, .3)
+    bb({"chambal": "lchm", "parbati": "lpar", "kalisindh": "lkal"}[k], t, S(4) + .2); sfx("pop", t, .3)
 for i in range(len(BARR)):
-    t = wt(1, "barrages") - .1 + i * .15
+    t = wt(3, "barrages") - .1 + i * .15
     J.append(f'tl.fromTo("#br{i}", {{opacity:0, scale:3, svgOrigin:"{BARR[i][0]:.0f} {BARR[i][1]:.0f}"}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2.5)", immediateRender:false}}, {t:.2f});'); sfx("click-soft", t, .3)
-lux(1, "EXTRA PAANI &rarr; <b>BARRAGE</b> &rarr; <b>CANAL</b>", wt(1, "extra") - .1, S(2), 60, 1270)
+lux(1, "EXTRA PAANI &rarr; <b>BARRAGE</b> &rarr; <b>CANAL</b>", wt(3, "extra") - .1, S(4), 60, 1270)
 for i, (nm, la, lo) in enumerate(DIST):
     if nm not in CAN: continue
-    t = wt(1, "canals") - .1 + (i % 6) * .08
+    t = wt(3, "canals") - .1 + (i % 6) * .08
     draw(f"#cn{i}", t, 1.3)
     J.append(f'tl.set("#cf{i}", {{opacity:.9}}, {t + 1.0:.2f}); tl.fromTo("#cf{i}", {{strokeDashoffset:0}}, {{strokeDashoffset:-1.2, duration:2.2, ease:"none", repeat:8, immediateRender:false}}, {t + 1.0:.2f});')
-sfx("whoosh", wt(1, "canals") - .1, .35)
+sfx("whoosh", wt(3, "canals") - .1, .35)
 
 # ---------- 2 districts light up ----------
 rx, sc, x, y = focus(wp(26.15, 75.8), 38, 1.15, 800)
-plane(S(2) - .3, rx, sc, x, y, 1.0)
+plane(S(4) - .3, rx, sc, x, y, 1.0)
 for i, (nm, la, lo) in enumerate(DIST):
-    t = wt(2, nm.split("-")[0]) - .08
+    t = wt(4, nm.split("-")[0]) - .08
     J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 15:.0f}}}}}, {{attr:{{r:{U * 60:.0f}}}, duration:.45, ease:"power3.out", immediateRender:false}}, {t:.2f});')
-    bb(f"dl{i}", t, S(4) - .1); sfx("click-soft", t, .18)
-    J.append(f'tl.to("#dz{i}", {{fillOpacity:.55, strokeOpacity:1, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:.22, duration:.5}}, {t + .35:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.35, duration:.4}}, {S(4) - .1:.2f});')
-lux(2, "<b>17</b> ZILE", S(2) + .1, S(3), 60, 300)
+    bb(f"dl{i}", t, S(6) - .1); sfx("click-soft", t, .18)
+    J.append(f'tl.to("#dz{i}", {{fillOpacity:.55, strokeOpacity:1, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:.22, duration:.5}}, {t + .35:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.35, duration:.4}}, {S(6) - .1:.2f});')
+lux(2, "<b>17</b> ZILE", S(4) + .1, S(5), 60, 300)
 
-# ---------- 3 numbers ----------
+# ---------- 5 numbers + greenery ----------
+for i in range(len(DIST)):
+    t = wt(5, "2.8") - .2 + i * .07
+    J.append(f'tl.to("#dz{i}", {{fill:"{GRN}", fillOpacity:.5, strokeOpacity:.9, duration:.5}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.3, duration:.4}}, {S(6) + .5:.2f});')
+H.append('<div id="crops">' + "".join(f'<i style="left:{k * 36}px;height:{60 + (k * 37) % 70}px"></i>' for k in range(31)) + '</div>')
+J.append(f'tl.set("#crops", {{opacity:1}}, {wt(5, "2.8") - .3:.2f}); tl.fromTo("#crops i", {{scaleY:0}}, {{scaleY:1, duration:.6, stagger:{{each:.03, from:"center"}}, ease:"back.out(2)", immediateRender:false}}, {wt(5, "2.8") - .3:.2f}); tl.to("#crops", {{opacity:0, duration:.4}}, {S(6) - .1:.2f});')
+
 H.append('<div id="nums"><div class="n1"><b>3.25 CRORE</b><span>LOG &middot; PEENE KA PAANI</span></div><div class="n2"><b>2.8 LAKH HA</b><span>ZAMEEN &middot; SINCHAI</span></div></div>')
-J.append(f'tl.to("#dim", {{opacity:.35, duration:.3}}, {S(3) - .1:.2f}); tl.fromTo("#nums .n1", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(3, "3.25") - .15:.2f}); tl.fromTo("#nums .n2", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(3, "2.8") - .15:.2f}); tl.to("#nums > div", {{opacity:0, duration:.3}}, {S(4) - .2:.2f}); tl.to("#dim", {{opacity:0, duration:.3}}, {S(4) - .1:.2f});')
+J.append(f'tl.to("#dim", {{opacity:.35, duration:.3}}, {S(5) - .1:.2f}); tl.fromTo("#nums .n1", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(5, "3.25") - .15:.2f}); tl.fromTo("#nums .n2", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(5, "2.8") - .15:.2f}); tl.to("#nums > div", {{opacity:0, duration:.3}}, {S(6) - .2:.2f}); tl.to("#dim", {{opacity:0, duration:.3}}, {S(6) - .1:.2f});')
 J.append(f'tl.set("#nums", {{opacity:1}}, 0);')
-sfx("impact-bass-1", wt(3, "3.25") - .1, .35); sfx("impact-bass-1", wt(3, "2.8") - .1, .3)
+sfx("impact-bass-1", wt(5, "3.25") - .1, .35); sfx("impact-bass-1", wt(5, "2.8") - .1, .3)
 H.append('<div id="drops">' + "".join(f'<i style="left:{80 + (k * 97) % 920}px"></i>' for k in range(12)) + '</div>')
-J.append(f'tl.set("#drops", {{opacity:1}}, {S(3):.2f}); tl.fromTo("#drops i", {{y:-80, opacity:0}}, {{y:1500, opacity:1, duration:1.4, stagger:{{each:.12, repeat:1}}, ease:"power1.in", immediateRender:false}}, {S(3):.2f}); tl.to("#drops", {{opacity:0, duration:.3}}, {S(4) - .2:.2f});')
+J.append(f'tl.set("#drops", {{opacity:1}}, {S(5):.2f}); tl.fromTo("#drops i", {{y:-80, opacity:0}}, {{y:1500, opacity:1, duration:1.4, stagger:{{each:.12, repeat:1}}, ease:"power1.in", immediateRender:false}}, {S(5):.2f}); tl.to("#drops", {{opacity:0, duration:.3}}, {S(6) - .2:.2f});')
 
 # ---------- 4 real estate: jahan paani wahan growth ----------
-plane(S(4) - .2, 56, 1.15, 0, 120, 1.0)
+plane(S(6) - .2, 56, 1.15, 0, 120, 1.0)
 for i in range(len(DIST)):
-    t = S(4) + .3 + i * .06
-    J.append(f'tl.fromTo("#gh{i}", {{opacity:0, attr:{{r:{U * 20:.0f}}}}}, {{opacity:1, attr:{{r:{U * 70:.0f}}}, duration:.5, ease:"power3.out", immediateRender:false}}, {t:.2f}); tl.to("#gh{i}", {{opacity:0, duration:.3}}, {S(5) - .1:.2f});')
-J.append(f'tl.fromTo(".tw", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.4, stagger:.05, ease:"back.out(1.8)", immediateRender:false}}, {wt(4, "growth") - .3:.2f}); tl.to(".tw", {{scaleY:0.001, rotationX:-90, duration:.3}}, {S(5) - .1:.2f});')
+    t = S(6) + .3 + i * .06
+    J.append(f'tl.fromTo("#gh{i}", {{opacity:0, attr:{{r:{U * 20:.0f}}}}}, {{opacity:1, attr:{{r:{U * 70:.0f}}}, duration:.5, ease:"power3.out", immediateRender:false}}, {t:.2f}); tl.to("#gh{i}", {{opacity:0, duration:.3}}, {S(7) - .1:.2f});')
+J.append(f'tl.fromTo(".tw", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.4, stagger:.05, ease:"back.out(1.8)", immediateRender:false}}, {wt(6, "growth") - .3:.2f}); tl.to(".tw", {{scaleY:0.001, rotationX:-90, duration:.3}}, {S(7) - .1:.2f});')
 H.append('<div id="growth"><span>JAHAN PAANI</span><i>&rarr;</i><b>WAHAN GROWTH</b></div>')
-J.append(f'tl.fromTo("#growth", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(4, "jahan") - .1:.2f}); tl.fromTo("#growth b", {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4}}, {wt(4, "wahan") - .1:.2f}); tl.to("#growth", {{opacity:0, duration:.3}}, {S(5) - .1:.2f});')
-for k, (w, txt) in enumerate([("kheti", "KHETI"), ("industry", "INDUSTRY"), ("colonies", "NAYI COLONIES")]):
-    lux(10 + k, f"<b>&#9670;</b> {txt}", wt(4, w) - .1, S(5), 60 + k * 0, 1130 + k * 85, "grn")
-sfx("riser", wt(4, "growth") - .3, .3)
+J.append(f'tl.fromTo("#growth", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(6, "jahan") - .1:.2f}); tl.fromTo("#growth b", {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4}}, {wt(6, "wahan") - .1:.2f}); tl.to("#growth", {{opacity:0, duration:.3}}, {S(7) - .1:.2f});')
+sfx("riser", wt(6, "growth") - .3, .3)
 
 # ---------- 5 MoU + money ----------
-H.append('<div id="mou"><small>MoU &middot; 2024</small><div class="seals"><span>KENDRA</span><span>RAJASTHAN</span><span>MP</span></div>'
-         '<div class="bar"><div class="k"><b>90%</b> KENDRA</div><div class="r">10%</div></div><div class="cost"><b>~&#8377;91,000 CR</b><span>DPR LAGAT</span></div></div>')
-J.append(f'tl.to("#dim", {{opacity:.45, duration:.3}}, {S(5) - .1:.2f}); tl.fromTo("#mou", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(5):.2f});'
-         f'tl.fromTo("#mou .seals span", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, stagger:.15, ease:"back.out(2)"}}, {wt(5, "Kendra") - .1:.2f});'
-         f'tl.set("#mou .bar .k", {{width:"0%"}}, 0); tl.set("#mou .cost", {{opacity:0}}, 0); tl.fromTo("#mou .bar .k", {{width:"0%"}}, {{width:"90%", duration:.8, ease:"power3.out", immediateRender:false}}, {wt(5, "90") - .1:.2f}); tl.fromTo("#mou .cost", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.4, immediateRender:false}}, {wt(5, "lagat") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.3}}, {S(6) - .1:.2f});')
-sfx("click-soft", wt(5, "Kendra") - .1, .35); sfx("impact-bass-1", wt(5, "91"), .35)
+H.append('<div id="mou"><small>FUNDING</small>'
+         '<div class="bar"><div class="k"><b>90%</b> KENDRA</div><div class="r">10%</div></div><div class="cost"><b>~&#8377;91,000 CR</b><span>PROJECT LAGAT</span></div></div>')
+J.append(f'tl.to("#dim", {{opacity:.45, duration:.3}}, {S(7) - .1:.2f}); tl.fromTo("#mou", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7):.2f});'
+                  f'tl.set("#mou .bar .k", {{width:"0%"}}, 0); tl.set("#mou .cost", {{opacity:0}}, 0); tl.fromTo("#mou .bar .k", {{width:"0%"}}, {{width:"90%", duration:.8, ease:"power3.out", immediateRender:false}}, {wt(7, "90") - .1:.2f}); tl.fromTo("#mou .cost", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.4, immediateRender:false}}, {wt(7, "lagat") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.3}}, {S(8) - .1:.2f});')
+sfx("click-soft", wt(7, "Kendra") - .1, .35); sfx("impact-bass-1", wt(7, "91"), .35)
 
 # ---------- 6 status ----------
 H.append('<div id="stat"><small>ZAMEEN PAR KAAM</small><div class="track"><div class="fill"></div><em>~4%</em></div><span>July 2026 tak kharch &middot; Vidhan Sabha data</span><i>SHURUAATI DAUR</i></div>')
-J.append(f'tl.fromTo("#stat", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(6):.2f}); tl.fromTo("#stat .fill", {{width:"0%"}}, {{width:"4%", duration:1.0, ease:"power2.out", immediateRender:false}}, {wt(6, "4 percent") - .3:.2f}); tl.fromTo("#stat em", {{opacity:0}}, {{opacity:1, duration:.3, immediateRender:false}}, {wt(6, "4 percent") - .1:.2f}); tl.set("#stat em", {{opacity:0}}, 0); tl.set("#stat .fill", {{width:"0%"}}, 0); tl.to("#stat", {{opacity:0, duration:.3}}, {S(7) - .1:.2f});')
-sfx("click-soft", wt(6, "4 percent"), .4)
+J.append(f'tl.fromTo("#stat", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(8):.2f}); tl.fromTo("#stat .fill", {{width:"0%"}}, {{width:"4%", duration:1.0, ease:"power2.out", immediateRender:false}}, {wt(8, "4 percent") - .3:.2f}); tl.fromTo("#stat em", {{opacity:0}}, {{opacity:1, duration:.3, immediateRender:false}}, {wt(8, "4 percent") - .1:.2f}); tl.set("#stat em", {{opacity:0}}, 0); tl.set("#stat .fill", {{width:"0%"}}, 0); tl.to("#stat", {{opacity:0, duration:.3}}, {S(9) - .1:.2f});')
+sfx("click-soft", wt(8, "4 percent"), .4)
 
 # ---------- 7 CTA ----------
 H.append('<div id="cta"><b>AAPKE ZILE MEIN PAANI KI KYA SITUATION HAI?</b><span>COMMENT KARO</span></div>')
-J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(7):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(7, "Comment"):.2f});')
-sfx("sparkle", wt(7, "Comment"), .3)
+J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(9):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(9):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(9, "Comment"):.2f});')
+sfx("sparkle", wt(9, "Comment"), .3)
 
 # ---------- captions ----------
 HI = ["17 zilon", "Ram Jal Setu Link", "ERCP", "Chambal", "Parbati", "Kalisindh", "barrages", "canals", "3.25 crore", "2.8 lakh hectare", "jahan paani, wahan growth", "kheti", "industry", "nayi colonies",
-      "MoU", "90 percent", "91 hazaar crore", "4 percent", "Comment"]
+      "90 percent", "Kendra", "pyaas", "91 hazaar crore", "4 percent", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -254,11 +268,17 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:40}
 #cred{position:absolute;left:40px;right:40px;top:1650px;text-align:center;font:700 17px Mont;color:rgba(255,255,255,.6);z-index:20}
 #hook{position:absolute;left:60px;right:60px;top:140px;z-index:16;text-align:center;padding:24px 20px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.93),rgba(34,27,18,.93))}
-#hook small{display:block;font:700 28px Mont;letter-spacing:.26em;color:#9BE3FF}#hook b{display:block;margin-top:10px;font:400 118px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent;letter-spacing:.02em}
+#hook small{display:block;font:700 28px Mont;letter-spacing:.26em;color:#9BE3FF}#hook b{display:block;margin-top:10px;font:400 96px/1.02 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent;letter-spacing:.02em}
 #hook span{display:inline-block;margin-top:10px;font:700 30px Mont;letter-spacing:.14em;color:#F3E6C8}#hook span i{font-style:normal;padding:2px 12px;border-radius:4px;background:#3FB4FF;color:#06121f;font-weight:900}
 .lx{position:absolute;opacity:0;z-index:14;padding:16px 28px;border-radius:6px;background:linear-gradient(135deg,rgba(14,12,9,.93),rgba(34,27,18,.93));border:1.5px solid #C9A24A;color:#F3E6C8;font:700 30px/1.1 Mont;letter-spacing:.12em;box-shadow:0 18px 50px rgba(0,0,0,.55);white-space:nowrap}
 .lx b{font:400 44px/1 Anton;letter-spacing:.04em;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}
 .lx.grn{border-color:#3CE65A}.lx.grn b{background:none;color:#3CE65A}
+#z17{position:absolute;left:0;right:0;top:220px;margin:0 auto;width:max-content;opacity:0;z-index:16;text-align:center;padding:14px 50px;border-radius:8px;border:1.5px solid #3FB4FF;background:linear-gradient(135deg,rgba(8,18,30,.95),rgba(14,30,46,.95))}
+#z17 b{display:block;font:400 190px/1 Anton;background:linear-gradient(180deg,#E6F7FF,#3FB4FF);-webkit-background-clip:text;color:transparent}#z17 span{font:700 40px Mont;letter-spacing:.4em;color:#F3E6C8}
+#name{position:absolute;left:60px;right:60px;top:220px;opacity:0;z-index:16;text-align:center;padding:26px 20px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94))}
+#name b{display:block;font:400 104px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}#name span{display:inline-block;margin-top:12px;font:700 32px Mont;letter-spacing:.14em;color:#F3E6C8}#name i{font-style:normal;padding:2px 14px;border-radius:4px;background:#3FB4FF;color:#06121f;font-weight:900}
+#drip{position:absolute;left:0;right:0;top:420px;height:900px;z-index:13;opacity:0;pointer-events:none}#drip i{position:absolute;top:0;width:20px;height:30px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(180deg,#E6F7FF,#3FB4FF);opacity:0}
+#crops{position:absolute;left:0;right:0;bottom:0;height:200px;z-index:12;opacity:0;pointer-events:none;background:linear-gradient(180deg,transparent,rgba(20,60,20,.6))}#crops i{position:absolute;bottom:0;width:24px;border-radius:12px 12px 0 0;background:linear-gradient(180deg,#8CF59B,#2E9E3E);transform-origin:50% 100%}
 #nums{position:absolute;left:60px;right:60px;top:330px;z-index:14;display:flex;flex-direction:column;gap:26px;opacity:0}
 #nums > div{padding:26px 30px;border-radius:8px;border:1.5px solid #3FB4FF;background:linear-gradient(135deg,rgba(8,18,30,.95),rgba(14,30,46,.95));text-align:center;opacity:0}
 #nums b{display:block;font:400 120px/1 Anton;background:linear-gradient(180deg,#E6F7FF,#3FB4FF);-webkit-background-clip:text;color:transparent}#nums span{display:block;margin-top:10px;font:700 30px Mont;letter-spacing:.2em;color:#F3E6C8}
