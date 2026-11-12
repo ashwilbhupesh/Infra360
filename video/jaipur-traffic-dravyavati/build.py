@@ -141,7 +141,9 @@ JAMS = [(26.935, 75.81), (26.926, 75.822), (26.917, 75.828), (26.90, 75.815), (2
 for i, (la, lo) in enumerate(JAMS):
     x, y = wp(la, lo)
     pass
-AREAS = [("SIKAR ROAD", 26.932, 75.795), ("SODALA", 26.904, 75.779), ("MANSAROVAR", 26.868, 75.782), ("SANGANER", 26.818, 75.799), ("SITAPURA", 26.786, 75.872)]
+AREAS = [("VIDHYADHAR NAGAR", 26.956, 75.789), ("MURLIPURA", 26.945, 75.789), ("SIKAR ROAD", 26.932, 75.795), ("KHATIPURA", 26.919, 75.784), ("SODALA", 26.905, 75.779),
+         ("SHYAM NAGAR", 26.892, 75.771), ("NIRMAN NAGAR", 26.884, 75.770), ("MANSAROVAR", 26.868, 75.782), ("GOPALPURA", 26.861, 75.786), ("DURGAPURA", 26.846, 75.789),
+         ("SANGANER", 26.818, 75.799), ("PRATAP NAGAR", 26.800, 75.815), ("SITAPURA", 26.786, 75.872), ("GONER ROAD", 26.774, 75.895)]
 for i, (nm, la, lo) in enumerate(AREAS):
     x, y = wp(la, lo)
     SVG.insert(-1, f'<circle class="ar" id="ar{i}" cx="{x:.1f}" cy="{y:.1f}" r="230" style="fill:{GOLD};fill-opacity:.18;stroke:{GOLD};stroke-width:2;vector-effect:non-scaling-stroke;opacity:0"/>')
@@ -247,10 +249,12 @@ lux(4, "<b>&#10004;</b> JAM KAM", wt(5, "jam kam") - .1, S(6), 340, 300, "grn")
 
 # ---------- 6 real estate ----------
 for i, (nm, la, lo) in enumerate(AREAS):
-    t = S(6) + .2 + i * .3
-    J.append(f'tl.to("#ar{i}", {{opacity:1, duration:.35}}, {t:.2f}); tl.fromTo("#ar{i}", {{attr:{{r:80}}}}, {{attr:{{r:230}}, duration:.6, ease:"power3.out", immediateRender:false}}, {t:.2f}); tl.to("#ar{i}", {{opacity:0, duration:.3}}, {S(7):.2f});')
-    lab(f"la{i}", wp(la, lo), nm, t + .1, S(7), S(6) + .5, dx=-190 if i % 2 == 0 else 190); sfx("click-soft", t, .2)
-lux(5, "DEMAND <b>&#9650;</b> &nbsp;DAAM <b>&#9650;</b>", wt(6, "demand") - .1, S(7), 290, 300, "grn")
+    t = S(6) + .1 + i * (E(6) - S(6) - .5) / len(AREAS)
+    J.append(f'tl.to("#ar{i}", {{opacity:1, duration:.3}}, {t:.2f}); tl.fromTo("#ar{i}", {{attr:{{r:40}}}}, {{attr:{{r:130}}, duration:.5, ease:"power3.out", immediateRender:false}}, {t:.2f}); tl.to("#ar{i}", {{opacity:0, duration:.3}}, {S(7):.2f});')
+    side = {"VIDHYADHAR NAGAR": -1, "MURLIPURA": 1, "SIKAR ROAD": -1, "KHATIPURA": 1, "SODALA": -1, "SHYAM NAGAR": 1, "NIRMAN NAGAR": -1, "MANSAROVAR": -1, "GOPALPURA": 1, "DURGAPURA": 1, "SANGANER": -1, "PRATAP NAGAR": 1, "SITAPURA": 1, "GONER ROAD": 1}[nm]
+    ddy = {"PRATAP NAGAR": -26, "GONER ROAD": 26, "NIRMAN NAGAR": -12, "MANSAROVAR": 12}.get(nm, 0)
+    lab(f"la{i}", wp(la, lo), nm + " &#9650;", t + .05, S(7), S(6) + .5, dx=1000 * side, dy=ddy, cls="md ar"); sfx("click-soft", t, .18)
+lux(5, "DEMAND <b>&#9650;</b> &nbsp;DAAM <b>&#9650;</b>", S(6) - .05, S(7), 290, 200, "grn")
 
 # ---------- 7 CTA ----------
 H.append('<div id="cta"><b>IS ROAD SE AAPKO BHI RELIEF MILEGA?</b><span>COMMENT KARO</span></div>')
@@ -315,6 +319,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cta b{border-radius:6px !important;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95)) !important;border:1.5px solid #C9A24A;color:#F3E6C8 !important;font:400 76px/1.05 Anton !important}
 #cta span{border-radius:4px !important;background:#C9A24A !important;color:#111 !important;letter-spacing:.22em}
 .ml.sm{font-size:24px;padding:4px 12px}.ml.md{font-size:31px;padding:5px 14px}
+.ml.ar{background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94));color:#F3E6C8;border:1.5px solid #C9A24A;border-radius:4px;letter-spacing:.06em}.ml.ar::first-line{}
 .ml.blue{background:#2EA8FF;color:#fff}
 #sky{position:absolute;inset:0;background:linear-gradient(180deg,#0b1730 0%,#2b3f66 28%,#c98a5a 44%,#3a3226 60%)}
 #stage{position:absolute;inset:0;perspective:1600px;perspective-origin:50% 30%;overflow:hidden}#plane{position:absolute;inset:0;transform-style:preserve-3d;transform-origin:50% 55%}
