@@ -191,6 +191,21 @@ sfx("riser", T3, .35); sfx("impact-bass-1", T3 + 1.9, .45); sfx("sparkle", T3 + 
 H.append('<div id="name3d"><small>ANIL AGARWAL</small><b>INTERNATIONAL CRICKET STADIUM</b><span>Chonp &middot; Jaipur</span></div>')
 J.append(f'tl.fromTo("#name3d", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.35, ease:"back.out(2)"}}, {T3 + 1.9:.2f}); tl.to("#name3d", {{opacity:0, duration:.2}}, {wt(1, "Vedanta") - .3:.2f});')
 
+# ---------- hook pop-ups (keep the first seconds busy) ----------
+def sticker(i, html, t, until, x, y, rot, cls=""):
+    H.append(f'<div class="stk {cls}" id="stk{i}" style="left:{x}px;top:{y}px;rotate:{rot}deg">{html}</div>')
+    J.append(f'tl.fromTo("#stk{i}", {{opacity:0, scale:2.2}}, {{opacity:1, scale:1, duration:.28, ease:"back.out(2.6)"}}, {t:.2f}); tl.to("#stk{i}", {{opacity:0, scale:.6, duration:.2, ease:"power2.in"}}, {until - .2:.2f});')
+    sfx("pop", t, .3)
+sticker(0, "&#127758; <b>#3</b> DUNIYA MEIN", wt(0, "teesra") - .1, wt(0, "teesra") + 1.3, 50, 1080, -7)
+sticker(1, "&#127951; CRICKET STADIUM", wt(0, "cricket") - .1, wt(0, "cricket") + 1.2, 560, 1180, 6, "w")
+for i, (txt, dt, x, y) in enumerate([("100 ACRE", 1.0, 60, 1240), ("PRACTICE GROUNDS", 1.35, 560, 1290), ("PARKING", 1.7, 120, 1330)]):
+    sticker(10 + i, txt, T3 + dt, T3 + dt + 1.3, x, y, (-1) ** i * 4, "chip")
+# Anil Agarwal portrait on his name
+TA = wt(0, "Anil Agarwal") - .1
+H.append('<div id="anil"><img src="assets/img/anil.jpg"/><div><b>ANIL AGARWAL</b><span>Chairman, Vedanta</span></div></div>')
+J.append(f'tl.fromTo("#anil", {{opacity:0, x:-300}}, {{opacity:1, x:0, duration:.35, ease:"back.out(1.8)"}}, {TA:.2f}); tl.fromTo("#anil img", {{scale:.4}}, {{scale:1, duration:.4, ease:"back.out(2.5)"}}, {TA:.2f}); tl.to("#anil", {{opacity:0, x:-300, duration:.25, ease:"power2.in"}}, {wt(1, "MoU") - .3:.2f});')
+sfx("whoosh-short", TA, .35)
+
 # ---------- 1 MoU ----------
 H.append('<div id="mou"><div class="mrow"><span>VEDANTA</span><b>&#129309;</b><span>RCA</span></div><div class="mbig">&#8377;300 CR</div><div class="msub">MoU &middot; 30 MARCH 2023</div></div>')
 TM = max(S(1), T3 + 2.6)
@@ -324,6 +339,9 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #name3d{position:absolute;left:40px;right:40px;top:300px;text-align:center;opacity:0;z-index:12}#name3d small{display:inline-block;padding:8px 26px;border-radius:30px;background:#FFC42E;color:#111;font:900 40px Mont}
 #name3d b{display:block;margin-top:12px;font:400 76px/1.05 Anton;color:#fff;text-shadow:0 6px 24px #000}#name3d span{display:inline-block;margin-top:10px;padding:6px 20px;border-radius:20px;background:rgba(8,10,15,.85);border:2px solid #3CFF96;color:#3CFF96;font:800 30px Mont}
 #hook b{font-size:170px !important}#hook span{font-size:56px !important}#hook i{font-size:52px !important;margin-top:8px !important}#hook{padding:16px 10px !important}
+.stk{position:absolute;opacity:0;z-index:14;padding:14px 26px;border-radius:18px;background:#FFC42E;color:#111;font:400 50px/1 Anton;box-shadow:0 10px 30px rgba(0,0,0,.6)}.stk b{font-size:64px}.stk.w{background:#fff}.stk.chip{padding:10px 22px;border-radius:40px;background:rgba(8,10,15,.9);border:3px solid #3CFF96;color:#3CFF96;font:900 34px Mont}
+#anil{position:absolute;left:40px;top:1020px;opacity:0;z-index:15;display:flex;align-items:center;gap:18px;padding:12px 28px 12px 12px;border-radius:120px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;box-shadow:0 20px 50px rgba(0,0,0,.6)}
+#anil img{width:200px;height:200px;border-radius:50%;object-fit:cover;border:5px solid #FFC42E}#anil b{display:block;font:400 64px/1 Anton;color:#fff}#anil span{display:block;margin-top:6px;font:800 30px Mont;color:#FFC42E}
 #hero{position:absolute;left:160px;top:760px;width:760px;opacity:1;z-index:13;padding:12px 12px 14px;border-radius:24px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7);text-align:center}#hero img{display:block;width:100%;border-radius:14px}#hero div{margin-top:8px;font:400 40px/1.05 Anton;color:#14161c}#hero span{font:800 22px Mont;color:#888}
 #mou{position:absolute;left:90px;right:90px;top:300px;opacity:0;z-index:12;padding:24px;border-radius:28px;background:rgba(8,10,15,.92);border:3px solid #FFC42E;text-align:center}
 .mrow{display:flex;justify-content:center;align-items:center;gap:26px}.mrow span{font:400 64px/1 Anton;color:#fff}.mrow b{font-size:70px}.mbig{margin-top:6px;font:400 130px/1 Anton;color:#FFC42E}.msub{font:900 30px Mont;color:#ccc;letter-spacing:.08em}
