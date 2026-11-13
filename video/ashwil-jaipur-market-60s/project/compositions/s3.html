@@ -1,0 +1,45 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .panel { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; overflow: hidden; }
+    .panel video { position: absolute; left: 0; top: 0; width: 1080px; height: 1100px; object-fit: cover; }
+    .fade { position: absolute; left: 0; right: 0; top: 840px; height: 262px; background: linear-gradient(180deg, rgba(18,13,10,0), #120D0A); }
+    .rep { position: absolute; right: 164px; top: 1050px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(243,231,211,0.7); }
+    .chip { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 12px 22px; border-radius: 14px; background: rgba(27,20,15,0.86); border: 1.5px solid rgba(243,231,211,0.25);
+      font-family: "Inter", sans-serif; font-weight: 700; font-size: 38px; color: #F3E7D3; white-space: nowrap; }
+    .chip.amb { border-color: #E3A23B; background: rgba(60,38,14,0.92); }
+    .chip i { font-style: normal; display: inline-flex; width: 44px; height: 44px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 28px; font-weight: 900; }
+    .mono { font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.14em; color: #E3A23B; text-transform: uppercase; white-space: nowrap; }
+    .label { position: absolute; left: 96px; top: 190px; padding: 10px 18px; border-radius: 10px; background: rgba(27,20,15,0.86); border: 1.5px solid #E3A23B; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.16em; color: #F3E7D3; text-transform: uppercase; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+
+  </style>
+  <div id="root" data-composition-id="s3" data-width="1080" data-height="1920">
+    <div id="s3-host" class="host clip" data-start="0" data-duration="4.5"><div id="s3-bg" class="ins"><div class=grain></div></div></div>
+    <div id="s3-vids"></div>
+    <div id="s3-fg" class="host">
+    <div class="mono" style="position:absolute;left:96px;top:300px">Average home sold · Jaipur</div>
+    <div style="position:absolute;left:96px;top:370px;display:flex;align-items:baseline;gap:26px">
+      <div id="s3-a" class="serif" style="font-size:150px;line-height:1">₹59 lakh</div></div>
+    <div id="s3-ar" style="position:absolute;left:96px;top:560px;font-family:Inter,sans-serif;font-weight:800;font-size:64px;color:#E3A23B">→ approx.</div>
+    <div id="s3-b" class="serif" style="position:absolute;left:96px;top:650px;font-size:170px;line-height:1;color:#E3A23B">₹78 lakh</div>
+    <div class="mono" style="position:absolute;left:96px;top:850px;color:#C9B79C">2023 → 2024</div>
+    <div id="s3-n" style="position:absolute;left:96px;right:164px;top:930px;font-family:Inter,sans-serif;font-weight:600;font-size:32px;line-height:1.3;color:#C9B79C">Average transaction value reflects the mix of homes sold; not individual property appreciation.</div></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 16 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
+      tl.fromTo(["#s3-bg", "#s3-vids", "#s3-fg"], { opacity: 0 }, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0);
+      tl.fromTo("#s3-vids", { scale: 1.04 }, { scale: 1.0, duration: 4.5, ease: "none" }, 0);
+      IN("#s3-a", 0.15); IN("#s3-ar", 0.6); IN("#s3-b", 0.8, { scale: 0.92 }, { scale: 1 }); IN("#s3-n", 0.5);
+      tl.to(["#s3-bg", "#s3-vids", "#s3-fg"], { opacity: 0, duration: 0.28, ease: "power2.in" }, 4.22);
+      window.__timelines["s3"] = tl;
+    })();
+  </script>
+</template>

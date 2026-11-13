@@ -1,0 +1,1162 @@
+[
+{
+"text": "Hello,",
+"start": 0.16,
+"end": 0.56
+},
+{
+"text": "my",
+"start": 0.56,
+"end": 0.64
+},
+{
+"text": "name",
+"start": 0.64,
+"end": 0.72
+},
+{
+"text": "is",
+"start": 0.72,
+"end": 0.88
+},
+{
+"text": "Ashwil",
+"start": 0.88,
+"end": 1.52
+},
+{
+"text": "and",
+"start": 1.52,
+"end": 1.6
+},
+{
+"text": "I",
+"start": 1.6,
+"end": 1.68
+},
+{
+"text": "come",
+"start": 1.68,
+"end": 1.76
+},
+{
+"text": "from",
+"start": 1.76,
+"end": 1.84
+},
+{
+"text": "the",
+"start": 1.84,
+"end": 1.92
+},
+{
+"text": "city",
+"start": 1.92,
+"end": 2.16
+},
+{
+"text": "of",
+"start": 2.16,
+"end": 2.24
+},
+{
+"text": "Jaipur",
+"start": 2.24,
+"end": 2.72
+},
+{
+"text": "Rajasthan.",
+"start": 2.72,
+"end": 3.44
+},
+{
+"text": "As",
+"start": 3.44,
+"end": 3.52
+},
+{
+"text": "a",
+"start": 3.52,
+"end": 3.68
+},
+{
+"text": "child",
+"start": 3.68,
+"end": 4.24
+},
+{
+"text": "who",
+"start": 4.24,
+"end": 4.4
+},
+{
+"text": "was",
+"start": 4.4,
+"end": 4.64
+},
+{
+"text": "born",
+"start": 4.64,
+"end": 4.88
+},
+{
+"text": "in",
+"start": 4.88,
+"end": 5.04
+},
+{
+"text": "a",
+"start": 5.04,
+"end": 5.12
+},
+{
+"text": "country",
+"start": 5.12,
+"end": 5.44
+},
+{
+"text": "with",
+"start": 5.44,
+"end": 5.6
+},
+{
+"text": "more",
+"start": 5.6,
+"end": 5.76
+},
+{
+"text": "than",
+"start": 5.76,
+"end": 5.92
+},
+{
+"text": "100",
+"start": 5.92,
+"end": 6.24
+},
+{
+"text": "crore",
+"start": 6.24,
+"end": 6.72
+},
+{
+"text": "people,",
+"start": 6.72,
+"end": 7.28
+},
+{
+"text": "it",
+"start": 7.28,
+"end": 7.44
+},
+{
+"text": "was",
+"start": 7.44,
+"end": 7.6
+},
+{
+"text": "always",
+"start": 7.6,
+"end": 7.84
+},
+{
+"text": "difficult",
+"start": 7.84,
+"end": 8.32
+},
+{
+"text": "to",
+"start": 8.32,
+"end": 8.48
+},
+{
+"text": "get",
+"start": 8.48,
+"end": 8.72
+},
+{
+"text": "into",
+"start": 8.72,
+"end": 9.04
+},
+{
+"text": "something",
+"start": 9.04,
+"end": 9.36
+},
+{
+"text": "that",
+"start": 9.36,
+"end": 9.6
+},
+{
+"text": "was",
+"start": 9.6,
+"end": 9.76
+},
+{
+"text": "prestigious.",
+"start": 9.76,
+"end": 10.64
+},
+{
+"text": "I",
+"start": 10.64,
+"end": 10.8
+},
+{
+"text": "am",
+"start": 10.8,
+"end": 10.88
+},
+{
+"text": "very",
+"start": 10.88,
+"end": 11.04
+},
+{
+"text": "proud",
+"start": 11.04,
+"end": 11.28
+},
+{
+"text": "of",
+"start": 11.28,
+"end": 11.44
+},
+{
+"text": "the",
+"start": 11.44,
+"end": 11.6
+},
+{
+"text": "fact",
+"start": 11.6,
+"end": 11.84
+},
+{
+"text": "that",
+"start": 11.84,
+"end": 12.08
+},
+{
+"text": "I",
+"start": 12.08,
+"end": 12.24
+},
+{
+"text": "got",
+"start": 12.24,
+"end": 12.4
+},
+{
+"text": "myself",
+"start": 12.4,
+"end": 12.8
+},
+{
+"text": "a",
+"start": 12.8,
+"end": 12.88
+},
+{
+"text": "10",
+"start": 12.88,
+"end": 13.2
+},
+{
+"text": "on",
+"start": 13.2,
+"end": 13.36
+},
+{
+"text": "10",
+"start": 13.36,
+"end": 13.52
+},
+{
+"text": "CG",
+"start": 13.52,
+"end": 13.68
+},
+{
+"text": "payment.",
+"start": 13.68,
+"end": 14.16
+},
+{
+"text": "Class",
+"start": 14.16,
+"end": 14.4
+},
+{
+"text": "10th,",
+"start": 14.4,
+"end": 14.96
+},
+{
+"text": "an",
+"start": 14.96,
+"end": 15.12
+},
+{
+"text": "NTSC",
+"start": 15.12,
+"end": 15.76
+},
+{
+"text": "scholar",
+"start": 15.76,
+"end": 16.08
+},
+{
+"text": "in",
+"start": 16.08,
+"end": 16.24
+},
+{
+"text": "class",
+"start": 16.24,
+"end": 16.48
+},
+{
+"text": "10th,",
+"start": 16.48,
+"end": 17.04
+},
+{
+"text": "got",
+"start": 17.04,
+"end": 17.12
+},
+{
+"text": "into",
+"start": 17.12,
+"end": 17.28
+},
+{
+"text": "ID",
+"start": 17.28,
+"end": 17.68
+},
+{
+"text": "Delhi",
+"start": 17.68,
+"end": 18.08
+},
+{
+"text": "with",
+"start": 18.08,
+"end": 18.32
+},
+{
+"text": "a",
+"start": 18.32,
+"end": 18.4
+},
+{
+"text": "national",
+"start": 18.4,
+"end": 18.8
+},
+{
+"text": "category",
+"start": 18.8,
+"end": 19.28
+},
+{
+"text": "rank",
+"start": 19.28,
+"end": 19.52
+},
+{
+"text": "of",
+"start": 19.52,
+"end": 19.68
+},
+{
+"text": "98,",
+"start": 19.68,
+"end": 20.4
+},
+{
+"text": "became",
+"start": 20.4,
+"end": 20.96
+},
+{
+"text": "the",
+"start": 20.96,
+"end": 21.12
+},
+{
+"text": "first",
+"start": 21.12,
+"end": 21.36
+},
+{
+"text": "in",
+"start": 21.36,
+"end": 21.52
+},
+{
+"text": "my",
+"start": 21.52,
+"end": 21.6
+},
+{
+"text": "family",
+"start": 21.6,
+"end": 21.92
+},
+{
+"text": "to",
+"start": 21.92,
+"end": 22.08
+},
+{
+"text": "prepare",
+"start": 22.08,
+"end": 22.32
+},
+{
+"text": "for",
+"start": 22.32,
+"end": 22.48
+},
+{
+"text": "civil",
+"start": 22.48,
+"end": 22.8
+},
+{
+"text": "services",
+"start": 22.8,
+"end": 23.52
+},
+{
+"text": "and",
+"start": 23.52,
+"end": 23.68
+},
+{
+"text": "reached",
+"start": 23.68,
+"end": 24.08
+},
+{
+"text": "this",
+"start": 24.08,
+"end": 24.24
+},
+{
+"text": "second",
+"start": 24.24,
+"end": 24.56
+},
+{
+"text": "stage,",
+"start": 24.56,
+"end": 24.96
+},
+{
+"text": "which",
+"start": 24.96,
+"end": 25.12
+},
+{
+"text": "only",
+"start": 25.12,
+"end": 25.36
+},
+{
+"text": "1%",
+"start": 25.36,
+"end": 25.76
+},
+{
+"text": "of",
+"start": 25.76,
+"end": 25.92
+},
+{
+"text": "the",
+"start": 25.92,
+"end": 26.0
+},
+{
+"text": "people",
+"start": 26.0,
+"end": 26.16
+},
+{
+"text": "do.",
+"start": 26.16,
+"end": 26.56
+},
+{
+"text": "I",
+"start": 26.56,
+"end": 26.64
+},
+{
+"text": "have",
+"start": 26.64,
+"end": 26.72
+},
+{
+"text": "proven",
+"start": 26.72,
+"end": 27.04
+},
+{
+"text": "time",
+"start": 27.04,
+"end": 27.28
+},
+{
+"text": "and",
+"start": 27.28,
+"end": 27.44
+},
+{
+"text": "often",
+"start": 27.44,
+"end": 27.84
+},
+{
+"text": "that",
+"start": 27.84,
+"end": 28.08
+},
+{
+"text": "I",
+"start": 28.08,
+"end": 28.24
+},
+{
+"text": "can",
+"start": 28.24,
+"end": 28.4
+},
+{
+"text": "reach",
+"start": 28.4,
+"end": 28.64
+},
+{
+"text": "the",
+"start": 28.64,
+"end": 28.72
+},
+{
+"text": "top.",
+"start": 28.72,
+"end": 29.24
+},
+{
+"text": "1%.",
+"start": 29.24,
+"end": 29.8
+},
+{
+"text": "I",
+"start": 29.8,
+"end": 29.96
+},
+{
+"text": "want",
+"start": 29.96,
+"end": 30.04
+},
+{
+"text": "to",
+"start": 30.04,
+"end": 30.12
+},
+{
+"text": "create",
+"start": 30.12,
+"end": 30.36
+},
+{
+"text": "a",
+"start": 30.36,
+"end": 30.44
+},
+{
+"text": "company",
+"start": 30.44,
+"end": 30.76
+},
+{
+"text": "now",
+"start": 30.76,
+"end": 30.92
+},
+{
+"text": "because",
+"start": 30.92,
+"end": 31.08
+},
+{
+"text": "I'm",
+"start": 31.08,
+"end": 31.32
+},
+{
+"text": "really",
+"start": 31.32,
+"end": 31.48
+},
+{
+"text": "passionate",
+"start": 31.48,
+"end": 31.88
+},
+{
+"text": "about",
+"start": 31.88,
+"end": 32.04
+},
+{
+"text": "bringing",
+"start": 32.04,
+"end": 32.36
+},
+{
+"text": "more",
+"start": 32.36,
+"end": 32.6
+},
+{
+"text": "employment",
+"start": 32.6,
+"end": 33.0
+},
+{
+"text": "opportunities.",
+"start": 33.0,
+"end": 33.72
+},
+{
+"text": "Currently,",
+"start": 33.72,
+"end": 34.04
+},
+{
+"text": "I'm",
+"start": 34.04,
+"end": 34.2
+},
+{
+"text": "working",
+"start": 34.2,
+"end": 34.36
+},
+{
+"text": "in",
+"start": 34.36,
+"end": 34.44
+},
+{
+"text": "the",
+"start": 34.44,
+"end": 34.52
+},
+{
+"text": "real",
+"start": 34.52,
+"end": 34.68
+},
+{
+"text": "estate",
+"start": 34.68,
+"end": 35.0
+},
+{
+"text": "sector.",
+"start": 35.0,
+"end": 35.56
+},
+{
+"text": "I",
+"start": 35.56,
+"end": 35.64
+},
+{
+"text": "have",
+"start": 35.64,
+"end": 35.8
+},
+{
+"text": "seen",
+"start": 35.8,
+"end": 36.04
+},
+{
+"text": "a",
+"start": 36.04,
+"end": 36.2
+},
+{
+"text": "lot",
+"start": 36.2,
+"end": 36.36
+},
+{
+"text": "of",
+"start": 36.36,
+"end": 36.44
+},
+{
+"text": "problems",
+"start": 36.44,
+"end": 36.84
+},
+{
+"text": "and",
+"start": 36.84,
+"end": 36.92
+},
+{
+"text": "I",
+"start": 36.92,
+"end": 37.08
+},
+{
+"text": "want",
+"start": 37.08,
+"end": 37.24
+},
+{
+"text": "to",
+"start": 37.24,
+"end": 37.4
+},
+{
+"text": "solve",
+"start": 37.4,
+"end": 37.64
+},
+{
+"text": "all",
+"start": 37.64,
+"end": 37.8
+},
+{
+"text": "of",
+"start": 37.8,
+"end": 37.96
+},
+{
+"text": "those",
+"start": 37.96,
+"end": 38.2
+},
+{
+"text": "problems",
+"start": 38.2,
+"end": 38.68
+},
+{
+"text": "with",
+"start": 38.68,
+"end": 38.84
+},
+{
+"text": "the",
+"start": 38.84,
+"end": 39.0
+},
+{
+"text": "help",
+"start": 39.0,
+"end": 39.16
+},
+{
+"text": "of",
+"start": 39.16,
+"end": 39.24
+},
+{
+"text": "technology.",
+"start": 39.24,
+"end": 39.88
+},
+{
+"text": "In",
+"start": 39.88,
+"end": 40.04
+},
+{
+"text": "the",
+"start": 40.04,
+"end": 40.12
+},
+{
+"text": "next",
+"start": 40.12,
+"end": 40.28
+},
+{
+"text": "five",
+"start": 40.28,
+"end": 40.52
+},
+{
+"text": "years,",
+"start": 40.52,
+"end": 40.84
+},
+{
+"text": "I",
+"start": 40.84,
+"end": 41.0
+},
+{
+"text": "want",
+"start": 41.0,
+"end": 41.16
+},
+{
+"text": "to",
+"start": 41.16,
+"end": 41.24
+},
+{
+"text": "spend",
+"start": 41.24,
+"end": 41.56
+},
+{
+"text": "my",
+"start": 41.56,
+"end": 41.8
+},
+{
+"text": "time",
+"start": 41.8,
+"end": 42.04
+},
+{
+"text": "solving",
+"start": 42.04,
+"end": 42.52
+},
+{
+"text": "the",
+"start": 42.52,
+"end": 42.68
+},
+{
+"text": "real",
+"start": 42.68,
+"end": 42.92
+},
+{
+"text": "estate",
+"start": 42.92,
+"end": 43.24
+},
+{
+"text": "market",
+"start": 43.24,
+"end": 43.56
+},
+{
+"text": "of",
+"start": 43.56,
+"end": 43.64
+},
+{
+"text": "India.",
+"start": 43.64,
+"end": 44.32
+},
+{
+"text": "and",
+"start": 44.32,
+"end": 44.56
+},
+{
+"text": "make",
+"start": 44.56,
+"end": 44.8
+},
+{
+"text": "more",
+"start": 44.8,
+"end": 45.04
+},
+{
+"text": "employment",
+"start": 45.04,
+"end": 45.6
+},
+{
+"text": "opportunities",
+"start": 45.6,
+"end": 46.16
+},
+{
+"text": "for",
+"start": 46.16,
+"end": 46.32
+},
+{
+"text": "not",
+"start": 46.32,
+"end": 46.48
+},
+{
+"text": "just",
+"start": 46.48,
+"end": 46.64
+},
+{
+"text": "my",
+"start": 46.64,
+"end": 46.88
+},
+{
+"text": "employees",
+"start": 46.88,
+"end": 47.44
+},
+{
+"text": "but",
+"start": 47.44,
+"end": 47.6
+},
+{
+"text": "also",
+"start": 47.6,
+"end": 47.76
+},
+{
+"text": "for",
+"start": 47.76,
+"end": 48.0
+},
+{
+"text": "my",
+"start": 48.0,
+"end": 48.16
+},
+{
+"text": "stakeholders",
+"start": 48.16,
+"end": 48.72
+},
+{
+"text": "which",
+"start": 48.72,
+"end": 48.88
+},
+{
+"text": "will",
+"start": 48.88,
+"end": 49.04
+},
+{
+"text": "be",
+"start": 49.04,
+"end": 49.12
+},
+{
+"text": "using",
+"start": 49.12,
+"end": 49.36
+},
+{
+"text": "my",
+"start": 49.36,
+"end": 49.6
+},
+{
+"text": "platform.",
+"start": 49.6,
+"end": 50.0
+},
+{
+"text": "Make",
+"start": 50.0,
+"end": 50.16
+},
+{
+"text": "the",
+"start": 50.16,
+"end": 50.24
+},
+{
+"text": "market",
+"start": 50.24,
+"end": 50.48
+},
+{
+"text": "more",
+"start": 50.48,
+"end": 50.64
+},
+{
+"text": "transparent,",
+"start": 50.64,
+"end": 51.2
+},
+{
+"text": "fair,",
+"start": 51.2,
+"end": 51.52
+},
+{
+"text": "justifiable",
+"start": 51.52,
+"end": 52.42
+},
+{
+"text": "and",
+"start": 52.72,
+"end": 53.2
+},
+{
+"text": "make",
+"start": 53.2,
+"end": 53.68
+},
+{
+"text": "the",
+"start": 53.68,
+"end": 54.32
+},
+{
+"text": "last",
+"start": 54.32,
+"end": 54.64
+},
+{
+"text": "person",
+"start": 54.64,
+"end": 55.2
+},
+{
+"text": "also",
+"start": 55.2,
+"end": 55.6
+},
+{
+"text": "have",
+"start": 55.6,
+"end": 55.84
+},
+{
+"text": "access",
+"start": 55.84,
+"end": 56.16
+},
+{
+"text": "to",
+"start": 56.16,
+"end": 56.48
+},
+{
+"text": "the",
+"start": 56.48,
+"end": 56.64
+},
+{
+"text": "market",
+"start": 56.64,
+"end": 57.12
+},
+{
+"text": "around",
+"start": 57.12,
+"end": 57.36
+},
+{
+"text": "them",
+"start": 57.36,
+"end": 57.52
+},
+{
+"text": "so",
+"start": 57.52,
+"end": 57.68
+},
+{
+"text": "that",
+"start": 57.68,
+"end": 57.84
+},
+{
+"text": "they",
+"start": 57.84,
+"end": 58.0
+},
+{
+"text": "can",
+"start": 58.0,
+"end": 58.16
+},
+{
+"text": "also",
+"start": 58.16,
+"end": 58.32
+},
+{
+"text": "earn",
+"start": 58.32,
+"end": 58.64
+},
+{
+"text": "and",
+"start": 58.64,
+"end": 58.8
+},
+{
+"text": "increase",
+"start": 58.8,
+"end": 59.12
+},
+{
+"text": "my",
+"start": 59.12,
+"end": 59.28
+},
+{
+"text": "per",
+"start": 59.28,
+"end": 59.52
+},
+{
+"text": "capita",
+"start": 59.52,
+"end": 59.92
+},
+{
+"text": "income",
+"start": 59.92,
+"end": 60.16
+},
+{
+"text": "of",
+"start": 60.16,
+"end": 60.32
+},
+{
+"text": "my",
+"start": 60.32,
+"end": 60.48
+},
+{
+"text": "country's",
+"start": 60.48,
+"end": 60.8
+},
+{
+"text": "citizens.",
+"start": 60.8,
+"end": 61.312
+}
+]

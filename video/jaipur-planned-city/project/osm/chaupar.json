@@ -1,0 +1,1657 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2026-11-02T06:51:20Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 316943439,
+  "lat": 26.9244477,
+  "lon": 75.8186598,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Choti Chaupar",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 3139919925,
+  "lat": 26.9246660,
+  "lon": 75.8184914,
+  "tags": {
+    "elevator": "yes",
+    "name": "Choti Chaupar",
+    "name:hi": "छोटी चौपड़",
+    "network": "Jaipur Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Jaipur Metro Rail Corporation Limited",
+    "public_transport": "stop_position",
+    "public_transport:version": "2",
+    "railway": "stop",
+    "ref": "CDPE",
+    "shelter": "yes",
+    "subway": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "node",
+  "id": 3860839961,
+  "lat": 26.9225798,
+  "lon": 75.8267125,
+  "tags": {
+    "name": "Badi Chaupar",
+    "place": "locality"
+  }
+},
+{
+  "type": "node",
+  "id": 5403055418,
+  "lat": 26.9227605,
+  "lon": 75.8265706,
+  "tags": {
+    "bus": "yes",
+    "highway": "bus_stop",
+    "name": "Badi Chaupar",
+    "public_transport": "platform"
+  }
+},
+{
+  "type": "node",
+  "id": 8035756429,
+  "lat": 26.9229693,
+  "lon": 75.8267752,
+  "tags": {
+    "name": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "network": "Jaipur Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Jaipur Metro Rail Corporation Limited",
+    "public_transport": "stop_position",
+    "public_transport:version": "2",
+    "railway": "stop",
+    "subway": "yes",
+    "wikimedia_commons": "Category:Badi Chaupar metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 8044083222,
+  "lat": 26.9247317,
+  "lon": 75.8184589,
+  "tags": {
+    "name": "Choti Chaupar",
+    "name:hi": "छोटी चौपड़",
+    "network": "Jaipur Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Jaipur Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "public_transport:version": "2",
+    "railway": "station",
+    "ref": "CDPE",
+    "shelter": "yes",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q20717371",
+    "wikipedia": "en:Chhoti Chaupar metro station"
+  }
+},
+{
+  "type": "node",
+  "id": 8044083223,
+  "lat": 26.9229585,
+  "lon": 75.8268223,
+  "tags": {
+    "name": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "network": "Jaipur Metro",
+    "note": "Contributors are requested to not edit the \"network\" and the \"operator\" tags. (2023/11/08)",
+    "operator": "Jaipur Metro Rail Corporation Limited",
+    "public_transport": "station",
+    "public_transport:version": "2",
+    "railway": "station",
+    "shelter": "yes",
+    "station": "subway",
+    "subway": "yes",
+    "wheelchair": "yes",
+    "wikidata": "Q20311991",
+    "wikipedia": "en:Badi Chaupar metro station"
+  }
+},
+{
+  "type": "way",
+  "id": 28827950,
+  "center": {
+    "lat": 26.9247612,
+    "lon": 75.8181581
+  },
+  "nodes": [
+    4156348456,
+    316943848
+  ],
+  "tags": {
+    "highway": "primary",
+    "junction": "roundabout",
+    "name": "Chhoti Chaupar",
+    "ref:old": "NH11"
+  }
+},
+{
+  "type": "way",
+  "id": 862954967,
+  "center": {
+    "lat": 26.9231880,
+    "lon": 75.8269176
+  },
+  "nodes": [
+    1812532435,
+    8039165451,
+    14058331354,
+    1812532514
+  ],
+  "tags": {
+    "highway": "primary",
+    "name": "Badi Chaupar",
+    "name:en": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 862954968,
+  "center": {
+    "lat": 26.9227509,
+    "lon": 75.8268109
+  },
+  "nodes": [
+    14058331326,
+    8039165444,
+    8039165445,
+    8039165446,
+    8039165457
+  ],
+  "tags": {
+    "highway": "primary",
+    "name": "Badi Chaupar",
+    "name:en": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 862954969,
+  "center": {
+    "lat": 26.9231213,
+    "lon": 75.8270606
+  },
+  "nodes": [
+    1812532514,
+    8039165452,
+    8039165453,
+    5403055413
+  ],
+  "tags": {
+    "highway": "primary",
+    "name": "Badi Chaupar",
+    "name:en": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 863031012,
+  "center": {
+    "lat": 26.9231586,
+    "lon": 75.8267353
+  },
+  "nodes": [
+    8035833209,
+    8039165442,
+    8039165449,
+    8039165450,
+    1812532435
+  ],
+  "tags": {
+    "highway": "primary",
+    "name": "Badi Chaupar",
+    "name:en": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 863303416,
+  "center": {
+    "lat": 26.9245232,
+    "lon": 75.8187079
+  },
+  "nodes": [
+    316943438,
+    1812532527,
+    316943439
+  ],
+  "tags": {
+    "highway": "primary",
+    "junction": "roundabout",
+    "name": "Chhoti Chaupar",
+    "ref:old": "NH11"
+  }
+},
+{
+  "type": "way",
+  "id": 863303417,
+  "center": {
+    "lat": 26.9246849,
+    "lon": 75.8187473
+  },
+  "nodes": [
+    1812532507,
+    1812532545,
+    316943438
+  ],
+  "tags": {
+    "highway": "primary",
+    "junction": "roundabout",
+    "name": "Chhoti Chaupar",
+    "ref:old": "NH11"
+  }
+},
+{
+  "type": "way",
+  "id": 863303418,
+  "center": {
+    "lat": 26.9248531,
+    "lon": 75.8184522
+  },
+  "nodes": [
+    316943848,
+    316943443,
+    1812532506,
+    1812532571,
+    316943444,
+    1812532463,
+    316943445,
+    1812532581,
+    316943446,
+    1812532507
+  ],
+  "tags": {
+    "highway": "primary",
+    "junction": "roundabout",
+    "name": "Chhoti Chaupar",
+    "ref:old": "NH11"
+  }
+},
+{
+  "type": "way",
+  "id": 863303419,
+  "center": {
+    "lat": 26.9246881,
+    "lon": 75.8181401
+  },
+  "nodes": [
+    2106256143,
+    4156348456
+  ],
+  "tags": {
+    "highway": "primary",
+    "junction": "roundabout",
+    "name": "Chhoti Chaupar",
+    "ref:old": "NH11"
+  }
+},
+{
+  "type": "way",
+  "id": 863303420,
+  "center": {
+    "lat": 26.9245084,
+    "lon": 75.8183970
+  },
+  "nodes": [
+    316943439,
+    1812532538,
+    316943440,
+    316943562,
+    4156348455,
+    316943441,
+    1812532490,
+    316943442,
+    1812532493,
+    2106256143
+  ],
+  "tags": {
+    "highway": "primary",
+    "junction": "roundabout",
+    "name": "Chhoti Chaupar",
+    "ref:old": "NH11"
+  }
+},
+{
+  "type": "way",
+  "id": 863303421,
+  "center": {
+    "lat": 26.9229426,
+    "lon": 75.8271023
+  },
+  "nodes": [
+    5403055413,
+    8039165443,
+    8039165454,
+    8039165455,
+    8646114436
+  ],
+  "tags": {
+    "highway": "primary",
+    "name": "Badi Chaupar",
+    "name:en": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 863303422,
+  "center": {
+    "lat": 26.9229911,
+    "lon": 75.8266216
+  },
+  "nodes": [
+    8646114435,
+    8039165447,
+    8039165448,
+    8039165458,
+    8035833209
+  ],
+  "tags": {
+    "highway": "primary",
+    "name": "Badi Chaupar",
+    "name:en": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1206898373,
+  "center": {
+    "lat": 26.9227720,
+    "lon": 75.8269928
+  },
+  "nodes": [
+    8646114436,
+    14058331343,
+    14058331327,
+    14058331316,
+    14058331326
+  ],
+  "tags": {
+    "highway": "primary",
+    "name": "Badi Chaupar",
+    "name:en": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "oneway": "yes"
+  }
+},
+{
+  "type": "relation",
+  "id": 5250264,
+  "center": {
+    "lat": 26.9029793,
+    "lon": 75.7884940
+  },
+  "members": [
+    {
+      "type": "node",
+      "ref": 1064270794,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3566139322,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3139920403,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3139920402,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3139920401,
+      "role": "stop"
+    },
+    {
+      "type": "way",
+      "ref": 867387883,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3139919926,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3139920400,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 1064270823,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 1064270915,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3139919925,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8035756429,
+      "role": "stop"
+    },
+    {
+      "type": "way",
+      "ref": 308729586,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 676313094,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 676313112,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 568709789,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 568709791,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 568709794,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 568709797,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 568709799,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 568709800,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 568709805,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 722997693,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 91602741,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 519595298,
+      "role": ""
+    }
+  ],
+  "tags": {
+    "colour": "#ff748c",
+    "duration": "00:26",
+    "from": "Mansarovar",
+    "interval": "00:10",
+    "interval:conditional": "18 @ (Mo-Su,PH 05:20-05:59); 15 @ (Mo-Su,PH 21:51-22:21)",
+    "name": "Pink Line (Mansarovar --> Badi Chaupar)",
+    "name:hi": "पिंक लाइन: मानसरोवर => बड़ी चौपाड़",
+    "network": "Jaipur Metro",
+    "network:wikidata": "Q6124135",
+    "opening_hours": "05:20-22:21",
+    "operator": "JMRC",
+    "public_transport:version": "2",
+    "ref": "Pink Line",
+    "route": "subway",
+    "to": "Badi Chaupar",
+    "type": "route",
+    "wikidata": "Q17053988",
+    "wikipedia": "en:Pink Line (Jaipur Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 7989307,
+  "center": {
+    "lat": 26.9029636,
+    "lon": 75.7884954
+  },
+  "members": [
+    {
+      "type": "node",
+      "ref": 8035756429,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3139919925,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 1064270915,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 6781585323,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8042601995,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8042595579,
+      "role": "stop"
+    },
+    {
+      "type": "way",
+      "ref": 867387884,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8042098373,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8042602063,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8042595542,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8042107918,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8042602051,
+      "role": "stop"
+    },
+    {
+      "type": "way",
+      "ref": 519595298,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 91602741,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 722997691,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 722997692,
+      "role": ""
+    }
+  ],
+  "tags": {
+    "colour": "#ff748c",
+    "duration": "00:26",
+    "from": "Badi Chaupar",
+    "interval": "00:10",
+    "interval:conditional": "15 @ (Mo-Su,PH 05:20-05:59)",
+    "name": "Pink Line (Badi Chaupar --> Mansarovar)",
+    "name:hi": "पिंक लाइन: बड़ी चौपाड़ => मानसरोवर",
+    "network": "Jaipur Metro",
+    "network:wikidata": "Q6124135",
+    "opening_hours": "05:20-22:21",
+    "operator": "JMRC",
+    "public_transport:version": "2",
+    "ref": "Pink Line",
+    "route": "subway",
+    "to": "Mansarovar",
+    "type": "route",
+    "wikidata": "Q17053988",
+    "wikipedia": "en:Pink Line (Jaipur Metro)"
+  }
+},
+{
+  "type": "relation",
+  "id": 11786470,
+  "center": {
+    "lat": 26.8701136,
+    "lon": 75.8047420
+  },
+  "members": [
+    {
+      "type": "node",
+      "ref": 8039924145,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 3954548679,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3826701164,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 4763964234,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 316742605,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3793717014,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3476201217,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 2663060604,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3778252986,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6876512280,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3783217169,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254795,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254796,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254799,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254800,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254802,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254804,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254806,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254808,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254811,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254813,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 5481842553,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254819,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254821,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8039165440,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 5403055418,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3266671377,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8039924157,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 316943439,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 2106256089,
+      "role": "platform"
+    },
+    {
+      "type": "way",
+      "ref": 734371123,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734371122,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 375269514,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863031006,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863031009,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 379368151,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1201388178,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 379368150,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 483657123,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 761621213,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 935710917,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 240415758,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1536477059,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 379367599,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 546572275,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 546572274,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1175300521,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1305182134,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734299550,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734299553,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1206544475,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734299552,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1014539710,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 374933221,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 753696178,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 862954963,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1315849350,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 375081694,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 866422948,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1212988283,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1212988286,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 28809506,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863572362,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1190644100,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863572361,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 753703773,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 874048705,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 170103976,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 758060824,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 866422968,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 570145307,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 570145305,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 754045503,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1206544474,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 236960267,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 878846719,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 878846720,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 170101100,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1206898377,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 560264179,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 28827964,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1210676322,
+      "role": ""
+    }
+  ],
+  "tags": {
+    "from": "Sanganer",
+    "interval": "00:30",
+    "name": "Bus 3A: Sanganer - Choti Chaupar",
+    "opening_hours": "Mo-Su 06:00-20:00",
+    "operator": "JCTSL",
+    "public_transport:version": "2",
+    "ref": "3A",
+    "route": "bus",
+    "to": "Choti Chaupar",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 11786471,
+  "center": {
+    "lat": 26.8702254,
+    "lon": 75.8049932
+  },
+  "members": [
+    {
+      "type": "node",
+      "ref": 8039924145,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8039924155,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3476240559,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8039165387,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3793710236,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6726175022,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3778252970,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8039165426,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3778252985,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6876534944,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 3787809626,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254797,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254798,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254801,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254803,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254805,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254807,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254809,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254810,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 321194335,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 1812540126,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 6976254819,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 316742974,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 1812540125,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8039165456,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8039924156,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 1812532483,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8039165441,
+      "role": "platform"
+    },
+    {
+      "type": "node",
+      "ref": 8137399286,
+      "role": "platform"
+    },
+    {
+      "type": "way",
+      "ref": 170101082,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863031012,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 862954967,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 862954969,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863303421,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1206898373,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 170101078,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 878846722,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 878846721,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 878846724,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 170105221,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 754045504,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 170105215,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 200665453,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1206544473,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 757545714,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 759780305,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 872370065,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 756961333,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 374932283,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 757545713,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1208475536,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863572359,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 863572364,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 866422947,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 163692669,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1315849351,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 374933223,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 374933213,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 756961331,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1015191023,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734299551,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1013018837,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1206537582,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1547836360,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734299554,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1547836359,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1158366161,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1305182130,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1305182131,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734299549,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1214396149,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 374933211,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 546572273,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 546572272,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 546572271,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 935710918,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 216250194,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 460700609,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 761621210,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 716025585,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 28810517,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 761621208,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 761621205,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 1201388179,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 379368149,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 379368148,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 480604105,
+      "role": ""
+    },
+    {
+      "type": "way",
+      "ref": 734371123,
+      "role": ""
+    }
+  ],
+  "tags": {
+    "from": "Choti Chaupar",
+    "interval": "00:30",
+    "name": "Bus 3A: Choti Chaupar - Sanganer",
+    "opening_hours": "Mo-Su 06:00-20:00",
+    "operator": "JCTSL",
+    "public_transport:version": "2",
+    "ref": "3A",
+    "route": "bus",
+    "to": "Sanganer",
+    "type": "route"
+  }
+},
+{
+  "type": "relation",
+  "id": 11791745,
+  "center": {
+    "lat": 26.9247283,
+    "lon": 75.8183169
+  },
+  "members": [
+    {
+      "type": "node",
+      "ref": 8044083222,
+      "role": ""
+    },
+    {
+      "type": "node",
+      "ref": 3139919925,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 14056287661,
+      "role": ""
+    },
+    {
+      "type": "node",
+      "ref": 14056287648,
+      "role": ""
+    }
+  ],
+  "tags": {
+    "colour": "#ff748c",
+    "name": "Choti Chaupar",
+    "name:hi": "छोटी चौपड़",
+    "network": "Jaipur Metro",
+    "operator": "JMRC",
+    "public_transport": "stop_area",
+    "public_transport:version": "2",
+    "type": "public_transport"
+  }
+},
+{
+  "type": "relation",
+  "id": 11791746,
+  "center": {
+    "lat": 26.9229500,
+    "lon": 75.8268858
+  },
+  "members": [
+    {
+      "type": "node",
+      "ref": 8044083223,
+      "role": ""
+    },
+    {
+      "type": "node",
+      "ref": 8035756429,
+      "role": "stop"
+    },
+    {
+      "type": "node",
+      "ref": 8475685136,
+      "role": ""
+    },
+    {
+      "type": "node",
+      "ref": 8475685133,
+      "role": ""
+    },
+    {
+      "type": "node",
+      "ref": 8475685134,
+      "role": ""
+    },
+    {
+      "type": "node",
+      "ref": 8475685135,
+      "role": ""
+    }
+  ],
+  "tags": {
+    "colour": "#ff748c",
+    "name": "Badi Chaupar",
+    "name:hi": "बड़ी चौपड़",
+    "network": "Jaipur Metro",
+    "operator": "JMRC",
+    "public_transport": "stop_area",
+    "public_transport:version": "2",
+    "type": "public_transport"
+  }
+}
+
+  ]
+}

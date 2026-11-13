@@ -1,0 +1,56 @@
+<template>
+  <style>
+    @font-face { font-family: "MontX"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+    #root { position: absolute; inset: 0; pointer-events: none; }
+    .cap {
+      position: absolute; left: 0; right: 0; bottom: 610px;
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: flex-end;
+      gap: 0 26px; padding: 0 70px; opacity: 0;
+      font-family: "MontX", sans-serif; font-weight: 900; text-transform: uppercase;
+      line-height: 1.02; text-align: center; overflow: visible;
+    }
+    .w {
+      display: inline-block; color: #fff; font-size: 92px; letter-spacing: -0.01em;
+      -webkit-text-stroke: 10px #10132a; paint-order: stroke fill;
+      text-shadow: 0 8px 0 rgba(16, 19, 42, 0.9), 0 14px 30px rgba(0, 0, 0, 0.45);
+      opacity: 0.35;
+    }
+    .w.em { color: #f0cd85; font-size: 118px; }
+  </style>
+  <div id="root" data-composition-id="captions" data-width="1080" data-height="1920">
+    <div id="cap-1" class="cap"><span class="w">If</span><span class="w">you're</span></div>
+    <div id="cap-2" class="cap"><span class="w">looking</span><span class="w">forward</span></div>
+    <div id="cap-3" class="cap"><span class="w">to</span><span class="w">construct</span></div>
+    <div id="cap-4" class="cap"><span class="w em">warehouses</span></div>
+    <div id="cap-5" class="cap"><span class="w">&amp;</span><span class="w em">industries</span></div>
+    <div id="cap-6" class="cap"><span class="w">and the</span><span class="w">best</span><span class="w em">work</span></div>
+    <div id="cap-7" class="cap"><span class="w">in the</span><span class="w">best</span><span class="w em">time</span></div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      // [group, open, close, word starts]
+      const groups = [
+        ["#cap-1", 0.18, 0.54, [0.22, 0.34]],
+        ["#cap-2", 0.54, 1.06, [0.54, 0.8]],
+        ["#cap-3", 1.06, 1.5, [1.06, 1.18]],
+        ["#cap-4", 1.5, 2.05, [1.5]],
+        ["#cap-5", 2.05, 2.9, [2.05, 2.28]],
+        ["#cap-6", 12.8, 13.7, [12.82, 13.22, 13.46]],
+        ["#cap-7", 13.7, 14.7, [13.7, 14.06, 14.3]],
+      ];
+      groups.forEach(([sel, open, close, starts]) => {
+        const g = document.querySelector(sel);
+        const words = g.querySelectorAll(".w");
+        tl.fromTo(g, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.1, ease: "power3.out" }, open);
+        words.forEach((w, i) => {
+          const big = w.classList.contains("em");
+          tl.fromTo(w, { opacity: 0.35, scale: big ? 0.7 : 0.92 }, { opacity: 1, scale: 1, duration: big ? 0.22 : 0.12, ease: big ? "back.out(2.2)" : "power3.out" }, starts[i]);
+        });
+        tl.to(g, { opacity: 0, duration: 0.06, ease: "power2.in" }, close - 0.06);
+        tl.set(g, { opacity: 0, visibility: "hidden" }, close);
+      });
+      window.__timelines["captions"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,104 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[
+    {"id":"brand","type":"string","label":"Brand name","default":"EmpireTech Global"},
+    {"id":"phone","type":"string","label":"Phone","default":"96721 19046"},
+    {"id":"gold","type":"color","label":"Gold","default":"#D4AF6A"},
+    {"id":"navy","type":"color","label":"Navy","default":"#2B3052"}
+  ]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <script src="assets/gsap.min.js"></script>
+    <style>
+      @font-face { font-family: "Anton"; src: url("assets/fonts/anton-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "MontX"; src: url("assets/fonts/montserrat-latin-600-normal.woff2") format("woff2"); font-weight: 600; }
+      @font-face { font-family: "MontX"; src: url("assets/fonts/montserrat-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+      @font-face { font-family: "MontX"; src: url("assets/fonts/montserrat-latin-900-normal.woff2") format("woff2"); font-weight: 900; }
+      @font-face { font-family: "GreatVibes"; src: url("assets/fonts/great-vibes-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+      :root {
+        --gold: #d4af6a;
+        --gold-hi: #f3d9a0;
+        --gold-lo: #9c7a3c;
+        --navy: #2b3052;
+        --navy-deep: #161a33;
+        --ink: #ffffff;
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1920px; overflow: hidden; background: #000; }
+      #root { position: relative; width: 1080px; height: 1920px; overflow: hidden; }
+      #ground { position: absolute; inset: 0; background: var(--navy-deep); }
+      #cam { position: absolute; inset: 0; transform-origin: 50% 32%; }
+      #speaker { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; object-fit: cover; }
+      .scene { position: absolute; inset: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="root" data-composition-id="main" data-start="0" data-duration="18" data-width="1080" data-height="1920" data-fps="30">
+      <div id="ground"></div>
+
+      <!-- Talking head: punch-ins and reframes are tweened on #cam -->
+      <div id="cam" style="z-index: 1">
+        <video id="speaker" class="clip" src="assets/speaker.mp4" data-start="0" data-duration="15.4" data-track-index="0" playsinline data-has-audio="true" data-volume="1"></video>
+      </div>
+
+      <!-- Graphics scenes -->
+      <div id="hook" class="scene" style="z-index: 5" data-composition-id="hook" data-composition-src="compositions/hook.html" data-start="0" data-duration="2.9" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="brand" class="scene" style="z-index: 5" data-composition-id="brand" data-composition-src="compositions/brand.html" data-start="2.9" data-duration="1.75" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="promise" class="scene" style="z-index: 5" data-composition-id="promise" data-composition-src="compositions/promise.html" data-start="4.65" data-duration="1.85" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="checklist" class="scene" style="z-index: 6" data-composition-id="checklist" data-composition-src="compositions/checklist.html" data-start="8.8" data-duration="3.95" data-track-index="2" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="broll" class="scene" style="z-index: 7" data-composition-id="broll" data-composition-src="compositions/broll.html" data-start="6.3" data-duration="2.95" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="ontime" class="scene" style="z-index: 5" data-composition-id="ontime" data-composition-src="compositions/ontime.html" data-start="12.7" data-duration="2.1" data-track-index="1" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+      <div id="endcard" class="scene" style="z-index: 9" data-composition-id="endcard" data-composition-src="compositions/endcard.html" data-start="14.7" data-duration="3.3" data-track-index="2" data-track-kind="graphics" data-width="1080" data-height="1920"></div>
+
+      <!-- Every spoken caption group lives in this one host -->
+      <div id="captions" class="scene" style="z-index: 8" data-composition-id="captions" data-composition-src="compositions/captions.html" data-start="0" data-duration="14.7" data-track-index="3" data-track-kind="captions" data-width="1080" data-height="1920"></div>
+
+      <!-- Sound design (kept under the voice) -->
+      <audio id="sfx-pop-1" class="clip" src="assets/sfx/pop.mp3" data-start="1.5" data-duration="0.72" data-track-index="10" data-volume="0.35"></audio>
+      <audio id="sfx-pop-2" class="clip" src="assets/sfx/pop.mp3" data-start="2.28" data-duration="0.72" data-track-index="10" data-volume="0.35"></audio>
+      <audio id="sfx-whoosh-brand" class="clip" src="assets/sfx/whoosh.mp3" data-start="2.88" data-duration="0.57" data-track-index="11" data-volume="0.45"></audio>
+      <audio id="sfx-sparkle" class="clip" src="assets/sfx/sparkle.mp3" data-start="3.35" data-duration="1.50" data-track-index="12" data-volume="0.3"></audio>
+      <audio id="sfx-ping-phone" class="clip" src="assets/sfx/ping.mp3" data-start="4.15" data-duration="1.32" data-track-index="10" data-volume="0.22"></audio>
+      <audio id="sfx-stamp-1" class="clip" src="assets/sfx/impact-bass-1.mp3" data-start="5.0" data-duration="1.2" data-track-index="11" data-volume="0.4" data-fade-out="0.4"></audio>
+      <audio id="sfx-stamp-2" class="clip" src="assets/sfx/impact-bass-2.mp3" data-start="5.75" data-duration="1.2" data-track-index="12" data-volume="0.4" data-fade-out="0.4"></audio>
+      <audio id="sfx-whoosh-b1" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="6.3" data-duration="0.57" data-track-index="10" data-volume="0.45"></audio>
+      <audio id="sfx-whoosh-b2" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="7.68" data-duration="0.57" data-track-index="11" data-volume="0.4"></audio>
+      <audio id="sfx-whoosh-b3" class="clip" src="assets/sfx/whoosh-short.mp3" data-start="8.25" data-duration="0.57" data-track-index="12" data-volume="0.4"></audio>
+      <audio id="sfx-whoosh-b4" class="clip" src="assets/sfx/whoosh.mp3" data-start="8.85" data-duration="0.57" data-track-index="10" data-volume="0.35"></audio>
+      <audio id="sfx-tick-1" class="clip" src="assets/sfx/click-soft.mp3" data-start="9.42" data-duration="0.37" data-track-index="11" data-volume="0.6"></audio>
+      <audio id="sfx-tick-2" class="clip" src="assets/sfx/click-soft.mp3" data-start="11.12" data-duration="0.37" data-track-index="12" data-volume="0.6"></audio>
+      <audio id="sfx-tick-3" class="clip" src="assets/sfx/click-soft.mp3" data-start="12.1" data-duration="0.37" data-track-index="11" data-volume="0.6"></audio>
+      <audio id="sfx-riser" class="clip" src="assets/sfx/riser.mp3" data-start="12.8" data-duration="1.15" data-media-start="8.85" data-track-index="10" data-volume="0.25" data-fade-in="0.3"></audio>
+      <audio id="sfx-chime" class="clip" src="assets/sfx/chime.mp3" data-start="13.95" data-duration="1.8" data-track-index="12" data-volume="0.25" data-fade-out="0.5"></audio>
+      <audio id="sfx-whoosh-end" class="clip" src="assets/sfx/whoosh-cinematic.mp3" data-start="14.65" data-duration="2.2" data-track-index="11" data-volume="0.35" data-fade-out="0.8"></audio>
+      <audio id="sfx-pop-cta" class="clip" src="assets/sfx/pop.mp3" data-start="15.9" data-duration="0.72" data-track-index="10" data-volume="0.35"></audio>
+    </div>
+
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const cam = "#cam";
+      // Hook: open tight on the face, punch out on "warehouses"
+      tl.set(cam, { scale: 1.14, x: 0, y: 40 }, 0);
+      tl.set(cam, { scale: 1.0, y: 0 }, 1.5);
+      // "Contact": punch in on the pointing hand + face
+      tl.set(cam, { scale: 1.12, y: -90 }, 2.97);
+      // Promise: back to medium, small shakes land with each stamp
+      tl.set(cam, { scale: 1.06, y: 0 }, 4.8);
+      tl.fromTo(cam, { x: 0, rotation: 0 }, { x: 10, rotation: 0.5, duration: 0.05, ease: "none" }, 5.0);
+      tl.to(cam, { x: -7, rotation: -0.35, duration: 0.06, ease: "none" }, 5.05);
+      tl.to(cam, { x: 0, rotation: 0, duration: 0.12, ease: "power2.out" }, 5.11);
+      tl.to(cam, { x: -10, rotation: -0.5, duration: 0.05, ease: "none" }, 5.75);
+      tl.to(cam, { x: 7, rotation: 0.35, duration: 0.06, ease: "none" }, 5.8);
+      tl.to(cam, { x: 0, rotation: 0, duration: 0.12, ease: "power2.out" }, 5.86);
+      // Checklist: face rides in the top half while the panel holds the bottom
+      tl.set(cam, { scale: 1.0, y: -300 }, 8.8);
+      // On time: full frame, gentle punch on "best work"
+      tl.set(cam, { scale: 1.0, y: 0 }, 12.7);
+      tl.set(cam, { scale: 1.12, y: 40 }, 13.7);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
