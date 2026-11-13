@@ -175,6 +175,9 @@ J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, du
 H.append('<div id="ns"><b>NORTH</b><i></i><b>SOUTH</b></div>')
 J.append(f'tl.fromTo("#ns", {{opacity:0}}, {{opacity:1, duration:.3}}, {wt(0, "Chaliye") - .1:.2f}); tl.fromTo("#ns i", {{scaleY:0}}, {{scaleY:1, duration:.8, ease:"power2.inOut"}}, {wt(0, "Chaliye"):.2f}); tl.to("#ns", {{opacity:0, duration:.3}}, {S(1) - .8:.2f});')
 sfx("impact-bass-1", 0, .45); sfx("riser", .5, .3)
+H.append('<div id="riico"><img src="assets/img/u_riico.jpg"/></div>')
+J.append(f'tl.fromTo("#riico", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {wt(0, "industrial") - .1:.2f}); tl.to("#riico", {{opacity:0, scale:.9, duration:.3}}, {wt(0, "Chaliye") - .2:.2f});')
+sfx("pop", wt(0, "industrial") - .1, .25)
 
 # ---------- tour (beat-scheduled: every stop holds >= MH s, overlays always leave before the camera moves) ----------
 AW = 34 * PXKM   # camera width at an area (~34 km across)
@@ -210,9 +213,9 @@ def card(a, t, until):
 
 # key roads & towns for relative position (scheme-brochure style); road geometry is snapped to Natural Earth highways
 REF = {
- "sal": ([("BHIWADI", (28.21, 76.86)), ("DHARUHERA", (28.21, 76.79)), ("TIJARA", (27.93, 76.86)), ("DELHI", (28.61, 77.21)), ("HONDA PLANT, TAPUKARA", (28.14, 76.90))], [("NH-48", [(28.45, 77.03), (28.21, 76.79), (27.95, 76.52)])]),
+ "sal": ([("BHIWADI", (28.21, 76.86)), ("TIJARA", (27.93, 76.86)), ("DELHI", (28.61, 77.21)), ("HONDA PLANT, TAPUKARA", (28.14, 76.90))], [("NH-48", [(28.45, 77.03), (28.21, 76.79), (27.95, 76.52)])]),
  "gaj": ([("BIKANER", (28.02, 73.31)), ("KOLAYAT", (27.84, 72.95))], [("NH-11", [(28.02, 73.31), (27.93, 73.10), (27.80, 72.92)])]),
- "bich": ([("PHULERA", (26.87, 75.24)), ("DUDU", (26.68, 75.24)), ("JAIPUR", (26.91, 75.79))], [("NH-48", [(26.91, 75.79), (26.81, 75.54), (26.68, 75.24)])]),
+ "bich": ([("DUDU", (26.68, 75.24)), ("JAIPUR", (26.91, 75.79))], [("NH-48", [(26.91, 75.79), (26.81, 75.54), (26.68, 75.24)])]),
  "fin": ([("SITAPURA", (26.78, 75.85)), ("WALLED CITY", (26.92, 75.82))], [("TONK ROAD", [(26.93, 75.80), (26.86, 75.80), (26.76, 75.83)])]),
  "kunj": ([("BAGRU", (26.81, 75.54)), ("PHAGI", (26.57, 75.54))], [("NH-48", [(26.91, 75.79), (26.81, 75.54), (26.68, 75.24)])]),
  "hukk": ([("SITAPURA", (26.78, 75.85)), ("JAIPUR", (26.91, 75.79))], [("NH-52", [(26.91, 75.79), (26.79, 75.82), (26.60, 75.95), (26.42, 76.05)])]),
@@ -228,6 +231,10 @@ for k in REF:   # stations / airports join the map labels (deduped)
     if k in AIR and not any(t[0] == AIR[k][0] for t in tw): tw.append((AIR[k][0], AIR[k][1], "air"))
 LM = {"pet": ("PACHPADRA REFINERY", "lm_refinery", "HPCL Rajasthan Refinery, Pachpadra"), "fin": ("JAIPUR AIRPORT", "lm_airport", "Jaipur International Airport"),
       "bor": ("JODHPUR", "lm_mehrangarh", "Jodhpur &middot; Mehrangarh"), "gaj": ("BIKANER", "lm_junagarh", "Bikaner &middot; Junagarh Fort")}
+IND = {"sal": [("u_honda", "Honda Cars plant, Tapukara", "~7 KM DOOR"), ("u_maruti", "Maruti Suzuki plant, Gurugram", "AUTO HUB KE PAAS")],
+       "gaj": [("u_ceramic", "Ceramic industry", "REPRESENTATIVE PHOTO")], "bich": [("u_phulera", "Phulera Junction", "~10 KM DOOR")],
+       "kunj": [("u_auto", "Auto &amp; heavy engineering", "REPRESENTATIVE PHOTO")], "rup": [("u_textile", "Textile manufacturing", "REPRESENTATIVE PHOTO")],
+       "son": [("u_factory", "Industrial unit", "REPRESENTATIVE PHOTO")], "gun": [("u_stone", "Kota stone", "REPRESENTATIVE PHOTO")]}
 def hav(a, b):
     la1, lo1, la2, lo2 = map(math.radians, (a[0], a[1], b[0], b[1]))
     return 6371 * 2 * math.asin(math.sqrt(math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2))
@@ -281,6 +288,9 @@ def ref_labels(a, tz, until):
     """screen-space labels for roads/towns with collision avoidance; off-screen towns -> edge arrows"""
     k = a[0]; towns, roads = REF[k]; placed = []
     zx, zy = scr(IP[k], tz); placed.append((zx - 210, zy - 150, zx + 210, zy + 120)); placed.append((0, 0, 1080, 470))
+    npc = (1 if k in LM else 0) + len(IND.get(k, []))
+    if npc >= 2: placed += [(30, 1060, 470, 1400), (610, 1060, 1050, 1400)]
+    elif npc == 1: placed.append((30, 1060, 470, 1400) if (("r" if scr(wp(*[t_[1] for t_ in towns if t_[0] == LM[k][0]][0]), tz)[0] < 540 else "l") if k in LM else ("l" if zx > 540 else "r")) == "l" else (610, 1060, 1050, 1400))
     def free(x0, y0, x1, y1):
         return all(x1 < a0 or x0 > a1 or y1 < b0 or y0 > b1 for a0, b0, a1, b1 in placed)
     out = []
@@ -310,21 +320,30 @@ def ref_labels(a, tz, until):
             sc_ = min([v for v in [((fx1 - zx) / (ex - zx) if ex > zx else (fx0 - zx) / (ex - zx) if ex < zx else 9e9), ((fy1 - zy) / (ey - zy) if ey > zy else (fy0 - zy) / (ey - zy) if ey < zy else 9e9)] if v > 0])
             px, py = zx + (ex - zx) * sc_, zy + (ey - zy) * sc_
             deg = math.degrees(ang)
-            for tries in range(8):
-                box = (px - w_ / 2 - 30, py - 22, px + w_ / 2 + 30, py + 22)
-                if free(*box): break
-                py += 50 if py < 1300 else -50
-            placed.append(box)
-            px = min(max(px, w_ / 2 + 50), 1030 - w_ / 2)
+            px = min(max(px, w_ / 2 + 50), 1030 - w_ / 2); py = min(max(py, 510), 1360); best = None
+            for dy in [0] + [s_ * 48 * n for n in range(1, 18) for s_ in (1, -1)]:
+                for dx in (0, -200, 200):
+                    qx = min(max(px + dx, w_ / 2 + 50), 1030 - w_ / 2); qy = py + dy
+                    if not 500 <= qy <= 1400: continue
+                    box = (qx - w_ / 2 - 30, qy - 22, qx + w_ / 2 + 30, qy + 22)
+                    if free(*box): best = (qx, qy, box); break
+                if best: break
+            if not best: continue
+            px, py, box = best; placed.append(box)
             out.append(f'<div class="rl edge {kind}" style="left:{px:.0f}px;top:{py:.0f}px"><b style="transform:rotate({deg:.0f}deg)">&#10148;</b>{txt}</div>')
+    cards = []
     if k in LM:
         tn, img, cap = LM[k]; ll = [t_[1] for t_ in towns if t_[0] == tn][0]; km = hav(a[2], ll)
-        x, y = scr(wp(*ll), tz); side = "r" if x < 540 else "l"
-        out.append(f'<div class="lmk {side}"><img src="assets/img/{img}.jpg"/><div><b>{cap}</b><span>~{max(1, round(km)):.0f} KM DOOR</span></div></div>')
+        x, y = scr(wp(*ll), tz); cards.append(("r" if x < 540 else "l", img, cap, f"~{max(1, round(km)):.0f} KM DOOR"))
+    for img, cap, sub in IND.get(k, []):
+        side = ("l" if cards[-1][0] == "r" else "r") if cards else ("l" if zx > 540 else "r")
+        cards.append((side, img, cap, sub))
+    for side, img, cap, sub in cards[:2]:
+        out.append(f'<div class="lmk {side}"><img src="assets/img/{img}.jpg"/><div><b>{cap}</b><span>{sub}</span></div></div>')
     H.append(f'<div class="rls" id="rls_{k}">' + "".join(out) + '</div>')
     fo = until - .3
     J.append(f'tl.to("#ref_{k}", {{opacity:1, duration:.4}}, {tz - .1:.2f}); tl.to("#ref_{k} .rd", {{strokeDashoffset:0, duration:.9, ease:"power2.out"}}, {tz:.2f}); tl.fromTo("#ref_{k}", {{opacity:1}}, {{opacity:0, duration:.5, immediateRender:false}}, {fo:.2f});'
-             f'tl.fromTo("#rls_{k} .lmk", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)", immediateRender:false}}, {tz + .9:.2f}); tl.fromTo("#rls_{k} .lmk", {{opacity:1}}, {{opacity:0, duration:.25, immediateRender:false}}, {fo:.2f}); tl.set("#rls_{k} .lmk", {{opacity:0}}, 0);'
+             f'tl.fromTo("#rls_{k} .lmk", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, stagger:.45, ease:"back.out(2)", immediateRender:false}}, {tz + .8:.2f}); tl.fromTo("#rls_{k} .lmk", {{opacity:1}}, {{opacity:0, duration:.25, immediateRender:false}}, {fo:.2f}); tl.set("#rls_{k} .lmk", {{opacity:0}}, 0);'
              f'tl.fromTo("#rls_{k} .rl", {{opacity:0, y:12}}, {{opacity:1, y:0, duration:.3, stagger:.08, ease:"power2.out", immediateRender:false}}, {tz + .3:.2f}); tl.fromTo("#rls_{k} .rl", {{opacity:1}}, {{opacity:0, duration:.25, immediateRender:false}}, {fo:.2f}); tl.set("#rls_{k} .rl", {{opacity:0}}, 0);')
 
 def district_on(nm, t0, arr, t_leave):
@@ -416,7 +435,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .8);')
-H.append('<div id="cred">Sources: RIICO MIS (June 2026), RIICO DAP 2025, Rising Rajasthan &middot; zones indicative, locations &amp; distances approximate (straight-line) &middot; roads/rail: Natural Earth &middot; Imagery: Sentinel-2 cloudless (EOX) &middot; photos: Wikimedia Commons (CC BY-SA)</div>')
+H.append('<div id="cred">Sources: RIICO MIS (June 2026), RIICO DAP 2025, Rising Rajasthan &middot; zones indicative, locations &amp; distances approximate (straight-line) &middot; roads/rail: Natural Earth &middot; Imagery: Sentinel-2 cloudless (EOX) &middot; photos: Wikimedia Commons (CC BY-SA) &amp; respective owners</div>')
 
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0c0b0a}
@@ -447,6 +466,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .lmk img{display:block;width:100%;height:230px;object-fit:cover;border-radius:4px}.lmk b{display:block;margin-top:8px;font:800 22px Mont;color:#fff}.lmk span{display:block;margin-top:2px;font:900 20px Mont;color:#FFC42E;letter-spacing:.08em}
 .dist{position:absolute;left:0;right:0;top:300px;margin:0 auto;width:max-content;max-width:980px;opacity:0;z-index:15;text-align:center;padding:18px 30px;border-radius:8px;background:rgba(10,10,12,.88);border:2px solid #FFD36B}
 .dist b{display:block;font:400 92px/1 Anton;color:#FFD36B;letter-spacing:.03em}.dist span{display:block;margin-top:10px;font:800 26px/1.35 Mont;color:#fff;letter-spacing:.06em}
+#riico{position:absolute;left:40px;top:1150px;width:380px;opacity:0;z-index:14;padding:6px;border-radius:8px;background:rgba(10,10,12,.92);border:2px solid #C9A24A;box-shadow:0 18px 40px rgba(0,0,0,.7)}#riico img{display:block;width:100%;border-radius:4px}
 #flow{position:absolute;left:0;right:0;top:140px;margin:0 auto;width:max-content;opacity:0;z-index:15;display:flex;align-items:center;gap:14px;padding:16px 26px;border-radius:6px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95))}
 #flow span{font:400 40px Anton;color:#F3E6C8}#flow i{font:300 40px Mont;color:#C9A24A;font-style:normal}#flow b{font:400 40px Anton;color:#3CE65A}
 #cta{position:absolute;left:60px;right:60px;top:420px;opacity:0;text-align:center;z-index:16}#cta b{display:block;padding:24px;border-radius:6px;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95));border:1.5px solid #C9A24A;color:#F3E6C8;font:400 72px/1.05 Anton}
