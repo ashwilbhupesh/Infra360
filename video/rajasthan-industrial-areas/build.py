@@ -145,6 +145,78 @@ def card(a, t, until):
     k = a[0]; soon = '<em class="s">COMING SOON</em>' if a[5] == "soon" else '<em>NAYA</em>'
     H.append(f'<div class="card" id="cd_{k}"><small>{a[3].upper()} ZILA {soon}</small><b>{a[1]}</b><span>{a[4]}</span></div>')
     J.append(f'tl.fromTo("#cd_{k}", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.35, ease:"power3.out"}}, {t:.2f}); tl.to("#cd_{k}", {{opacity:0, y:-20, duration:.2}}, {until - .2:.2f});')
+
+# key roads & towns for relative position (scheme-brochure style)
+REF = {
+ "sal": ([("BHIWADI", (28.21, 76.86)), ("DHARUHERA", (28.21, 76.79)), ("TIJARA", (27.93, 76.86)), ("DELHI", (28.61, 77.21))], [("NH-48", [(28.45, 77.03), (28.21, 76.79), (27.95, 76.52)])]),
+ "gaj": ([("BIKANER", (28.02, 73.31)), ("KOLAYAT", (27.84, 72.95))], [("NH-11", [(28.02, 73.31), (27.93, 73.10), (27.80, 72.92)])]),
+ "bich": ([("PHULERA", (26.87, 75.24)), ("DUDU", (26.68, 75.24)), ("JAIPUR", (26.91, 75.79))], [("NH-48", [(26.91, 75.79), (26.81, 75.54), (26.68, 75.24)])]),
+ "fin": ([("JAIPUR AIRPORT", (26.824, 75.812)), ("SITAPURA", (26.78, 75.85)), ("WALLED CITY", (26.92, 75.82))], [("TONK ROAD", [(26.93, 75.80), (26.86, 75.80), (26.76, 75.83)])]),
+ "kunj": ([("BAGRU", (26.81, 75.54)), ("PHAGI", (26.57, 75.54)), ("JAIPUR", (26.91, 75.79))], [("NH-48", [(26.91, 75.79), (26.81, 75.54), (26.68, 75.24)])]),
+ "hukk": ([("SITAPURA", (26.78, 75.85)), ("CHAKSU", (26.60, 75.95)), ("JAIPUR", (26.91, 75.79))], [("NH-52", [(26.91, 75.79), (26.79, 75.82), (26.60, 75.95), (26.42, 76.05)])]),
+ "bor": ([("JODHPUR", (26.24, 73.02)), ("LUNI", (26.00, 73.00))], [("NH-62", [(26.24, 73.02), (26.10, 73.10), (25.90, 73.25)])]),
+ "rup": ([("GULABPURA", (25.90, 74.66)), ("BHILWARA", (25.35, 74.63)), ("AJMER", (26.45, 74.64))], [("NH-48", [(25.35, 74.63), (25.90, 74.66), (26.20, 74.65)])]),
+ "pet": ([("BALOTRA", (25.83, 72.24)), ("PACHPADRA REFINERY", (25.95, 72.27))], [("NH-25", [(25.75, 72.05), (25.83, 72.24), (25.95, 72.45)])]),
+ "son": ([("HAMIRGARH", (25.18, 74.63)), ("BHILWARA", (25.35, 74.63)), ("CHITTORGARH", (24.88, 74.62))], [("NH-48", [(25.35, 74.63), (25.13, 74.63), (24.88, 74.62)])]),
+ "gun": ([("KOTA", (25.18, 75.83)), ("RAMGANJ MANDI", (24.65, 75.94)), ("MORAK", (24.80, 75.98))], [("NH-52", [(25.18, 75.83), (24.95, 75.92), (24.65, 76.05)])]),
+}
+def hav(a, b):
+    la1, lo1, la2, lo2 = map(math.radians, (a[0], a[1], b[0], b[1]))
+    return 6371 * 2 * math.asin(math.sqrt(math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2))
+for k, (towns, roads) in REF.items():
+    g = []
+    for rn, rp in roads:
+        P_ = [wp(*q) for q in rp]
+        g.append(f'<path d="{pd(P_)}" style="fill:none;stroke:#000;stroke-opacity:.6;stroke-width:13;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke"/>'
+                 f'<path class="rd" d="{pd(P_)}" pathLength="1" style="fill:none;stroke:#FFC42E;stroke-width:7;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:1"/>')
+    for tn, ll in towns:
+        p = wp(*ll); g.append(f'<circle class="tdot" cx="{p[0]:.0f}" cy="{p[1]:.0f}" r="1" style="fill:#fff;stroke:#111;stroke-width:3;vector-effect:non-scaling-stroke"/>')
+    SVG.append(f'<g class="refg" id="ref_{k}" style="opacity:0">{"".join(g)}</g>')
+J.append('const _sw = setW; setW = function(w){ _sw(w); document.querySelectorAll(".tdot").forEach(e=>e.setAttribute("r", w/120)); };')
+def ref_labels(a, tz, until):
+    """screen-space labels for roads/towns with simple collision avoidance; off-screen towns -> edge arrows"""
+    k = a[0]; towns, roads = REF[k]; placed = []
+    zx, zy = scr(IP[k], tz); placed.append((zx - 200, zy - 140, zx + 200, zy + 120))   # keep zone + its label clear
+    def free(x0, y0, x1, y1):
+        return all(x1 < a0 or x0 > a1 or y1 < b0 or y0 > b1 for a0, b0, a1, b1 in placed)
+    out = []
+    for rn, rp in roads:
+        P_ = [wp(*q) for q in rp]
+        for fr in (.2, .35, .65, .8, .5, .1, .9):
+            # point along polyline
+            L = [0.0]
+            for u, v in zip(P_, P_[1:]): L.append(L[-1] + math.hypot(v[0] - u[0], v[1] - u[1]))
+            tg = L[-1] * fr; j = next(m for m in range(1, len(L)) if L[m] >= tg); f_ = (tg - L[j - 1]) / max(1e-6, L[j] - L[j - 1])
+            q = (P_[j - 1][0] + (P_[j][0] - P_[j - 1][0]) * f_, P_[j - 1][1] + (P_[j][1] - P_[j - 1][1]) * f_)
+            x, y = scr(q, tz); w_ = len(rn) * 17 + 24
+            box = (x - w_ / 2, y - 22, x + w_ / 2, y + 22)
+            if 60 < x - w_ / 2 and x + w_ / 2 < 1020 and 330 < y < 1380 and free(*box):
+                placed.append(box); out.append(f'<div class="rl road" style="left:{x:.0f}px;top:{y:.0f}px">{rn}</div>'); break
+    for tn, ll in towns:
+        x, y = scr(wp(*ll), tz); km = hav(a[2], ll); txt = f"{tn} &middot; {km:.0f} KM"
+        w_ = len(tn) * 15 + 110
+        if 80 < x < 1000 and 340 < y < 1370:
+            for dy in (-34, 34, -70, 70):
+                box = (x - w_ / 2, y + dy - 20, x + w_ / 2, y + dy + 20)
+                if free(*box): placed.append(box); out.append(f'<div class="rl town" style="left:{min(max(x, w_ / 2 + 20), 1060 - w_ / 2):.0f}px;top:{y + dy:.0f}px">{txt}</div>'); break
+        else:
+            ang = math.atan2(y - zy, x - zx); ex = zx + math.cos(ang) * 2000; ey = zy + math.sin(ang) * 2000
+            # clamp to frame box
+            fx0, fy0, fx1, fy1 = 70, 360, 1010, 1360
+            sc_ = min([v for v in [((fx1 - zx) / (ex - zx) if ex > zx else (fx0 - zx) / (ex - zx) if ex < zx else 9e9), ((fy1 - zy) / (ey - zy) if ey > zy else (fy0 - zy) / (ey - zy) if ey < zy else 9e9)] if v > 0])
+            px, py = zx + (ex - zx) * sc_, zy + (ey - zy) * sc_
+            deg = math.degrees(ang)
+            for tries in range(6):
+                box = (px - w_ / 2 - 30, py - 22, px + w_ / 2 + 30, py + 22)
+                if free(*box): break
+                py += 50 if py < 1300 else -50
+            placed.append(box)
+            px = min(max(px, w_ / 2 + 50), 1030 - w_ / 2)
+            out.append(f'<div class="rl edge" style="left:{px:.0f}px;top:{py:.0f}px"><i style="transform:rotate({deg:.0f}deg)">&#10148;</i>{txt}</div>')
+    H.append(f'<div class="rls" id="rls_{k}">' + "".join(out) + '</div>')
+    J.append(f'tl.to("#ref_{k}", {{opacity:1, duration:.3}}, {tz:.2f}); tl.to("#ref_{k} .rd", {{strokeDashoffset:0, duration:.7, ease:"power2.out"}}, {tz:.2f}); tl.fromTo("#ref_{k}", {{opacity:1}}, {{opacity:0, duration:.3, immediateRender:false}}, {max(until - .5, tz + 1.4):.2f});'
+             f'tl.fromTo("#rls_{k} .rl", {{opacity:0, y:12}}, {{opacity:1, y:0, duration:.3, stagger:.1, ease:"power2.out", immediateRender:false}}, {tz + .35:.2f}); tl.fromTo("#rls_{k} .rl", {{opacity:1}}, {{opacity:0, duration:.2, immediateRender:false}}, {max(until - .5, tz + 1.4):.2f});')
+    J.append(f'tl.set("#rls_{k} .rl", {{opacity:0}}, 0);')
 prev = None
 for i, a in enumerate(IA):
     k = a[0]; t = area_time(a); nxt = area_time(IA[i + 1]) if i + 1 < len(IA) else S(9) - .1
@@ -174,6 +246,7 @@ for i, a in enumerate(IA):
     lab(f"zl_{k}", IP[k], a[1], tz + .2, nxt - .3, tz, dy=-int(ZR / AW * 1080) - 40, cls="big" + (" soon" if a[5] == "soon" else ""))
     card(a, t, nxt)
     sfx("impact-bass-1", tz, .3)
+    ref_labels(a, tz, nxt)
     prev = a
 
 # ---------- 9 real estate: back to top view, all zones glow ----------
@@ -234,6 +307,10 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .card{position:absolute;left:50px;right:50px;top:120px;opacity:0;z-index:15;text-align:center;padding:20px 24px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.92),rgba(34,27,18,.92))}
 .card small{display:inline-flex;align-items:center;gap:12px;font:700 26px Mont;letter-spacing:.22em;color:#F3E6C8}.card em{font-style:normal;padding:3px 10px;border-radius:3px;background:#3CE65A;color:#111;font:900 20px Mont;letter-spacing:.1em}.card em.s{background:#FF9A3C}
 .card b{display:block;margin-top:8px;font:400 76px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}.card span{display:block;margin-top:8px;font:800 28px Mont;letter-spacing:.1em;color:#FF8BE3}
+.rls{position:absolute;inset:0;z-index:9;pointer-events:none}.rl{position:absolute;translate:-50% -50%;white-space:nowrap;opacity:0}
+.rl.road{padding:4px 12px;border-radius:4px;background:#FFC42E;color:#111;font:900 24px Mont;letter-spacing:.06em;box-shadow:0 4px 12px rgba(0,0,0,.6)}
+.rl.town{padding:5px 12px;border-radius:4px;background:rgba(255,255,255,.95);color:#111;font:800 22px Mont;letter-spacing:.04em;box-shadow:0 4px 12px rgba(0,0,0,.6)}
+.rl.edge{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:30px;background:rgba(10,10,12,.88);border:1.5px solid #fff;color:#fff;font:800 22px Mont;letter-spacing:.04em}.rl.edge i{font-style:normal;color:#FFC42E;font-size:24px;display:inline-block}
 #flow{position:absolute;left:0;right:0;top:140px;margin:0 auto;width:max-content;opacity:0;z-index:15;display:flex;align-items:center;gap:14px;padding:16px 26px;border-radius:6px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95))}
 #flow span{font:400 40px Anton;color:#F3E6C8}#flow i{font:300 40px Mont;color:#C9A24A;font-style:normal}#flow b{font:400 40px Anton;color:#3CE65A}
 #cta{position:absolute;left:60px;right:60px;top:420px;opacity:0;text-align:center;z-index:16}#cta b{display:block;padding:24px;border-radius:6px;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95));border:1.5px solid #C9A24A;color:#F3E6C8;font:400 72px/1.05 Anton}
