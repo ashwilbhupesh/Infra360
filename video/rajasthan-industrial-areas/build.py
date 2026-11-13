@@ -34,7 +34,8 @@ PXKM = 256 * 2 ** 13 / 40075 / math.cos(math.radians(26.5))
 SVG, H, J, SFX = [], [], [], []
 def sfx(n, t, v=.3): SFX.append(f'<audio id="sx{len(SFX)}" class="clip" src="assets/sfx/{n}.mp3" data-start="{t:.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v}"></audio>')
 def pd(pts, close=False): return "M" + " L".join(f"{x:.0f} {y:.0f}" for x, y in pts) + (" Z" if close else "")
-GOLD, ZONE, WAVE = "#C9A24A", "#FF3DCB", "#3FE0FF"
+GOLD, ZONE, WAVE = "#C9A24A", "#FFB020", "#BFE6FA"
+SKY = "#A8D8F0"
 TM = json.load(open("tiles_meta.json"))
 
 # industrial areas (north -> south): key, name, latlon, district, tag, status, line, keyword
@@ -56,6 +57,7 @@ IP = {a[0]: wp(*a[2]) for a in IA}
 # ---------- layers ----------
 r = TM["raj"]
 SVG.append('<rect x="-900000" y="-900000" width="2000000" height="2000000" fill="#0c0b0a"/>')
+SVG.append('<g id="base" style="filter:grayscale(0) brightness(1)">')
 SVG.append('<image href="assets/img/bm4.jpg" x="-302848" y="-363008" width="786432" height="786432" preserveAspectRatio="none"/>')
 SVG.append(f'<image href="assets/img/raj8.jpg" x="{r["x"]}" y="{r["y"]}" width="{r["w"]}" height="{r["h"]}" preserveAspectRatio="none" style="filter:saturate(1.2) brightness(.92)"/>')
 SVG.append(f'<image href="assets/img/t_raj8.jpg" x="{r["x"]}" y="{r["y"]}" width="{r["w"]}" height="{r["h"]}" preserveAspectRatio="none" style="mix-blend-mode:multiply;opacity:.75"/>')
@@ -63,6 +65,7 @@ for a in IA:
     m = TM[a[0]]
     SVG.append(f'<g class="patch" id="pt_{a[0]}" style="opacity:0"><image href="assets/img/s_{a[0]}.jpg" x="{m["x"]}" y="{m["y"]}" width="{m["w"]}" height="{m["h"]}" preserveAspectRatio="none"/>')
     SVG.append(f'<image href="assets/img/t_{a[0]}.jpg" x="{m["x"]}" y="{m["y"]}" width="{m["w"]}" height="{m["h"]}" preserveAspectRatio="none" style="mix-blend-mode:multiply;opacity:.7"/></g>')
+SVG.append('</g>')
 ST = json.load(open("data/states.json"))
 def ring(rs): return " ".join(pd([wp(la, lo) for lo, la in rr], True) for rr in rs)
 RAJ = ring(ST["Rajasthan"])
@@ -74,16 +77,16 @@ def gpath(g):
     polys = g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
     return " ".join(pd([wp(la, lo) for lo, la in rr], True) for poly in polys for rr in poly[:1])
 for nm in sorted({a[3] for a in IA}):
-    SVG.append(f'<path class="dz" id="dz_{nm.replace("-", "_")}" d="{gpath(DG[nm]["geometry"])}" style="fill:none;stroke:#FFD36B;stroke-width:3;stroke-dasharray:14 9;vector-effect:non-scaling-stroke;opacity:0"/>')
+    SVG.append(f'<path class="dz" id="dz_{nm.replace("-", "_")}" d="{gpath(DG[nm]["geometry"])}" style="fill:{SKY};fill-opacity:0;stroke:#fff;stroke-width:3;stroke-linejoin:round;vector-effect:non-scaling-stroke;opacity:0"/>')
 # spotlight dim layer: dark everywhere except a hole around the active zone (hole moves via attr)
 SVG.append('<defs><mask id="spot" maskUnits="userSpaceOnUse" x="-900000" y="-900000" width="2000000" height="2000000"><rect x="-900000" y="-900000" width="2000000" height="2000000" fill="#fff"/>'
            '<circle id="hole" cx="0" cy="0" r="1" fill="#000"/></mask>'
-           '<radialGradient id="zg"><stop offset="0" stop-color="#FF3DCB" stop-opacity=".55"/><stop offset=".75" stop-color="#FF3DCB" stop-opacity=".35"/><stop offset="1" stop-color="#FF3DCB" stop-opacity="0"/></radialGradient>'
+           '<radialGradient id="zg"><stop offset="0" stop-color="#FFB020" stop-opacity=".55"/><stop offset=".75" stop-color="#FFB020" stop-opacity=".35"/><stop offset="1" stop-color="#FFB020" stop-opacity="0"/></radialGradient>'
            '<filter id="gs"><feColorMatrix type="saturate" values=".15"/></filter></defs>')
-SVG.append('<rect id="dimr" x="-900000" y="-900000" width="2000000" height="2000000" fill="#0b1220" fill-opacity="0" mask="url(#spot)"/>')
+SVG.append('<rect id="dimr" x="-900000" y="-900000" width="2000000" height="2000000" fill="#0b1a26" fill-opacity="0" mask="url(#spot)"/>')
 ZR = 2.6 * PXKM   # indicative zone radius
 for a in IA:
-    x, y = IP[a[0]]; col = "#FF9A3C" if a[5] == "soon" else ZONE
+    x, y = IP[a[0]]; col = "#FF7A45" if a[5] == "soon" else ZONE
     SVG.append(f'<g class="zone" id="zn_{a[0]}" style="opacity:0"><circle cx="{x:.0f}" cy="{y:.0f}" r="{ZR:.0f}" fill="url(#zg)"/>'
                f'<circle class="zr" cx="{x:.0f}" cy="{y:.0f}" r="{ZR:.0f}" style="fill:none;stroke:{col};stroke-width:5;vector-effect:non-scaling-stroke;filter:drop-shadow(0 0 8px {col})"/></g>')
     for w in range(3):
@@ -158,10 +161,12 @@ def district_intro(nm, t0, t1):
         zoom(t0, c, w, .9)
     sfx("whoosh", t0, .3)
     dn = nm.replace("-", "_"); ks = [a for a in IA if a[3] == nm]
-    J.append(f'tl.to("#dz_{dn}", {{opacity:1, duration:.4}}, {t0 + .5:.2f}); tl.fromTo("#dz_{dn}", {{strokeWidth:3}}, {{strokeWidth:7, duration:.4, yoyo:true, repeat:1, immediateRender:false}}, {t0 + .9:.2f});')
-    names = " &middot; ".join(a[1] for a in ks)
-    H.append(f'<div class="dist" id="di_{dn}"><b>{nm.upper()} ZILA</b><span>{names}</span></div>')
-    J.append(f'tl.fromTo("#di_{dn}", {{opacity:0, scale:.8}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {t0 + .7:.2f}); tl.to("#di_{dn}", {{opacity:0, scale:.95, duration:.25}}, {t1 - .3:.2f});')
+    J.append(f'tl.to("#dz_{dn}", {{opacity:1, duration:.4}}, {t0 + .4:.2f}); tl.to("#dz_{dn}", {{fillOpacity:.6, duration:.6}}, {t0 + .6:.2f}); tl.to("#dz_{dn}", {{fillOpacity:.2, duration:.5}}, {t1 - .4:.2f});')
+    lo, la = DG[nm]["properties"]["label"]; lp = (c[0], wp(la, lo)[1]); fs = min(w / 8.5, w * .78 / (len(nm) * .52))
+    names = " &#183; ".join(a[1] for a in ks)
+    SVG.append(f'<g class="dname" id="dn_{dn}" style="opacity:0"><text x="{lp[0]:.0f}" y="{lp[1]:.0f}" text-anchor="middle" font-family="Anton" font-size="{fs:.0f}" letter-spacing="{fs * .05:.0f}" fill="#fff" stroke="#0b2a3a" stroke-width="{fs * .06:.0f}" paint-order="stroke" style="filter:drop-shadow(0 0 {fs * .1:.0f}px rgba(0,0,0,.5))">{nm.upper()}</text>'
+               f'<text x="{lp[0]:.0f}" y="{lp[1] + fs * .55:.0f}" text-anchor="middle" font-family="Mont" font-weight="800" font-size="{min(fs * .22, w * .82 / (len(names.replace(' &#183; ', ' . ')) * .78)):.0f}" letter-spacing="{fs * .02:.1f}" fill="#0b2a3a">{names}</text></g>')
+    J.append(f'tl.fromTo("#dn_{dn}", {{opacity:0, y:{fs * .2:.0f}}}, {{opacity:1, y:0, duration:.5, ease:"power3.out"}}, {t0 + .8:.2f}); tl.to("#dn_{dn}", {{opacity:0, duration:.3}}, {t1 - .4:.2f});')
     for i, a in enumerate(ks):
         J.append(f'tl.fromTo("#dt_{a[0]}", {{attr:{{r:0}}}}, {{attr:{{r:{w / 70:.0f}}}, duration:.35, ease:"back.out(3)", immediateRender:false}}, {t0 + .9 + i * .15:.2f});')
         waves(a[0], t0 + .9 + i * .15, t1 - .2, w / 14)
@@ -288,6 +293,7 @@ for i, a in enumerate(IA):
     ref_labels(a, tz, nxt)
     prev = a
 
+J.append(f'tl.to("#base", {{filter:"grayscale(0.2) brightness(0.88)", duration:.8}}, {S(1) - .6:.2f}); tl.to("#base", {{filter:"grayscale(0) brightness(1)", duration:.8}}, {S(9) - .5:.2f});')
 # ---------- 9 real estate: back to top view, all zones glow ----------
 zoom(S(9) - .5, OV_C, OV_W, 1.2)
 for i, a in enumerate(IA):
@@ -336,8 +342,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #cred{position:absolute;left:40px;right:40px;top:1660px;text-align:center;font:700 17px Mont;color:rgba(255,255,255,.7);z-index:20;text-shadow:0 2px 6px #000}
 .ml{position:absolute;opacity:0;translate:-50% -50%;white-space:nowrap;z-index:8}
 .ml.sm{padding:4px 10px;border-radius:4px;background:rgba(10,10,12,.85);border:1px solid #3FE0FF;color:#fff;font:800 20px Mont;letter-spacing:.06em}
-.ml.big{padding:12px 26px;border-radius:6px;background:#FF3DCB;color:#fff;font:400 58px/1 Anton;letter-spacing:.03em;box-shadow:0 0 30px rgba(255,61,203,.8),0 10px 30px rgba(0,0,0,.6)}
-.ml.big.soon{background:#FF9A3C;color:#111;box-shadow:0 0 30px rgba(255,154,60,.8),0 10px 30px rgba(0,0,0,.6)}
+.ml.big{padding:10px 24px;border-radius:4px;background:#FFB020;color:#111;font:400 54px/1 Anton;letter-spacing:.04em;box-shadow:0 10px 30px rgba(0,0,0,.55)}
+.ml.big.soon{background:#FF7A45;color:#111}
 #hook{position:absolute;left:50px;right:50px;top:110px;z-index:16;text-align:center;padding:22px 20px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.9),rgba(34,27,18,.9))}
 #hook small{display:block;font:700 30px Mont;letter-spacing:.3em;color:#F3E6C8}#hook b{display:block;margin-top:8px;font:400 92px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}
 #hook span{display:inline-block;margin-top:14px;padding:8px 22px;border-radius:4px;background:#C9A24A;color:#111;font:900 30px Mont;letter-spacing:.14em}
@@ -345,7 +351,7 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #ns i{width:8px;height:300px;border-radius:4px;background:linear-gradient(#3FE0FF,#FF3DCB);transform-origin:50% 0}
 .card{position:absolute;left:50px;right:50px;top:120px;opacity:0;z-index:15;text-align:center;padding:20px 24px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.92),rgba(34,27,18,.92))}
 .card small{display:inline-flex;align-items:center;gap:12px;font:700 26px Mont;letter-spacing:.22em;color:#F3E6C8}.card em{font-style:normal;padding:3px 10px;border-radius:3px;background:#3CE65A;color:#111;font:900 20px Mont;letter-spacing:.1em}.card em.s{background:#FF9A3C}
-.card b{display:block;margin-top:8px;font:400 76px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}.card span{display:block;margin-top:8px;font:800 28px Mont;letter-spacing:.1em;color:#FF8BE3}
+.card b{display:block;margin-top:8px;font:400 76px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}.card span{display:block;margin-top:8px;font:800 28px Mont;letter-spacing:.1em;color:#A8D8F0}
 .rls{position:absolute;inset:0;z-index:9;pointer-events:none}.rl{position:absolute;translate:-50% -50%;white-space:nowrap;opacity:0}
 .rl.road{padding:4px 12px;border-radius:4px;background:#FFC42E;color:#111;font:900 24px Mont;letter-spacing:.06em;box-shadow:0 4px 12px rgba(0,0,0,.6)}
 .rl.town{padding:5px 12px;border-radius:4px;background:rgba(255,255,255,.95);color:#111;font:800 22px Mont;letter-spacing:.04em;box-shadow:0 4px 12px rgba(0,0,0,.6)}
