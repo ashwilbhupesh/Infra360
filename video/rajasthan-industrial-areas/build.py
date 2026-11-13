@@ -61,8 +61,8 @@ SVG.append(f'<image href="assets/img/raj8.jpg" x="{r["x"]}" y="{r["y"]}" width="
 SVG.append(f'<image href="assets/img/t_raj8.jpg" x="{r["x"]}" y="{r["y"]}" width="{r["w"]}" height="{r["h"]}" preserveAspectRatio="none" style="mix-blend-mode:multiply;opacity:.75"/>')
 for a in IA:
     m = TM[a[0]]
-    SVG.append(f'<image href="assets/img/s_{a[0]}.jpg" x="{m["x"]}" y="{m["y"]}" width="{m["w"]}" height="{m["h"]}" preserveAspectRatio="none"/>')
-    SVG.append(f'<image href="assets/img/t_{a[0]}.jpg" x="{m["x"]}" y="{m["y"]}" width="{m["w"]}" height="{m["h"]}" preserveAspectRatio="none" style="mix-blend-mode:multiply;opacity:.7"/>')
+    SVG.append(f'<g class="patch" id="pt_{a[0]}" style="opacity:0"><image href="assets/img/s_{a[0]}.jpg" x="{m["x"]}" y="{m["y"]}" width="{m["w"]}" height="{m["h"]}" preserveAspectRatio="none"/>')
+    SVG.append(f'<image href="assets/img/t_{a[0]}.jpg" x="{m["x"]}" y="{m["y"]}" width="{m["w"]}" height="{m["h"]}" preserveAspectRatio="none" style="mix-blend-mode:multiply;opacity:.7"/></g>')
 ST = json.load(open("data/states.json"))
 def ring(rs): return " ".join(pd([wp(la, lo) for lo, la in rr], True) for rr in rs)
 RAJ = ring(ST["Rajasthan"])
@@ -139,8 +139,33 @@ sfx("impact-bass-1", 0, .45); sfx("riser", .5, .3)
 
 # ---------- tour ----------
 AW = 34 * PXKM   # camera width at an area (~34 km across)
+FIRST = {}
+for a in IA: FIRST.setdefault(a[3], a[0])
 def area_time(a):
-    return wt(a[6], a[7]) - .2 if a[6] == 3 else S(a[6]) + .05
+    return wt(a[6], a[7]) + (.9 if FIRST[a[3]] == a[0] else -.2)
+def dbox(nm):
+    g = DG[nm]["geometry"]; polys = g["coordinates"] if g["type"] == "MultiPolygon" else [g["coordinates"]]
+    pts = [wp(la, lo) for poly in polys for rr in poly[:1] for lo, la in rr]
+    xs = [p[0] for p in pts]; ys = [p[1] for p in pts]; return min(xs), min(ys), max(xs), max(ys)
+def district_intro(nm, t0, t1):
+    x0, y0, x1, y1 = dbox(nm); c = ((x0 + x1) / 2, (y0 + y1) / 2 + (y1 - y0) * .08)
+    w = max((x1 - x0) * 1.35, (y1 - y0) * 1.35 * 1080 / 1300)
+    d = math.hypot(c[0] - CAMS[-1][2][0], c[1] - CAMS[-1][2][1])
+    if d > w * 2.5:
+        mid = ((c[0] + CAMS[-1][2][0]) / 2, (c[1] + CAMS[-1][2][1]) / 2)
+        zoom(t0, mid, max(d * 1.4, w * 2), .55); zoom(t0 + .55, c, w, .6)
+    else:
+        zoom(t0, c, w, .9)
+    sfx("whoosh", t0, .3)
+    dn = nm.replace("-", "_"); ks = [a for a in IA if a[3] == nm]
+    J.append(f'tl.to("#dz_{dn}", {{opacity:1, duration:.4}}, {t0 + .5:.2f}); tl.fromTo("#dz_{dn}", {{strokeWidth:3}}, {{strokeWidth:7, duration:.4, yoyo:true, repeat:1, immediateRender:false}}, {t0 + .9:.2f});')
+    names = " &middot; ".join(a[1] for a in ks)
+    H.append(f'<div class="dist" id="di_{dn}"><b>{nm.upper()} ZILA</b><span>{names}</span></div>')
+    J.append(f'tl.fromTo("#di_{dn}", {{opacity:0, scale:.8}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {t0 + .7:.2f}); tl.to("#di_{dn}", {{opacity:0, scale:.95, duration:.25}}, {t1 - .3:.2f});')
+    for i, a in enumerate(ks):
+        J.append(f'tl.fromTo("#dt_{a[0]}", {{attr:{{r:0}}}}, {{attr:{{r:{w / 70:.0f}}}, duration:.35, ease:"back.out(3)", immediateRender:false}}, {t0 + .9 + i * .15:.2f});')
+        waves(a[0], t0 + .9 + i * .15, t1 - .2, w / 14)
+    sfx("impact-bass-1", t0 + .7, .3)
 def card(a, t, until):
     k = a[0]; soon = '<em class="s">COMING SOON</em>' if a[5] == "soon" else '<em>NAYA</em>'
     H.append(f'<div class="card" id="cd_{k}"><small>{a[3].upper()} ZILA {soon}</small><b>{a[1]}</b><span>{a[4]}</span></div>')
@@ -148,7 +173,7 @@ def card(a, t, until):
 
 # key roads & towns for relative position (scheme-brochure style)
 REF = {
- "sal": ([("BHIWADI", (28.21, 76.86)), ("DHARUHERA", (28.21, 76.79)), ("TIJARA", (27.93, 76.86)), ("DELHI", (28.61, 77.21))], [("NH-48", [(28.45, 77.03), (28.21, 76.79), (27.95, 76.52)])]),
+ "sal": ([("BHIWADI", (28.21, 76.86)), ("DHARUHERA", (28.21, 76.79)), ("TIJARA", (27.93, 76.86)), ("DELHI", (28.61, 77.21)), ("HONDA PLANT, TAPUKARA", (28.14, 76.90))], [("NH-48", [(28.45, 77.03), (28.21, 76.79), (27.95, 76.52)])]),
  "gaj": ([("BIKANER", (28.02, 73.31)), ("KOLAYAT", (27.84, 72.95))], [("NH-11", [(28.02, 73.31), (27.93, 73.10), (27.80, 72.92)])]),
  "bich": ([("PHULERA", (26.87, 75.24)), ("DUDU", (26.68, 75.24)), ("JAIPUR", (26.91, 75.79))], [("NH-48", [(26.91, 75.79), (26.81, 75.54), (26.68, 75.24)])]),
  "fin": ([("JAIPUR AIRPORT", (26.824, 75.812)), ("SITAPURA", (26.78, 75.85)), ("WALLED CITY", (26.92, 75.82))], [("TONK ROAD", [(26.93, 75.80), (26.86, 75.80), (26.76, 75.83)])]),
@@ -160,6 +185,8 @@ REF = {
  "son": ([("HAMIRGARH", (25.18, 74.63)), ("BHILWARA", (25.35, 74.63)), ("CHITTORGARH", (24.88, 74.62))], [("NH-48", [(25.35, 74.63), (25.13, 74.63), (24.88, 74.62)])]),
  "gun": ([("KOTA", (25.18, 75.83)), ("RAMGANJ MANDI", (24.65, 75.94)), ("MORAK", (24.80, 75.98))], [("NH-52", [(25.18, 75.83), (24.95, 75.92), (24.65, 76.05)])]),
 }
+LM = {"pet": ("PACHPADRA REFINERY", "lm_refinery", "HPCL Rajasthan Refinery, Pachpadra"), "fin": ("JAIPUR AIRPORT", "lm_airport", "Jaipur International Airport"),
+      "bor": ("JODHPUR", "lm_mehrangarh", "Jodhpur &middot; Mehrangarh"), "gaj": ("BIKANER", "lm_junagarh", "Bikaner &middot; Junagarh Fort")}
 def hav(a, b):
     la1, lo1, la2, lo2 = map(math.radians, (a[0], a[1], b[0], b[1]))
     return 6371 * 2 * math.asin(math.sqrt(math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2))
@@ -213,15 +240,26 @@ def ref_labels(a, tz, until):
             placed.append(box)
             px = min(max(px, w_ / 2 + 50), 1030 - w_ / 2)
             out.append(f'<div class="rl edge" style="left:{px:.0f}px;top:{py:.0f}px"><i style="transform:rotate({deg:.0f}deg)">&#10148;</i>{txt}</div>')
+    if k in LM:
+        tn, img, cap = LM[k]; ll = [q for n_, q in towns if n_ == tn][0]; km = hav(a[2], ll)
+        x, y = scr(wp(*ll), tz); side = "r" if x < 540 else "l"
+        out.append(f'<div class="lmk {side}"><img src="assets/img/{img}.jpg"/><div><b>{cap}</b><span>~{km:.0f} KM DOOR</span></div></div>')
     H.append(f'<div class="rls" id="rls_{k}">' + "".join(out) + '</div>')
     J.append(f'tl.to("#ref_{k}", {{opacity:1, duration:.3}}, {tz:.2f}); tl.to("#ref_{k} .rd", {{strokeDashoffset:0, duration:.7, ease:"power2.out"}}, {tz:.2f}); tl.fromTo("#ref_{k}", {{opacity:1}}, {{opacity:0, duration:.3, immediateRender:false}}, {max(until - .5, tz + 1.4):.2f});'
+             f'tl.fromTo("#rls_{k} .lmk", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)", immediateRender:false}}, {tz + 1.0:.2f}); tl.fromTo("#rls_{k} .lmk", {{opacity:1}}, {{opacity:0, duration:.2, immediateRender:false}}, {max(until - .5, tz + 2.2):.2f}); tl.set("#rls_{k} .lmk", {{opacity:0}}, 0);'
              f'tl.fromTo("#rls_{k} .rl", {{opacity:0, y:12}}, {{opacity:1, y:0, duration:.3, stagger:.1, ease:"power2.out", immediateRender:false}}, {tz + .35:.2f}); tl.fromTo("#rls_{k} .rl", {{opacity:1}}, {{opacity:0, duration:.2, immediateRender:false}}, {max(until - .5, tz + 1.4):.2f});')
     J.append(f'tl.set("#rls_{k} .rl", {{opacity:0}}, 0);')
 prev = None
 for i, a in enumerate(IA):
-    k = a[0]; t = area_time(a); nxt = area_time(IA[i + 1]) if i + 1 < len(IA) else S(9) - .1
+    k = a[0]; t = area_time(a)
+    if i + 1 < len(IA):
+        b = IA[i + 1]; nxt = (S(b[6]) - .45) if FIRST[b[3]] == b[0] else area_time(b)
+    else: nxt = S(9) - .1
     c = (IP[k][0], IP[k][1] + AW * .12)   # keep the zone slightly above centre (captions sit low)
-    if prev is None:
+    if FIRST[a[3]] == k:
+        district_intro(a[3], S(a[6]) - .45, t)
+        zoom(t - .6, c, AW, .7)
+    elif prev is None:
         zoom(t - .9, c, AW, 1.2)
     else:
         d = math.hypot(c[0] - CAMS[-1][2][0], c[1] - CAMS[-1][2][1])
@@ -231,6 +269,7 @@ for i, a in enumerate(IA):
         else:
             zoom(t - .6, c, AW, .7)
     tz = CAMS[-1][0] + CAMS[-1][1]
+    J.append(f'tl.to("#pt_{k}", {{opacity:1, duration:.5}}, {tz - .7:.2f}); tl.fromTo("#pt_{k}", {{opacity:1}}, {{opacity:0, duration:.4, immediateRender:false}}, {nxt - .2:.2f});')
     sfx("whoosh", t - .8, .3)
     # spotlight hole + zone + district outline
     hx, hy = IP[k]
@@ -240,8 +279,8 @@ for i, a in enumerate(IA):
     J.append(f'tl.to("#dimr", {{attr:{{"fill-opacity":0}}, duration:.3}}, {nxt - .5:.2f});')
     dn = a[3].replace("-", "_")
     if prev is None or prev[3] != a[3]:
-        last = max(j for j, b in enumerate(IA) if b[3] == a[3]); endd = area_time(IA[last + 1]) if last + 1 < len(IA) else S(9) - .1
-        J.append(f'tl.to("#dz_{dn}", {{opacity:1, duration:.4}}, {t - .6:.2f}); tl.to("#dz_{dn}", {{opacity:0, duration:.3}}, {endd - .5:.2f});')
+        last = max(j for j, b in enumerate(IA) if b[3] == a[3]); endd = (S(IA[last + 1][6]) - .45) if last + 1 < len(IA) else S(9) - .1
+        J.append(f'tl.to("#dz_{dn}", {{opacity:0, duration:.3}}, {endd - .5:.2f});')
     waves(k, tz, nxt - .5, ZR * 2.4)
     lab(f"zl_{k}", IP[k], a[1], tz + .2, nxt - .3, tz, dy=-int(ZR / AW * 1080) - 40, cls="big" + (" soon" if a[5] == "soon" else ""))
     card(a, t, nxt)
@@ -286,7 +325,7 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .8);')
-H.append('<div id="cred">Sources: RIICO MIS (June 2026), RIICO DAP 2025, Rising Rajasthan &middot; zones indicative, locations approximate &middot; Imagery: Sentinel-2 cloudless (EOX)</div>')
+H.append('<div id="cred">Sources: RIICO MIS (June 2026), RIICO DAP 2025, Rising Rajasthan &middot; zones indicative, locations approximate &middot; Imagery: Sentinel-2 cloudless (EOX) &middot; photos: Wikimedia Commons (CC BY-SA)</div>')
 
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0c0b0a}
@@ -311,6 +350,10 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .rl.road{padding:4px 12px;border-radius:4px;background:#FFC42E;color:#111;font:900 24px Mont;letter-spacing:.06em;box-shadow:0 4px 12px rgba(0,0,0,.6)}
 .rl.town{padding:5px 12px;border-radius:4px;background:rgba(255,255,255,.95);color:#111;font:800 22px Mont;letter-spacing:.04em;box-shadow:0 4px 12px rgba(0,0,0,.6)}
 .rl.edge{display:flex;align-items:center;gap:8px;padding:6px 14px;border-radius:30px;background:rgba(10,10,12,.88);border:1.5px solid #fff;color:#fff;font:800 22px Mont;letter-spacing:.04em}.rl.edge i{font-style:normal;color:#FFC42E;font-size:24px;display:inline-block}
+.lmk{position:absolute;top:1080px;width:420px;opacity:0;padding:8px 8px 10px;border-radius:8px;background:rgba(10,10,12,.92);border:2px solid #fff;box-shadow:0 18px 40px rgba(0,0,0,.7)}.lmk.l{left:40px}.lmk.r{right:40px}
+.lmk img{display:block;width:100%;height:230px;object-fit:cover;border-radius:4px}.lmk b{display:block;margin-top:8px;font:800 22px Mont;color:#fff}.lmk span{display:block;margin-top:2px;font:900 20px Mont;color:#FFC42E;letter-spacing:.08em}
+.dist{position:absolute;left:0;right:0;top:300px;margin:0 auto;width:max-content;max-width:980px;opacity:0;z-index:15;text-align:center;padding:18px 30px;border-radius:8px;background:rgba(10,10,12,.88);border:2px solid #FFD36B}
+.dist b{display:block;font:400 92px/1 Anton;color:#FFD36B;letter-spacing:.03em}.dist span{display:block;margin-top:10px;font:800 26px/1.35 Mont;color:#fff;letter-spacing:.06em}
 #flow{position:absolute;left:0;right:0;top:140px;margin:0 auto;width:max-content;opacity:0;z-index:15;display:flex;align-items:center;gap:14px;padding:16px 26px;border-radius:6px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95))}
 #flow span{font:400 40px Anton;color:#F3E6C8}#flow i{font:300 40px Mont;color:#C9A24A;font-style:normal}#flow b{font:400 40px Anton;color:#3CE65A}
 #cta{position:absolute;left:60px;right:60px;top:420px;opacity:0;text-align:center;z-index:16}#cta b{display:block;padding:24px;border-radius:6px;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95));border:1.5px solid #C9A24A;color:#F3E6C8;font:400 72px/1.05 Anton}
