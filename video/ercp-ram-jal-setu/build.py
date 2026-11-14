@@ -236,6 +236,7 @@ def photo(pid, img, t0, t1, cap, top=330, w=880, h=560, left=None):
     sfx("whoosh-short", t0, .25)
 photo("phdry", "dry", .9, wt(0, "pyaas") + .05, "AAJ: SOOKHI ZAMEEN", top=520, h=520)
 photo("phdrink", "drink", wt(0, "pyaas") - .05, S(1) + .1, "KAL: HAR GHAR PAANI", top=520, h=520)
+photo("phsetu", "setu", wt(2, "Ram") + .15, S(3) - .1, "&#9679; CURRENT DEVELOPMENT", top=490, w=520, h=760)
 photo("phfield", "fields", wt(5, "2.8") - .1, S(6) - .1, "2.8 LAKH HECTARE &middot; SINCHAI", top=820, h=420)
 
 # ---------- captions ----------
