@@ -2,10 +2,14 @@
 import json, math, os
 P = "proj"
 LINES = [
-    "Rajasthan mein pichhle do saal mein 30 se zyada naye industrial areas khule hain, aur aur bhi aa rahe hain. Chaliye north se south dekhte hain.",
+    "Rajasthan mein RIICO ne pichhle do saal mein 30 se zyada naye industrial areas khole hain, aur Direct Allotment Policy ki wajah se inke plot tezi se allot ho rahe hain.",
+    "Is policy mein Rising Rajasthan MoU wale investors ko plot reserve price par milta hai. Ek plot par ek hi application aaye to seedha allotment, zyada aayein to e-lottery.",
+    "Ab tak 13 phase mein 2,335 plot allot ho chuke hain, aur 14ve phase mein 94 industrial areas ke 4,700 se zyada plot rakhe gaye.",
+    "Sabse zyada demand: Sikar ka Ganeshwar, Alwar ka Rundhsokhri, Jaipur ka Hukkan, aur Balotra ka Borawas-Kalawa. Chaliye north se south dekhte hain.",
     "Sabse upar, Bhiwadi mein Salarpur, Honda, Hero aur Maruti ke paas.",
     "Bikaner mein Gajner, ceramic industry ke liye.",
-    "Jaipur mein Bichoon, Phulera freight corridor ke paas. Kunjbiharipura, Bagru ke paas, auto aur heavy engineering ke liye. Tonk Road par naya Fintech Park, airport ke bilkul paas. Aur Hukkan-Nimodia, Jaipur-Kota highway par.",
+    "Jaipur mein Bichoon, Phulera freight corridor ke paas. Kunjbiharipura, Bagru ke paas, auto aur heavy engineering ke liye. Phagi mein Devnagar, jo abhi ban raha hai. Tonk Road par naya Fintech Park, airport ke bilkul paas. Aur Hukkan-Nimodia, Jaipur-Kota highway par.",
+    "Tonk mein Chosla, Diggi ke paas, jahan plot allotment chal raha hai.",
     "Jodhpur mein Boranada Extension aur Medical Device Park.",
     "Bhilwara mein Rupaheli Textile Park, jahan allotment shuru ho chuka hai.",
     "Balotra mein Petro Zone, refinery ke bilkul paas.",
@@ -21,12 +25,12 @@ if VOICE: PH = json.load(open("rec/phrases.json"))
 else:
     PH = []; t = .3
     for n_, l in enumerate(LINES):
-        d = len(l) / 15 + .15 + (1.0 if not PH else .6); e = t + d
+        d = len(l) / 17 + .15 + (1.0 if not PH else .4); e = t + d
         for key, ta in ANC.items():
             ln, kw = key.split("|")
             if int(ln) == n_ and kw == "__end": e = max(e, ta); continue
             if int(ln) == n_:
-                ci = l.lower().find(kw.lower()); e = max(e, ta + (len(l) - ci) / 15 + .4)
+                ci = l.lower().find(kw.lower()); e = max(e, ta + (len(l) - ci) / 17 + .4)
         PH.append({"s": round(t, 2), "e": round(e, 2), "t": l}); t = e + .3
 def S(k): return PH[k]["s"]
 def E(k): return PH[k]["e"]
@@ -45,7 +49,7 @@ def tchar(k, ci):
 def wt(k, w):
     i = PH[k]["t"].lower().find(w.lower()); assert i >= 0, (k, w)
     return tchar(k, i)
-END = round(E(10) + 1.0, 2)
+END = round(E(14) + 1.0, 2)
 def wp(lat, lon):
     n = 2 ** 13
     return (((lon + 180) / 360 * n) - 5791) * 256, (((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n) - 3466) * 256
@@ -59,17 +63,19 @@ TM = json.load(open("tiles_meta.json"))
 
 # industrial areas (north -> south): key, name, latlon, district, tag, status, line, keyword
 IA = [
-    ("sal", "SALARPUR", (28.10, 76.84), "Khairthal-Tijara", "HONDA &middot; HERO &middot; MARUTI KE PAAS", "new", 1, "Salarpur"),
-    ("gaj", "GAJNER", (27.95, 73.10), "Bikaner", "CERAMIC PARK", "new", 2, "Gajner"),
-    ("bich", "BICHOON", (26.80, 75.30), "Jaipur", "PHULERA FREIGHT CORRIDOR KE PAAS", "new", 3, "Bichoon"),
-    ("kunj", "KUNJBIHARIPURA", (26.74, 75.53), "Jaipur", "AUTO &middot; HEAVY ENGINEERING", "new", 3, "Kunjbiharipura"),
-    ("fin", "FINTECH PARK", (26.84, 75.80), "Jaipur", "TONK ROAD &middot; IT &middot; AI", "soon", 3, "Fintech"),
-    ("hukk", "HUKKAN-NIMODIA", (26.63, 75.88), "Jaipur", "JAIPUR&ndash;KOTA NH-52", "new", 3, "Hukkan"),
-    ("bor", "BORANADA + MEDTECH PARK", (26.15, 73.07), "Jodhpur", "MEDICAL DEVICES &middot; THAR DRY PORT", "new", 4, "Boranada"),
-    ("rup", "RUPAHELI TEXTILE PARK", (25.98, 74.50), "Bhilwara", "ALLOTMENT SHURU", "new", 5, "Rupaheli"),
-    ("pet", "PETRO ZONE", (25.88, 72.30), "Balotra", "REFINERY KE PAAS", "soon", 6, "Petro"),
-    ("son", "SONIYANA", (25.13, 74.58), "Chittorgarh", "GLASS &middot; CERAMIC", "new", 7, "Soniyana"),
-    ("gun", "GUNDI FATEHPUR", (24.82, 75.95), "Kota", "STONE &middot; AGRO", "new", 8, "Gundi"),
+    ("sal", "SALARPUR", (28.10, 76.84), "Khairthal-Tijara", "HONDA &middot; HERO &middot; MARUTI KE PAAS", "new", 4, "Salarpur"),
+    ("gaj", "GAJNER", (27.95, 73.10), "Bikaner", "CERAMIC PARK", "new", 5, "Gajner"),
+    ("bich", "BICHOON", (26.80, 75.30), "Jaipur", "PHULERA FREIGHT CORRIDOR KE PAAS", "new", 6, "Bichoon"),
+    ("kunj", "KUNJBIHARIPURA", (26.74, 75.53), "Jaipur", "AUTO &middot; HEAVY ENGINEERING", "new", 6, "Kunjbiharipura"),
+    ("dev", "DEVNAGAR", (26.655, 75.585), "Jaipur", "PHAGI &middot; ABHI BAN RAHA HAI", "soon", 6, "Devnagar"),
+    ("fin", "FINTECH PARK", (26.84, 75.80), "Jaipur", "TONK ROAD &middot; IT &middot; AI", "soon", 6, "Fintech"),
+    ("hukk", "HUKKAN-NIMODIA", (26.63, 75.88), "Jaipur", "JAIPUR&ndash;KOTA NH-52", "new", 6, "Hukkan"),
+    ("cho", "CHOSLA", (26.44, 75.48), "Tonk", "DIGGI KE PAAS &middot; ALLOTMENT CHAL RAHA", "new", 7, "Chosla"),
+    ("bor", "BORANADA + MEDTECH PARK", (26.15, 73.07), "Jodhpur", "MEDICAL DEVICES &middot; THAR DRY PORT", "new", 8, "Boranada"),
+    ("rup", "RUPAHELI TEXTILE PARK", (25.98, 74.50), "Bhilwara", "ALLOTMENT SHURU", "new", 9, "Rupaheli"),
+    ("pet", "PETRO ZONE", (25.88, 72.30), "Balotra", "REFINERY KE PAAS", "soon", 10, "Petro"),
+    ("son", "SONIYANA", (25.13, 74.58), "Chittorgarh", "GLASS &middot; CERAMIC", "new", 11, "Soniyana"),
+    ("gun", "GUNDI FATEHPUR", (24.82, 75.95), "Kota", "STONE &middot; AGRO", "new", 12, "Gundi"),
 ]
 IP = {a[0]: wp(*a[2]) for a in IA}
 
@@ -166,22 +172,60 @@ def waves(k, t0, t1, big=1.0):
 for i, a in enumerate(IA):
     k = a[0]; t = .5 + i * .07
     J.append(f'tl.fromTo("#dt_{k}", {{opacity:0}}, {{opacity:1, duration:.2}}, {t:.2f});')
-    waves(k, t, S(1) - .4, OV_W / 22)
-    off = {"bich": (-110, -30), "fin": (40, -64), "kunj": (40, 46), "hukk": (120, 6), "bor": (-70, -34), "pet": (-30, 24), "rup": (70, 34)}.get(k, (0, -34))
-    lab(f"ol_{k}", (IP[k][0] + off[0] * OV_W / 1080, IP[k][1]), a[1], t + .1, S(1) - .5, 1.3, dy=off[1], cls="sm")
+    waves(k, t, S(4) - .4, OV_W / 22)
+    off = {"bich": (-110, -30), "fin": (40, -64), "kunj": (40, 46), "hukk": (120, 6), "bor": (-70, -34), "pet": (-30, 24), "rup": (70, 34), "dev": (-60, 64), "cho": (-125, 18)}.get(k, (0, -34))
+    OVL = {"kunj": (905, 1003), "dev": (905, 1046), "cho": (560, 1030)}
+    if k in OVL:
+        px_, py_ = scr(IP[k], 1.3); qx, qy = OVL[k]; ln = math.hypot(qx - px_, qy - py_); ang = math.degrees(math.atan2(qy - py_, qx - px_))
+        H.append(f'<div class="ldr" id="ld_{k}" style="left:{px_:.0f}px;top:{py_:.0f}px;width:{ln:.0f}px;transform:rotate({ang:.1f}deg)"></div>')
+        J.append(f'tl.set("#ld_{k}", {{opacity:0}}, 0); tl.to("#ld_{k}", {{opacity:1, duration:.2}}, {t + .1:.2f}); tl.to("#ld_{k}", {{opacity:0, duration:.2}}, {S(1) - .5:.2f});')
+        H.append(f'<div class="ml sm" id="ol_{k}" style="left:{qx}px;top:{qy}px">{a[1]}</div>')
+        J.append(f'tl.fromTo("#ol_{k}", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)", immediateRender:false}}, {t + .1:.2f}); tl.to("#ol_{k}", {{opacity:0, duration:.2}}, {S(1) - .5:.2f});')
+    else:
+        lab(f"ol_{k}", (IP[k][0] + off[0] * OV_W / 1080, IP[k][1]), a[1], t + .1, S(1) - .3, 1.3, dy=off[1], cls="sm")
     sfx("click-soft", t, .12)
 H.append('<div id="hook"><small>RAJASTHAN KE</small><b>NAYE INDUSTRIAL AREAS</b><span>&#128278; SAVE KAR LO</span></div>')
-J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.fromTo("#hook span", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)", immediateRender:false}}, 1.3); tl.to("#hook span", {{scale:1.08, duration:.35, yoyo:true, repeat:5}}, 1.7); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .8:.2f});')
+J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.fromTo("#hook span", {{opacity:0, scale:1.4}}, {{opacity:1, scale:1, duration:.35, ease:"back.out(2)", immediateRender:false}}, 1.3); tl.to("#hook span", {{scale:1.08, duration:.35, yoyo:true, repeat:5}}, 1.7); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .35:.2f});')
 H.append('<div id="ns"><b>NORTH</b><i></i><b>SOUTH</b></div>')
-J.append(f'tl.fromTo("#ns", {{opacity:0}}, {{opacity:1, duration:.3}}, {wt(0, "Chaliye") - .1:.2f}); tl.fromTo("#ns i", {{scaleY:0}}, {{scaleY:1, duration:.8, ease:"power2.inOut"}}, {wt(0, "Chaliye"):.2f}); tl.to("#ns", {{opacity:0, duration:.3}}, {S(1) - .8:.2f});')
+J.append(f'tl.fromTo("#ns", {{opacity:0}}, {{opacity:1, duration:.3}}, {wt(3, "Chaliye") - .1:.2f}); tl.fromTo("#ns i", {{scaleY:0}}, {{scaleY:1, duration:.8, ease:"power2.inOut"}}, {wt(3, "Chaliye"):.2f}); tl.to("#ns", {{opacity:0, duration:.3}}, {S(4) - .8:.2f});')
 sfx("impact-bass-1", 0, .45); sfx("riser", .5, .3)
 H.append('<div id="riico"><img src="assets/img/u_riico.jpg"/></div>')
-J.append(f'tl.fromTo("#riico", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {wt(0, "industrial") - .1:.2f}); tl.to("#riico", {{opacity:0, scale:.9, duration:.3}}, {wt(0, "Chaliye") - .2:.2f});')
+J.append(f'tl.fromTo("#riico", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, {wt(0, "industrial") - .1:.2f}); tl.to("#riico", {{opacity:0, scale:.9, duration:.3}}, {S(1) - .3:.2f});')
 sfx("pop", wt(0, "industrial") - .1, .25)
+
+# ---------- 1 policy · 2 numbers · 3 demand ----------
+J.append(f'tl.to("#dim", {{opacity:.42, duration:.4}}, {S(1) - .3:.2f}); tl.to("#dim", {{opacity:0, duration:.4}}, {S(3) - .2:.2f});')
+H.append('<div class="pan" id="pol"><small>RIICO &middot; DIRECT ALLOTMENT POLICY</small>'
+         '<div class="row r1"><em>1 APPLICATION</em><i>&rarr;</i><b>SEEDHA ALLOTMENT</b></div>'
+         '<div class="row r2"><em>2+ APPLICATIONS</em><i>&rarr;</i><b class="l">E-LOTTERY</b></div>'
+         '<span>Rising Rajasthan MoU investors &middot; reserve price par</span></div>')
+J.append(f'tl.fromTo("#pol", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(1) - .1:.2f}); tl.set("#pol .row", {{opacity:0}}, 0);'
+         f'tl.fromTo("#pol .r1", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.4, ease:"power3.out", immediateRender:false}}, {wt(1, "Ek plot") - .1:.2f});'
+         f'tl.fromTo("#pol .r2", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.4, ease:"power3.out", immediateRender:false}}, {wt(1, "zyada aayein") - .1:.2f});'
+         f'tl.to("#pol", {{opacity:0, y:-20, duration:.3}}, {S(2) - .25:.2f});')
+sfx("whoosh", S(1) - .1, .3); sfx("click-soft", wt(1, "Ek plot"), .3); sfx("click-soft", wt(1, "zyada aayein"), .3)
+H.append('<div class="pan" id="num"><small>DIRECT ALLOTMENT &middot; AB TAK</small><div class="nb"><div><b class="c" data-v="2335">0</b><span>PLOTS ALLOT<br/>13 PHASES MEIN</span></div>'
+         '<div><b class="c" data-v="4700">0</b><span>PLOTS &middot; PHASE 14<br/>94 INDUSTRIAL AREAS</span></div></div></div>')
+J.append(f'tl.fromTo("#num", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(2) - .1:.2f}); tl.to("#num", {{opacity:0, y:-20, duration:.3}}, {S(3) - .3:.2f});')
+for j_, (kw, v, suf) in enumerate([("2,335", 2335, ""), ("4,700", 4700, "+")]):
+    J.append(f'(function(){{ const el = document.querySelectorAll("#num .c")[{j_}]; const o = {{v:0}}; el.parentNode.style.opacity = 0; tl.to(el.parentNode, {{opacity:1, duration:.3}}, {wt(2, kw) - .4:.2f}); tl.to(o, {{v:{v}, duration:1.1, ease:"power2.out", onUpdate:()=>{{ el.textContent = Math.round(o.v).toLocaleString("en-IN") + (o.v >= {v} - .5 ? "{suf}" : ""); }}}}, {wt(2, kw) - .4:.2f}); }})();')
+    sfx("riser", wt(2, kw) - .5, .2)
+DEM = [("GANESHWAR", "Sikar", 46, "Ganeshwar"), ("RUNDHSOKHRI", "Alwar", 40, "Rundhsokhri"), ("HUKKAN", "Jaipur", 31, "Hukkan"), ("BORAWAS-KALAWA", "Balotra", 28, "Borawas")]
+rows = "".join(f'<div class="dr" id="dr{j_}"><em>{n}</em><small>{d.upper()}</small><div class="bt"><i style="width:{v / 46 * 100:.0f}%"></i></div><b>{v}</b></div>' for j_, (n, d, v, kw) in enumerate(DEM))
+H.append(f'<div class="pan" id="dem"><small>SABSE ZYADA DEMAND &middot; PLOTS ALLOT / OFFER</small>{rows}<span>RIICO data, FY 2025-26 (via news reports)</span></div>')
+J.append(f'tl.fromTo("#dem", {{opacity:0, y:-30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(3) - .1:.2f}); tl.to("#dem", {{opacity:0, y:-20, duration:.3}}, {wt(3, "Chaliye") - .1:.2f}); tl.set("#dem .dr", {{opacity:0}}, 0);')
+for j_, (n, d, v, kw) in enumerate(DEM):
+    t_ = wt(3, kw) - .15
+    J.append(f'tl.fromTo("#dr{j_}", {{opacity:0, x:-30}}, {{opacity:1, x:0, duration:.35, immediateRender:false}}, {t_:.2f}); tl.fromTo("#dr{j_} .bt i", {{scaleX:0}}, {{scaleX:1, duration:.7, ease:"power3.out", immediateRender:false}}, {t_:.2f});')
+    SVG.append(f'<path id="dh{j_}" d="{gpath(DG[d]["geometry"])}" style="fill:#FFC42E;fill-opacity:0;stroke:#FFE08A;stroke-width:3;stroke-opacity:0;vector-effect:non-scaling-stroke"/>')
+    J.append(f'tl.to("#dh{j_}", {{fillOpacity:.5, strokeOpacity:1, duration:.35}}, {t_:.2f}); tl.to("#dh{j_}", {{fillOpacity:0, strokeOpacity:0, duration:.4}}, {wt(3, "Chaliye") - .1:.2f});')
+    lo_, la_ = DG[d]["properties"]["label"]
+    lab(f"dhl{j_}", wp(la_, lo_), d.upper(), t_ + .05, wt(3, "Chaliye"), 1.3, dy=0, cls="dhl")
+    sfx("impact-bass-1", t_, .22)
 
 # ---------- tour (beat-scheduled: every stop holds >= MH s, overlays always leave before the camera moves) ----------
 AW = 34 * PXKM   # camera width at an area (~34 km across)
-MH, DH = 2.5, 1.2   # min hold at an area / at a district view
+MH, DH = 2.3, 1.1   # min hold at an area / at a district view
 FIRST = {}
 for a in IA: FIRST.setdefault(a[3], a[0])
 def dbox(nm):
@@ -194,17 +238,19 @@ def dview(nm):
 def acam(k): return (IP[k][0], IP[k][1] + AW * .12), AW
 # connectivity: nearest key station + airport (straight-line km)
 ST_ = {"sal": ("REWARI JN", (28.196, 76.617)), "gaj": ("BIKANER JN", (28.012, 73.318)), "bich": ("PHULERA JN", (26.874, 75.243)), "kunj": ("JAIPUR JN", (26.920, 75.788)),
-       "fin": ("DURGAPURA STN", (26.851, 75.785)), "hukk": ("CHAKSU STN", (26.604, 75.946)), "bor": ("JODHPUR JN", (26.284, 73.022)), "rup": ("GULABPURA STN", (25.904, 74.660)),
+       "dev": ("JAIPUR JN", (26.920, 75.788)), "fin": ("DURGAPURA STN", (26.851, 75.785)), "hukk": ("CHAKSU STN", (26.604, 75.946)), "bor": ("JODHPUR JN", (26.284, 73.022)), "rup": ("GULABPURA STN", (25.904, 74.660)),
        "pet": ("BALOTRA JN", (25.836, 72.240)), "son": ("CHITTORGARH JN", (24.882, 74.640)), "gun": ("RAMGANJ MANDI JN", (24.648, 75.940))}
 AIR = {"sal": ("DELHI AIRPORT", (28.556, 77.100)), "gaj": ("BIKANER AIRPORT", (28.071, 73.207)), "bich": ("JAIPUR AIRPORT", (26.824, 75.812)), "kunj": ("JAIPUR AIRPORT", (26.824, 75.812)),
-       "fin": ("JAIPUR AIRPORT", (26.824, 75.812)), "hukk": ("JAIPUR AIRPORT", (26.824, 75.812)), "bor": ("JODHPUR AIRPORT", (26.251, 73.049)), "rup": ("KISHANGARH AIRPORT", (26.591, 74.812)),
+       "fin": ("JAIPUR AIRPORT", (26.824, 75.812)), "dev": ("JAIPUR AIRPORT", (26.824, 75.812)), "cho": ("JAIPUR AIRPORT", (26.824, 75.812)), "hukk": ("JAIPUR AIRPORT", (26.824, 75.812)), "bor": ("JODHPUR AIRPORT", (26.251, 73.049)), "rup": ("KISHANGARH AIRPORT", (26.591, 74.812)),
        "pet": ("JODHPUR AIRPORT", (26.251, 73.049)), "son": ("UDAIPUR AIRPORT", (24.618, 73.896))}
 IC = {"road": '<svg viewBox="0 0 24 24"><path d="M9 2 5 22M15 2l4 20" stroke="currentColor" stroke-width="2.4" fill="none"/><path d="M12 3v3M12 10v4M12 18v3" stroke="currentColor" stroke-width="2.4"/></svg>',
       "rail": '<svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M5 10h14" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="13.5" r="1.3" fill="currentColor"/><circle cx="15" cy="13.5" r="1.3" fill="currentColor"/><path d="M8 17l-3 5M16 17l3 5" stroke="currentColor" stroke-width="2.2"/></svg>',
       "air": '<svg viewBox="0 0 24 24"><path fill="currentColor" d="M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V8.5l-8 5v2l8-2.5V18l-2 1.5V21l3.5-1 3.5 1v-1.5L13 18v-5z" transform="translate(.5 0)"/></svg>'}
+CROAD = {"dev": "NH-48 &middot; ~16 KM", "cho": "JAIPUR&ndash;DIGGI ROAD"}
 def card(a, t, until):
     k = a[0]; soon = '<em class="s">COMING SOON</em>' if a[5] == "soon" else '<em>NAYA</em>'
-    ch = [f'<i>{IC["road"]}{REF[k][1][0][0]}</i>']
+    rdn = CROAD.get(k) or (REF[k][1][0][0] if REF[k][1] else None)
+    ch = [f'<i>{IC["road"]}{rdn}</i>'] if rdn else []
     if k in ST_: ch.append(f'<i>{IC["rail"]}{ST_[k][0]} &middot; ~{max(1, round(hav(a[2], ST_[k][1]))):.0f} KM</i>')
     if k in AIR: ch.append(f'<i>{IC["air"]}{AIR[k][0]} &middot; ~{max(1, round(hav(a[2], AIR[k][1]))):.0f} KM</i>')
     H.append(f'<div class="card" id="cd_{k}"><small>{a[3].upper()} ZILA {soon}</small><b>{a[1]}</b><span>{a[4]}</span><div class="conn">{"".join(ch)}</div></div>')
@@ -219,6 +265,8 @@ REF = {
  "fin": ([("SITAPURA", (26.78, 75.85)), ("WALLED CITY", (26.92, 75.82))], [("TONK ROAD", [(26.93, 75.80), (26.86, 75.80), (26.76, 75.83)])]),
  "kunj": ([("BAGRU", (26.81, 75.54)), ("PHAGI", (26.57, 75.54))], [("NH-48", [(26.91, 75.79), (26.81, 75.54), (26.68, 75.24)])]),
  "hukk": ([("SITAPURA", (26.78, 75.85)), ("JAIPUR", (26.91, 75.79))], [("NH-52", [(26.91, 75.79), (26.79, 75.82), (26.60, 75.95), (26.42, 76.05)])]),
+ "dev": ([("PHAGI", (26.57, 75.54)), ("BAGRU", (26.81, 75.54)), ("JAIPUR", (26.91, 75.79))], []),
+ "cho": ([("DIGGI", (26.377, 75.437)), ("MALPURA", (26.28, 75.37)), ("PHAGI", (26.57, 75.54)), ("JAIPUR", (26.91, 75.79))], []),
  "bor": ([("JODHPUR", (26.24, 73.02)), ("LUNI", (26.00, 73.00))], [("NH-62", [(26.24, 73.02), (26.10, 73.10), (25.90, 73.25)])]),
  "rup": ([("BHILWARA", (25.35, 74.63)), ("AJMER", (26.45, 74.64))], [("NH-48", [(25.35, 74.63), (25.90, 74.66), (26.20, 74.65)])]),
  "pet": ([("PACHPADRA REFINERY", (25.95, 72.27))], [("NH-25", [(25.75, 72.05), (25.83, 72.24), (25.95, 72.45)])]),
@@ -359,7 +407,7 @@ def district_on(nm, t0, arr, t_leave):
     sfx("whoosh", t0, .3); sfx("impact-bass-1", arr - .3, .3)
 
 # ---- schedule beats ----
-sched = []; tcur = S(1) - .7
+sched = []; tcur = S(4) - .7
 for i, a in enumerate(IA):
     k = a[0]
     if FIRST[a[3]] == k:
@@ -371,9 +419,9 @@ for i, a in enumerate(IA):
         ta = max(wt(a[6], a[7]) - 1.0, tcur)
     c, w = acam(k); arr = zoom(ta, c, w); ta = CAMS[-1][0]
     sched.append(("a", k, ta, arr)); tcur = arr + MH
-T_OUT = max(S(9) - .4, tcur)
+T_OUT = max(S(13) - .4, tcur)
 if not VOICE:
-    json.dump({f"{x[6]}|{x[7]}": round(t0_ + (.3 if FIRST[x[3]] == x[0] else 1.0), 2) for x in IA for kd, kk, t0_, arr_ in sched if kd == "a" and kk == x[0]} | {"8|__end": round(T_OUT + .1, 2)}, open("anchors.json", "w"))
+    json.dump({f"{x[6]}|{x[7]}": round(t0_ + (.3 if FIRST[x[3]] == x[0] else 1.0), 2) for x in IA for kd, kk, t0_, arr_ in sched if kd == "a" and kk == x[0]} | {"12|__end": round(T_OUT + .1, 2)}, open("anchors.json", "w"))
 for j, (kind, key, t0, arr) in enumerate(sched):
     nb = sched[j + 1][2] if j + 1 < len(sched) else T_OUT
     if kind == "d":
@@ -396,23 +444,23 @@ for j, (kind, key, t0, arr) in enumerate(sched):
     sfx("whoosh", t0, .25); sfx("impact-bass-1", arr, .3)
     ref_labels(a, arr, nb)
 
-J.append(f'tl.to("#base", {{filter:"grayscale(0.2) brightness(0.88)", duration:.8}}, {S(1) - .6:.2f}); tl.to("#base", {{filter:"grayscale(0) brightness(1)", duration:.8}}, {T_OUT:.2f});')
+J.append(f'tl.to("#base", {{filter:"grayscale(0.2) brightness(0.88)", duration:.8}}, {S(4) - .6:.2f}); tl.to("#base", {{filter:"grayscale(0) brightness(1)", duration:.8}}, {T_OUT:.2f});')
 # ---------- 9 real estate: back to top view, all zones glow ----------
 zoom(T_OUT, OV_C, OV_W)
 for i, a in enumerate(IA):
-    waves(a[0], CAMS[-1][0] + CAMS[-1][1] - .3 + i * .05, S(10) - .1, OV_W / 18)
+    waves(a[0], CAMS[-1][0] + CAMS[-1][1] - .3 + i * .05, S(14) - .1, OV_W / 18)
 H.append('<div id="flow"><span>INDUSTRY</span><i>&rarr;</i><span>NAUKRI</span><i>&rarr;</i><b>GHAR &amp; PLOT KI DEMAND &#9650;</b></div>')
-J.append(f'tl.fromTo("#flow", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.4, ease:"power3.out"}}, {CAMS[-1][0] + CAMS[-1][1] - .2:.2f}); tl.fromTo("#flow b", {{opacity:0, x:30}}, {{opacity:1, x:0, duration:.4, immediateRender:false}}, {max(wt(9, "ghar") - .1, CAMS[-1][0] + CAMS[-1][1] + .3):.2f}); tl.to("#flow", {{opacity:0, duration:.3}}, {S(10) - .1:.2f});')
-sfx("riser", S(9), .3)
+J.append(f'tl.fromTo("#flow", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.4, ease:"power3.out"}}, {CAMS[-1][0] + CAMS[-1][1] - .2:.2f}); tl.fromTo("#flow b", {{opacity:0, x:30}}, {{opacity:1, x:0, duration:.4, immediateRender:false}}, {max(wt(13, "ghar") - .1, CAMS[-1][0] + CAMS[-1][1] + .3):.2f}); tl.to("#flow", {{opacity:0, duration:.3}}, {S(14) - .1:.2f});')
+sfx("riser", S(13), .3)
 
 # ---------- 10 CTA ----------
 H.append('<div id="cta"><b>AAPKE ZILE MEIN KAUNSA INDUSTRIAL AREA AA RAHA HAI?</b><span>COMMENT KARO</span></div>')
-J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(10):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(10):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(10, "Comment"):.2f});')
-sfx("sparkle", wt(10, "Comment"), .3)
+J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(14):.2f}); tl.fromTo("#cta", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(14):.2f}); tl.to("#cta span", {{scale:1.06, duration:.4, yoyo:true, repeat:3}}, {wt(14, "Comment"):.2f});')
+sfx("sparkle", wt(14, "Comment"), .3)
 
 J.insert(0, cam_js())
 # ---------- captions ----------
-HI = ["30 se zyada", "north se south", "Salarpur", "Gajner", "Bichoon", "Fintech Park", "Kunjbiharipura", "Hukkan-Nimodia", "Boranada Extension", "Medical Device Park", "Rupaheli Textile Park", "Petro Zone", "Soniyana", "Gundi Fatehpur", "Comment"]
+HI = ["30 se zyada", "north se south", "Direct Allotment Policy", "seedha allotment", "e-lottery", "2,335 plot", "4,700 se zyada", "Ganeshwar", "Rundhsokhri", "Borawas-Kalawa", "Salarpur", "Gajner", "Bichoon", "Fintech Park", "Kunjbiharipura", "Hukkan-Nimodia", "Devnagar", "Chosla", "Boranada Extension", "Medical Device Park", "Rupaheli Textile Park", "Petro Zone", "Soniyana", "Gundi Fatehpur", "Comment"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -467,6 +515,16 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .dist{position:absolute;left:0;right:0;top:300px;margin:0 auto;width:max-content;max-width:980px;opacity:0;z-index:15;text-align:center;padding:18px 30px;border-radius:8px;background:rgba(10,10,12,.88);border:2px solid #FFD36B}
 .dist b{display:block;font:400 92px/1 Anton;color:#FFD36B;letter-spacing:.03em}.dist span{display:block;margin-top:10px;font:800 26px/1.35 Mont;color:#fff;letter-spacing:.06em}
 #riico{position:absolute;left:40px;top:1150px;width:380px;opacity:0;z-index:14;padding:6px;border-radius:8px;background:rgba(10,10,12,.92);border:2px solid #C9A24A;box-shadow:0 18px 40px rgba(0,0,0,.7)}#riico img{display:block;width:100%;border-radius:4px}
+.pan{position:absolute;left:50px;right:50px;top:120px;opacity:0;z-index:16;text-align:center;padding:24px 28px;border-radius:8px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95));box-shadow:0 24px 60px rgba(0,0,0,.6)}
+.pan>small{display:block;font:800 26px Mont;letter-spacing:.2em;color:#C9A24A}.pan>span{display:block;margin-top:16px;font:700 22px Mont;letter-spacing:.06em;color:rgba(243,230,200,.75)}
+#pol .row{display:flex;align-items:center;justify-content:center;gap:18px;margin-top:20px}#pol em{font:400 46px Anton;font-style:normal;color:#F3E6C8;letter-spacing:.03em}#pol i{font:300 46px Mont;color:#C9A24A;font-style:normal}
+#pol b{padding:6px 18px;border-radius:4px;background:#3CE65A;color:#111;font:400 46px Anton;letter-spacing:.03em}#pol b.l{background:#FFB020}
+#num .nb{display:flex;justify-content:space-around;margin-top:16px}#num .nb b{display:block;font:400 104px/1 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}#num .nb span{display:block;margin-top:8px;font:800 22px/1.35 Mont;letter-spacing:.08em;color:#F3E6C8}
+#dem .dr{display:grid;grid-template-columns:300px 1fr 70px;grid-template-rows:auto auto;align-items:center;column-gap:16px;margin-top:14px;text-align:left}#dem .dr em{font:400 40px/1 Anton;font-style:normal;color:#F3E6C8;letter-spacing:.02em}
+#dem .dr small{grid-column:1;grid-row:2;font:800 18px Mont;letter-spacing:.14em;color:#C9A24A}#dem .bt{grid-column:2;grid-row:1/3;height:26px;border-radius:13px;background:rgba(255,255,255,.08);overflow:hidden}#dem .bt i{display:block;height:100%;border-radius:13px;background:linear-gradient(90deg,#C9A24A,#FFD36B);transform-origin:0 50%}
+#dem .dr b{grid-column:3;grid-row:1/3;font:400 46px Anton;color:#FFD36B;text-align:right}
+.ldr{position:absolute;height:2px;background:#3FE0FF;transform-origin:0 50%;z-index:7;opacity:0}
+.ml.dhl{padding:4px 12px;border-radius:4px;background:#FFC42E;color:#111;font:900 22px Mont;letter-spacing:.08em;box-shadow:0 6px 16px rgba(0,0,0,.5)}
 #flow{position:absolute;left:0;right:0;top:140px;margin:0 auto;width:max-content;opacity:0;z-index:15;display:flex;align-items:center;gap:14px;padding:16px 26px;border-radius:6px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95))}
 #flow span{font:400 40px Anton;color:#F3E6C8}#flow i{font:300 40px Mont;color:#C9A24A;font-style:normal}#flow b{font:400 40px Anton;color:#3CE65A}
 #cta{position:absolute;left:60px;right:60px;top:420px;opacity:0;text-align:center;z-index:16}#cta b{display:block;padding:24px;border-radius:6px;background:linear-gradient(135deg,rgba(14,12,9,.95),rgba(34,27,18,.95));border:1.5px solid #C9A24A;color:#F3E6C8;font:400 72px/1.05 Anton}
