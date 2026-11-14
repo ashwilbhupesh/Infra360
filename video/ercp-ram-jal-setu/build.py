@@ -8,7 +8,7 @@ LINES = [
     "Plan yeh hai ki Chambal aur uski nadiyon, Parbati aur Kalisindh, ka extra paani barrages aur canals se poorvi Rajasthan tak pahunchaya jaaye.",
     "Jaipur, Ajmer, Tonk, Kota, Bundi, Baran, Jhalawar, Sawai Madhopur, Dausa, Karauli, Dholpur, Bharatpur, Deeg, Alwar, Khairthal-Tijara, Kotputli-Behror aur Beawar.",
     "Karib 3.25 crore logon ko peene ka paani, aur lagbhag 2.8 lakh hectare zameen ko sinchai.",
-    "Real estate ka seedha funda hai, jahan paani, wahan growth.",
+    "Real estate ka seedha funda hai, jahan paani, wahan growth.",  # spoken BEFORE line 5 in the recording (order swapped)
     "Is project ka 90 percent paisa Kendra de raha hai, aur iski lagat karib 91 hazaar crore hai.",
     "Par kaam abhi shuruaati daur mein hai. July 2026 tak sirf karib 4 percent paisa kharch hua hai.",
     "Aapke zile mein paani ki kya situation hai? Comment karo.",
@@ -25,6 +25,8 @@ def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower()); assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
 END = round(E(9) + 1.0, 2)
+ORD = sorted(range(len(PH)), key=lambda k: PH[k]["s"])
+def NX(k): j = ORD.index(k); return PH[ORD[j + 1]]["s"] if j + 1 < len(ORD) else END
 def wp(lat, lon):
     n = 2 ** 13
     return (((lon + 180) / 360 * n) - 5791) * 256, (((1 - math.asinh(math.tan(math.radians(lat))) / math.pi) / 2 * n) - 3466) * 256
@@ -182,32 +184,32 @@ plane(S(4) - .3, rx, sc, x, y, 1.0)
 for i, (nm, la, lo) in enumerate(DIST):
     t = wt(4, nm.split("-")[0]) - .08
     J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 15:.0f}}}}}, {{attr:{{r:{U * 60:.0f}}}, duration:.45, ease:"power3.out", immediateRender:false}}, {t:.2f});')
-    bb(f"dl{i}", t, S(6) - .1); sfx("click-soft", t, .18)
-    J.append(f'tl.to("#dz{i}", {{fillOpacity:.55, strokeOpacity:1, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:.22, duration:.5}}, {t + .35:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.35, duration:.4}}, {S(6) - .1:.2f});')
-lux(2, "<b>17</b> ZILE", S(4) + .1, S(5), 60, 300)
+    bb(f"dl{i}", t, NX(4) - .1); sfx("click-soft", t, .18)
+    J.append(f'tl.to("#dz{i}", {{fillOpacity:.55, strokeOpacity:1, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:.22, duration:.5}}, {t + .35:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.35, duration:.4}}, {NX(4) - .1:.2f});')
+lux(2, "<b>17</b> ZILE", S(4) + .1, NX(4), 60, 300)
 
 # ---------- 5 numbers + greenery ----------
 for i in range(len(DIST)):
     t = wt(5, "2.8") - .2 + i * .07
-    J.append(f'tl.to("#dz{i}", {{fill:"{GRN}", fillOpacity:.5, strokeOpacity:.9, duration:.5}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.3, duration:.4}}, {S(6) + .5:.2f});')
+    J.append(f'tl.to("#dz{i}", {{fill:"{GRN}", fillOpacity:.5, strokeOpacity:.9, duration:.5}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.3, duration:.4}}, {NX(5) + .3:.2f});')
 H.append('<div id="crops">' + "".join(f'<i style="left:{k * 36}px;height:{60 + (k * 37) % 70}px"></i>' for k in range(31)) + '</div>')
-J.append(f'tl.set("#crops", {{opacity:1}}, {wt(5, "2.8") - .3:.2f}); tl.fromTo("#crops i", {{scaleY:0}}, {{scaleY:1, duration:.6, stagger:{{each:.03, from:"center"}}, ease:"back.out(2)", immediateRender:false}}, {wt(5, "2.8") - .3:.2f}); tl.to("#crops", {{opacity:0, duration:.4}}, {S(6) - .1:.2f});')
+J.append(f'tl.set("#crops", {{opacity:1}}, {wt(5, "2.8") - .3:.2f}); tl.fromTo("#crops i", {{scaleY:0}}, {{scaleY:1, duration:.6, stagger:{{each:.03, from:"center"}}, ease:"back.out(2)", immediateRender:false}}, {wt(5, "2.8") - .3:.2f}); tl.to("#crops", {{opacity:0, duration:.4}}, {NX(5) - .1:.2f});')
 
 H.append('<div id="nums"><div class="n1"><b>3.25 CRORE</b><span>LOG &middot; PEENE KA PAANI</span></div><div class="n2"><b>2.8 LAKH HA</b><span>ZAMEEN &middot; SINCHAI</span></div></div>')
-J.append(f'tl.to("#dim", {{opacity:.35, duration:.3}}, {S(5) - .1:.2f}); tl.fromTo("#nums .n1", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(5, "3.25") - .15:.2f}); tl.fromTo("#nums .n2", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(5, "2.8") - .15:.2f}); tl.to("#nums > div", {{opacity:0, duration:.3}}, {S(6) - .2:.2f}); tl.to("#dim", {{opacity:0, duration:.3}}, {S(6) - .1:.2f});')
+J.append(f'tl.to("#dim", {{opacity:.35, duration:.3}}, {S(5) - .1:.2f}); tl.fromTo("#nums .n1", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(5, "3.25") - .15:.2f}); tl.fromTo("#nums .n2", {{opacity:0, y:40, scale:.9}}, {{opacity:1, y:0, scale:1, duration:.45, ease:"power3.out"}}, {wt(5, "2.8") - .15:.2f}); tl.to("#nums > div", {{opacity:0, duration:.3}}, {NX(5) - .2:.2f}); tl.to("#dim", {{opacity:0, duration:.3}}, {NX(5) - .1:.2f});')
 J.append(f'tl.set("#nums", {{opacity:1}}, 0);')
 sfx("impact-bass-1", wt(5, "3.25") - .1, .35); sfx("impact-bass-1", wt(5, "2.8") - .1, .3)
 H.append('<div id="drops">' + "".join(f'<i style="left:{80 + (k * 97) % 920}px"></i>' for k in range(12)) + '</div>')
-J.append(f'tl.set("#drops", {{opacity:1}}, {S(5):.2f}); tl.fromTo("#drops i", {{y:-80, opacity:0}}, {{y:1500, opacity:1, duration:1.4, stagger:{{each:.12, repeat:1}}, ease:"power1.in", immediateRender:false}}, {S(5):.2f}); tl.to("#drops", {{opacity:0, duration:.3}}, {S(6) - .2:.2f});')
+J.append(f'tl.set("#drops", {{opacity:1}}, {S(5):.2f}); tl.fromTo("#drops i", {{y:-80, opacity:0}}, {{y:1500, opacity:1, duration:1.4, stagger:{{each:.12, repeat:1}}, ease:"power1.in", immediateRender:false}}, {S(5):.2f}); tl.to("#drops", {{opacity:0, duration:.3}}, {NX(5) - .2:.2f});')
 
 # ---------- 4 real estate: jahan paani wahan growth ----------
 plane(S(6) - .2, 56, 1.15, 0, 120, 1.0)
 for i in range(len(DIST)):
     t = S(6) + .3 + i * .06
-    J.append(f'tl.fromTo("#gh{i}", {{opacity:0, attr:{{r:{U * 20:.0f}}}}}, {{opacity:1, attr:{{r:{U * 70:.0f}}}, duration:.5, ease:"power3.out", immediateRender:false}}, {t:.2f}); tl.to("#gh{i}", {{opacity:0, duration:.3}}, {S(7) - .1:.2f});')
-J.append(f'tl.fromTo(".tw", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.4, stagger:.05, ease:"back.out(1.8)", immediateRender:false}}, {wt(6, "growth") - .3:.2f}); tl.to(".tw", {{scaleY:0.001, rotationX:-90, duration:.3}}, {S(7) - .1:.2f});')
+    J.append(f'tl.fromTo("#gh{i}", {{opacity:0, attr:{{r:{U * 20:.0f}}}}}, {{opacity:1, attr:{{r:{U * 70:.0f}}}, duration:.5, ease:"power3.out", immediateRender:false}}, {t:.2f}); tl.to("#gh{i}", {{opacity:0, duration:.3}}, {NX(6) - .1:.2f});')
+J.append(f'tl.fromTo(".tw", {{scaleY:0.001, rotationX:-90, transformOrigin:"50% 100%"}}, {{scaleY:1, rotationX:-90, duration:.4, stagger:.05, ease:"back.out(1.8)", immediateRender:false}}, {wt(6, "growth") - .3:.2f}); tl.to(".tw", {{scaleY:0.001, rotationX:-90, duration:.3}}, {NX(6) - .1:.2f});')
 H.append('<div id="growth"><span>JAHAN PAANI</span><i>&rarr;</i><b>WAHAN GROWTH</b></div>')
-J.append(f'tl.fromTo("#growth", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(6, "jahan") - .1:.2f}); tl.fromTo("#growth b", {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4}}, {wt(6, "wahan") - .1:.2f}); tl.to("#growth", {{opacity:0, duration:.3}}, {S(7) - .1:.2f});')
+J.append(f'tl.fromTo("#growth", {{opacity:0, y:30}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {wt(6, "jahan") - .1:.2f}); tl.fromTo("#growth b", {{opacity:0, x:40}}, {{opacity:1, x:0, duration:.4}}, {wt(6, "wahan") - .1:.2f}); tl.to("#growth", {{opacity:0, duration:.3}}, {NX(6) - .1:.2f});')
 sfx("riser", wt(6, "growth") - .3, .3)
 
 # ---------- 5 MoU + money ----------
@@ -237,7 +239,7 @@ def photo(pid, img, t0, t1, cap, top=330, w=880, h=560, left=None):
 photo("phdry", "dry", .9, wt(0, "pyaas") + .05, "AAJ: SOOKHI ZAMEEN", top=520, h=520)
 photo("phdrink", "drink", wt(0, "pyaas") - .05, S(1) + .1, "KAL: HAR GHAR PAANI", top=520, h=520)
 photo("phsetu", "setu", wt(2, "Ram") + .15, S(3) - .1, "&#9679; CURRENT DEVELOPMENT", top=490, w=520, h=760)
-photo("phfield", "fields", wt(5, "2.8") - .1, S(6) - .1, "2.8 LAKH HECTARE &middot; SINCHAI", top=820, h=420)
+photo("phfield", "fields", wt(5, "2.8") - .1, NX(5) - .1, "2.8 LAKH HECTARE &middot; SINCHAI", top=820, h=420)
 
 # ---------- captions ----------
 HI = ["17 zilon", "Ram Jal Setu Link", "ERCP", "Chambal", "Parbati", "Kalisindh", "barrages", "canals", "3.25 crore", "2.8 lakh hectare", "jahan paani, wahan growth", "kheti", "industry", "nayi colonies",
@@ -254,7 +256,7 @@ for n, ph in enumerate(PH):
         if cur and len(cur) + 1 + len(w_) > 22: chunks.append(cur); cur = w_
         else: cur = (cur + " " + w_).strip()
     chunks.append(cur)
-    tot_ = sum(len(c) for c in chunks); t = ph["s"]; nx = PH[n + 1]["s"] if n + 1 < len(PH) else END
+    tot_ = sum(len(c) for c in chunks); t = ph["s"]; nx = NX(n)
     for j, c in enumerate(chunks):
         d = (ph["e"] - ph["s"]) * len(c) / tot_
         a_ = max(.02, t if j else t - .04); b_ = (min(t + d + .25, nx - .08) if j == len(chunks) - 1 else t + d - .03)
