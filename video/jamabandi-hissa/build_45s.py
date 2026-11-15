@@ -93,6 +93,10 @@ def fake_overlay(k, hl=False):
     o.append(f'<div class="wm" style="font-size:{150 * k:.0f}px">उदाहरण · SAMPLE</div>')
     return "".join(o)
 # ---------- 0 hook ----------
+H.append('<div class="bgp" id="bg0"><img src="assets/img/bg_fields.jpg"/></div>')
+J.append(f'tl.set("#bg0", {{opacity:.5}}, 0); tl.fromTo("#bg0 img", {{scale:1.15}}, {{scale:1.0, duration:{S(1):.2f}, ease:"none"}}, 0); tl.to("#bg0", {{opacity:0, duration:.4}}, {S(1) - .3:.2f});')
+H.append('<div class="pcap" id="pcap0">प्रतीकात्मक चित्र</div>')
+J.append(f'tl.set("#pcap0", {{opacity:1}}, 0); tl.to("#pcap0", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
 H.append('<div id="hook"><small>आप भी सीख लीजिए</small><b>जमाबंदी में<br/>अपना हिस्सा निकालना</b><span>1/6 = कितनी ज़मीन?</span></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.45, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .3:.2f});')
 H.append('<div class="scr" id="hd"><div class="im" id="hdi" style="width:940px"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082, hl=True) + '</div></div>')
