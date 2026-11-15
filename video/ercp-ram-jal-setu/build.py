@@ -168,6 +168,7 @@ for i, dd in WF:
     J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.2}}, {ta - .05:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 10:.0f}}}}}, {{attr:{{r:{U * 52:.0f}}}, duration:.5, ease:"power2.out", immediateRender:false}}, {ta - .05:.2f}); tl.to("#dt{i}", {{opacity:.35, duration:.3}}, {S(3) - .2:.2f});')
     J.append(f'tl.fromTo("#dz{i}", {{fillOpacity:0, strokeOpacity:0}}, {{fillOpacity:.45, strokeOpacity:.9, duration:.45, ease:"power2.out", immediateRender:false}}, {ta - .1:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:0, duration:.4}}, {S(2) + .3:.2f});')
     if i % 3 == 0: sfx("pop", ta, .14)
+    bb(f"dl{i}", ta - .08, S(2) + .1)
 H.append('<div id="z17"><b>17</b><span>ZILE</span></div>')
 J.append(f'tl.fromTo("#z17", {{opacity:0, scale:1.6}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, {wt(1, "17") - .1:.2f}); tl.to("#z17", {{opacity:0, y:-30, duration:.3}}, {S(2) - .1:.2f});')
 sfx("riser", S(1), .3); sfx("impact-bass-1", wt(1, "17"), .4)
@@ -193,16 +194,6 @@ for i, (nm, la, lo) in enumerate(DIST):
     draw(f"#cn{i}", t, 1.3)
     J.append(f'tl.set("#cf{i}", {{opacity:.9}}, {t + 1.0:.2f}); tl.fromTo("#cf{i}", {{strokeDashoffset:0}}, {{strokeDashoffset:-1.2, duration:2.2, ease:"none", repeat:8, immediateRender:false}}, {t + 1.0:.2f});')
 sfx("whoosh", wt(3, "canals") - .1, .35)
-
-# ---------- 2 districts light up ----------
-rx, sc, x, y = focus(wp(26.15, 75.8), 38, 1.15, 800)
-plane(S(4) - .3, rx, sc, x, y, 1.0)
-for i, (nm, la, lo) in enumerate(DIST):
-    t = wt(4, nm.split("-")[0]) - .08
-    J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.15}}, {t:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 15:.0f}}}}}, {{attr:{{r:{U * 60:.0f}}}, duration:.45, ease:"power3.out", immediateRender:false}}, {t:.2f});')
-    bb(f"dl{i}", t, NX(4) - .1); sfx("click-soft", t, .18)
-    J.append(f'tl.to("#dz{i}", {{fillOpacity:.55, strokeOpacity:1, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:.22, duration:.5}}, {t + .35:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:.35, duration:.4}}, {NX(4) - .1:.2f});')
-lux(2, "<b>17</b> ZILE", S(4) + .1, NX(4), 60, 300)
 
 # ---------- 5 numbers + greenery ----------
 for i in range(len(DIST)):
@@ -269,6 +260,7 @@ def hl(t):
     return t
 ci = 0
 for n, ph in enumerate(PH):
+    if ph["e"] - ph["s"] < .1: continue
     words = ph["t"].split(); chunks = []; cur = ""
     for w_ in words:
         if cur and len(cur) + 1 + len(w_) > 22: chunks.append(cur); cur = w_
