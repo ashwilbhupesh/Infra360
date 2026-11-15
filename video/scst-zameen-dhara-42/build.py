@@ -46,12 +46,12 @@ def bgp(bid, img, t0, t1, op=.55, z0=1.0, z1=1.12, blur=0):
 bgp("b0", "board", 0, S(1), op=1, z0=1.0, z1=1.0)
 H.append('<div id="sign"><div class="sa"><b>सस्ती ज़मीन</b><span>बिकाऊ &middot; ₹ आधे दाम</span></div><div class="sb"></div></div><div id="signt"><b>₹ लाखों फँसे</b><span>सावधान!</span></div>')
 tf = wt(0, "गलत")
-J.append(f'tl.set("#sign .sb", {{opacity:0}}, 0); tl.fromTo("#sign .sa", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, .2); tl.to("#sign .sa", {{rotationX:90, opacity:0, duration:.25}}, {tf:.2f}); tl.fromTo("#sign .sb", {{rotationX:-90, opacity:0}}, {{rotationX:0, opacity:1, duration:.3, immediateRender:false}}, {tf + .25:.2f}); tl.to("#sign, #signt", {{x:8, duration:.05, yoyo:true, repeat:7}}, {tf + .55:.2f}); tl.to("#sign, #signt", {{opacity:0, duration:.3}}, {S(1) - .3:.2f}); tl.set("#signt", {{opacity:0}}, 0); tl.fromTo("#signt", {{opacity:0, rotationX:-90}}, {{opacity:1, rotationX:0, duration:.3, immediateRender:false}}, {tf + .25:.2f});')
+J.append(f'tl.set("#sign .sb", {{opacity:0}}, 0); tl.set("#signt", {{opacity:0}}, 0); tl.fromTo("#sign .sa", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, .2); tl.to("#sign", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
 H.append('<div id="hook"><small>सावधान</small><b>SC/ST की सस्ती ज़मीन?</b></div>')
 inn("#hook", .1, "opacity:0, y:-40"); out("#hook", S(1))
 H.append('<div id="rain">' + "".join(f'<i style="left:{40 + (k * 131) % 1000}px;font-size:{60 + (k * 23) % 50}px">₹</i>' for k in range(14)) + '</div>')
 J.append(f'tl.set("#rain", {{opacity:1}}, {wt(0, "लाखों") - .2:.2f}); tl.fromTo("#rain i", {{y:-150, opacity:0, rotation:-20}}, {{y:2100, opacity:1, rotation:30, duration:1.8, stagger:{{each:.09}}, ease:"power1.in", immediateRender:false}}, {wt(0, "लाखों") - .2:.2f}); tl.set("#rain", {{opacity:0}}, {S(1):.2f}); tl.set("#rain", {{opacity:0}}, 0);')
-sfx("impact-bass-1", 0, .45); sfx("whoosh", tf + .2, .35); sfx("impact-bass-1", tf + .3, .4)
+sfx("impact-bass-1", 0, .45)
 
 # 'sasti zameen dekhkar khush' -> daydream illustration
 H.append('<div id="happy"><img src="assets/img/happy.jpg"/><span>प्रतीकात्मक चित्र</span></div>')
