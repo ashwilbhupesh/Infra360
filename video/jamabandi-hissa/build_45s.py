@@ -140,6 +140,20 @@ H.append('<div id="fml"><small>सामान्य सूत्र</small><b>�
          '<div class="ch"><span class="g">गज</span><i>&divide; 3,025 =</i><span class="y">बीघा</span></div></div>')
 J.append(f'tl.set("#fml", {{opacity:0}}, 0); tl.fromTo("#fml", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.4, ease:"power3.out", immediateRender:false}}, {FG0:.2f}); tl.fromTo("#fml .ch", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.3, stagger:.35, immediateRender:false}}, {FG0 + .3:.2f}); tl.to("#fml", {{opacity:0, y:-20, duration:.3}}, {FG1 + .05:.2f});')
 sfx("whoosh", FG0, .3); sfx("click-soft", FG0 + .3, .25); sfx("click-soft", FG0 + .65, .25); sfx("click-soft", FG0 + 1.0, .25)
+
+# ---------- background photos (calculation section) ----------
+def bgp(bid, img, t0, t1, op=.42, z0=1.0, z1=1.12):
+    H.append(f'<div class="bgp" id="{bid}"><img src="assets/img/{img}.jpg"/></div>')
+    J.append(f'tl.set("#{bid}", {{opacity:0}}, 0); tl.to("#{bid}", {{opacity:{op}, duration:.6}}, {t0:.2f}); tl.fromTo("#{bid} img", {{scale:{z0}}}, {{scale:{z1}, duration:{t1 - t0 + .6:.2f}, ease:"none", immediateRender:false}}, {t0:.2f}); tl.to("#{bid}", {{opacity:0, duration:.6}}, {t1:.2f});')
+_cal3 = wt(3, "Ab hamare paas") - .1
+bgp("bg1", "bg_fields", S(2) - .3, S(3) - .1)
+bgp("bg2", "bg_stone", S(3) - .3, _cal3 - .1)
+bgp("bg3", "bg_plots", _cal3 - .2, S(4) - .1, op=.6, z0=1.0, z1=1.0)
+bgp("bg4", "bg_road", S(4) - .3, S(6) - .2)
+H.append('<div class="plt" id="plt"></div><div class="pll" id="pll">रमेश का हिस्सा &middot; 0.68 बीघा</div>')
+J.append(f'tl.set("#plt, #pll", {{opacity:0}}, 0); tl.fromTo("#plt", {{opacity:0, scale:1.3}}, {{opacity:1, scale:1, duration:.5, ease:"power2.out", immediateRender:false}}, {_cal3 + .6:.2f}); tl.to("#pll", {{opacity:1, duration:.3}}, {_cal3 + .9:.2f}); tl.to("#plt, #pll", {{opacity:0, duration:.4}}, {S(4) - .1:.2f});')
+H.append('<div class="pcap" id="pcap">प्रतीकात्मक चित्र</div>')
+J.append(f'tl.set("#pcap", {{opacity:0}}, 0); tl.to("#pcap", {{opacity:1, duration:.4}}, {S(2) - .2:.2f}); tl.to("#pcap", {{opacity:0, duration:.4}}, {S(6) - .2:.2f});')
 # ---------- 5 bridge ----------
 H.append('<div id="bridge"><small>अब अगला भाग</small><b>जमाबंदी की PDF<br/>कैसे निकालें?</b><span>वीडियो आगे देखिए &darr;</span></div>')
 J.append(f'tl.set("#bridge", {{opacity:0}}, 0); tl.fromTo("#bridge", {{opacity:0, scale:.92}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {S(5) - .1:.2f}); tl.to("#bridge span", {{y:12, duration:.35, yoyo:true, repeat:3}}, {wt(5, "aage"):.2f}); tl.to("#bridge", {{opacity:0, duration:.3}}, {S(6) - .3:.2f});')
@@ -238,9 +252,13 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #fml{position:absolute;left:60px;right:60px;top:300px;z-index:16;text-align:center;padding:40px 30px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
 #fml>small{display:block;font:800 32px Mont,Deva;color:#FFD23F}#fml>b{display:block;margin-top:10px;font:400 76px/1.1 Anton,DevaH;color:#fff}
 #fml .ch{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:34px;font:400 52px Anton,DevaH;color:#e8edf5}#fml .ch i{font-style:normal;color:#FFD23F}#fml .ch .g{padding:4px 16px;border-radius:8px;background:#2FD158;color:#062411}#fml .ch .y{padding:4px 16px;border-radius:8px;background:#FFD23F;color:#111}
-#own{position:absolute;left:90px;right:90px;top:360px;z-index:16;text-align:center;padding:36px 30px;border-radius:18px;border:3px solid #2FD158;background:#121a27;box-shadow:0 30px 70px rgba(0,0,0,.6)}
+#own{position:absolute;left:90px;right:90px;top:120px;transform-origin:50% 0;z-index:16;text-align:center;padding:36px 30px;border-radius:18px;border:3px solid #2FD158;background:#121a27;box-shadow:0 30px 70px rgba(0,0,0,.6)}
 #own small{letter-spacing:.02em !important;display:block;font:800 28px Mont,Deva;letter-spacing:.3em;color:#2FD158}#own .or{display:flex;justify-content:center;align-items:center;gap:22px;margin-top:22px}#own .nm{font:800 60px Deva;color:#fff}#own .hs{padding:6px 16px;border-radius:8px;background:#FFD23F;color:#111;font:800 36px Deva}
 #own i{display:block;margin-top:12px;font:400 70px/1 Mont,Deva;font-style:normal;color:#FFD23F}#own b{display:inline-block;margin-top:10px;padding:14px 40px;border-radius:14px;background:#2FD158;color:#062411;font:400 150px/1 Anton,DevaH}#own em{display:block;margin-top:20px;font:700 30px Mont,Deva;font-style:normal;color:#cfd8e6}
+.bgp{position:absolute;inset:0;overflow:hidden;z-index:1;opacity:0}.bgp img{width:100%;height:100%;object-fit:cover;filter:saturate(.9) brightness(.85)}.bgp:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,11,17,.55),rgba(8,11,17,.25) 45%,rgba(8,11,17,.7))}
+.plt{position:absolute;left:184px;top:649px;width:640px;height:594px;border:6px solid #FFD23F;border-radius:6px;box-shadow:0 0 30px rgba(255,210,63,.7),inset 0 0 40px rgba(255,210,63,.25);z-index:3;opacity:0}
+.pll{position:absolute;left:184px;top:1255px;width:640px;text-align:center;padding:8px 0;border-radius:6px;background:#FFD23F;color:#111;font:800 30px Mont,Deva;z-index:3;opacity:0}
+.pcap{position:absolute;right:30px;top:1660px;padding:4px 12px;border-radius:4px;background:rgba(0,0,0,.55);color:rgba(255,255,255,.8);font:700 18px Deva;z-index:20;opacity:0}
 .cp{position:absolute;left:40px;right:40px;top:1480px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont,Deva;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
 audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio><audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.14" data-fade-out="1.5"></audio>' if VOICE
