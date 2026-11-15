@@ -56,98 +56,102 @@
   "s": 34.3,
   "e": 34.3,
   "t": "",
-  "parts": []
+  "parts": [],
+  "fgap": [
+   34.37,
+   37.37
+  ]
  },
  {
-  "s": 34.44,
-  "e": 38.08,
+  "s": 37.44,
+  "e": 41.08,
   "t": "Saath hi saath, agar aapko Jamabandi ki PDF nikaalni hai, to video aage dekhiye.",
   "parts": [
    {
-    "s": 34.44,
-    "e": 38.08,
+    "s": 37.44,
+    "e": 41.08,
     "t": "Saath hi saath, agar aapko Jamabandi ki PDF nikaalni hai, to video aage dekhiye."
    }
   ]
  },
  {
-  "s": 38.22,
-  "e": 41.6,
+  "s": 41.22,
+  "e": 44.6,
   "t": "Google par Apna Khata search kariye, aur apni website kholiye.",
   "parts": [
    {
-    "s": 38.22,
-    "e": 41.6,
+    "s": 41.22,
+    "e": 44.6,
     "t": "Google par Apna Khata search kariye, aur apni website kholiye."
    }
   ]
  },
  {
-  "s": 41.74,
-  "e": 44.5,
+  "s": 44.74,
+  "e": 47.5,
   "t": "Neeche scroll karne ke baad Bhu Naksha par click kariye.",
   "parts": [
    {
-    "s": 41.74,
-    "e": 44.5,
+    "s": 44.74,
+    "e": 47.5,
     "t": "Neeche scroll karne ke baad Bhu Naksha par click kariye."
    }
   ]
  },
  {
-  "s": 44.64,
-  "e": 48.88,
+  "s": 47.64,
+  "e": 51.88,
   "t": "Viewmap kholiye, aur zila, tehsil, gaon aur sheet number chuniye.",
   "parts": [
    {
-    "s": 44.64,
-    "e": 48.88,
+    "s": 47.64,
+    "e": 51.88,
     "t": "Viewmap kholiye, aur zila, tehsil, gaon aur sheet number chuniye."
    }
   ]
  },
  {
-  "s": 49.02,
-  "e": 55.46,
+  "s": 52.02,
+  "e": 58.46,
   "t": "Map pe apna khasra dabaiye, ya to upar diye gaye numbers mein search kariye. Aur Plot Info mein Nakal par click kijiye.",
   "parts": [
    {
-    "s": 49.02,
-    "e": 53.1,
+    "s": 52.02,
+    "e": 56.1,
     "t": "Map pe apna khasra dabaiye, ya to upar diye gaye numbers mein search kariye."
    },
    {
-    "s": 53.24,
-    "e": 55.46,
+    "s": 56.24,
+    "e": 58.46,
     "t": "Aur Plot Info mein Nakal par click kijiye."
    }
   ]
  },
  {
-  "s": 55.6,
-  "e": 59.16,
+  "s": 58.6,
+  "e": 62.16,
   "t": "Show Report PDF dabaiye, aur aapki Jamabandi ki PDF taiyaar.",
   "parts": [
    {
-    "s": 55.6,
-    "e": 59.16,
+    "s": 58.6,
+    "e": 62.16,
     "t": "Show Report PDF dabaiye, aur aapki Jamabandi ki PDF taiyaar."
    }
   ]
  },
  {
-  "s": 59.3,
-  "e": 66.52,
+  "s": 62.3,
+  "e": 69.52,
   "t": "Is Jamabandi mein se aap apna hissa ab dekh sakte hain. Ye reel apne us friend ko share kijiye, jo apni Jamabandi mein apna hissa dekhna chahta hai.",
   "parts": [
    {
-    "s": 59.3,
-    "e": 62.16,
+    "s": 62.3,
+    "e": 65.16,
     "t": "Is Jamabandi mein se aap apna hissa ab dekh sakte hain."
    },
    {
-    "s": 62.3,
-    "e": 66.52,
+    "s": 65.3,
+    "e": 69.52,
     "t": "Ye reel apne us friend ko share kijiye, jo apni Jamabandi mein apna hissa dekhna chahta hai."
    }
   ]

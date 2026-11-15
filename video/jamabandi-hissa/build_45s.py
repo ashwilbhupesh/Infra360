@@ -129,9 +129,17 @@ sfx("impact-bass-1", wt(3, "lagbhag"), .35)
 # owner result: name + 0.68 bigha
 H.append('<div id="own"><small>परिणाम</small><div class="or"><span class="nm">रमेश पुत्र मोहन</span><span class="hs">हिस्सा <span style="font:900 36px Mont">1/6</span></span></div><i>&darr;</i><b>0.68 बीघा</b><em>&asymp; 2,053 गज &middot; 0.1717 हेक्टेयर</em></div>')
 to_ = wt(3, "Ab hamare paas") - .1
-J.append(f'tl.set("#own", {{opacity:0}}, 0); tl.fromTo("#own", {{opacity:0, y:40, scale:.95}}, {{opacity:1, y:0, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {to_:.2f}); tl.fromTo("#own b", {{scale:.6, opacity:0}}, {{scale:1, opacity:1, duration:.4, ease:"back.out(2.5)", immediateRender:false}}, {to_ + .35:.2f}); tl.to("#own", {{opacity:0, y:-20, duration:.3}}, {S(5) + .1:.2f});')
+J.append(f'tl.set("#own", {{opacity:0}}, 0); tl.fromTo("#own", {{opacity:0, y:40, scale:.95}}, {{opacity:1, y:0, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {to_:.2f}); tl.fromTo("#own b", {{scale:.6, opacity:0}}, {{scale:1, opacity:1, duration:.4, ease:"back.out(2.5)", immediateRender:false}}, {to_ + .35:.2f}); tl.to("#own", {{opacity:0, y:-20, duration:.3}}, {PH[4]["fgap"][0] - .1:.2f});')
 J.append(f'tl.to("#bd8", {{opacity:0, duration:.25}}, {to_ - .05:.2f});')
 sfx("impact-bass-1", to_ + .35, .4)
+# general formula card (in the inserted gap)
+FG0, FG1 = PH[4]["fgap"]
+H.append('<div id="fml"><small>सामान्य सूत्र</small><b>अपना हिस्सा निकालो</b>'
+         '<div class="ch"><span>हिस्सा &times; कुल क्षेत्रफल</span><i>=</i><span class="g">हेक्टेयर</span></div>'
+         '<div class="ch"><span class="g">हेक्टेयर</span><i>&times; 11,960 =</i><span class="g">गज</span></div>'
+         '<div class="ch"><span class="g">गज</span><i>&divide; 3,025 =</i><span class="y">बीघा</span></div></div>')
+J.append(f'tl.set("#fml", {{opacity:0}}, 0); tl.fromTo("#fml", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.4, ease:"power3.out", immediateRender:false}}, {FG0:.2f}); tl.fromTo("#fml .ch", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.3, stagger:.35, immediateRender:false}}, {FG0 + .3:.2f}); tl.to("#fml", {{opacity:0, y:-20, duration:.3}}, {FG1 + .05:.2f});')
+sfx("whoosh", FG0, .3); sfx("click-soft", FG0 + .3, .25); sfx("click-soft", FG0 + .65, .25); sfx("click-soft", FG0 + 1.0, .25)
 # ---------- 5 bridge ----------
 H.append('<div id="bridge"><small>अब अगला भाग</small><b>जमाबंदी की PDF<br/>कैसे निकालें?</b><span>वीडियो आगे देखिए &darr;</span></div>')
 J.append(f'tl.set("#bridge", {{opacity:0}}, 0); tl.fromTo("#bridge", {{opacity:0, scale:.92}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {S(5) - .1:.2f}); tl.to("#bridge span", {{y:12, duration:.35, yoyo:true, repeat:3}}, {wt(5, "aage"):.2f}); tl.to("#bridge", {{opacity:0, duration:.3}}, {S(6) - .3:.2f});')
@@ -227,6 +235,9 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #bridge{position:absolute;left:60px;right:60px;top:420px;z-index:16;text-align:center;padding:40px 24px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
 #bridge small{letter-spacing:.02em !important;display:block;font:800 28px Mont,Deva;letter-spacing:.3em;color:#cfd8e6}#bridge b{display:block;margin-top:12px;font:400 92px/1.04 Anton,DevaH;color:#fff}#bridge span{display:inline-block;margin-top:24px;padding:10px 26px;border-radius:8px;background:#FFD23F;color:#111;font:900 36px Mont,Deva;letter-spacing:.08em}
 .bd .ic{font:400 120px/1 Mont,Deva;color:#FFD23F}.bd .wt{margin-top:10px;font:400 96px/1.02 Anton,DevaH;color:#fff}
+#fml{position:absolute;left:60px;right:60px;top:300px;z-index:16;text-align:center;padding:40px 30px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
+#fml>small{display:block;font:800 32px Mont,Deva;color:#FFD23F}#fml>b{display:block;margin-top:10px;font:400 76px/1.1 Anton,DevaH;color:#fff}
+#fml .ch{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:34px;font:400 52px Anton,DevaH;color:#e8edf5}#fml .ch i{font-style:normal;color:#FFD23F}#fml .ch .g{padding:4px 16px;border-radius:8px;background:#2FD158;color:#062411}#fml .ch .y{padding:4px 16px;border-radius:8px;background:#FFD23F;color:#111}
 #own{position:absolute;left:90px;right:90px;top:360px;z-index:16;text-align:center;padding:36px 30px;border-radius:18px;border:3px solid #2FD158;background:#121a27;box-shadow:0 30px 70px rgba(0,0,0,.6)}
 #own small{letter-spacing:.02em !important;display:block;font:800 28px Mont,Deva;letter-spacing:.3em;color:#2FD158}#own .or{display:flex;justify-content:center;align-items:center;gap:22px;margin-top:22px}#own .nm{font:800 60px Deva;color:#fff}#own .hs{padding:6px 16px;border-radius:8px;background:#FFD23F;color:#111;font:800 36px Deva}
 #own i{display:block;margin-top:12px;font:400 70px/1 Mont,Deva;font-style:normal;color:#FFD23F}#own b{display:inline-block;margin-top:10px;padding:14px 40px;border-radius:14px;background:#2FD158;color:#062411;font:400 150px/1 Anton,DevaH}#own em{display:block;margin-top:20px;font:700 30px Mont,Deva;font-style:normal;color:#cfd8e6}
