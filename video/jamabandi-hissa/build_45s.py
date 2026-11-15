@@ -2,16 +2,18 @@
 import json, os
 P = "proj"
 LINES = [
-    "Jamabandi mein apna hissa kaise nikaalein? 45 second mein seekhiye.",
+    "Jamabandi mein 1/6 jaisa hissa likha hai? Isse apni zameen kaise nikaalein, dekhiye.",
+    "Apne naam ke aage hissa dekhiye, jaise 1/6. Aur neeche kul area, 1.03 hectare.",
+    "Hissa guna kul area: 1/6 guna 1.03, yaani 0.1717 hectare.",
+    "Isko 11,960 se guna kariye, 2,053 gaj. Aur 3,025 se bhaag dijiye, lagbhag 0.68 bigha.",
+    "Bigha ka maap apni tehsil mein confirm kar lijiye.",
+    "Aur agar Jamabandi ki copy nikaalni hai, to video aage dekhiye.",
     "Google par Apna Khata search kariye, aur pehli website kholiye.",
     "Neeche scroll karke Bhu Naksha par click kariye.",
     "Viewmap kholiye, aur zila, tehsil, gaon aur sheet number chuniye.",
     "Map par apna khasra dabaiye, aur Plot Info mein Nakal par click kariye.",
     "Show Report dabate hi aapki Jamabandi khul jaayegi.",
-    "Apne naam ke aage hissa dekhiye, jaise 1/6. Aur neeche kul area, 1.03 hectare.",
-    "Hissa guna kul area: 1/6 guna 1.03, yaani 0.1717 hectare.",
-    "Isko 11,960 se guna kariye, 2,053 gaj. Aur 3,025 se bhaag dijiye, lagbhag 0.68 bigha.",
-    "Bigha ka maap apni tehsil mein confirm kariye. Video save kar lijiye.",
+    "Video save kar lijiye, aur jiski zameen bati hui hai unhe share kariye.",
 ]
 VOICE = os.path.exists("rec/phrases.json")
 if VOICE: PH = json.load(open("rec/phrases.json"))
@@ -24,7 +26,7 @@ def E(k): return PH[k]["e"]
 def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower()); assert i >= 0, (k, w)
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(9) + 1.0, 2)
+END = round(E(11) + 1.0, 2)
 H, J, SFX = [], [], []
 def sfx(n, t, v=.3): SFX.append(f'<audio id="sx{len(SFX)}" class="clip" src="assets/sfx/{n}.mp3" data-start="{max(0, t):.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v}"></audio>')
 
@@ -82,60 +84,67 @@ def fake_overlay(k):
     o.append(f'<div class="wm" style="font-size:{150 * k:.0f}px">उदाहरण · SAMPLE</div>')
     return "".join(o)
 # ---------- 0 hook ----------
-H.append('<div id="hook"><small>JAMABANDI MEIN</small><b>APNA HISSA<br/>KAISE NIKAALEIN?</b><span>STEP BY STEP &middot; 45 SECOND</span></div>')
+H.append('<div id="hook"><small>JAMABANDI MEIN</small><b>APNA HISSA<br/>KAISE NIKAALEIN?</b><span>1/6 = KITNI ZAMEEN?</span></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.45, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .3:.2f});')
 H.append('<div class="scr" id="hd"><div class="im" style="width:940px"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082) + '</div></div>')
 J.append(f'tl.fromTo("#hd", {{opacity:0, y:160, scale:.9}}, {{opacity:.55, y:120, scale:1, duration:.8, ease:"power3.out"}}, .2); tl.to("#hd", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
 sfx("impact-bass-1", 0, .4)
 
-# ---------- 1..5 navigation ----------
-step(1, "1", "Google par <u>APNA KHATA</u> search karo", S(1) - .1, S(2))
-screen("sc1", "s1", S(1) - .1, S(2), [(wt(1, "pehli") - .1, 130, 450, 135, 40, 1.35, "CLICK")])
-step(2, "2", "Neeche scroll &rarr; <u>BHU NAKSHA</u>", S(2) - .1, S(3))
-mid = S(2) + (E(2) - S(2)) * .45
-screen("sc2", "s2", S(2) - .1, mid + .3, [], scroll=(S(2) + .2, .9))
-screen("sc3", "s3", mid, S(3), [(wt(2, "Bhu Naksha") + .1, 288, 771, 295, 50, 1.0, "CLICK")])
-step(3, "3", "<u>VIEWMAP</u> &rarr; zila, tehsil, gaon, sheet", S(3) - .1, S(4))
-m3 = wt(3, "aur zila")
-screen("sc4", "s4", S(3) - .1, m3 + .3, [(wt(3, "Viewmap") + .5, 95, 160, 62, 26, 1.9, "CLICK")])
-screen("sc5", "s5", m3, S(4), [(m3 + .45, 235, 638, 190, 120, 1.3, "SELECT")])
-step(4, "4", "Apna <u>KHASRA</u> dabao &rarr; <u>NAKAL</u>", S(4) - .1, S(5))
-screen("sc6", "s6", S(4) - .1, S(5), [(wt(4, "khasra"), 230, 710, 150, 95, 1.0, "TAP"), (wt(4, "Nakal") + .1, 242, 1122, 55, 22, 1.35, "CLICK")])
-step(5, "5", "<u>SHOW REPORT</u> &rarr; Jamabandi", S(5) - .1, S(6))
-screen("sc7", "s7", S(5) - .1, S(6), [(wt(5, "Show") + .5, 37, 273, 46, 17, 2.3, "CLICK")])
-
-# ---------- 6 real jamabandi ----------
-step(6, "6", "Naam ke aage <u>HISSA</u> &middot; neeche <u>KUL AREA</u>", S(6) - .1, S(7))
-screen("sc8", "jama_real", S(6) - .1, S(7) + .2, [(wt(6, "hissa"), 290, 430, 72, 20, 1.6, "HISSA 1/6"), (wt(6, "kul area"), 250, 1135, 75, 22, 1.6, "KUL 1.0300 HA")], extra=fake_overlay(940 / 1082))
+# ---------- 1 the jamabandi ----------
+step(6, "&#9733;", "Naam ke aage <u>HISSA</u> &middot; neeche <u>KUL AREA</u>", S(1) - .1, S(2))
+screen("sc8", "jama_real", S(1) - .1, S(2) + .2, [(wt(1, "hissa"), 290, 430, 72, 20, 1.6, "HISSA 1/6"), (wt(1, "kul area"), 250, 1135, 75, 22, 1.6, "KUL 1.0300 HA")], extra=fake_overlay(940 / 1082))
 H.append('<div class="tag" id="tagr">UDAHARAN &middot; NAAM BADLE GAYE HAIN</div>')
-J.append(f'tl.set("#tagr", {{opacity:0}}, 0); tl.to("#tagr", {{opacity:1, duration:.3}}, {S(6) + .2:.2f}); tl.to("#tagr", {{opacity:0, duration:.2}}, {S(7):.2f});')
-sfx("whoosh", S(6) - .1, .3)
+J.append(f'tl.set("#tagr", {{opacity:0}}, 0); tl.to("#tagr", {{opacity:1, duration:.3}}, {S(1) + .2:.2f}); tl.to("#tagr", {{opacity:0, duration:.2}}, {S(2):.2f});')
+sfx("whoosh", S(1) - .1, .3)
 
-# ---------- 7-8 formula ----------
+# ---------- 2-3 formula ----------
 def board(i, t0, t1, html):
     H.append(f'<div class="bd" id="bd{i}">{html}</div>')
     J.append(f'tl.set("#bd{i}", {{opacity:0}}, 0); tl.set("#bd{i} .tk", {{opacity:0}}, 0); tl.fromTo("#bd{i}", {{opacity:0, scale:.95}}, {{opacity:1, scale:1, duration:.35, ease:"power3.out", immediateRender:false}}, {t0:.2f}); tl.to("#bd{i}", {{opacity:0, y:-30, duration:.3}}, {t1 - .3:.2f});')
 def tok(i, j, t):
     J.append(f'tl.fromTo("#bd{i} .t{j}", {{opacity:0, y:24, scale:.85}}, {{opacity:1, y:0, scale:1, duration:.35, ease:"back.out(2)", immediateRender:false}}, {t:.2f});'); sfx("click-soft", t, .25)
-board(7, S(7) - .1, S(8), '<div class="tk t0 lbl">HISSA &times; KUL AREA</div><div class="row"><span class="tk t1 big">1/6</span><span class="tk t2 op">&times;</span><span class="tk t3 big">1.03</span></div>'
+board(7, S(2) - .1, S(3), '<div class="tk t0 lbl">HISSA &times; KUL AREA</div><div class="row"><span class="tk t1 big">1/6</span><span class="tk t2 op">&times;</span><span class="tk t3 big">1.03</span></div>'
       '<div class="tk t4 op">=</div><div class="tk t5 res">0.1717 <small>HECTARE</small></div>')
-tok(7, 0, S(7) + .1); tok(7, 1, wt(7, "1/6 guna") - .1); tok(7, 2, wt(7, "guna 1.03") - .05); tok(7, 3, wt(7, "1.03,") - .1); tok(7, 4, wt(7, "yaani") - .1); tok(7, 5, wt(7, "yaani") + .1)
-sfx("impact-bass-1", wt(7, "yaani") + .1, .35)
-board(8, S(8) - .1, S(9), '<div class="tk t0 lbl">HECTARE &rarr; GAJ &rarr; BIGHA</div>'
+tok(7, 0, S(2) + .1); tok(7, 1, wt(2, "1/6 guna") - .1); tok(7, 2, wt(2, "guna 1.03") - .05); tok(7, 3, wt(2, "1.03,") - .1); tok(7, 4, wt(2, "yaani") - .1); tok(7, 5, wt(2, "yaani") + .1)
+sfx("impact-bass-1", wt(2, "yaani") + .1, .35)
+board(8, S(3) - .1, S(4), '<div class="tk t0 lbl">HECTARE &rarr; GAJ &rarr; BIGHA</div>'
       '<div class="ln tk t1"><span>0.1717</span><i>&times; 11,960 =</i><b>2,053 GAJ</b></div>'
       '<div class="ln tk t2"><span>2,053</span><i>&divide; 3,025 =</i><b class="g">0.68 BIGHA</b></div>'
       '<em class="tk t3">1 hectare &asymp; 11,960 gaj &middot; 1 pakka bigha = 3,025 gaj</em>')
-tok(8, 0, S(8) + .1); tok(8, 1, wt(8, "11,960") - .1); tok(8, 2, wt(8, "3,025") - .1); tok(8, 3, wt(8, "lagbhag") - .1)
-sfx("impact-bass-1", wt(8, "lagbhag"), .35)
+tok(8, 0, S(3) + .1); tok(8, 1, wt(3, "11,960") - .1); tok(8, 2, wt(3, "3,025") - .1); tok(8, 3, wt(3, "lagbhag") - .1)
+sfx("impact-bass-1", wt(3, "lagbhag"), .35)
+board(9, S(4) - .1, S(5), '<div class="tk t0 ic">&#9888;</div><div class="tk t1 wt">BIGHA HAR ILAAKE<br/>MEIN ALAG</div><em class="tk t2">Apni tehsil / patwari se confirm karein</em>')
+tok(9, 0, S(4)); tok(9, 1, S(4) + .15); tok(9, 2, wt(4, "tehsil") - .1)
 
-# ---------- 9 save card ----------
+# ---------- 5 bridge ----------
+H.append('<div id="bridge"><small>AB AGLA PART</small><b>JAMABANDI KI COPY<br/>KAISE NIKAALEIN?</b><span>VIDEO AAGE DEKHIYE &darr;</span></div>')
+J.append(f'tl.set("#bridge", {{opacity:0}}, 0); tl.fromTo("#bridge", {{opacity:0, scale:.92}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {S(5) - .1:.2f}); tl.to("#bridge span", {{y:12, duration:.35, yoyo:true, repeat:3}}, {wt(5, "aage"):.2f}); tl.to("#bridge", {{opacity:0, duration:.3}}, {S(6) - .3:.2f});')
+sfx("riser", S(5) - .3, .3); sfx("whoosh", S(6) - .2, .3)
+
+# ---------- 6..10 navigation ----------
+step(1, "1", "Google par <u>APNA KHATA</u> search karo", S(6) - .1, S(7))
+screen("sc1", "s1", S(6) - .1, S(7), [(wt(6, "pehli") - .1, 130, 450, 135, 40, 1.35, "CLICK")])
+step(2, "2", "Neeche scroll &rarr; <u>BHU NAKSHA</u>", S(7) - .1, S(8))
+mid = S(7) + (E(7) - S(7)) * .45
+screen("sc2", "s2", S(7) - .1, mid + .3, [], scroll=(S(7) + .2, .9))
+screen("sc3", "s3", mid, S(8), [(wt(7, "Bhu Naksha") + .1, 288, 771, 295, 50, 1.0, "CLICK")])
+step(3, "3", "<u>VIEWMAP</u> &rarr; zila, tehsil, gaon, sheet", S(8) - .1, S(9))
+m3 = wt(8, "aur zila")
+screen("sc4", "s4", S(8) - .1, m3 + .3, [(wt(8, "Viewmap") + .5, 95, 160, 62, 26, 1.9, "CLICK")])
+screen("sc5", "s5", m3, S(9), [(m3 + .45, 235, 638, 190, 120, 1.3, "SELECT")])
+step(4, "4", "Apna <u>KHASRA</u> dabao &rarr; <u>NAKAL</u>", S(9) - .1, S(10))
+screen("sc6", "s6", S(9) - .1, S(10), [(wt(9, "khasra"), 230, 710, 150, 95, 1.0, "TAP"), (wt(9, "Nakal") + .1, 242, 1122, 55, 22, 1.35, "CLICK")])
+step(5, "5", "<u>SHOW REPORT</u> &rarr; Jamabandi", S(10) - .1, S(11))
+screen("sc7", "s7", S(10) - .1, S(11), [(wt(10, "Show") + .5, 37, 273, 46, 17, 2.3, "CLICK")])
+
+# ---------- 11 save card ----------
 H.append('<div id="save"><small>SAVE KAR LO</small><b>APNA HISSA NIKAALO</b>'
          '<div class="ch"><span>HISSA &times; KUL AREA</span><i>=</i><span class="g">HECTARE</span></div>'
          '<div class="ch"><span class="g">HECTARE</span><i>&times; 11,960 =</i><span class="g">GAJ</span></div>'
          '<div class="ch"><span class="g">GAJ</span><i>&divide; 3,025 =</i><span class="y">BIGHA</span></div>'
-         '<div class="wr">&#9888; Bigha ka maap ilaake ke hisaab se alag &middot; tehsil mein confirm karein</div></div>')
-J.append(f'tl.set("#save", {{opacity:0}}, 0); tl.fromTo("#save", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out", immediateRender:false}}, {S(9) - .1:.2f}); tl.fromTo("#save .ch", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.3, stagger:.2, immediateRender:false}}, {S(9) + .2:.2f});')
-sfx("riser", S(9) - .4, .25)
+         '<div class="wr">Copy: Apna Khata &rarr; Bhu Naksha &rarr; Nakal &rarr; Show Report</div></div>')
+J.append(f'tl.set("#save", {{opacity:0}}, 0); tl.fromTo("#save", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out", immediateRender:false}}, {S(11) - .1:.2f}); tl.fromTo("#save .ch", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.3, stagger:.2, immediateRender:false}}, {S(11) + .2:.2f});')
+sfx("sparkle", wt(11, "share"), .3)
 
 # ---------- captions ----------
 HI = ["Apna Khata", "Bhu Naksha", "Viewmap", "khasra", "Nakal", "Show Report", "hissa", "1/6", "1.03 hectare", "0.1717 hectare", "11,960", "2,053 gaj", "3,025", "0.68 bigha", "save"]
@@ -192,6 +201,9 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #save>small{display:block;font:800 30px Mont;letter-spacing:.3em;color:#FFD23F}#save>b{display:block;margin-top:10px;font:400 76px/1.05 Anton;color:#fff}
 #save .ch{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:34px;font:400 52px Anton;color:#e8edf5}#save .ch i{font-style:normal;color:#FFD23F}#save .ch .g{padding:4px 16px;border-radius:8px;background:#2FD158;color:#062411}#save .ch .y{padding:4px 16px;border-radius:8px;background:#FFD23F;color:#111}
 #save .wr{margin-top:40px;font:800 28px/1.35 Mont;color:#FFD23F}
+#bridge{position:absolute;left:60px;right:60px;top:420px;z-index:16;text-align:center;padding:40px 24px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
+#bridge small{display:block;font:800 28px Mont;letter-spacing:.3em;color:#cfd8e6}#bridge b{display:block;margin-top:12px;font:400 92px/1.04 Anton;color:#fff}#bridge span{display:inline-block;margin-top:24px;padding:10px 26px;border-radius:8px;background:#FFD23F;color:#111;font:900 36px Mont;letter-spacing:.08em}
+.bd .ic{font:400 120px/1 Mont;color:#FFD23F}.bd .wt{margin-top:10px;font:400 96px/1.02 Anton;color:#fff}
 .cp{position:absolute;left:40px;right:40px;top:1480px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
 audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio><audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.14" data-fade-out="1.5"></audio>' if VOICE
