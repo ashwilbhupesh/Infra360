@@ -97,8 +97,8 @@ H.append('<div id="hook"><small>आप भी सीख लीजिए</small><
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.45, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .3:.2f});')
 H.append('<div class="scr" id="hd"><div class="im" id="hdi" style="width:940px"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082, hl=True) + '</div></div>')
 J.append(f'tl.fromTo("#hd", {{opacity:0, y:160, scale:.9}}, {{opacity:1, y:120, scale:1, duration:.5, ease:"power3.out"}}, .1); tl.to("#hd", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
-t12 = 1.0; J.append(f'tl.to("#hdi", {{scale:1.4, x:-60, y:-250, transformOrigin:"0 0", duration:.6, ease:"power2.inOut"}}, {t12 - .6:.2f}); tl.to("#hook", {{y:-150, scale:.82, duration:.5, ease:"power2.inOut"}}, {t12 - .6:.2f}); tl.set(".hlb", {{opacity:0, scale:.7}}, 0);')
-for i, t_ in enumerate([1.0, 1.75, 2.65]):
+t12 = PH[0].get("hl", [1.0])[0]; J.append(f'tl.to("#hdi", {{scale:1.4, x:-60, y:-250, transformOrigin:"0 0", duration:.6, ease:"power2.inOut"}}, {t12 - .6:.2f}); tl.to("#hook", {{y:-150, scale:.82, duration:.5, ease:"power2.inOut"}}, {t12 - .6:.2f}); tl.set(".hlb", {{opacity:0, scale:.7}}, 0);')
+for i, t_ in enumerate(PH[0].get("hl", [1.0, 1.75, 2.65])):
     J.append(f'tl.to("#hlb{i}", {{opacity:1, scale:1, duration:.25, ease:"back.out(2.5)"}}, {t_:.2f});'); sfx("pop", t_, .28)
 sfx("impact-bass-1", 0, .4)
 
@@ -117,23 +117,23 @@ def tok(i, j, t):
     J.append(f'tl.fromTo("#bd{i} .t{j}", {{opacity:0, y:24, scale:.85}}, {{opacity:1, y:0, scale:1, duration:.35, ease:"back.out(2)", immediateRender:false}}, {t:.2f});'); sfx("click-soft", t, .25)
 board(7, S(2) - .1, S(3), '<div class="tk t0 lbl">हिस्सा &times; कुल क्षेत्रफल</div><div class="row"><span class="tk t1 big">1/6</span><span class="tk t2 op">&times;</span><span class="tk t3 big">1.03</span></div>'
       '<div class="tk t4 op">=</div><div class="tk t5 res">0.1717 <small>हेक्टेयर</small></div>')
-tok(7, 0, S(2) + .1); tok(7, 1, wt(2, "1/6 guna") - .1); tok(7, 2, wt(2, "guna 1.03") - .05); tok(7, 3, wt(2, "1.03 hectare") - .1); tok(7, 4, wt(2, "answer aaya") - .1); tok(7, 5, wt(2, "answer aaya") + .1)
-sfx("impact-bass-1", wt(2, "answer aaya") + .1, .35)
+tok(7, 0, S(2) + .1); tok(7, 1, wt(2, "1/6 guna") - .1); tok(7, 2, wt(2, "guna 1.03") - .05); tok(7, 3, wt(2, "1.03 hectare") - .1); tok(7, 4, wt(2, "answer aata") - .1); tok(7, 5, wt(2, "answer aata") + .1)
+sfx("impact-bass-1", wt(2, "answer aata") + .1, .35)
 board(8, S(3) - .1, S(4), '<div class="tk t0 lbl">हेक्टेयर &rarr; गज &rarr; बीघा</div>'
       '<div class="ln tk t1"><span>0.1717</span><i>&times; 11,960 =</i><b>2,053 गज</b></div>'
       '<div class="ln tk t2"><span>2,053</span><i>&divide; 3,025 =</i><b class="g">0.68 बीघा</b></div>'
       '<em class="tk t3">1 हेक्टेयर &asymp; 11,960 गज &middot; 1 पक्का बीघा = 3,025 गज (इलाके के हिसाब से अलग हो सकता है)</em>')
-tok(8, 0, S(3) + .1); tok(8, 1, wt(3, "11,960") - .1); tok(8, 2, wt(3, "3,025") - .1); tok(8, 3, wt(3, "lagbhag") - .1)
-sfx("impact-bass-1", wt(3, "lagbhag"), .35)
+tok(8, 0, S(3) + .1); tok(8, 1, wt(3, "11,960") - .1); tok(8, 2, wt(3, "3,025") - .1); tok(8, 3, wt(3, "0.68") - .1)
+sfx("impact-bass-1", wt(3, "0.68"), .35)
 
 # owner result: name + 0.68 bigha
 H.append('<div id="own"><small>परिणाम</small><div class="or"><span class="nm">रमेश पुत्र मोहन</span><span class="hs">हिस्सा <span style="font:900 36px Mont">1/6</span></span></div><i>&darr;</i><b>0.68 बीघा</b><em>&asymp; 2,053 गज &middot; 0.1717 हेक्टेयर</em></div>')
 to_ = wt(3, "Ab hamare paas") - .1
-J.append(f'tl.set("#own", {{opacity:0}}, 0); tl.fromTo("#own", {{opacity:0, y:40, scale:.95}}, {{opacity:1, y:0, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {to_:.2f}); tl.fromTo("#own b", {{scale:.6, opacity:0}}, {{scale:1, opacity:1, duration:.4, ease:"back.out(2.5)", immediateRender:false}}, {to_ + .35:.2f}); tl.to("#own", {{opacity:0, y:-20, duration:.3}}, {PH[4]["fgap"][0] - .1:.2f});')
+J.append(f'tl.set("#own", {{opacity:0}}, 0); tl.fromTo("#own", {{opacity:0, y:40, scale:.95}}, {{opacity:1, y:0, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {to_:.2f}); tl.fromTo("#own b", {{scale:.6, opacity:0}}, {{scale:1, opacity:1, duration:.4, ease:"back.out(2.5)", immediateRender:false}}, {to_ + .35:.2f}); tl.to("#own", {{opacity:0, y:-20, duration:.3}}, {(PH[4]["fgap"][0] if "fgap" in PH[4] else S(4)) - .1:.2f});')
 J.append(f'tl.to("#bd8", {{opacity:0, duration:.25}}, {to_ - .05:.2f});')
 sfx("impact-bass-1", to_ + .35, .4)
 # general formula card (in the inserted gap)
-FG0, FG1 = PH[4]["fgap"]
+FG0, FG1 = PH[4]["fgap"] if "fgap" in PH[4] else (S(4) - .05, E(4) + .05)
 H.append('<div id="fml"><small>सामान्य सूत्र</small><b>अपना हिस्सा निकालो</b>'
          '<div class="ch"><span>हिस्सा &times; कुल क्षेत्रफल</span><i>=</i><span class="g">हेक्टेयर</span></div>'
          '<div class="ch"><span class="g">हेक्टेयर</span><i>&times; 11,960 =</i><span class="g">गज</span></div>'
