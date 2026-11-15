@@ -96,7 +96,7 @@ PIC = '<svg viewBox="0 0 100 100"><circle cx="50" cy="32" r="18" fill="currentCo
 H.append(f'<div class="who" id="w0" style="left:60px"><div class="av">{PIC}</div><b>बेचने वाला</b><span>बेच दी</span><i>&#10005;</i></div>'
          f'<div class="who" id="w1" style="left:580px"><div class="av">{PIC}</div><b>खरीदने वाला</b><span>गैरकानूनी खरीद</span><i>&#10005;</i></div>')
 inn("#w0", S(4) + .1, "opacity:0, x:-80"); inn("#w1", wt(4, "खरीदने") - .1, "opacity:0, x:80")
-for j, kw in enumerate(["उसने बेच", "गैरकानूनी"]):
+for j, kw in enumerate(["बेच दी", "गैरकानूनी"]):
     J.append(f'tl.set("#w{j} i", {{opacity:0}}, 0); tl.fromTo("#w{j} i", {{opacity:0, scale:2.5}}, {{opacity:1, scale:1, duration:.25, ease:"power4.in", immediateRender:false}}, {wt(4, kw) + .2:.2f});'); sfx("impact-bass-1", wt(4, kw) + .4, .3)
 out("#w0, #w1", wt(4, "बेदखल") - .2)
 H.append('<div id="evict"><b>बेदखली</b><span>खरीदार को ज़मीन से हटाया जा सकता है</span></div>'); inn("#evict", wt(4, "बेदखल") - .2, "opacity:0, scale:.8"); out("#evict", wt(4, "राज रकबा") - .3)
@@ -105,8 +105,8 @@ inn("#raj", wt(4, "राज रकबा") - .3, "opacity:0, y:60, scale:.9"); 
 sfx("whoosh", wt(4, "राज रकबा") - .3, .3)
 
 # ---------- 5 High Court ----------
-bgp("b5", "court", S(5) - .3, S(6) - .1, op=.45, blur=3)
-H.append('<div id="hc"><div class="cb"><svg viewBox="0 0 200 120"><path d="M20 44 100 8 180 44z" fill="#E8D6A8"/><rect x="28" y="48" width="144" height="8" fill="#E8D6A8"/>' + "".join(f'<rect x="{36 + k * 26}" y="60" width="14" height="44" fill="#E8D6A8"/>' for k in range(6)) + '<rect x="18" y="106" width="164" height="10" fill="#E8D6A8"/></svg></div>'
+bgp("b5", "hc", S(5) - .3, S(6) - .1, op=.7, blur=0)
+H.append('<div id="hc"><div class="cb" style="display:none"><svg viewBox="0 0 200 120"><path d="M20 44 100 8 180 44z" fill="#E8D6A8"/><rect x="28" y="48" width="144" height="8" fill="#E8D6A8"/>' + "".join(f'<rect x="{36 + k * 26}" y="60" width="14" height="44" fill="#E8D6A8"/>' for k in range(6)) + '<rect x="18" y="106" width="164" height="10" fill="#E8D6A8"/></svg></div>'
          '<small>राजस्थान हाई कोर्ट</small><div class="q">&ldquo;धारा 42 के खिलाफ़ खरीदी ज़मीन पर<br/>सालों के कब्ज़े से भी खातेदारी नहीं मिलती&rdquo;</div>'
          '<div class="eq"><span>सालों का कब्ज़ा</span><i>&ne;</i><span class="y">मालिकाना हक</span></div><em>सीता राम बनाम राजस्व मंडल (2012) &middot; 2025 में भी दोहराया</em></div>')
 inn("#hc", S(5) - .1, "opacity:0, y:60"); out("#hc", S(6))
@@ -125,9 +125,9 @@ bgp("b7", "court", S(7) - .2, S(8) - .1, op=1, z0=1.12, z1=1.0)
 tk = wt(7, "केस") - .2
 J.append(f'tl.to("#jg0, #jg1", {{rotation:(i) => i ? 6 : -6, y:"+=40", opacity:0, duration:.5, ease:"power2.in"}}, {tk:.2f}); tl.set(".ck", {{opacity:0}}, 0); tl.to(".ck", {{opacity:1, duration:.1}}, {tk - .2:.2f});')
 sfx("impact-bass-1", tk - .2, .4)
-H.append('<div id="case"><b>केस &middot; मुकदमे</b><span>सालों तक</span></div>'); inn("#case", tk + .1, "opacity:0, scale:1.6", "power4.out", .3); out("#case", wt(7, "पैसा") - .2)
+H.append('<div id="case"><b>केस &middot; मुकदमे</b><span>सालों तक</span></div>'); inn("#case", tk + .1, "opacity:0, scale:1.6", "power4.out", .3); out("#case", wt(7, "पैसे") - .2)
 H.append('<div id="mt">' + "".join(f'<div class="m" id="m{j}"><b>{a}</b><div class="bar"><i></i></div></div>' for j, a in enumerate(["₹ पैसा", "&#8987; समय", "&#9889; एनर्जी"])) + '</div>')
-for j, kw in enumerate(["पैसा", "समय और", "एनर्जी"]):
+for j, kw in enumerate(["पैसे", "समय,", "एनर्जी"]):
     inn(f"#m{j}", wt(7, kw) - .15, "opacity:0, x:-60", "power3.out", .3)
     J.append(f'tl.fromTo("#m{j} .bar i", {{scaleX:1}}, {{scaleX:.08, duration:1.2, ease:"power2.in", immediateRender:false}}, {wt(7, kw):.2f});')
     sfx("click-soft", wt(7, kw), .3)
@@ -150,7 +150,7 @@ inn("#share", S(9) - .1, "opacity:0, scale:.9")
 J.append(f'tl.to("#share .cta", {{scale:1.07, duration:.35, yoyo:true, repeat:5}}, {S(9) + .6:.2f});'); sfx("sparkle", S(9) + .5, .3)
 
 # ---------- captions (Hindi) ----------
-HI = ["SC/ST", "सस्ती ज़मीन", "लाखों रुपए", "General", "OBC", "धारा 42", "शून्य", "void", "राज रकबा", "बेदखल", "हाई कोर्ट", "मालिक नहीं", "पावर ऑफ़ अटॉर्नी", "रिश्तेदार", "केस", "मुकदमे", "जाति", "जमाबंदी"]
+HI = ["SC/ST", "सस्ती ज़मीन", "लाखों रुपए", "General", "OBC", "धारा 42", "शून्य", "void", "राज रकबा", "बेदखल", "हाई कोर्ट", "मालिक नहीं", "राज रकबा", "शॉर्टकट्स", "पावर ऑफ़ अटॉर्नी", "रिश्तेदार", "केस", "मुकदमे", "जाति", "जमाबंदी"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
@@ -206,7 +206,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 .who i{position:absolute;left:0;right:0;top:10px;height:240px;display:flex;align-items:center;justify-content:center;font:900 230px/1 Mont;font-style:normal;color:#E8262B;text-shadow:0 0 30px rgba(0,0,0,.6)}
 #evict{position:absolute;left:90px;right:90px;top:520px;z-index:15;text-align:center;padding:50px 30px;border-radius:18px;background:#5a1616;border:3px solid #FF6B6B}#evict b{display:block;font:900 120px/1 DevaH;color:#fff}#evict span{display:block;margin-top:18px;font:700 38px Deva;color:#ffd7d7}
 #raj{position:absolute;left:90px;right:90px;top:420px;z-index:15;text-align:center;padding:40px 30px;border-radius:18px;background:rgba(11,15,23,.94);border:3px solid #FFD23F}#raj .gv{width:300px;margin:0 auto}#raj b{display:block;margin-top:20px;font:900 130px/1 DevaH;color:#FFD23F}#raj span{display:block;margin-top:16px;font:700 40px Deva;color:#fff}
-#hc{position:absolute;left:60px;right:60px;top:240px;z-index:15;text-align:center;padding:36px 30px;border-radius:18px;background:linear-gradient(160deg,rgba(18,15,10,.96),rgba(38,30,19,.96));border:3px solid #C9A24A}#hc .cb{width:360px;margin:0 auto}#hc small{display:block;margin-top:14px;font:900 50px DevaH;color:#E8D6A8}
+#hc{position:absolute;left:60px;right:60px;top:820px;z-index:15;text-align:center;padding:36px 30px;border-radius:18px;background:linear-gradient(160deg,rgba(18,15,10,.96),rgba(38,30,19,.96));border:3px solid #C9A24A}#hc .cb{width:360px;margin:0 auto}#hc small{display:block;margin-top:14px;font:900 50px DevaH;color:#E8D6A8}
 #hc .q{margin-top:22px;font:700 38px/1.4 Deva;color:#fff}#hc .eq{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:30px}#hc .eq span{padding:10px 22px;border-radius:10px;background:#2b3a52;color:#fff;font:900 46px DevaH}#hc .eq span.y{background:#FFD23F;color:#111}#hc .eq i{font:900 80px Mont;font-style:normal;color:#FF6B6B}
 #hc em{display:block;margin-top:26px;font:600 24px Deva;font-style:normal;color:#cfd8e6}
 .jg{position:absolute;left:90px;right:90px;z-index:15;padding:34px 36px;border-radius:18px;background:rgba(11,15,23,.93);border:3px solid #FFD23F;overflow:hidden}.jg b{display:block;font:900 70px/1.1 DevaH;color:#FFD23F}.jg span{display:block;margin-top:10px;font:700 36px Deva;color:#fff}
