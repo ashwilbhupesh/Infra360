@@ -53,6 +53,11 @@ H.append('<div id="rain">' + "".join(f'<i style="left:{40 + (k * 131) % 1000}px;
 J.append(f'tl.set("#rain", {{opacity:1}}, {wt(0, "लाखों") - .2:.2f}); tl.fromTo("#rain i", {{y:-150, opacity:0, rotation:-20}}, {{y:2100, opacity:1, rotation:30, duration:1.8, stagger:{{each:.09}}, ease:"power1.in", immediateRender:false}}, {wt(0, "लाखों") - .2:.2f}); tl.set("#rain", {{opacity:0}}, {S(1):.2f}); tl.set("#rain", {{opacity:0}}, 0);')
 sfx("impact-bass-1", 0, .45); sfx("whoosh", tf + .2, .35); sfx("impact-bass-1", tf + .3, .4)
 
+# 'lakhon rupaye gawa dete hain' -> loss image pop-up
+H.append('<div id="loss"><img src="assets/img/loss.jpg"/><span>प्रतीकात्मक चित्र</span></div>')
+tl_ = wt(0, "लाखों") - .15
+J.append(f'tl.set("#loss", {{opacity:0}}, 0); tl.fromTo("#loss", {{opacity:0, scale:.6, rotation:-6, y:80}}, {{opacity:1, scale:1, rotation:-2, y:0, duration:.4, ease:"back.out(1.8)", immediateRender:false}}, {tl_:.2f}); tl.to("#loss", {{opacity:0, scale:.95, duration:.3}}, {S(1) - .25:.2f});')
+sfx("whoosh", tl_, .3)
 # ---------- 1 Jamabandi: jaati ----------
 bgp("b1", "bg_fields", S(1) - .3, S(2) + .2, op=.4, blur=3)
 H.append('<div class="doc" id="d1"><div class="im" id="d1i"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082, hl=True) + '</div></div>')
@@ -209,6 +214,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #sign .sa b{font:900 84px/1 DevaH;color:#C81E1E}#sign .sa span{margin-top:14px;font:800 40px Deva;color:#222}
 #sign .sb{background:#C81E1E}#sign .sb b{font:900 86px/1 DevaH;color:#fff}#sign .sb span{margin-top:12px;font:800 40px Deva;color:#FFD23F}
 #hook{position:absolute;left:60px;right:60px;top:110px;z-index:16;text-align:center;padding:22px 20px;border-radius:14px;border:2px solid #FFD23F;background:rgba(11,15,23,.9)}#hook small{display:block;font:800 32px Deva;color:#FF6B6B}#hook b{display:block;margin-top:6px;font:900 78px/1.1 DevaH;color:#fff}
+#loss{position:absolute;left:0;right:0;margin:0 auto;width:780px;top:890px;z-index:12;padding:8px;border-radius:10px;background:#fff;box-shadow:0 40px 90px rgba(0,0,0,.75)}#loss img{display:block;width:100%;border-radius:6px}#loss span{position:absolute;right:16px;bottom:16px;padding:3px 10px;border-radius:4px;background:rgba(0,0,0,.6);color:#fff;font:700 18px Deva}
 #rain{position:absolute;inset:0;z-index:7;pointer-events:none;opacity:0}#rain i{position:absolute;top:0;font-style:normal;font-weight:900;color:#2FD158;text-shadow:0 4px 12px rgba(0,0,0,.6)}
 .doc{position:absolute;left:70px;top:330px;width:940px;height:1060px;overflow:hidden;border-radius:16px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.7);z-index:5}.doc .im{position:absolute;left:0;top:0;width:940px}.doc img{display:block;width:100%}
 .fk{position:absolute;background:#fff;color:#111;font-family:Deva,sans-serif;font-weight:500;line-height:1.25;white-space:nowrap;overflow:hidden;padding-left:2px}
