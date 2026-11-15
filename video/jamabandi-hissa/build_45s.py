@@ -73,26 +73,33 @@ def step(i, num, text, t0, t1):
     H.append(f'<div class="stp" id="stp{i}"><i>{num}</i><b>{text}</b></div>')
     J.append(f'tl.set("#stp{i}", {{opacity:0}}, 0); tl.fromTo("#stp{i}", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3, immediateRender:false}}, {t0:.2f}); tl.to("#stp{i}", {{opacity:0, duration:.2}}, {t1 - .2:.2f});')
 
-FAKE = [((80, 322, 240, 346), "सीता पुत्री मोहन"), ((80, 370, 224, 394), "गीता पुत्री मोहन"), ((80, 418, 232, 442), "रमेश पुत्र मोहन"),
-        ((80, 467, 221, 491), "रानी पुत्री मोहन"), ((80, 515, 249, 539), "सुरेश पुत्र मोहन"), ((80, 563, 261, 587), "महेश पुत्र मोहन"),
+FAKE = [((80, 322, 240, 346), "सीता पुत्री मोहन"), ((80, 370, 224, 394), "गीता पुत्र मोहन"), ((80, 418, 232, 442), "रमेश पुत्र मोहन"),
         ((140, 124, 215, 150), "उदाहरणपुर"), ((150, 158, 225, 186), "नमूना"), ((150, 190, 215, 216), "नमूना"), ((118, 222, 215, 248), "उदाहरण")]
-BLANK = [(y0, cs) for y0, cs in [(322, 350), (370, 336), (418, 343), (467, 333), (515, 360), (563, 373)]]
-def fake_overlay(k):
+ROWS = [(322, 238, 350, "1/2"), (370, 222, 336, "1/3"), (418, 230, 343, "1/6")]   # y0, hissa-x, caste-x, share  (1/2+1/3+1/6 = 1)
+def fake_overlay(k, hl=False):
     o = []
     for (x0, y0, x1, y1), t in FAKE:
         o.append(f'<div class="fk" style="left:{x0 * k:.1f}px;top:{y0 * k:.1f}px;width:{(x1 - x0 + 4) * k:.1f}px;height:{(y1 - y0) * k:.1f}px;font-size:{19 * k:.1f}px">{t}</div>')
-    for y0, cs in BLANK:
-        o.append(f'<div class="fk" style="left:{(cs - 30) * k:.1f}px;top:{y0 * k:.1f}px;width:{217 * k:.1f}px;height:{24 * k:.1f}px;font-size:{19 * k:.1f}px">जाति- ----&nbsp;&nbsp;सा. देह खातेदार</div>')
-        o.append(f'<div class="fk" style="left:{285 * k:.1f}px;top:{(y0 + 24) * k:.1f}px;width:{422 * k:.1f}px;height:{26 * k:.1f}px"></div>')
+    for y0, hx, cs, sh in ROWS:
+        o.append(f'<div class="fk" style="left:{(hx - 2) * k:.1f}px;top:{y0 * k:.1f}px;width:{(cs - 30 - hx + 2) * k:.1f}px;height:{24 * k:.1f}px;font-size:{19 * k:.1f}px">हिस्सा- {sh}</div>')
+        o.append(f'<div class="fk" style="left:{(cs - 30) * k:.1f}px;top:{y0 * k:.1f}px;width:{217 * k:.1f}px;height:{24 * k:.1f}px;font-size:{19 * k:.1f}px">&nbsp;जाति- ----&nbsp;&nbsp;सा. देह खातेदार</div>')
+        o.append(f'<div class="fk" style="left:{62 * k:.1f}px;top:{(y0 + 24) * k:.1f}px;width:{645 * k:.1f}px;height:{24 * k:.1f}px"></div>')
+    o.append(f'<div class="fk" style="left:{55 * k:.1f}px;top:{466 * k:.1f}px;width:{670 * k:.1f}px;height:{148 * k:.1f}px"></div>')
     for b in [(160, 1215, 450, 1305), (500, 1215, 720, 1305), (110, 1360, 880, 1388), (150, 1428, 400, 1482)]:
         o.append(f'<div class="fk" style="left:{b[0] * k:.1f}px;top:{b[1] * k:.1f}px;width:{(b[2] - b[0]) * k:.1f}px;height:{(b[3] - b[1]) * k:.1f}px;font-size:{19 * k:.1f}px">------</div>')
+    if hl:
+        for i, (y0, hx, cs, sh) in enumerate(ROWS):
+            o.append(f'<div class="hlb" id="hlb{i}" style="left:{(hx - 8) * k:.1f}px;top:{(y0 - 4) * k:.1f}px;width:{(cs - 30 - hx + 14) * k:.1f}px;height:{32 * k:.1f}px"></div>')
     o.append(f'<div class="wm" style="font-size:{150 * k:.0f}px">उदाहरण · SAMPLE</div>')
     return "".join(o)
 # ---------- 0 hook ----------
 H.append('<div id="hook"><small>AAP BHI SEEKH LIJIYE</small><b>JAMABANDI MEIN<br/>APNA HISSA NIKAALNA</b><span>1/6 = KITNI ZAMEEN?</span></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.45, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .3:.2f});')
-H.append('<div class="scr" id="hd"><div class="im" style="width:940px"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082) + '</div></div>')
-J.append(f'tl.fromTo("#hd", {{opacity:0, y:160, scale:.9}}, {{opacity:.55, y:120, scale:1, duration:.8, ease:"power3.out"}}, .2); tl.to("#hd", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
+H.append('<div class="scr" id="hd"><div class="im" id="hdi" style="width:940px"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082, hl=True) + '</div></div>')
+J.append(f'tl.fromTo("#hd", {{opacity:0, y:160, scale:.9}}, {{opacity:1, y:120, scale:1, duration:.5, ease:"power3.out"}}, .1); tl.to("#hd", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
+t12 = 1.0; J.append(f'tl.to("#hdi", {{scale:1.4, x:-60, y:-250, transformOrigin:"0 0", duration:.6, ease:"power2.inOut"}}, {t12 - .6:.2f}); tl.to("#hook", {{y:-150, scale:.82, duration:.5, ease:"power2.inOut"}}, {t12 - .6:.2f}); tl.set(".hlb", {{opacity:0, scale:.7}}, 0);')
+for i, t_ in enumerate([1.0, 1.75, 2.65]):
+    J.append(f'tl.to("#hlb{i}", {{opacity:1, scale:1, duration:.25, ease:"back.out(2.5)"}}, {t_:.2f});'); sfx("pop", t_, .28)
 sfx("impact-bass-1", 0, .4)
 
 # ---------- 1 the jamabandi ----------
@@ -191,6 +198,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #hd{background:transparent;border:none;box-shadow:none}
 .im{position:absolute;left:0;top:0}.im img{display:block;width:100%;height:auto}.im svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
 .fk{position:absolute;background:#fff;color:#111;font-family:Deva,sans-serif;font-weight:500;line-height:1.25;white-space:nowrap;overflow:hidden;padding-left:2px}
+.hlb{position:absolute;border:4px solid #E8262B;border-radius:8px;background:rgba(255,210,63,.35);box-shadow:0 0 14px rgba(232,38,43,.5);opacity:0}
 .wm{position:absolute;left:50%;top:42%;translate:-50% -50%;rotate:-28deg;white-space:nowrap;font-family:Deva,Mont;font-weight:900;color:rgba(200,30,30,.13);pointer-events:none}
 .ci{fill:none;stroke:#E8262B;stroke-dasharray:1;stroke-dashoffset:1;stroke-linecap:round;filter:drop-shadow(0 0 3px rgba(232,38,43,.6))}
 .ar line{stroke:#FFD23F;stroke-linecap:round}.ar text{fill:#111;font-family:Mont;font-weight:900;paint-order:stroke;stroke:#FFD23F;stroke-width:.35em;stroke-linejoin:round}
