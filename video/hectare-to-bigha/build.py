@@ -53,11 +53,16 @@ J.append('tl.set("#map", {opacity:0}, 0); tl.set("#map .dz", {strokeDashoffset:1
 def map_on(t0, t1, draw=True, qmarks=False, y=420, sc=1.0):
     J.append(f'tl.fromTo("#map", {{opacity:0, y:{y + 40}, scale:{sc}}}, {{opacity:1, y:{y}, scale:{sc}, duration:.4, immediateRender:false}}, {t0:.2f}); tl.to("#map", {{opacity:0, duration:.3}}, {t1 - .3:.2f});')
     if draw: J.append(f'tl.fromTo("#map .dz", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:1.0, stagger:{{each:.025, from:"random"}}, ease:"power2.out", immediateRender:false}}, {t0:.2f});')
-    J.append(f'tl.to("#map .dz", {{fillOpacity:.12, duration:.4, stagger:{{each:.03, from:"random", yoyo:true, repeat:1}}}}, {t0 + 1.0:.2f});')
+    J.append(f'tl.fromTo("#map .dz", {{fillOpacity:0}}, {{fillOpacity:.08, duration:.6, immediateRender:false}}, {t0 + 1.0:.2f});')
     if qmarks:
-        J.append(f'tl.fromTo("#map .qm", {{opacity:0, scale:.3}}, {{opacity:1, scale:1, duration:.3, stagger:{{each:.04, from:"random"}}, ease:"back.out(3)", immediateRender:false}}, {t0 + .6:.2f}); tl.to("#map .qm", {{scale:1.25, duration:.35, yoyo:true, repeat:5, stagger:{{each:.02, from:"random"}}}}, {t0 + 2.4:.2f}); tl.to("#map .qm", {{opacity:0, duration:.2}}, {t1 - .4:.2f});')
+        J.append(f'tl.fromTo("#map .qm", {{opacity:0, scale:.3}}, {{opacity:1, scale:1, duration:.3, stagger:{{each:.04, from:"random"}}, ease:"back.out(3)", immediateRender:false}}, {t0 + .6:.2f});  tl.to("#map .qm", {{opacity:0, duration:.2}}, {t1 - .4:.2f});')
     sfx("riser", t0, .25)
 
+H.append('<div class="qt" id="qb">बड़ा बीघा ?</div><div class="qt" id="qc">छोटा बीघा ?</div>')
+J.append('tl.set("#qb, #qc", {opacity:0}, 0);')
+def qtags(ta, tb, t1):
+    J.append(f'tl.fromTo("#qb", {{opacity:0, scale:1.6, rotation:-6}}, {{opacity:1, scale:1, rotation:-4, duration:.35, ease:"back.out(2.5)", immediateRender:false}}, {ta:.2f}); tl.fromTo("#qc", {{opacity:0, scale:1.6, rotation:6}}, {{opacity:1, scale:1, rotation:4, duration:.35, ease:"back.out(2.5)", immediateRender:false}}, {tb:.2f}); tl.to("#qb, #qc", {{opacity:0, duration:.3}}, {t1 - .3:.2f});')
+    sfx("pop", ta, .3); sfx("pop", tb, .3)
 # ---------- 0 hook ----------
 bgp("b0", "bg_fields", 0, S(1) + .2, op=.45, blur=2)
 H.append('<div class="doc" id="d0"><div class="im"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(760 / 1082) + '</div><div class="hl" id="ha">1.0300 हेक्टेयर</div></div>')
@@ -69,7 +74,8 @@ J.append(f'tl.to("#hook b", {{scale:1.07, duration:.3, yoyo:true, repeat:3}}, {w
 sfx("impact-bass-1", 0, .4); sfx("impact-bass-1", wt(0, "Lekin"), .4)
 
 # ---------- 1 two types ----------
-map_on(S(1) - .2, S(2), draw=True, y=520, sc=.95)
+map_on(wt(0, "Lekin") - .2, S(2), draw=True, y=560, sc=.95)
+qtags(wt(0, "alag") - .1, wt(0, "alag") + .35, S(1) + .1)
 H.append('<div class="two" id="two"><div class="pk"><b>पक्का</b><span>बड़ा बीघा</span></div><i>vs</i><div class="kc"><b>कच्चा</b><span>छोटा बीघा</span></div></div>')
 inn("#two .pk", wt(1, "pakka") - .1, "opacity:0, x:-80", "back.out(2)", .35); inn("#two .kc", wt(1, "kaccha") - .1, "opacity:0, x:80", "back.out(2)", .35)
 J.append(f'tl.set("#two", {{opacity:1}}, 0); tl.set("#two i", {{opacity:0}}, 0); tl.to("#two i", {{opacity:1, duration:.2}}, {wt(1, "kaccha") + .2:.2f}); tl.to("#two", {{opacity:0, duration:.3}}, {S(2) - .3:.2f});')
@@ -91,6 +97,7 @@ sfx("whoosh", wt(2, "165"), .3); sfx("whoosh", wt(3, "132"), .3)
 
 # ---------- 4 comment: neon map + ? ----------
 map_on(S(4) - .2, S(5), draw=True, qmarks=True, y=470, sc=1.0)
+qtags(wt(4, "Pakka ya") - .1, wt(4, "kaccha?") - .1, S(5))
 H.append('<div id="ask"><b>आपके ज़िले में कौनसा बीघा?</b><span>पक्का या कच्चा &middot; <u>कमेंट करें</u></span></div>')
 inn("#ask", S(4) - .1, "opacity:0, y:-40", "back.out(1.6)", .4); out("#ask", S(5))
 J.append(f'tl.to("#ask u", {{scale:1.12, duration:.3, yoyo:true, repeat:5, display:"inline-block"}}, {wt(4, "Comment"):.2f});')
@@ -172,7 +179,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 .doc .hl{position:absolute;left:150px;top:610px;padding:10px 26px;border-radius:10px;background:#fff;border:4px solid #2FA8FF;font:900 52px Mont,Deva;color:#111;box-shadow:0 10px 30px rgba(0,0,0,.4)}
 .fk{position:absolute;background:#fff;color:#111;font-family:Deva,sans-serif;font-weight:500;line-height:1.25;white-space:nowrap;overflow:hidden;padding-left:2px}.hlb{display:none}
 .wm{position:absolute;left:50%;top:42%;translate:-50% -50%;rotate:-28deg;white-space:nowrap;font-family:Deva,Mont;font-weight:900;color:rgba(200,30,30,.13);pointer-events:none}
-#hook{position:absolute;left:60px;right:60px;top:560px;z-index:16;text-align:center;padding:40px 20px;border-radius:18px;border:3px solid #2FA8FF;background:rgba(7,10,18,.94);box-shadow:0 0 40px rgba(47,168,255,.35)}#hook small{display:block;font:800 40px Deva;color:#9fd4ff}#hook b{display:block;margin-top:8px;font:900 140px/1.05 DevaH;color:#fff;text-shadow:0 0 24px rgba(47,168,255,.6)}#hook span{display:inline-block;margin-top:16px;padding:8px 24px;border-radius:8px;background:#2FA8FF;color:#fff;font:900 40px Deva}
+#hook{position:absolute;left:60px;right:60px;top:140px;z-index:16;text-align:center;padding:40px 20px;border-radius:18px;border:3px solid #2FA8FF;background:rgba(7,10,18,.94);box-shadow:0 0 40px rgba(47,168,255,.35)}#hook small{display:block;font:800 40px Deva;color:#9fd4ff}#hook b{display:block;margin-top:8px;font:900 140px/1.05 DevaH;color:#fff;text-shadow:0 0 24px rgba(47,168,255,.6)}#hook span{display:inline-block;margin-top:16px;padding:8px 24px;border-radius:8px;background:#2FA8FF;color:#fff;font:900 40px Deva}
 #map{position:absolute;left:70px;top:0;width:940px;z-index:6;opacity:0}#map svg{display:block;width:100%;overflow:visible}
 #map .dz{fill:currentColor;fill-opacity:0;stroke-width:2.6;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}#map .dz{vector-effect:non-scaling-stroke}#map path{pathLength:1}
 #map .qm{font:900 44px Mont;text-anchor:middle;filter:drop-shadow(0 0 6px currentColor)}
@@ -197,6 +204,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #save .cta{display:inline-block;margin-top:40px;padding:14px 34px;border-radius:10px;background:#2FA8FF;color:#fff;font:900 40px Deva}
 #fm{position:absolute;left:60px;right:60px;top:280px;z-index:15;padding:40px 40px;border-radius:20px;background:rgba(7,10,18,.95);border:3px solid #2FA8FF;box-shadow:0 0 40px rgba(47,168,255,.3)}#fm small{display:block;text-align:center;font:900 54px DevaH;color:#9fd4ff}
 #fm .fr{display:flex;justify-content:center;align-items:center;gap:18px;margin-top:34px;font:900 56px DevaH;color:#fff}#fm .fr i{font-style:normal;font-family:Anton;font-weight:400;font-size:60px;color:#2FA8FF}#fm .fr b{padding:4px 18px;border-radius:10px;background:#2FA8FF;color:#fff;font-weight:900}
+.qt{position:absolute;z-index:17;padding:12px 28px;border-radius:14px;background:rgba(7,10,18,.94);border:3px solid #2FA8FF;color:#fff;font:900 62px DevaH;box-shadow:0 0 30px rgba(47,168,255,.55)}#qb{left:60px;top:1210px}#qc{right:60px;top:1330px}
 .cp{position:absolute;left:40px;right:40px;top:1480px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
 audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio><audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.14" data-fade-out="1.5"></audio>' if VOICE
