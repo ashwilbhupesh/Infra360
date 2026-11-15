@@ -106,6 +106,11 @@ for i, t_ in enumerate(PH[0].get("hl", [1.0, 1.75, 2.65])):
     J.append(f'tl.to("#hlb{i}", {{opacity:1, scale:1, duration:.25, ease:"back.out(2.5)"}}, {t_:.2f});'); sfx("pop", t_, .28)
 sfx("impact-bass-1", 0, .4)
 
+# 'bigha mein kaise pata lage' -> big बीघा?
+H.append('<div id="bq"><b>बीघा ?</b><span>कितनी ज़मीन?</span></div>')
+_tb = wt(0, "Lekin bigha") + .25
+J.append(f'tl.set("#bq", {{opacity:0}}, 0); tl.fromTo("#bq", {{opacity:0, scale:2.2, rotation:-8}}, {{opacity:1, scale:1, rotation:-4, duration:.35, ease:"back.out(2)", immediateRender:false}}, {_tb:.2f}); tl.to("#bq b", {{scale:1.08, duration:.3, yoyo:true, repeat:3}}, {_tb + .4:.2f}); tl.to("#bq", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
+sfx("impact-bass-1", _tb, .4)
 # ---------- 1 the jamabandi ----------
 step(6, "&#9733;", "नाम के आगे <u>हिस्सा</u> &middot; नीचे <u>कुल क्षेत्रफल</u>", S(1) - .1, S(2))
 screen("sc8", "jama_real", S(1) - .1, S(2) + .2, [(wt(1, "hissa"), 290, 430, 72, 20, 1.6, "हिस्सा 1/6"), (wt(1, "kul area"), 250, 1135, 75, 22, 1.6, "कुल 1.0300 हेक्टेयर")], extra=fake_overlay(940 / 1082))
@@ -258,6 +263,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #bridge{position:absolute;left:60px;right:60px;top:200px;z-index:16;text-align:center;padding:40px 24px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
 #bridge small{letter-spacing:.02em !important;display:block;font:800 28px Mont,Deva;letter-spacing:.3em;color:#cfd8e6}#bridge b{display:block;margin-top:12px;font:400 92px/1.04 Anton,DevaH;color:#fff}#bridge span{display:inline-block;margin-top:24px;padding:10px 26px;border-radius:8px;background:#FFD23F;color:#111;font:900 36px Mont,Deva;letter-spacing:.08em}
 .bd .ic{font:400 120px/1 Mont,Deva;color:#FFD23F}.bd .wt{margin-top:10px;font:400 96px/1.02 Anton,DevaH;color:#fff}
+#bq{position:absolute;left:0;right:0;top:820px;margin:0 auto;width:max-content;z-index:18;text-align:center;padding:26px 60px;border-radius:20px;background:#FFD23F;box-shadow:0 30px 70px rgba(0,0,0,.7)}#bq b{display:block;font:900 190px/1 DevaH;color:#111}#bq span{display:block;margin-top:8px;font:800 44px Deva;color:#5a3c00}
 #fml{position:absolute;left:60px;right:60px;top:300px;z-index:16;text-align:center;padding:40px 30px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
 #fml>small{display:block;font:800 32px Mont,Deva;color:#FFD23F}#fml>b{display:block;margin-top:10px;font:400 76px/1.1 Anton,DevaH;color:#fff}
 #fml .ch{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:34px;font:400 52px Anton,DevaH;color:#e8edf5}#fml .ch i{font-style:normal;color:#FFD23F}#fml .ch .g{padding:4px 16px;border-radius:8px;background:#2FD158;color:#062411}#fml .ch .y{padding:4px 16px;border-radius:8px;background:#FFD23F;color:#111}

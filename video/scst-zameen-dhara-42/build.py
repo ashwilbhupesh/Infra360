@@ -115,11 +115,33 @@ sfx("impact-bass-1", S(5), .4); sfx("click-soft", wt(5, "सालों"), .3)
 
 # ---------- 6 jugaad ----------
 bgp("b6", "cash", S(6) - .3, S(7) + .4, op=.85, z0=1.0, z1=1.15)
-H.append('<div class="lbl1" id="l6">जुगाड़ &#128064;</div>'); inn("#l6", S(6), "opacity:0, y:-30"); out("#l6", S(7) - .2)
+H.append('<div class="lbl1" id="l6">जुगाड़ &#128064;</div>'); inn("#l6", S(6), "opacity:0, y:-30"); out("#l6", wt(6, "रिश्तेदार") - .2)
 for j, (t1_, t2_, kw) in enumerate([("रिश्तेदार के नाम", "SC/ST रिश्तेदार के नाम रजिस्ट्री", "रिश्तेदार"), ("पावर ऑफ़ अटॉर्नी", "&lsquo;सब कुछ मेरे ज़रिए होगा&rsquo;", "पावर")]):
-    H.append(f'<div class="jg" id="jg{j}" style="top:{500 + j * 290}px"><b>{t1_}</b><span>{t2_}</span><div class="ck"></div></div>')
+    H.append(f'<div class="jg" id="jg{j}" style="top:{1130 + j * 170}px"><b>{t1_}</b><span>{t2_}</span><div class="ck"></div></div>')
     inn(f"#jg{j}", wt(6, kw) - .1, "opacity:0, x:-120", "back.out(1.6)", .4); sfx("pop", wt(6, kw), .3)
 
+
+# family tree (रिश्तेदार) + PoA document
+FT = ('<svg viewBox="0 0 900 520"><defs><marker id="fa" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#FFD23F"/></marker></defs>'
+      '<g class="ftl" stroke="#cfd8e6" stroke-width="5" fill="none"><path d="M450 130 V200 H190 V260"/><path d="M450 200 H710 V260"/></g>'
+      '<g class="fn n0"><rect x="300" y="30" width="300" height="100" rx="16" fill="#2b3a52" stroke="#cfd8e6" stroke-width="3"/><text x="450" y="74" text-anchor="middle" fill="#fff" font-size="34" font-weight="800">SC/ST खातेदार</text><text x="450" y="112" text-anchor="middle" fill="#FFD23F" font-size="26" font-weight="700">ज़मीन बेचने वाला</text></g>'
+      '<g class="fn n1"><rect x="40" y="260" width="300" height="110" rx="16" fill="#1f4d2b" stroke="#2FD158" stroke-width="3"/><text x="190" y="306" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">SC/ST रिश्तेदार</text><text x="190" y="346" text-anchor="middle" fill="#2FD158" font-size="26" font-weight="700">काग़ज़ में नाम</text></g>'
+      '<g class="fn n2"><rect x="560" y="260" width="300" height="110" rx="16" fill="#5a1616" stroke="#FF6B6B" stroke-width="3"/><text x="710" y="306" text-anchor="middle" fill="#fff" font-size="32" font-weight="800">असली खरीदार</text><text x="710" y="346" text-anchor="middle" fill="#FFD23F" font-size="26" font-weight="700">पैसा आपका</text></g>'
+      '<path class="fdl" d="M560 315 C470 430 410 430 340 330" stroke="#FFD23F" stroke-width="6" stroke-dasharray="14 10" fill="none" marker-end="url(#fa)"/>'
+      '<text class="fq" x="450" y="470" text-anchor="middle" fill="#FFD23F" font-size="40" font-weight="900">नाम किसी का · पैसा आपका ?</text></svg>')
+H.append(f'<div id="ftree">{FT}</div>')
+tr = wt(6, "रिश्तेदार") - .2
+J.append(f'tl.set("#ftree", {{opacity:0}}, 0); tl.set("#ftree .fn, #ftree .ftl, #ftree .fdl, #ftree .fq", {{opacity:0}}, 0); tl.to("#ftree", {{opacity:1, duration:.25}}, {tr:.2f});'
+         f'tl.fromTo("#ftree .n0", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3, immediateRender:false}}, {tr:.2f}); tl.to("#ftree .ftl", {{opacity:1, duration:.3}}, {tr + .25:.2f});'
+         f'tl.fromTo("#ftree .n1", {{opacity:0, scale:.7, svgOrigin:"190 315"}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)", immediateRender:false}}, {tr + .45:.2f});'
+         f'tl.fromTo("#ftree .n2", {{opacity:0, scale:.7, svgOrigin:"710 315"}}, {{opacity:1, scale:1, duration:.3, ease:"back.out(2)", immediateRender:false}}, {tr + .7:.2f});'
+         f'tl.to("#ftree .fdl", {{opacity:1, duration:.2}}, {tr + 1.0:.2f}); tl.fromTo("#ftree .fdl", {{strokeDashoffset:300}}, {{strokeDashoffset:0, duration:.8, immediateRender:false}}, {tr + 1.0:.2f}); tl.to("#ftree .fq", {{opacity:1, duration:.3}}, {tr + 1.3:.2f});'
+         f'tl.to("#ftree", {{opacity:0, duration:.25}}, {wt(6, "पावर") - .3:.2f});')
+sfx("pop", tr + .45, .25); sfx("pop", tr + .7, .25)
+H.append('<div id="poa"><img src="assets/img/poa.jpg"/><span>प्रतीकात्मक चित्र</span></div>')
+tp_ = wt(6, "पावर") - .2
+J.append(f'tl.set("#poa", {{opacity:0}}, 0); tl.fromTo("#poa", {{opacity:0, y:140, rotation:6, scale:.85}}, {{opacity:1, y:0, rotation:-3, scale:1, duration:.45, ease:"back.out(1.6)", immediateRender:false}}, {tp_:.2f}); tl.to("#poa", {{rotation:6, y:"+=60", opacity:0, duration:.5, ease:"power2.in"}}, {wt(7, "केस") - .2:.2f});')
+sfx("whoosh", tp_, .3)
 # ---------- 7 litigation ----------
 bgp("b7", "court", S(7) - .2, S(8) - .1, op=1, z0=1.12, z1=1.0)
 tk = wt(7, "केस") - .2
@@ -209,8 +231,10 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #hc{position:absolute;left:60px;right:60px;top:820px;z-index:15;text-align:center;padding:36px 30px;border-radius:18px;background:linear-gradient(160deg,rgba(18,15,10,.96),rgba(38,30,19,.96));border:3px solid #C9A24A}#hc .cb{width:360px;margin:0 auto}#hc small{display:block;margin-top:14px;font:900 50px DevaH;color:#E8D6A8}
 #hc .q{margin-top:22px;font:700 38px/1.4 Deva;color:#fff}#hc .eq{display:flex;justify-content:center;align-items:center;gap:20px;margin-top:30px}#hc .eq span{padding:10px 22px;border-radius:10px;background:#2b3a52;color:#fff;font:900 46px DevaH}#hc .eq span.y{background:#FFD23F;color:#111}#hc .eq i{font:900 80px Mont;font-style:normal;color:#FF6B6B}
 #hc em{display:block;margin-top:26px;font:600 24px Deva;font-style:normal;color:#cfd8e6}
-.jg{position:absolute;left:90px;right:90px;z-index:15;padding:34px 36px;border-radius:18px;background:rgba(11,15,23,.93);border:3px solid #FFD23F;overflow:hidden}.jg b{display:block;font:900 70px/1.1 DevaH;color:#FFD23F}.jg span{display:block;margin-top:10px;font:700 36px Deva;color:#fff}
+.jg{position:absolute;left:90px;right:90px;z-index:15;padding:14px 30px;border-radius:18px;background:rgba(11,15,23,.93);border:3px solid #FFD23F;overflow:hidden}.jg b{display:block;font:900 52px/1.1 DevaH;color:#FFD23F}.jg span{display:none;color:#fff}
 .jg .ck{position:absolute;inset:0;opacity:0;background:linear-gradient(115deg,transparent 46%,#E8262B 47%,#E8262B 49%,transparent 50%),linear-gradient(65deg,transparent 60%,#E8262B 61%,#E8262B 62.5%,transparent 63%)}
+#ftree{position:absolute;left:90px;right:90px;top:330px;z-index:15;padding:20px;border-radius:18px;background:rgba(11,15,23,.93);border:3px solid #FFD23F}#ftree svg{display:block;width:100%;font-family:Deva}
+#poa{position:absolute;left:0;right:0;top:250px;margin:0 auto;width:470px;z-index:15;padding:8px;border-radius:8px;background:#fff;box-shadow:0 40px 90px rgba(0,0,0,.75)}#poa img{display:block;width:100%}#poa span{position:absolute;right:12px;bottom:12px;padding:3px 10px;border-radius:4px;background:rgba(0,0,0,.6);color:#fff;font:700 18px Deva}
 #case{position:absolute;left:120px;right:120px;top:300px;z-index:15;text-align:center;padding:30px;border-radius:18px;background:#5a1616;border:3px solid #FF6B6B}#case b{display:block;font:900 110px/1.05 DevaH;color:#fff}#case span{display:block;margin-top:10px;font:800 44px Deva;color:#FFD23F}
 #mt{position:absolute;left:90px;right:90px;top:340px;z-index:15}.m{margin-top:34px;padding:26px 30px;border-radius:16px;background:rgba(11,15,23,.93);border:2px solid #cfd8e6}.m b{display:block;font:900 60px DevaH;color:#fff}.m .bar{margin-top:16px;height:34px;border-radius:17px;background:rgba(255,255,255,.12);overflow:hidden}.m .bar i{display:block;height:100%;background:linear-gradient(90deg,#E8262B,#FF8A3D);transform-origin:0 50%}
 #chk{position:absolute;left:60px;right:60px;top:240px;z-index:15;padding:40px 40px;border-radius:18px;background:rgba(11,15,23,.94);border:3px solid #2FD158}#chk small{display:block;text-align:center;font:800 34px Deva;color:#2FD158}#chk>b{display:block;text-align:center;margin-top:6px;font:900 76px/1.1 DevaH;color:#fff}
