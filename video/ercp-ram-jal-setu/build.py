@@ -248,6 +248,18 @@ photo("phdrink", "drink", wt(0, "pyaas") - .05, S(1) + .1, "KAL: HAR GHAR PAANI"
 photo("phsetu", "setu", wt(2, "Ram") + .15, S(3) - .1, "&#9679; CURRENT DEVELOPMENT", top=490, w=520, h=760)
 photo("phbar", "barrage", wt(3, "barrages") - .7, S(4) - .1, "BARRAGE", top=250, w=440, h=250, left=30)
 photo("phcan", "canal", wt(3, "canals") - .5, S(4) - .1, "CANAL", top=250, w=440, h=250, left=590)
+photo("phwater", "water", wt(5, "3.25") - .1, wt(5, "2.8") - .05, "3.25 CRORE LOGON KO PEENE KA PAANI", top=820, h=420)
+photo("phmodi", "modi", wt(7, "90") - .1, S(8) - .1, "PM MODI &middot; PKC-ERCP KARYAKRAM, JAIPUR", top=930, h=430)
+photo("phaq", "aqueduct", wt(8, "shuruaati") - .1, S(9) - .1, "SHURUAATI DAUR &middot; PRATEEKATMAK CHITRA", top=880, h=400)
+# districts again: on 'poorvi Rajasthan tak' and on the CTA
+def districts_again(t0, t1):
+    for i, (nm, la, lo) in enumerate(DIST):
+        t = t0 + i * .05
+        J.append(f'tl.fromTo("#dz{i}", {{fillOpacity:0, strokeOpacity:0}}, {{fill:"{WATER}", fillOpacity:.42, strokeOpacity:.9, duration:.3, immediateRender:false}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:0, duration:.4}}, {t1 - .4:.2f});')
+        bb(f"dl{i}", t, t1)
+    sfx("whoosh", t0, .3)
+districts_again(wt(3, "poorvi") - .1, NX(3) + .6)
+districts_again(S(9) + .1, END - .1)
 photo("phfield", "fields", wt(5, "2.8") - .1, NX(5) - .1, "2.8 LAKH HECTARE &middot; SINCHAI", top=820, h=420)
 
 # ---------- captions ----------
