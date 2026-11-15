@@ -7,12 +7,12 @@ LINES = [
     "Hissa guna kul area: 1/6 guna 1.03, yaani 0.1717 hectare.",
     "Isko 11,960 se guna kariye, 2,053 gaj. Aur 3,025 se bhaag dijiye, lagbhag 0.68 bigha.",
     "Bigha ka maap apni tehsil mein confirm kar lijiye.",
-    "Aur agar Jamabandi ki copy nikaalni hai, to video aage dekhiye.",
+    "Aur agar Jamabandi ki PDF nikaalni hai, to video aage dekhiye.",
     "Google par Apna Khata search kariye, aur pehli website kholiye.",
     "Neeche scroll karke Bhu Naksha par click kariye.",
     "Viewmap kholiye, aur zila, tehsil, gaon aur sheet number chuniye.",
     "Map par apna khasra dabaiye, aur Plot Info mein Nakal par click kariye.",
-    "Show Report dabate hi aapki Jamabandi khul jaayegi.",
+    "Show Report PDF dabaiye, aur aapki Jamabandi ki PDF taiyaar.",
     "Video save kar lijiye, aur jiski zameen bati hui hai unhe share kariye.",
 ]
 VOICE = os.path.exists("rec/phrases.json")
@@ -117,7 +117,7 @@ board(9, S(4) - .1, S(5), '<div class="tk t0 ic">&#9888;</div><div class="tk t1 
 tok(9, 0, S(4)); tok(9, 1, S(4) + .15); tok(9, 2, wt(4, "tehsil") - .1)
 
 # ---------- 5 bridge ----------
-H.append('<div id="bridge"><small>AB AGLA PART</small><b>JAMABANDI KI COPY<br/>KAISE NIKAALEIN?</b><span>VIDEO AAGE DEKHIYE &darr;</span></div>')
+H.append('<div id="bridge"><small>AB AGLA PART</small><b>JAMABANDI KI PDF<br/>KAISE NIKAALEIN?</b><span>VIDEO AAGE DEKHIYE &darr;</span></div>')
 J.append(f'tl.set("#bridge", {{opacity:0}}, 0); tl.fromTo("#bridge", {{opacity:0, scale:.92}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {S(5) - .1:.2f}); tl.to("#bridge span", {{y:12, duration:.35, yoyo:true, repeat:3}}, {wt(5, "aage"):.2f}); tl.to("#bridge", {{opacity:0, duration:.3}}, {S(6) - .3:.2f});')
 sfx("riser", S(5) - .3, .3); sfx("whoosh", S(6) - .2, .3)
 
@@ -134,20 +134,25 @@ screen("sc4", "s4", S(8) - .1, m3 + .3, [(wt(8, "Viewmap") + .5, 95, 160, 62, 26
 screen("sc5", "s5", m3, S(9), [(m3 + .45, 235, 638, 190, 120, 1.3, "SELECT")])
 step(4, "4", "Apna <u>KHASRA</u> dabao &rarr; <u>NAKAL</u>", S(9) - .1, S(10))
 screen("sc6", "s6", S(9) - .1, S(10), [(wt(9, "khasra"), 230, 710, 150, 95, 1.0, "TAP"), (wt(9, "Nakal") + .1, 242, 1122, 55, 22, 1.35, "CLICK")])
-step(5, "5", "<u>SHOW REPORT</u> &rarr; Jamabandi", S(10) - .1, S(11))
-screen("sc7", "s7", S(10) - .1, S(11), [(wt(10, "Show") + .5, 37, 273, 46, 17, 2.3, "CLICK")])
+step(5, "5", "<u>SHOW REPORT PDF</u> &rarr; Jamabandi PDF", S(10) - .1, S(11))
+m10 = wt(10, "aur aapki")
+screen("sc7", "s7", S(10) - .1, m10 + .3, [(wt(10, "Show") + .5, 45, 291, 50, 17, 2.3, "CLICK")])
+screen("sc9", "jama_real", m10, S(11), [], extra=fake_overlay(940 / 1082))
+H.append('<div class="tag" id="tagp">&#128196; JAMABANDI PDF &middot; UDAHARAN</div>')
+J.append(f'tl.set("#tagp", {{opacity:0}}, 0); tl.to("#tagp", {{opacity:1, duration:.3}}, {m10 + .2:.2f}); tl.to("#tagp", {{opacity:0, duration:.2}}, {S(11) - .2:.2f}); tl.to("#sc9i", {{y:-260, duration:{S(11) - m10:.2f}, ease:"none"}}, {m10:.2f});')
+sfx("pop", m10, .3)
 
 # ---------- 11 save card ----------
 H.append('<div id="save"><small>SAVE KAR LO</small><b>APNA HISSA NIKAALO</b>'
          '<div class="ch"><span>HISSA &times; KUL AREA</span><i>=</i><span class="g">HECTARE</span></div>'
          '<div class="ch"><span class="g">HECTARE</span><i>&times; 11,960 =</i><span class="g">GAJ</span></div>'
          '<div class="ch"><span class="g">GAJ</span><i>&divide; 3,025 =</i><span class="y">BIGHA</span></div>'
-         '<div class="wr">Copy: Apna Khata &rarr; Bhu Naksha &rarr; Nakal &rarr; Show Report</div></div>')
+         '<div class="wr">PDF: Apna Khata &rarr; Bhu Naksha &rarr; Nakal &rarr; Show Report PDF</div></div>')
 J.append(f'tl.set("#save", {{opacity:0}}, 0); tl.fromTo("#save", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out", immediateRender:false}}, {S(11) - .1:.2f}); tl.fromTo("#save .ch", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.3, stagger:.2, immediateRender:false}}, {S(11) + .2:.2f});')
 sfx("sparkle", wt(11, "share"), .3)
 
 # ---------- captions ----------
-HI = ["Apna Khata", "Bhu Naksha", "Viewmap", "khasra", "Nakal", "Show Report", "hissa", "1/6", "1.03 hectare", "0.1717 hectare", "11,960", "2,053 gaj", "3,025", "0.68 bigha", "save"]
+HI = ["Apna Khata", "Bhu Naksha", "Viewmap", "khasra", "Nakal", "Show Report PDF", "PDF", "hissa", "1/6", "1.03 hectare", "0.1717 hectare", "11,960", "2,053 gaj", "3,025", "0.68 bigha", "save"]
 def hl(t):
     for h in sorted(HI, key=len, reverse=True):
         i = t.find(h)
