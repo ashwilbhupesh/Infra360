@@ -34,7 +34,7 @@ def place(name, cx, cy, z):
     w, h = IMG[name]; k = FW / w; W, Hh = w * k * z, h * k * z
     tx = min(0, max(FW - W, FW / 2 - cx * k * z)); ty = min(0, max(FH - Hh, FH * .45 - cy * k * z))
     return tx, ty, z
-def screen(sid, name, t0, t1, targets, scroll=None):
+def screen(sid, name, t0, t1, targets, scroll=None, extra=""):
     """targets: list of (t, cx, cy, rx, ry, z, label)"""
     w, h = IMG[name]; k = FW / w
     svg = []
@@ -46,7 +46,7 @@ def screen(sid, name, t0, t1, targets, scroll=None):
                    f'<text x="{sx:.1f}" y="{sy + 34 / s:.1f}" style="font-size:{30 / s:.1f}px">{lab}</text></g>')
     if scroll:
         svg.append(f'<g class="ar" id="{sid}sc"><line x1="{w / 2}" y1="{h * .55}" x2="{w / 2}" y2="{h * .8}" style="stroke-width:{9 / k:.2f}" marker-end="url(#ah)"/><text x="{w / 2}" y="{h * .53}" text-anchor="middle" style="font-size:{34 / k:.1f}px">SCROLL</text></g>')
-    H.append(f'<div class="scr" id="{sid}"><div class="im" id="{sid}i" style="width:{w * k:.0f}px;height:{h * k:.0f}px"><img src="assets/img/{name}.jpg"/>'
+    H.append(f'<div class="scr" id="{sid}"><div class="im" id="{sid}i" style="width:{w * k:.0f}px;height:{h * k:.0f}px"><img src="assets/img/{name}.jpg"/>{extra}'
              f'<svg viewBox="0 0 {w} {h}"><defs><marker id="ah" markerWidth="4" markerHeight="4" refX="2.2" refY="2" orient="auto"><path d="M0,0 L4,2 L0,4 Z" fill="#FFD23F"/></marker></defs>{"".join(svg)}</svg></div></div>')
     J.append(f'tl.set("#{sid}", {{opacity:0}}, 0); tl.set("#{sid} .ci", {{strokeDashoffset:1}}, 0); tl.set("#{sid} .ar", {{opacity:0}}, 0);'
              f'tl.fromTo("#{sid}", {{opacity:0, x:60}}, {{opacity:1, x:0, duration:.35, ease:"power3.out", immediateRender:false}}, {t0:.2f}); tl.to("#{sid}", {{opacity:0, x:-60, duration:.3}}, {t1 - .3:.2f});')
@@ -66,10 +66,25 @@ def step(i, num, text, t0, t1):
     H.append(f'<div class="stp" id="stp{i}"><i>{num}</i><b>{text}</b></div>')
     J.append(f'tl.set("#stp{i}", {{opacity:0}}, 0); tl.fromTo("#stp{i}", {{opacity:0, y:-20}}, {{opacity:1, y:0, duration:.3, immediateRender:false}}, {t0:.2f}); tl.to("#stp{i}", {{opacity:0, duration:.2}}, {t1 - .2:.2f});')
 
+FAKE = [((80, 322, 240, 346), "सीता पुत्री मोहन"), ((80, 370, 224, 394), "गीता पुत्री मोहन"), ((80, 418, 232, 442), "रमेश पुत्र मोहन"),
+        ((80, 467, 221, 491), "रानी पुत्री मोहन"), ((80, 515, 249, 539), "सुरेश पुत्र मोहन"), ((80, 563, 261, 587), "महेश पुत्र मोहन"),
+        ((140, 124, 215, 150), "उदाहरणपुर"), ((150, 158, 225, 186), "नमूना"), ((150, 190, 215, 216), "नमूना"), ((118, 222, 215, 248), "उदाहरण")]
+BLANK = [(y0, cs) for y0, cs in [(322, 350), (370, 336), (418, 343), (467, 333), (515, 360), (563, 373)]]
+def fake_overlay(k):
+    o = []
+    for (x0, y0, x1, y1), t in FAKE:
+        o.append(f'<div class="fk" style="left:{x0 * k:.1f}px;top:{y0 * k:.1f}px;width:{(x1 - x0 + 4) * k:.1f}px;height:{(y1 - y0) * k:.1f}px;font-size:{19 * k:.1f}px">{t}</div>')
+    for y0, cs in BLANK:
+        o.append(f'<div class="fk" style="left:{(cs - 30) * k:.1f}px;top:{y0 * k:.1f}px;width:{217 * k:.1f}px;height:{24 * k:.1f}px;font-size:{19 * k:.1f}px">जाति- ----&nbsp;&nbsp;सा. देह खातेदार</div>')
+        o.append(f'<div class="fk" style="left:{285 * k:.1f}px;top:{(y0 + 24) * k:.1f}px;width:{422 * k:.1f}px;height:{26 * k:.1f}px"></div>')
+    for b in [(160, 1215, 450, 1305), (500, 1215, 720, 1305), (110, 1360, 880, 1388), (150, 1428, 400, 1482)]:
+        o.append(f'<div class="fk" style="left:{b[0] * k:.1f}px;top:{b[1] * k:.1f}px;width:{(b[2] - b[0]) * k:.1f}px;height:{(b[3] - b[1]) * k:.1f}px;font-size:{19 * k:.1f}px">------</div>')
+    o.append(f'<div class="wm" style="font-size:{150 * k:.0f}px">उदाहरण · SAMPLE</div>')
+    return "".join(o)
 # ---------- 0 hook ----------
 H.append('<div id="hook"><small>JAMABANDI MEIN</small><b>APNA HISSA<br/>KAISE NIKAALEIN?</b><span>STEP BY STEP &middot; 45 SECOND</span></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.45, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .3:.2f});')
-H.append('<div class="scr" id="hd"><div class="im" style="width:940px"><img src="assets/img/jama_real.jpg"/></div></div>')
+H.append('<div class="scr" id="hd"><div class="im" style="width:940px"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082) + '</div></div>')
 J.append(f'tl.fromTo("#hd", {{opacity:0, y:160, scale:.9}}, {{opacity:.55, y:120, scale:1, duration:.8, ease:"power3.out"}}, .2); tl.to("#hd", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
 sfx("impact-bass-1", 0, .4)
 
@@ -91,8 +106,8 @@ screen("sc7", "s7", S(5) - .1, S(6), [(wt(5, "Show") + .5, 37, 273, 46, 17, 2.3,
 
 # ---------- 6 real jamabandi ----------
 step(6, "6", "Naam ke aage <u>HISSA</u> &middot; neeche <u>KUL AREA</u>", S(6) - .1, S(7))
-screen("sc8", "jama_real", S(6) - .1, S(7) + .2, [(wt(6, "hissa"), 290, 430, 72, 20, 1.6, "HISSA 1/6"), (wt(6, "kul area"), 250, 1135, 75, 22, 1.6, "KUL 1.0300 HA")])
-H.append('<div class="tag" id="tagr">ASLI JAMABANDI &middot; NIJI JAANKARI BLUR</div>')
+screen("sc8", "jama_real", S(6) - .1, S(7) + .2, [(wt(6, "hissa"), 290, 430, 72, 20, 1.6, "HISSA 1/6"), (wt(6, "kul area"), 250, 1135, 75, 22, 1.6, "KUL 1.0300 HA")], extra=fake_overlay(940 / 1082))
+H.append('<div class="tag" id="tagr">UDAHARAN &middot; NAAM BADLE GAYE HAIN</div>')
 J.append(f'tl.set("#tagr", {{opacity:0}}, 0); tl.to("#tagr", {{opacity:1, duration:.3}}, {S(6) + .2:.2f}); tl.to("#tagr", {{opacity:0, duration:.2}}, {S(7):.2f});')
 sfx("whoosh", S(6) - .1, .3)
 
@@ -146,9 +161,9 @@ for n, ph in enumerate(PH):
 if os.path.exists(f"{P}/assets/face.mp4"):
     H.append('<video id="face" class="clip" src="assets/face.mp4" data-start="0" data-duration="1.0" data-track-index="2" muted playsinline></video>')
     J.append('tl.set("#face", {opacity:1}, 0); tl.to("#face", {opacity:0, scale:1.06, duration:.12}, .8);')
-H.append('<div id="cred">Screens: apnakhata.rajasthan.gov.in &middot; bhunaksha.rajasthan.gov.in &middot; Jamabandi: asli nakal, niji jaankari blur &middot; 1 ha = 11,959.9 sq. yd</div>')
+H.append('<div id="cred">Screens: apnakhata.rajasthan.gov.in &middot; bhunaksha.rajasthan.gov.in &middot; Jamabandi: udaharan, naam badle gaye hain &middot; 1 ha = 11,959.9 sq. yd</div>')
 
-CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
+CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/notodeva.woff2)}@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0b0f17}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif;background:radial-gradient(120% 80% at 50% 30%,#18202e 0%,#0b0f17 65%,#06080c 100%)}
 .y{color:#111;background:#FFD23F;border-radius:6px;padding:0 6px}
@@ -157,6 +172,8 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 .scr{position:absolute;left:70px;top:250px;width:940px;height:1160px;overflow:hidden;border-radius:18px;border:3px solid #2b3a52;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.65);opacity:0;z-index:5}
 #hd{background:transparent;border:none;box-shadow:none}
 .im{position:absolute;left:0;top:0}.im img{display:block;width:100%;height:auto}.im svg{position:absolute;left:0;top:0;width:100%;height:100%;overflow:visible}
+.fk{position:absolute;background:#fff;color:#111;font-family:Deva,sans-serif;font-weight:500;line-height:1.25;white-space:nowrap;overflow:hidden;padding-left:2px}
+.wm{position:absolute;left:50%;top:42%;translate:-50% -50%;rotate:-28deg;white-space:nowrap;font-family:Deva,Mont;font-weight:900;color:rgba(200,30,30,.13);pointer-events:none}
 .ci{fill:none;stroke:#E8262B;stroke-dasharray:1;stroke-dashoffset:1;stroke-linecap:round;filter:drop-shadow(0 0 3px rgba(232,38,43,.6))}
 .ar line{stroke:#FFD23F;stroke-linecap:round}.ar text{fill:#111;font-family:Mont;font-weight:900;paint-order:stroke;stroke:#FFD23F;stroke-width:.35em;stroke-linejoin:round}
 .stp{position:absolute;left:70px;right:70px;top:120px;height:100px;display:flex;align-items:center;gap:20px;padding:0 26px;border-radius:14px;background:#141c29;border:2px solid #FFD23F;opacity:0;z-index:15}
