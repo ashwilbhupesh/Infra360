@@ -2,7 +2,7 @@
 import json, os
 P = "proj"
 LINES = [
-    "Jamabandi mein 1/6 jaisa hissa likha hai? Isse apni zameen kaise nikaalein, dekhiye.",
+    "Aap bhi Jamabandi mein apna hissa nikaalna seekh lijiye.",
     "Apne naam ke aage hissa dekhiye, jaise 1/6. Aur neeche kul area, 1.03 hectare.",
     "Hissa guna kul area: 1/6 guna 1.03, yaani 0.1717 hectare.",
     "Isko 11,960 se guna kariye, 2,053 gaj. Aur 3,025 se bhaag dijiye, lagbhag 0.68 bigha.",
@@ -84,7 +84,7 @@ def fake_overlay(k):
     o.append(f'<div class="wm" style="font-size:{150 * k:.0f}px">उदाहरण · SAMPLE</div>')
     return "".join(o)
 # ---------- 0 hook ----------
-H.append('<div id="hook"><small>JAMABANDI MEIN</small><b>APNA HISSA<br/>KAISE NIKAALEIN?</b><span>1/6 = KITNI ZAMEEN?</span></div>')
+H.append('<div id="hook"><small>AAP BHI SEEKH LIJIYE</small><b>JAMABANDI MEIN<br/>APNA HISSA NIKAALNA</b><span>1/6 = KITNI ZAMEEN?</span></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.1}}, {{opacity:1, scale:1, duration:.45, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .3:.2f});')
 H.append('<div class="scr" id="hd"><div class="im" style="width:940px"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(940 / 1082) + '</div></div>')
 J.append(f'tl.fromTo("#hd", {{opacity:0, y:160, scale:.9}}, {{opacity:.55, y:120, scale:1, duration:.8, ease:"power3.out"}}, .2); tl.to("#hd", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
@@ -195,7 +195,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 .stp b{font:800 34px/1.15 Mont;color:#fff}.stp u{text-decoration:none;color:#FFD23F}
 .tag{position:absolute;left:0;right:0;top:1360px;margin:0 auto;width:max-content;padding:6px 16px;border-radius:6px;background:rgba(10,14,22,.9);border:1px solid #FFD23F;color:#FFD23F;font:800 20px Mont;letter-spacing:.1em;opacity:0;z-index:12}
 #hook{position:absolute;left:60px;right:60px;top:300px;z-index:16;text-align:center;padding:30px 20px 28px;border-radius:14px;border:2px solid #FFD23F;background:rgba(11,15,23,.94)}
-#hook small{display:block;font:800 30px Mont;letter-spacing:.3em;color:#cfd8e6}#hook b{display:block;margin-top:8px;font:400 104px/1.02 Anton;color:#fff}
+#hook small{display:block;font:800 30px Mont;letter-spacing:.3em;color:#cfd8e6}#hook b{display:block;margin-top:8px;font:400 96px/1.02 Anton;color:#fff}
 #hook span{display:inline-block;margin-top:18px;padding:8px 22px;border-radius:6px;background:#FFD23F;color:#111;font:900 30px Mont;letter-spacing:.1em}
 .bd{position:absolute;left:60px;right:60px;top:300px;z-index:15;text-align:center;padding:42px 30px;border-radius:16px;border:2px solid #FFD23F;background:#121a27;box-shadow:0 30px 70px rgba(0,0,0,.6)}
 .bd .lbl{font:800 32px Mont;letter-spacing:.16em;color:#cfd8e6}.bd .row{display:flex;justify-content:center;align-items:center;gap:30px;margin-top:26px}.bd .big{font:400 140px/1 Anton;color:#fff}.bd .op{font:400 90px/1 Anton;color:#FFD23F}
