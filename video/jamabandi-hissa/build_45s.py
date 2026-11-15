@@ -25,6 +25,11 @@ def S(k): return PH[k]["s"]
 def E(k): return PH[k]["e"]
 def wt(k, w):
     t = PH[k]["t"]; i = t.lower().find(w.lower()); assert i >= 0, (k, w)
+    if PH[k].get("parts"):
+        off = 0
+        for p in PH[k]["parts"]:
+            if i < off + len(p["t"]) + 1: return p["s"] + (p["e"] - p["s"]) * (i - off) / len(p["t"])
+            off += len(p["t"]) + 1
     return S(k) + (E(k) - S(k)) * i / len(t)
 END = round(E(11) + 1.0, 2)
 H, J, SFX = [], [], []
@@ -105,16 +110,14 @@ def tok(i, j, t):
     J.append(f'tl.fromTo("#bd{i} .t{j}", {{opacity:0, y:24, scale:.85}}, {{opacity:1, y:0, scale:1, duration:.35, ease:"back.out(2)", immediateRender:false}}, {t:.2f});'); sfx("click-soft", t, .25)
 board(7, S(2) - .1, S(3), '<div class="tk t0 lbl">HISSA &times; KUL AREA</div><div class="row"><span class="tk t1 big">1/6</span><span class="tk t2 op">&times;</span><span class="tk t3 big">1.03</span></div>'
       '<div class="tk t4 op">=</div><div class="tk t5 res">0.1717 <small>HECTARE</small></div>')
-tok(7, 0, S(2) + .1); tok(7, 1, wt(2, "1/6 guna") - .1); tok(7, 2, wt(2, "guna 1.03") - .05); tok(7, 3, wt(2, "1.03,") - .1); tok(7, 4, wt(2, "yaani") - .1); tok(7, 5, wt(2, "yaani") + .1)
-sfx("impact-bass-1", wt(2, "yaani") + .1, .35)
+tok(7, 0, S(2) + .1); tok(7, 1, wt(2, "1/6 guna") - .1); tok(7, 2, wt(2, "guna 1.03") - .05); tok(7, 3, wt(2, "1.03 hectare") - .1); tok(7, 4, wt(2, "answer aaya") - .1); tok(7, 5, wt(2, "answer aaya") + .1)
+sfx("impact-bass-1", wt(2, "answer aaya") + .1, .35)
 board(8, S(3) - .1, S(4), '<div class="tk t0 lbl">HECTARE &rarr; GAJ &rarr; BIGHA</div>'
       '<div class="ln tk t1"><span>0.1717</span><i>&times; 11,960 =</i><b>2,053 GAJ</b></div>'
       '<div class="ln tk t2"><span>2,053</span><i>&divide; 3,025 =</i><b class="g">0.68 BIGHA</b></div>'
-      '<em class="tk t3">1 hectare &asymp; 11,960 gaj &middot; 1 pakka bigha = 3,025 gaj</em>')
+      '<em class="tk t3">1 ha &asymp; 11,960 gaj &middot; 1 pakka bigha = 3,025 gaj (ilaake ke hisaab se alag ho sakta hai)</em>')
 tok(8, 0, S(3) + .1); tok(8, 1, wt(3, "11,960") - .1); tok(8, 2, wt(3, "3,025") - .1); tok(8, 3, wt(3, "lagbhag") - .1)
 sfx("impact-bass-1", wt(3, "lagbhag"), .35)
-board(9, S(4) - .1, S(5), '<div class="tk t0 ic">&#9888;</div><div class="tk t1 wt">BIGHA HAR ILAAKE<br/>MEIN ALAG</div><em class="tk t2">Apni tehsil / patwari se confirm karein</em>')
-tok(9, 0, S(4)); tok(9, 1, S(4) + .15); tok(9, 2, wt(4, "tehsil") - .1)
 
 # ---------- 5 bridge ----------
 H.append('<div id="bridge"><small>AB AGLA PART</small><b>JAMABANDI KI PDF<br/>KAISE NIKAALEIN?</b><span>VIDEO AAGE DEKHIYE &darr;</span></div>')
@@ -123,7 +126,7 @@ sfx("riser", S(5) - .3, .3); sfx("whoosh", S(6) - .2, .3)
 
 # ---------- 6..10 navigation ----------
 step(1, "1", "Google par <u>APNA KHATA</u> search karo", S(6) - .1, S(7))
-screen("sc1", "s1", S(6) - .1, S(7), [(wt(6, "pehli") - .1, 130, 450, 135, 40, 1.35, "CLICK")])
+screen("sc1", "s1", S(6) - .1, S(7), [(wt(6, "website") - .1, 130, 450, 135, 40, 1.35, "CLICK")])
 step(2, "2", "Neeche scroll &rarr; <u>BHU NAKSHA</u>", S(7) - .1, S(8))
 mid = S(7) + (E(7) - S(7)) * .45
 screen("sc2", "s2", S(7) - .1, mid + .3, [], scroll=(S(7) + .2, .9))
@@ -159,13 +162,14 @@ def hl(t):
         if i >= 0 and "<span" not in t[max(0, i - 25):i] and "span" not in t[i:i + len(h)]: t = t[:i] + '<span class="y">' + h + '</span>' + t[i + len(h):]
     return t
 ci = 0
-for n, ph in enumerate(PH):
+FLAT = [q for ph in PH for q in (ph.get("parts") or ([ph] if ph["e"] - ph["s"] >= .1 else []))]
+for n, ph in enumerate(FLAT):
     words = ph["t"].split(); chunks = []; cur = ""
     for w_ in words:
         if cur and len(cur) + 1 + len(w_) > 22: chunks.append(cur); cur = w_
         else: cur = (cur + " " + w_).strip()
     chunks.append(cur)
-    tot_ = sum(len(c) for c in chunks); t = ph["s"]; nx = PH[n + 1]["s"] if n + 1 < len(PH) else END
+    tot_ = sum(len(c) for c in chunks); t = ph["s"]; nx = FLAT[n + 1]["s"] if n + 1 < len(FLAT) else END
     for j, c in enumerate(chunks):
         d = (ph["e"] - ph["s"]) * len(c) / tot_
         a_ = max(.02, t if j else t - .04); b_ = (min(t + d + .25, nx - .08) if j == len(chunks) - 1 else t + d - .03)

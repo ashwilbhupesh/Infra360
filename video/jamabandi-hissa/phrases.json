@@ -1,0 +1,155 @@
+[
+ {
+  "s": 0.0,
+  "e": 6.94,
+  "t": "Jamabandi mein 1/2, 1/3, 1/6, ye sab cheezein likhi rehti hain. In sab mein apna hissa bigha mein kaise nikaalein?",
+  "parts": [
+   {
+    "s": 0.0,
+    "e": 6.94,
+    "t": "Jamabandi mein 1/2, 1/3, 1/6, ye sab cheezein likhi rehti hain. In sab mein apna hissa bigha mein kaise nikaalein?"
+   }
+  ]
+ },
+ {
+  "s": 7.08,
+  "e": 14.62,
+  "t": "Sabse pehle apne naam ke aage apna hissa dekhiye, jaise yahan 1/6. Aur neeche kul area dekhiye, jaise 1.03 hectare.",
+  "parts": [
+   {
+    "s": 7.08,
+    "e": 11.1,
+    "t": "Sabse pehle apne naam ke aage apna hissa dekhiye, jaise yahan 1/6."
+   },
+   {
+    "s": 11.24,
+    "e": 14.62,
+    "t": "Aur neeche kul area dekhiye, jaise 1.03 hectare."
+   }
+  ]
+ },
+ {
+  "s": 14.76,
+  "e": 23.12,
+  "t": "Apne hisse ko kul area se guna kijiye, jaise 1/6 guna 1.03 hectare. Yahan answer aaya 0.1717 hectare.",
+  "parts": [
+   {
+    "s": 14.76,
+    "e": 23.12,
+    "t": "Apne hisse ko kul area se guna kijiye, jaise 1/6 guna 1.03 hectare. Yahan answer aaya 0.1717 hectare."
+   }
+  ]
+ },
+ {
+  "s": 23.26,
+  "e": 34.3,
+  "t": "Isko 11,960 se guna kijiye, 2,053 gaj. Ab hamara answer gaj mein aa jaayega. Aur 3,025 se bhaag dijiye, lagbhag 0.68 bigha. Ab hamare paas bigha mein aa chuka hai.",
+  "parts": [
+   {
+    "s": 23.26,
+    "e": 34.3,
+    "t": "Isko 11,960 se guna kijiye, 2,053 gaj. Ab hamara answer gaj mein aa jaayega. Aur 3,025 se bhaag dijiye, lagbhag 0.68 bigha. Ab hamare paas bigha mein aa chuka hai."
+   }
+  ]
+ },
+ {
+  "s": 34.3,
+  "e": 34.3,
+  "t": "",
+  "parts": []
+ },
+ {
+  "s": 34.44,
+  "e": 38.08,
+  "t": "Saath hi saath, agar aapko Jamabandi ki PDF nikaalni hai, to video aage dekhiye.",
+  "parts": [
+   {
+    "s": 34.44,
+    "e": 38.08,
+    "t": "Saath hi saath, agar aapko Jamabandi ki PDF nikaalni hai, to video aage dekhiye."
+   }
+  ]
+ },
+ {
+  "s": 38.22,
+  "e": 41.6,
+  "t": "Google par Apna Khata search kariye, aur apni website kholiye.",
+  "parts": [
+   {
+    "s": 38.22,
+    "e": 41.6,
+    "t": "Google par Apna Khata search kariye, aur apni website kholiye."
+   }
+  ]
+ },
+ {
+  "s": 41.74,
+  "e": 44.5,
+  "t": "Neeche scroll karne ke baad Bhu Naksha par click kariye.",
+  "parts": [
+   {
+    "s": 41.74,
+    "e": 44.5,
+    "t": "Neeche scroll karne ke baad Bhu Naksha par click kariye."
+   }
+  ]
+ },
+ {
+  "s": 44.64,
+  "e": 48.88,
+  "t": "Viewmap kholiye, aur zila, tehsil, gaon aur sheet number chuniye.",
+  "parts": [
+   {
+    "s": 44.64,
+    "e": 48.88,
+    "t": "Viewmap kholiye, aur zila, tehsil, gaon aur sheet number chuniye."
+   }
+  ]
+ },
+ {
+  "s": 49.02,
+  "e": 55.46,
+  "t": "Map pe apna khasra dabaiye, ya to upar diye gaye numbers mein search kariye. Aur Plot Info mein Nakal par click kijiye.",
+  "parts": [
+   {
+    "s": 49.02,
+    "e": 53.1,
+    "t": "Map pe apna khasra dabaiye, ya to upar diye gaye numbers mein search kariye."
+   },
+   {
+    "s": 53.24,
+    "e": 55.46,
+    "t": "Aur Plot Info mein Nakal par click kijiye."
+   }
+  ]
+ },
+ {
+  "s": 55.6,
+  "e": 59.16,
+  "t": "Show Report PDF dabaiye, aur aapki Jamabandi ki PDF taiyaar.",
+  "parts": [
+   {
+    "s": 55.6,
+    "e": 59.16,
+    "t": "Show Report PDF dabaiye, aur aapki Jamabandi ki PDF taiyaar."
+   }
+  ]
+ },
+ {
+  "s": 59.3,
+  "e": 66.52,
+  "t": "Is Jamabandi mein se aap apna hissa ab dekh sakte hain. Ye reel apne us friend ko share kijiye, jo apni Jamabandi mein apna hissa dekhna chahta hai.",
+  "parts": [
+   {
+    "s": 59.3,
+    "e": 62.16,
+    "t": "Is Jamabandi mein se aap apna hissa ab dekh sakte hain."
+   },
+   {
+    "s": 62.3,
+    "e": 66.52,
+    "t": "Ye reel apne us friend ko share kijiye, jo apni Jamabandi mein apna hissa dekhna chahta hai."
+   }
+  ]
+ }
+]
