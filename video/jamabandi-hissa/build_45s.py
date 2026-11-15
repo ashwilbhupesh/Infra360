@@ -159,6 +159,11 @@ H.append('<div id="bridge"><small>अब अगला भाग</small><b>जम
 J.append(f'tl.set("#bridge", {{opacity:0}}, 0); tl.fromTo("#bridge", {{opacity:0, scale:.92}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(1.6)", immediateRender:false}}, {S(5) - .1:.2f}); tl.to("#bridge span", {{y:12, duration:.35, yoyo:true, repeat:3}}, {wt(5, "aage"):.2f}); tl.to("#bridge", {{opacity:0, duration:.3}}, {S(6) - .3:.2f});')
 sfx("riser", S(5) - .3, .3); sfx("whoosh", S(6) - .2, .3)
 
+# PDF preview on bridge line
+H.append('<div id="pdfp"><div class="pg"><img src="assets/img/jama_real.jpg"/>' + fake_overlay(420 / 1082) + '</div><div class="pb">PDF</div></div>')
+_tp = wt(5, "PDF") - .2
+J.append(f'tl.set("#pdfp", {{opacity:0}}, 0); tl.fromTo("#pdfp", {{opacity:0, y:120, rotation:-8, scale:.8}}, {{opacity:1, y:0, rotation:-4, scale:1, duration:.5, ease:"back.out(1.6)", immediateRender:false}}, {_tp:.2f}); tl.to("#pdfp", {{opacity:0, y:-40, duration:.3}}, {S(6) - .3:.2f});')
+sfx("pop", _tp, .3)
 # ---------- 6..10 navigation ----------
 step(1, "1", "Google पर <u>अपना खाता</u> सर्च करें", S(6) - .1, S(7))
 screen("sc1", "s1", S(6) - .1, S(7), [(wt(6, "website") - .1, 130, 450, 135, 40, 1.35, "क्लिक करें")])
@@ -246,7 +251,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #save>small{letter-spacing:.02em !important;display:block;font:800 30px Mont,Deva;letter-spacing:.3em;color:#FFD23F}#save>b{display:block;margin-top:10px;font:400 76px/1.05 Anton,DevaH;color:#fff}
 #save .ch{display:flex;justify-content:center;align-items:center;gap:16px;margin-top:34px;font:400 52px Anton,DevaH;color:#e8edf5}#save .ch i{font-style:normal;color:#FFD23F}#save .ch .g{padding:4px 16px;border-radius:8px;background:#2FD158;color:#062411}#save .ch .y{padding:4px 16px;border-radius:8px;background:#FFD23F;color:#111}
 #save .wr{margin-top:40px;font:800 28px/1.35 Mont,Deva;color:#FFD23F}
-#bridge{position:absolute;left:60px;right:60px;top:420px;z-index:16;text-align:center;padding:40px 24px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
+#bridge{position:absolute;left:60px;right:60px;top:200px;z-index:16;text-align:center;padding:40px 24px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
 #bridge small{letter-spacing:.02em !important;display:block;font:800 28px Mont,Deva;letter-spacing:.3em;color:#cfd8e6}#bridge b{display:block;margin-top:12px;font:400 92px/1.04 Anton,DevaH;color:#fff}#bridge span{display:inline-block;margin-top:24px;padding:10px 26px;border-radius:8px;background:#FFD23F;color:#111;font:900 36px Mont,Deva;letter-spacing:.08em}
 .bd .ic{font:400 120px/1 Mont,Deva;color:#FFD23F}.bd .wt{margin-top:10px;font:400 96px/1.02 Anton,DevaH;color:#fff}
 #fml{position:absolute;left:60px;right:60px;top:300px;z-index:16;text-align:center;padding:40px 30px;border-radius:16px;border:2px solid #FFD23F;background:#121a27}
@@ -259,6 +264,8 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 .plt{position:absolute;left:184px;top:649px;width:640px;height:594px;border:6px solid #FFD23F;border-radius:6px;box-shadow:0 0 30px rgba(255,210,63,.7),inset 0 0 40px rgba(255,210,63,.25);z-index:3;opacity:0}
 .pll{position:absolute;left:184px;top:1255px;width:640px;text-align:center;padding:8px 0;border-radius:6px;background:#FFD23F;color:#111;font:800 30px Mont,Deva;z-index:3;opacity:0}
 .pcap{position:absolute;right:30px;top:1660px;padding:4px 12px;border-radius:4px;background:rgba(0,0,0,.55);color:rgba(255,255,255,.8);font:700 18px Deva;z-index:20;opacity:0}
+#pdfp{position:absolute;left:330px;top:760px;width:420px;z-index:17;opacity:0}#pdfp .pg{position:relative;width:420px;height:594px;overflow:hidden;border-radius:6px;background:#fff;box-shadow:0 30px 70px rgba(0,0,0,.7)}#pdfp .pg img{display:block;width:420px}
+#pdfp .pb{position:absolute;right:-24px;top:-24px;width:110px;height:110px;border-radius:14px;background:#E8262B;color:#fff;display:flex;align-items:center;justify-content:center;font:900 36px Mont;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .cp{position:absolute;left:40px;right:40px;top:1480px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont,Deva;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
 audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio><audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.14" data-fade-out="1.5"></audio>' if VOICE
