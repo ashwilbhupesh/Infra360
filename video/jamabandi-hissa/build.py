@@ -36,28 +36,28 @@ NAMES = [("रामलाल पुत्र मोहनलाल", 237), ("�
          ("मोहन पुत्र गणपत", 13), ("राधा पत्नी गणपत", 312), ("हरिराम पुत्र छोटूराम", 316), ("बजरंग पुत्र छोटूराम", 158)]
 NAMES.append(("कैलाश पुत्र छोटूराम", 3795 - sum(n for _, n in NAMES)))
 HERO = 5
-KH = [("18", "0.2530", "नहरी"), ("23", "0.2530", "नहरी"), ("24", "0.2530", "नहरी"), ("25", "0.2530", "नहरी"), ("31", "0.2480", "नहरी"), ("...", "...", "..."), ("38/22", "0.0760", "गै.मु. खाला")]
-RH = 58   # row height (doc px)
-rows = "".join(f'<div class="nr{" hero" if i == HERO else ""}" id="nr{i}"><span class="no">{i + 1}.</span><span class="nm">{n}</span><span class="hs">हिस्सा- <b id="{"hhs" if i == HERO else ""}">{v}/3795</b></span><span class="kt">खातेदार</span></div>' for i, (n, v) in enumerate(NAMES))
-krows = "".join(f'<div class="kr"><span>{a}</span><span>{b}</span><span>{c}</span></div>' for a, b, c in KH)
+KH = [("18", "0.2530", "चाही-1"), ("23", "0.2530", "चाही-1"), ("24", "0.2530", "चाही-1"), ("25", "0.2530", "चाही-1"), ("31", "0.2480", "चाही-1"), ("...", "...", "..."), ("38/22", "0.0760", "गै.मु.बाड़ा")]
+def lag(a):
+    try: return "" if "गै" in a[2] else f"{float(a[1]) * 36:.2f}"
+    except ValueError: return "..."
+rows = "".join(f'<div class="nr{" hero" if i == HERO else ""}" id="nr{i}"><span class="nm">{i + 1}. {n}</span><span class="hs">हिस्सा- <b id="{"hhs" if i == HERO else ""}">{v}/3795</b></span><span class="kt">सा. देह खातेदार</span></div>' for i, (n, v) in enumerate(NAMES))
+krows = "".join(f'<div class="kr"><span>{a}</span><span>{b}</span><span>{c}</span><span>{b}</span><span>{lag((a, b, c))}</span><span></span><span></span></div>' for a, b, c in KH)
 H.append(f'''<div id="docwrap"><div id="doc">
-<div class="dh"><div class="seal">उदाहरण</div><div><b>जमाबन्दी (खेवट/खतौनी) प्रतिलिपि</b><small>SAMPLE &middot; नमूना दस्तावेज़</small></div></div>
-<div class="meta"><span>ग्राम का नाम :- उदाहरणपुर</span><span>अंतिम जमाबंदी :- 2076-2079</span><span>पटवार हल्का :- नमूना</span><span>क्षेत्रफल की इकाई :- हैक्टेयर</span><span>तहसील :- -----</span><span>खाता संख्या :- 39</span></div>
+<div class="top"><div class="seal">उदाहरण</div><b>जमाबन्दी (खेवट/खतौनी) (प्रतिलिपि )</b><div class="pp">प्रपत्र पी-26 (सी)<br/>(देखिये नियम 169 एच)<br/>पृष्ठ संख्या :- 1 of 2</div></div>
+<div class="meta"><div><span>ग्राम का नाम :- उदाहरणपुर</span><span>पटवार हल्का :- नमूना</span><span>भू.अभि.नि.क्षेत्र :- नमूना</span><span>तहसील :- उदाहरण</span><span>जिला :- उदाहरण</span></div>
+<div><span>अंतिम चौसला आधार संवत :- 2076 - 2079</span><span>भूमि धारक का नाम :- राज. सरकार</span><span>क्षेत्रफल की इकाई :- हैक्टेयर</span><span>खाता संख्या नया :- 39</span><span>खाता संख्या पुराना :- 32</span></div></div>
 <div class="lab">काश्तकार का नाम :-</div>
 <div id="nlist">{rows}</div>
-<div class="kh"><div class="kr khd"><span>खसरा संख्या</span><span>क्षेत्रफल</span><span>भूमि प्रकार</span></div>{krows}
-<div class="kr tot" id="tot"><span>कुल खसरे - 16</span><span><b id="tval">3.7950</b></span><span>हैक्टेयर</span></div></div>
+<div class="kh"><div class="kr khd"><span>खसरा<br/>संख्या</span><span>क्षेत्रफल</span><span>भूमि<br/>वर्गीकरण</span><span></span><span>कृषक द्वारा<br/>संदत्त लगान</span><span>सिंचाई<br/>के साधन</span><span>टिप्पणी</span></div>{krows}
+<div class="kr tot" id="tot"><span>कुल खसरे -16</span><span><b id="tval">3.7950</b></span><span></span><span></span><span>133.88</span><span></span><span></span></div></div>
+<div class="foot"><b>आवेदक की सूचना :-</b><div class="fg"><span>आवेदक का नाम - ------</span><span>पता - ------</span><span>प्रतिलिपि सं. - XXXXX</span><span>नक़ल जारी करने का स्थान - ------</span></div>
+<div class="qr">SAMPLE<br/>QR</div></div>
 <div class="wm">SAMPLE</div></div>
-<svg id="mark" viewBox="0 0 940 2200"><ellipse id="hcirc" cx="655" cy="0" rx="150" ry="38" pathLength="1"/><rect id="tbox" x="0" y="0" width="0" height="0" rx="10" pathLength="1"/></svg></div>''')
-# doc layout constants (must match CSS)
-Y_LIST = 410; HERO_Y = Y_LIST + HERO * RH + RH / 2
-Y_KH = Y_LIST + len(NAMES) * RH + 40; TOT_Y = Y_KH + RH * (len(KH) + 1) + 35
+<svg id="mark" viewBox="0 0 940 2600"><ellipse id="hcirc" cx="655" cy="0" rx="150" ry="34" pathLength="1"/><rect id="tbox" x="0" y="0" width="0" height="0" rx="10" pathLength="1"/></svg></div>''')
 J.append('(function(){ const h = document.getElementById("nr' + str(HERO) + '"), b = document.getElementById("hhs"), t = document.getElementById("tot"), v = document.getElementById("tval"); const c = document.getElementById("hcirc"); c.setAttribute("cy", h.offsetTop + h.offsetHeight / 2); c.setAttribute("cx", b.offsetLeft + b.offsetWidth / 2); c.setAttribute("rx", b.offsetWidth / 2 + 26); const tb = document.getElementById("tbox"); tb.setAttribute("x", v.offsetLeft - 18); tb.setAttribute("y", t.offsetTop + 2); tb.setAttribute("width", v.offsetWidth + 36); tb.setAttribute("height", t.offsetHeight - 4); })();')
-DOC_TOP, DOC_X = 260, 70
-def docpos(t, y_center, sc, d=1.0):
-    # place doc point y_center at screen y 760 with scale sc
-    ty = 760 - DOC_TOP - y_center * sc
-    J.append(f'tl.to("#docwrap", {{y:{ty:.0f}, scale:{sc}, duration:{d}, ease:"power2.inOut"}}, {t:.2f});')
+J.append('function DY(id, sc, frac){ const e = document.getElementById(id); const y = e.offsetTop + e.offsetHeight * (frac === undefined ? .5 : frac); return 760 - 260 - y * sc; }')
+def docpos(t, el, sc, d=1.0, frac=.5):
+    J.append(f'tl.to("#docwrap", {{y:() => DY("{el}", {sc}, {frac}), scale:{sc}, duration:{d}, ease:"power2.inOut"}}, {t:.2f});')
 
 # ---------- 0 hook ----------
 H.append('<div id="hook"><small>JAMABANDI MEIN</small><b>APNA HISSA<br/>KAISE NIKAALEIN?</b><span>158/3795 = KITNI ZAMEEN?</span></div>')
@@ -78,8 +78,8 @@ for k, kw in [(1, "Apna Khata"), (2, "zila"), (3, "khata number")]:
 
 # ---------- 2 find your name + hissa ----------
 J.append(f'tl.set("#docwrap", {{y:420, scale:.62, rotation:0}}, {S(2) - .4:.2f}); tl.to("#docwrap", {{opacity:1, duration:.4}}, {S(2) - .35:.2f});')
-docpos(S(2) - .3, Y_LIST + 3 * RH, .66, .6)
-docpos(wt(2, "Apna naam") - .2, HERO_Y, 1.0, 1.0)
+docpos(S(2) - .3, "nr3", .66, .6)
+docpos(wt(2, "Apna naam") - .2, "nr5", 1.0, 1.0)
 J.append(f'tl.fromTo("#nr{HERO}", {{backgroundColor:"rgba(255,214,0,0)"}}, {{backgroundColor:"rgba(255,214,0,.55)", duration:.45, immediateRender:false}}, {wt(2, "Apna naam") + .6:.2f});')
 J.append(f'tl.fromTo("#hcirc", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:.6, ease:"power2.out", immediateRender:false}}, {wt(2, "hissa") - .1:.2f}); tl.set("#hcirc", {{strokeDashoffset:1}}, 0);')
 H.append('<div class="call" id="c_hissa"><small>AAPKA HISSA</small><b>158 / 3795</b></div>')
@@ -87,7 +87,7 @@ show("#c_hissa", wt(2, "Jaise"), S(3) + .4, "opacity:0, y:40, scale:.9")
 sfx("pop", wt(2, "Apna naam") + .6, .3); sfx("click-soft", wt(2, "hissa"), .3); sfx("impact-bass-1", wt(2, "Jaise"), .35)
 
 # ---------- 3 total area ----------
-docpos(S(3) - .1, TOT_Y - 120, .95, 1.1)
+docpos(S(3) - .1, "tot", .95, 1.1, -1.5)
 J.append(f'tl.fromTo("#tbox", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:.6, ease:"power2.out", immediateRender:false}}, {wt(3, "kul khasre") - .1:.2f}); tl.set("#tbox", {{strokeDashoffset:1}}, 0);')
 J.append(f'tl.fromTo("#tot", {{backgroundColor:"rgba(255,214,0,0)"}}, {{backgroundColor:"rgba(255,214,0,.45)", duration:.4, immediateRender:false}}, {wt(3, "kul khasre"):.2f});')
 H.append('<div class="call" id="c_tot"><small>KUL AREA</small><b>3.7950 HECTARE</b></div>')
@@ -169,7 +169,7 @@ if os.path.exists(f"{P}/assets/face.mp4"):
 H.append('<div id="cred">Sample document &middot; names made up &middot; 1 hectare = 11,959.9 sq. yard &middot; bigha ka maap ilaake ke hisaab se alag ho sakta hai</div>')
 
 CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-face{font-family:Mont;font-weight:700;src:url(assets/fonts/mont700.woff2)}@font-face{font-family:Mont;font-weight:800;src:url(assets/fonts/mont800.woff2)}@font-face{font-family:Mont;font-weight:900;src:url(assets/fonts/mont900.woff2)}
-@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/notodeva.woff2)}@font-face{font-family:Tiro;src:url(assets/fonts/tiro.woff2)}
+@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/notodeva.woff2);unicode-range:U+0900-097F,U+1CD0-1CF9,U+200C-200D,U+20A8,U+20B9,U+25CC,U+A830-A839,U+A8E0-A8FF}@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/notolatin.woff2);unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}@font-face{font-family:Tiro;src:url(assets/fonts/tiro.woff2)}
 *{margin:0;padding:0;box-sizing:border-box}html,body{width:1080px;height:1920px;overflow:hidden;background:#0f0d0a}
 #root{position:relative;width:1080px;height:1920px;overflow:hidden;font-family:Mont,sans-serif;background:radial-gradient(120% 80% at 50% 30%,#2a2216 0%,#120f0b 60%,#0a0907 100%)}
 #root:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(201,162,74,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,74,.06) 1px,transparent 1px);background-size:60px 60px}
@@ -177,16 +177,18 @@ CSS = """@font-face{font-family:Anton;src:url(assets/fonts/anton.woff2)}@font-fa
 #face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:40}
 #cred{position:absolute;left:40px;right:40px;top:1690px;text-align:center;font:700 18px Mont;color:rgba(255,255,255,.6);z-index:20}
 #docwrap{position:absolute;left:70px;top:260px;width:940px;opacity:0;z-index:5}
-#doc{position:relative;width:940px;padding:40px 44px;background:#F6F1E4;border-radius:6px;box-shadow:0 40px 90px rgba(0,0,0,.7);color:#1c1a16;font-family:Deva,Mont,sans-serif;overflow:hidden}
-#doc .dh{display:flex;align-items:center;gap:24px;height:120px}#doc .seal{flex:none;width:100px;height:100px;border-radius:50%;border:4px double #7a6a4a;display:flex;align-items:center;justify-content:center;font:700 22px Deva;color:#7a6a4a}
-#doc .dh b{display:block;font:800 40px Deva}#doc .dh small{display:block;margin-top:4px;font:800 20px Mont;letter-spacing:.2em;color:#B4261A}
-#doc .meta{display:grid;grid-template-columns:1fr 1fr;row-gap:10px;column-gap:20px;height:180px;margin-top:20px;font:500 25px Deva;align-content:start}
-#doc .lab{height:50px;font:700 28px Deva;text-decoration:underline}
-#nlist .nr{display:flex;align-items:center;height:58px;font:500 27px Deva;border-radius:4px;padding:0 6px}#nlist .no{width:46px;flex:none}#nlist .nm{width:360px;flex:none}#nlist .hs{width:310px;flex:none}#nlist .hs b{font:800 27px Mont}#nlist .kt{color:#555}
-#doc .kh{margin-top:40px;border-top:3px solid #1c1a16}#doc .kr{display:grid;grid-template-columns:260px 250px 1fr;align-items:center;height:58px;font:500 27px Deva;padding:0 6px;border-radius:4px}#doc .kr span:nth-child(2){font:800 27px Mont}
-#doc .khd{font-weight:700;border-bottom:2px solid #1c1a16}#doc .tot{height:70px;margin-top:0;border-top:3px solid #1c1a16;font:800 30px Deva}#doc .tot b{font:900 32px Mont}
-#doc .wm{position:absolute;left:50%;top:45%;translate:-50% -50%;rotate:-30deg;font:900 170px Mont;letter-spacing:.1em;color:rgba(180,38,26,.08);pointer-events:none}
-#mark{position:absolute;left:0;top:0;width:940px;height:2200px;pointer-events:none;overflow:visible}#mark ellipse,#mark rect{fill:none;stroke:#D7261E;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:1}
+#doc{position:relative;width:940px;padding:34px 36px 40px;background:#fff;border-radius:4px;box-shadow:0 40px 90px rgba(0,0,0,.7);color:#111;font-family:Deva,Mont,sans-serif;overflow:hidden}
+#doc .top{position:relative;display:flex;align-items:center;height:110px}#doc .seal{flex:none;width:84px;height:84px;border-radius:50%;border:4px double #8a7a5a;display:flex;align-items:center;justify-content:center;font:700 17px Deva;color:#8a7a5a}
+#doc .top>b{flex:1;text-align:center;font:800 35px Deva;padding-right:120px}#doc .pp{position:absolute;right:0;top:0;text-align:right;font:500 17px/1.35 Deva}
+#doc .meta{display:grid;grid-template-columns:1fr 1.35fr;column-gap:20px;margin-top:12px;font:500 21px Deva}#doc .meta div{display:flex;flex-direction:column;gap:6px}
+#doc .lab{margin-top:14px;height:40px;font:800 23px Deva}
+#nlist .nr{display:flex;align-items:center;height:50px;font:500 23px Deva;border-radius:4px;padding:0 6px 0 18px}#nlist .nm{width:330px;flex:none}#nlist .hs{width:250px;flex:none}#nlist .hs b{font:700 23px Deva,Mont}#nlist .kt{color:#222}
+#doc .kh{margin-top:26px;border-top:2px solid #111}#doc .kr{display:grid;grid-template-columns:160px 115px 130px 105px 130px 100px 1fr;align-items:center;height:54px;font:500 21px Deva;padding:0 4px;border-radius:4px}
+#doc .khd{height:76px;font:800 19px/1.2 Deva;border-bottom:2px solid #111}#doc .tot{height:64px;border-top:2px solid #111;border-bottom:2px solid #111;font:800 23px Deva}#doc .tot b{font:800 25px Deva,Mont}
+#doc .foot{position:relative;margin-top:24px;font:500 20px Deva}#doc .foot>b{font:800 22px Deva}#doc .fg{display:grid;grid-template-columns:1fr 1fr;row-gap:8px;margin-top:10px;padding-right:150px}
+#doc .qr{position:absolute;right:0;top:0;width:120px;height:120px;border:3px solid #111;background:repeating-linear-gradient(45deg,#ddd 0 6px,#fff 6px 12px);display:flex;align-items:center;justify-content:center;text-align:center;font:900 16px Mont}
+#doc .wm{position:absolute;left:50%;top:45%;translate:-50% -50%;rotate:-30deg;font:900 170px Mont;letter-spacing:.1em;color:rgba(180,38,26,.07);pointer-events:none}
+#mark{position:absolute;left:0;top:0;width:940px;height:2600px;pointer-events:none;overflow:visible}#mark ellipse,#mark rect{fill:none;stroke:#D7261E;stroke-width:6;stroke-dasharray:1;stroke-dashoffset:1}
 #hook{position:absolute;left:60px;right:60px;top:110px;z-index:16;text-align:center;padding:26px 20px 24px;border-radius:10px;border:1.5px solid #C9A24A;background:linear-gradient(135deg,rgba(14,12,9,.94),rgba(34,27,18,.94))}
 #hook small{display:block;font:800 30px Mont;letter-spacing:.3em;color:#F3E6C8}#hook b{display:block;margin-top:8px;font:400 96px/1.02 Anton;background:linear-gradient(180deg,#F7E3A8,#C9A24A);-webkit-background-clip:text;color:transparent}
 #hook span{display:inline-block;margin-top:16px;padding:8px 22px;border-radius:6px;background:#F2B23E;color:#111;font:900 34px Mont}
