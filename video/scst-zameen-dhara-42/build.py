@@ -43,16 +43,21 @@ def bgp(bid, img, t0, t1, op=.55, z0=1.0, z1=1.12, blur=0):
     J.append(f'tl.set("#{bid}", {{opacity:0}}, 0); tl.to("#{bid}", {{opacity:{op}, duration:.5}}, {max(0, t0):.2f}); tl.fromTo("#{bid} img", {{scale:{z0}}}, {{scale:{z1}, duration:{t1 - t0 + .5:.2f}, ease:"none", immediateRender:false}}, {max(0, t0):.2f}); tl.to("#{bid}", {{opacity:0, duration:.5}}, {t1 - .2:.2f});')
 
 # ---------- 0 HOOK: board ----------
-bgp("b0", "board", 0, S(1), op=1, z0=1.0, z1=1.08)
-H.append('<div id="sign"><div class="sa"><b>सस्ती ज़मीन</b><span>बिकाऊ &middot; ₹ आधे दाम</span></div><div class="sb"><b>₹ लाखों फँसे</b><span>सावधान!</span></div></div>')
+bgp("b0", "board", 0, S(1), op=1, z0=1.0, z1=1.0)
+H.append('<div id="sign"><div class="sa"><b>सस्ती ज़मीन</b><span>बिकाऊ &middot; ₹ आधे दाम</span></div><div class="sb"></div></div><div id="signt"><b>₹ लाखों फँसे</b><span>सावधान!</span></div>')
 tf = wt(0, "गलत")
-J.append(f'tl.set("#sign .sb", {{opacity:0}}, 0); tl.fromTo("#sign .sa", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, .2); tl.to("#sign .sa", {{rotationX:90, opacity:0, duration:.25}}, {tf:.2f}); tl.fromTo("#sign .sb", {{rotationX:-90, opacity:0}}, {{rotationX:0, opacity:1, duration:.3, immediateRender:false}}, {tf + .25:.2f}); tl.to("#sign", {{x:8, duration:.05, yoyo:true, repeat:7}}, {tf + .55:.2f}); tl.to("#sign", {{opacity:0, duration:.3}}, {S(1) - .3:.2f});')
+J.append(f'tl.set("#sign .sb", {{opacity:0}}, 0); tl.fromTo("#sign .sa", {{opacity:0, scale:.6}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2)"}}, .2); tl.to("#sign .sa", {{rotationX:90, opacity:0, duration:.25}}, {tf:.2f}); tl.fromTo("#sign .sb", {{rotationX:-90, opacity:0}}, {{rotationX:0, opacity:1, duration:.3, immediateRender:false}}, {tf + .25:.2f}); tl.to("#sign, #signt", {{x:8, duration:.05, yoyo:true, repeat:7}}, {tf + .55:.2f}); tl.to("#sign, #signt", {{opacity:0, duration:.3}}, {S(1) - .3:.2f}); tl.set("#signt", {{opacity:0}}, 0); tl.fromTo("#signt", {{opacity:0, rotationX:-90}}, {{opacity:1, rotationX:0, duration:.3, immediateRender:false}}, {tf + .25:.2f});')
 H.append('<div id="hook"><small>सावधान</small><b>SC/ST की सस्ती ज़मीन?</b></div>')
 inn("#hook", .1, "opacity:0, y:-40"); out("#hook", S(1))
 H.append('<div id="rain">' + "".join(f'<i style="left:{40 + (k * 131) % 1000}px;font-size:{60 + (k * 23) % 50}px">₹</i>' for k in range(14)) + '</div>')
 J.append(f'tl.set("#rain", {{opacity:1}}, {wt(0, "लाखों") - .2:.2f}); tl.fromTo("#rain i", {{y:-150, opacity:0, rotation:-20}}, {{y:2100, opacity:1, rotation:30, duration:1.8, stagger:{{each:.09}}, ease:"power1.in", immediateRender:false}}, {wt(0, "लाखों") - .2:.2f}); tl.set("#rain", {{opacity:0}}, {S(1):.2f}); tl.set("#rain", {{opacity:0}}, 0);')
 sfx("impact-bass-1", 0, .45); sfx("whoosh", tf + .2, .35); sfx("impact-bass-1", tf + .3, .4)
 
+# 'galat tareekon se apnane' -> illustration
+H.append('<div id="grab"><img src="assets/img/grab.jpg"/><b>गलत तरीके</b><span>प्रतीकात्मक चित्र</span></div>')
+tg_ = wt(0, "गलत") - .1
+J.append(f'tl.set("#grab", {{opacity:0}}, 0); tl.fromTo("#grab", {{opacity:0, scale:.7, rotation:5}}, {{opacity:1, scale:1, rotation:2, duration:.35, ease:"back.out(1.8)", immediateRender:false}}, {tg_:.2f}); tl.to("#grab", {{opacity:0, x:-200, rotation:-6, duration:.3}}, {wt(0, "लाखों") - .2:.2f});')
+sfx("whoosh", tg_, .3)
 # 'lakhon rupaye gawa dete hain' -> loss image pop-up
 H.append('<div id="loss"><img src="assets/img/loss.jpg"/><span>प्रतीकात्मक चित्र</span></div>')
 tl_ = wt(0, "लाखों") - .15
@@ -210,10 +215,11 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 #face{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover;z-index:40}
 #cred{position:absolute;left:30px;right:30px;top:1700px;text-align:center;font:600 17px Deva;color:rgba(255,255,255,.6);z-index:20}
 .bgp{position:absolute;inset:0;overflow:hidden;z-index:1;opacity:0}.bgp img{width:100%;height:100%;object-fit:cover}.bgp:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(8,11,17,.35),rgba(8,11,17,.05) 40%,rgba(8,11,17,.55))}
-#sign{position:absolute;left:379px;top:505px;width:596px;height:356px;z-index:6;perspective:900px}#sign>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-#sign .sa b{font:900 84px/1 DevaH;color:#C81E1E}#sign .sa span{margin-top:14px;font:800 40px Deva;color:#222}
-#sign .sb{background:#C81E1E}#sign .sb b{font:900 86px/1 DevaH;color:#fff}#sign .sb span{margin-top:12px;font:800 40px Deva;color:#FFD23F}
+#sign{position:absolute;left:392px;top:546px;width:566px;height:302px;z-index:6;perspective:900px;mix-blend-mode:multiply}#sign>div{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+#sign .sa b{font:900 82px/1 DevaH;color:#B3161C}#sign .sa span{margin-top:14px;font:800 40px Deva;color:#222}
+#sign .sb{background:#B3161C}#signt{position:absolute;left:392px;top:546px;width:566px;height:302px;z-index:7;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0;transform-origin:50% 50%}#signt b{font:900 86px/1 DevaH;color:#fff;text-shadow:0 2px 0 rgba(0,0,0,.25)}#signt span{margin-top:12px;font:800 40px Deva;color:#FFD23F}#sign .sb b{font:900 86px/1 DevaH;color:#fff}#sign .sb span{margin-top:12px;font:800 40px Deva;color:#FFD23F}
 #hook{position:absolute;left:60px;right:60px;top:110px;z-index:16;text-align:center;padding:22px 20px;border-radius:14px;border:2px solid #FFD23F;background:rgba(11,15,23,.9)}#hook small{display:block;font:800 32px Deva;color:#FF6B6B}#hook b{display:block;margin-top:6px;font:900 78px/1.1 DevaH;color:#fff}
+#grab{position:absolute;left:0;right:0;margin:0 auto;width:840px;top:900px;z-index:12;padding:8px;border-radius:10px;background:#fff;box-shadow:0 40px 90px rgba(0,0,0,.75)}#grab img{display:block;width:100%;border-radius:6px}#grab b{position:absolute;left:24px;top:24px;padding:6px 18px;border-radius:8px;background:#C81E1E;color:#fff;font:900 46px DevaH}#grab span{position:absolute;right:16px;bottom:16px;padding:3px 10px;border-radius:4px;background:rgba(0,0,0,.6);color:#fff;font:700 18px Deva}
 #loss{position:absolute;left:0;right:0;margin:0 auto;width:780px;top:890px;z-index:12;padding:8px;border-radius:10px;background:#fff;box-shadow:0 40px 90px rgba(0,0,0,.75)}#loss img{display:block;width:100%;border-radius:6px}#loss span{position:absolute;right:16px;bottom:16px;padding:3px 10px;border-radius:4px;background:rgba(0,0,0,.6);color:#fff;font:700 18px Deva}
 #rain{position:absolute;inset:0;z-index:7;pointer-events:none;opacity:0}#rain i{position:absolute;top:0;font-style:normal;font-weight:900;color:#2FD158;text-shadow:0 4px 12px rgba(0,0,0,.6)}
 .doc{position:absolute;left:70px;top:330px;width:940px;height:1060px;overflow:hidden;border-radius:16px;background:#fff;box-shadow:0 30px 80px rgba(0,0,0,.7);z-index:5}.doc .im{position:absolute;left:0;top:0;width:940px}.doc img{display:block;width:100%}
