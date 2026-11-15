@@ -105,6 +105,16 @@ def gpath(g):
 for i, (nm, la, lo) in enumerate(DIST):
     SVG.append(f'<path class="dz" id="dz{i}" d="{gpath(DG[nm]["geometry"])}" style="fill:{WATER};fill-opacity:0;stroke:#fff;stroke-width:3;stroke-opacity:0;vector-effect:non-scaling-stroke;stroke-linejoin:round"/>')
     lo2, la2 = DG[nm]["properties"]["label"]; DP[nm] = wp(la2, lo2)
+# water-flow paths for line 1 (source on the Chambal near Kota -> every district)
+WSRC = wp(25.35, 75.98)
+WF = []
+for i, (nm, la, lo) in enumerate(DIST):
+    b = DP[nm]; a = WSRC; dd = math.hypot(b[0] - a[0], b[1] - a[1])
+    m = ((a[0] + b[0]) / 2 + (b[1] - a[1]) * .10, (a[1] + b[1]) / 2 - (b[0] - a[0]) * .10)
+    d = f"M{a[0]:.0f} {a[1]:.0f} Q{m[0]:.0f} {m[1]:.0f} {b[0]:.0f} {b[1]:.0f}"; WF.append((i, dd))
+    SVG.append(f'<path class="wfl" id="wf{i}" d="{d}" pathLength="1" style="fill:none;stroke:{WATER};stroke-width:7;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:url(#glow);opacity:.95"/>'
+               f'<path class="wfd" id="wd{i}" d="{d}" pathLength="1" style="fill:none;stroke:#fff;stroke-width:3;vector-effect:non-scaling-stroke;stroke-linecap:round;stroke-dasharray:.03 .06;opacity:0"/>')
+SVG.append(f'<g id="wsrc" style="opacity:0"><circle cx="{WSRC[0]:.0f}" cy="{WSRC[1]:.0f}" r="{U * 60:.0f}" style="fill:url(#dg)"/><circle cx="{WSRC[0]:.0f}" cy="{WSRC[1]:.0f}" r="{U * 16:.0f}" style="fill:{WATER2};stroke:#fff;stroke-width:4;vector-effect:non-scaling-stroke"/></g>')
 # green growth halos (real estate)
 for i, (nm, la, lo) in enumerate(DIST):
     x, y = DP[nm]
@@ -147,11 +157,17 @@ J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.12}}, {{opacity:1, scale:1, d
 H.append('<div id="drip">' + "".join(f'<i style="left:{120 + k * 105}px"></i>' for k in range(8)) + '</div>')
 J.append(f'tl.set("#drip", {{opacity:1}}, 0); tl.fromTo("#drip i", {{y:-60, opacity:0}}, {{y:900, opacity:1, duration:1.1, stagger:{{each:.1, repeat:1}}, ease:"power1.in", immediateRender:false}}, .2); tl.to("#drip", {{opacity:0, duration:.3}}, {S(1) - .1:.2f});')
 sfx("impact-bass-1", 0, .45)
-# line 1: 17 zile flash
-for i in range(len(DIST)):
-    t = S(1) + .1 + i * .06
-    J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.2}}, {t:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 10:.0f}}}}}, {{attr:{{r:{U * 46:.0f}}}, duration:.5, immediateRender:false}}, {t:.2f}); tl.to("#dt{i}", {{opacity:.35, duration:.3}}, {S(3) - .2:.2f});')
-    J.append(f'tl.to("#dz{i}", {{fillOpacity:.4, strokeOpacity:.9, duration:.2}}, {t:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:0, duration:.4}}, {S(2) + .3:.2f});')
+# line 1: water flows from the Chambal into all 17 districts (nearest first)
+T1 = S(1) + .05; DMAX = max(dd for _, dd in WF)
+J.append(f'tl.fromTo("#wsrc", {{opacity:0, scale:.3, svgOrigin:"{WSRC[0]:.0f} {WSRC[1]:.0f}"}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2.5)"}}, {T1:.2f}); tl.to("#wsrc", {{opacity:0, duration:.4}}, {S(2) + .2:.2f});')
+sfx("whoosh", T1, .35)
+for i, dd in WF:
+    t0 = T1 + .2 + dd / DMAX * .9; dur = .5 + dd / DMAX * 1.0; ta = t0 + dur
+    J.append(f'tl.fromTo("#wf{i}", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:{dur:.2f}, ease:"power1.inOut", immediateRender:false}}, {t0:.2f}); tl.to("#wf{i}", {{opacity:0, duration:.4}}, {S(2) + .2:.2f});')
+    J.append(f'tl.set("#wd{i}", {{opacity:.9}}, {t0 + .15:.2f}); tl.fromTo("#wd{i}", {{strokeDashoffset:0}}, {{strokeDashoffset:-1.5, duration:1.6, ease:"none", repeat:3, immediateRender:false}}, {t0 + .15:.2f}); tl.to("#wd{i}", {{opacity:0, duration:.3}}, {S(2) + .2:.2f});')
+    J.append(f'tl.to("#dt{i}", {{opacity:1, duration:.2}}, {ta - .05:.2f}); tl.fromTo("#dt{i} .dgl", {{attr:{{r:{U * 10:.0f}}}}}, {{attr:{{r:{U * 52:.0f}}}, duration:.5, ease:"power2.out", immediateRender:false}}, {ta - .05:.2f}); tl.to("#dt{i}", {{opacity:.35, duration:.3}}, {S(3) - .2:.2f});')
+    J.append(f'tl.fromTo("#dz{i}", {{fillOpacity:0, strokeOpacity:0}}, {{fillOpacity:.45, strokeOpacity:.9, duration:.45, ease:"power2.out", immediateRender:false}}, {ta - .1:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:0, duration:.4}}, {S(2) + .3:.2f});')
+    if i % 3 == 0: sfx("pop", ta, .14)
 H.append('<div id="z17"><b>17</b><span>ZILE</span></div>')
 J.append(f'tl.fromTo("#z17", {{opacity:0, scale:1.6}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, {wt(1, "17") - .1:.2f}); tl.to("#z17", {{opacity:0, y:-30, duration:.3}}, {S(2) - .1:.2f});')
 sfx("riser", S(1), .3); sfx("impact-bass-1", wt(1, "17"), .4)
