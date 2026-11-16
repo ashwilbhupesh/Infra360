@@ -152,11 +152,18 @@ J.append('tl.fromTo("#plane", {rotationX:20, scale:.8}, {rotationX:44, scale:1.0
 J.append(f'tl.to("#raj", {{fillOpacity:.12, duration:.6}}, .2); tl.to("#raj", {{fillOpacity:.04, duration:.6}}, 1.4);')
 bb("lraj", .3, S(3)); bb("lmp", .5, S(4))
 for k in RIV: draw(f"#rv_{k}, #rc_{k}", .1, 1.1)
-H.append('<div id="hook"><small>IS PROJECT KA PAANI</small><b>AAPKE ZILE KI<br/>PYAAS BUJHAYEGA</b></div>')
+H.append('<div id="hook"><small>RAM JAL SETU LINK &middot; 17 ZILE</small><b>KYA AAPKE ZILE MEIN<br/>PAANI AAYEGA?</b></div>')
 J.append(f'tl.fromTo("#hook", {{opacity:0, scale:1.12}}, {{opacity:1, scale:1, duration:.4, ease:"power3.out"}}, 0); tl.to("#hook", {{opacity:0, y:-30, duration:.3}}, {S(1) - .15:.2f});')
 H.append('<div id="drip">' + "".join(f'<i style="left:{120 + k * 105}px"></i>' for k in range(8)) + '</div>')
 J.append(f'tl.set("#drip", {{opacity:1}}, 0); tl.fromTo("#drip i", {{y:-60, opacity:0}}, {{y:900, opacity:1, duration:1.1, stagger:{{each:.1, repeat:1}}, ease:"power1.in", immediateRender:false}}, .2); tl.to("#drip", {{opacity:0, duration:.3}}, {S(1) - .1:.2f});')
 sfx("impact-bass-1", 0, .45)
+# hook: water already flowing to districts from frame 0
+DMAX = max(dd for _, dd in WF)
+for i, dd in WF:
+    t0 = .1 + dd / DMAX * .7; dur = .45 + dd / DMAX * .6
+    J.append(f'tl.fromTo("#wf{i}", {{strokeDashoffset:1}}, {{strokeDashoffset:0, duration:{dur:.2f}, ease:"power1.inOut", immediateRender:false}}, {t0:.2f}); tl.to("#wf{i}", {{opacity:0, duration:.3}}, {S(1) - .2:.2f}); tl.set("#wf{i}", {{opacity:.95}}, {S(1) - .05:.2f});')
+    J.append(f'tl.fromTo("#dz{i}", {{fillOpacity:0, strokeOpacity:0}}, {{fillOpacity:.35, strokeOpacity:.8, duration:.35, immediateRender:false}}, {t0 + dur - .1:.2f}); tl.to("#dz{i}", {{fillOpacity:0, strokeOpacity:0, duration:.3}}, {S(1) - .2:.2f});')
+J.append(f'tl.fromTo("#wsrc", {{opacity:0}}, {{opacity:1, duration:.25, immediateRender:false}}, .05);')
 # line 1: water flows from the Chambal into all 17 districts (nearest first)
 T1 = S(1) + .05; DMAX = max(dd for _, dd in WF)
 J.append(f'tl.fromTo("#wsrc", {{opacity:0, scale:.3, svgOrigin:"{WSRC[0]:.0f} {WSRC[1]:.0f}"}}, {{opacity:1, scale:1, duration:.4, ease:"back.out(2.5)"}}, {T1:.2f}); tl.to("#wsrc", {{opacity:0, duration:.4}}, {S(2) + .2:.2f});')
@@ -221,13 +228,13 @@ sfx("riser", wt(6, "growth") - .3, .3)
 
 # ---------- 5 MoU + money ----------
 H.append('<div id="mou"><small>FUNDING</small>'
-         '<div class="bar"><div class="k"><b>90%</b> KENDRA</div><div class="r">10%</div></div><div class="cost"><b>~&#8377;91,000 CR</b><span>PROJECT LAGAT</span></div></div>')
+         '<div class="bar"><div class="k"><b>90%</b> KENDRA</div><div class="r">10%</div></div><div class="cost"><b>~&#8377;<var class="cu" style="font:inherit;font-style:normal;color:inherit;letter-spacing:inherit;display:inline;margin:0;padding:0;background:none">0</var> CR</b><span>PROJECT LAGAT</span></div></div>')
 J.append(f'tl.to("#dim", {{opacity:.45, duration:.3}}, {S(7) - .1:.2f}); tl.fromTo("#mou", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(7):.2f});'
                   f'tl.set("#mou .bar .k", {{width:"0%"}}, 0); tl.set("#mou .cost", {{opacity:0}}, 0); tl.fromTo("#mou .bar .k", {{width:"0%"}}, {{width:"90%", duration:.8, ease:"power3.out", immediateRender:false}}, {wt(7, "90") - .1:.2f}); tl.fromTo("#mou .cost", {{opacity:0, y:20}}, {{opacity:1, y:0, duration:.4, immediateRender:false}}, {wt(7, "91,000") - .1:.2f}); tl.to("#mou", {{opacity:0, duration:.3}}, {S(8) - .1:.2f});')
 sfx("click-soft", wt(7, "Kendra") - .1, .35); sfx("impact-bass-1", wt(7, "91"), .35)
 
 # ---------- 6 status ----------
-H.append('<div id="stat"><small>ZAMEEN PAR KAAM</small><div class="track"><div class="fill"></div><em>~4%</em></div><span>July 2026 tak kharch &middot; Vidhan Sabha data</span><i>SHURUAATI DAUR</i></div>')
+H.append('<div id="stat"><small>ZAMEEN PAR KAAM</small><div class="track"><div class="fill"></div><em>~<var class="cu4" style="font:inherit;font-style:normal;color:inherit;letter-spacing:inherit;display:inline;margin:0;padding:0;background:none">0</var>%</em></div><span>July 2026 tak kharch &middot; Vidhan Sabha data</span><i>SHURUAATI DAUR</i></div>')
 J.append(f'tl.fromTo("#stat", {{opacity:0, y:40}}, {{opacity:1, y:0, duration:.45, ease:"power3.out"}}, {S(8):.2f}); tl.fromTo("#stat .fill", {{width:"0%"}}, {{width:"4%", duration:1.0, ease:"power2.out", immediateRender:false}}, {wt(8, "4%") - .3:.2f}); tl.fromTo("#stat em", {{opacity:0}}, {{opacity:1, duration:.3, immediateRender:false}}, {wt(8, "4%") - .1:.2f}); tl.set("#stat em", {{opacity:0}}, 0); tl.set("#stat .fill", {{width:"0%"}}, 0); tl.to("#stat", {{opacity:0, duration:.3}}, {S(9) - .1:.2f});')
 sfx("click-soft", wt(8, "4%"), .4)
 
@@ -237,14 +244,15 @@ J.append(f'tl.to("#dim", {{opacity:.5, duration:.3}}, {S(9):.2f}); tl.fromTo("#c
 sfx("sparkle", wt(9, "Comment"), .3)
 
 
+J.append(f'(function(){{ const el = document.querySelector("#mou .cu"); const o = {{v:0}}; tl.to(o, {{v:91000, duration:.9, ease:"power2.out", onUpdate:()=>{{ el.textContent = Math.round(o.v).toLocaleString("en-IN"); }}}}, {wt(7, "91") - .9:.2f}); const e4 = document.querySelector("#stat .cu4"); const o4 = {{v:0}}; tl.to(o4, {{v:4, duration:.8, ease:"power2.out", onUpdate:()=>{{ e4.textContent = Math.round(o4.v); }}}}, {wt(8, "4%") - .3:.2f}); }})();')
 # ---------- photos ----------
 def photo(pid, img, t0, t1, cap, top=330, w=880, h=560, left=None):
     lx = (1080 - w - 20) // 2 if left is None else left
     H.append(f'<div class="ph" id="{pid}" style="left:{lx}px;top:{top}px;width:{w + 20}px"><div class="iw" style="height:{h}px"><img src="assets/img/{img}.jpg"/></div><div class="pc">{cap}</div></div>')
     J.append(f'tl.fromTo("#{pid}", {{opacity:0, y:40, scale:.94}}, {{opacity:1, y:0, scale:1, duration:.4, ease:"power3.out"}}, {t0:.2f}); tl.fromTo("#{pid} img", {{scale:1.15}}, {{scale:1, duration:{t1 - t0 + .3:.2f}, ease:"none"}}, {t0:.2f}); tl.to("#{pid}", {{opacity:0, duration:.25}}, {t1 - .25:.2f});')
     sfx("whoosh-short", t0, .25)
-photo("phdry", "dry", .9, wt(0, "pyaas") + .05, "AAJ: SOOKHI ZAMEEN", top=520, h=520)
-photo("phdrink", "drink", wt(0, "pyaas") - .05, S(1) + .1, "KAL: HAR GHAR PAANI", top=520, h=520)
+photo("phdry", "dry", 1.4, wt(0, "pyaas") + .05, "AAJ: SOOKHI ZAMEEN", top=1020, w=440, h=280, left=40)
+photo("phdrink", "drink", wt(0, "pyaas") - .05, S(1) + .1, "KAL: HAR GHAR PAANI", top=1020, w=440, h=280, left=580)
 photo("phsetu", "setu", wt(2, "Ram") + .15, S(3) - .1, "&#9679; CURRENT DEVELOPMENT", top=490, w=520, h=760)
 photo("phbar", "barrage", wt(3, "barrages") - .7, S(4) - .1, "BARRAGE", top=250, w=440, h=250, left=30)
 photo("phcan", "canal", wt(3, "canals") - .5, S(4) - .1, "CANAL", top=250, w=440, h=250, left=590)
