@@ -3,7 +3,8 @@ import json, os, math
 P = "proj"
 LINES = [
     "2 hectare zameen: kahin 7 bigha, kahin 12 bigha. Kyun?",
-    "Rajasthan mein do bigha chalte hain: pakka 165 foot ka, aur kaccha 132 foot ka.",
+    "Rajasthan mein do bigha chalte hain. Bada, yaani pakka bigha: 165 foot guna 165 foot, yaani 3,025 gaj.",
+    "Chhota, yaani kaccha bigha: 132 foot guna 132 foot, yaani 1,936 gaj. Matlab pakka bigha, kacche se lagbhag dedh guna bada hota hai.",
     "Aapke zile mein kaunsa? Comment karo.",
     "Formula: hectare ko pakke ke liye 0.253 se, kacche ke liye 0.162 se bhaag do. Dashamlav ko 20 se guna karo, wo biswa.",
     "Jaise 2 hectare: pakka 7 bigha 18 biswa, kaccha 12 bigha 7 biswa.",
@@ -25,7 +26,7 @@ def wt(k, w):
             if i < off + len(p["t"]) + 1: return p["s"] + (p["e"] - p["s"]) * (i - off) / len(p["t"])
             off += len(p["t"]) + 1
     return S(k) + (E(k) - S(k)) * i / len(t)
-END = round(E(5) + 1.0, 2)
+END = round(E(6) + 1.0, 2)
 H, J, SFX = [], [], []
 def sfx(n, t, v=.3): SFX.append(f'<audio id="sx{len(SFX)}" class="clip" src="assets/sfx/{n}.mp3" data-start="{max(0, t):.2f}" data-duration="2" data-track-index="{20 + len(SFX)}" data-volume="{v}"></audio>')
 def inn(sel, t, frm="opacity:0, y:40, scale:.95", ease="back.out(1.6)", d=.45):
@@ -73,49 +74,52 @@ sfx("impact-bass-1", 0, .4); sfx("pop", wt(0, "kahin 7"), .3); sfx("pop", wt(0, 
 map_on(S(1) - .15, wt(1, "pakka") + .1, draw=True, y=560, sc=.95)
 H.append('<div class="t1" id="t1"><b>राजस्थान में 2 तरह के बीघा</b></div>'); inn("#t1", S(1), "opacity:0, y:-30"); out("#t1", wt(1, "pakka") + .2)
 SQ = 760 / 165
-H.append(f'<div id="sq"><div class="pq" style="width:{165 * SQ:.0f}px;height:{165 * SQ:.0f}px"><em class="w">165 ft</em><em class="h">165 ft</em><div class="lab"><b>बड़ा / पक्का</b></div></div>'
-         f'<div class="kq" style="width:{132 * SQ:.0f}px;height:{132 * SQ:.0f}px"><em class="w">132 ft</em><em class="h">132 ft</em><div class="lab"><b>छोटा / कच्चा</b></div></div></div>')
-J.append(f'tl.set("#sq", {{opacity:0}}, 0); tl.set("#sq .kq, #sq .lab, #sq em", {{opacity:0}}, 0); tl.to("#sq", {{opacity:1, duration:.25}}, {wt(1, "pakka") - .1:.2f}); tl.to("#sq", {{opacity:0, duration:.3}}, {S(2) - .2:.2f});'
+H.append(f'<div id="sq"><div class="pq" style="width:{165 * SQ:.0f}px;height:{165 * SQ:.0f}px"><em class="w">165 ft</em><em class="h">165 ft</em><div class="lab"><b>बड़ा / पक्का</b><span>3,025 गज</span></div></div>'
+         f'<div class="kq" style="width:{132 * SQ:.0f}px;height:{132 * SQ:.0f}px"><em class="w">132 ft</em><em class="h">132 ft</em><div class="lab"><b>छोटा / कच्चा</b><span>1,936 गज</span></div></div></div>')
+J.append(f'tl.set("#sq", {{opacity:0}}, 0); tl.set("#sq .kq, #sq .lab, #sq em", {{opacity:0}}, 0); tl.to("#sq", {{opacity:1, duration:.25}}, {wt(1, "pakka") - .1:.2f}); tl.to("#sq", {{opacity:0, duration:.3}}, {S(3) - .2:.2f});'
          f'tl.fromTo("#sq .pq", {{scale:0, transformOrigin:"0% 100%"}}, {{scale:1, duration:.55, ease:"power3.out", immediateRender:false}}, {wt(1, "pakka") - .05:.2f}); tl.to("#sq .pq em, #sq .pq .lab", {{opacity:1, duration:.25}}, {wt(1, "165") - .1:.2f});'
-         f'tl.fromTo("#sq .kq", {{scale:0, transformOrigin:"0% 100%"}}, {{opacity:1, scale:1, duration:.55, ease:"power3.out", immediateRender:false}}, {wt(1, "kaccha") - .05:.2f}); tl.to("#sq .pq .lab", {{opacity:0, duration:.2}}, {wt(1, "kaccha") - .05:.2f}); tl.to("#sq .kq em, #sq .kq .lab", {{opacity:1, duration:.25}}, {wt(1, "132") - .1:.2f});')
-bgp("b1", "bg_fields", wt(1, "pakka") - .3, S(2) + .1, op=.3, blur=3)
-sfx("whoosh", wt(1, "pakka"), .3); sfx("whoosh", wt(1, "kaccha"), .3)
+         f'tl.fromTo("#sq .kq", {{scale:0, transformOrigin:"0% 100%"}}, {{opacity:1, scale:1, duration:.55, ease:"power3.out", immediateRender:false}}, {wt(2, "kaccha") - .05:.2f}); tl.to("#sq .pq .lab", {{opacity:0, duration:.2}}, {wt(2, "kaccha") - .05:.2f}); tl.to("#sq .kq em, #sq .kq .lab", {{opacity:1, duration:.25}}, {wt(2, "132") - .1:.2f});')
+bgp("b1", "bg_fields", wt(1, "pakka") - .3, S(3) + .1, op=.3, blur=3)
+H.append('<div id="x15"><b>पक्का &asymp; 1.5 &times; कच्चा</b><span>लगभग डेढ़ गुना बड़ा</span></div>')
+inn("#x15", wt(2, "dedh") - .2, "opacity:0, scale:1.6", "power4.out", .3); out("#x15", S(3) - .1)
+sfx("impact-bass-1", wt(2, "dedh"), .35)
+sfx("whoosh", wt(1, "pakka"), .3); sfx("whoosh", wt(2, "kaccha"), .3)
 
 # ---------- 2 comment: map + ? + tags ----------
-map_on(S(2) - .2, S(3), draw=False, qmarks=True, y=470, sc=1.0)
+map_on(S(3) - .2, S(4), draw=False, qmarks=True, y=470, sc=1.0)
 H.append('<div id="ask"><b>आपके ज़िले में कौनसा?</b><span>पक्का या कच्चा &middot; <u>कमेंट करें</u></span></div>')
-inn("#ask", S(2) - .1, "opacity:0, y:-40", "back.out(1.6)", .35); out("#ask", S(3))
-J.append(f'tl.to("#ask u", {{scale:1.12, duration:.25, yoyo:true, repeat:3, display:"inline-block"}}, {wt(2, "Comment"):.2f});')
-qtags(S(2) + .2, S(2) + .5, S(3))
-sfx("sparkle", wt(2, "Comment"), .3)
+inn("#ask", S(3) - .1, "opacity:0, y:-40", "back.out(1.6)", .35); out("#ask", S(4))
+J.append(f'tl.to("#ask u", {{scale:1.12, duration:.25, yoyo:true, repeat:3, display:"inline-block"}}, {wt(3, "Comment"):.2f});')
+qtags(S(3) + .2, S(3) + .5, S(4))
+sfx("sparkle", wt(3, "Comment"), .3)
 
 # ---------- 3 formula ----------
-bgp("bF", "bg_plots", S(3) - .3, S(4) - .1, op=.3, blur=3)
+bgp("bF", "bg_plots", S(4) - .3, S(5) - .1, op=.3, blur=3)
 H.append('<div id="fm"><small>फ़ॉर्मूला</small>'
          '<div class="fr k0"><span>हेक्टेयर</span><i>&divide; 0.253</i><b>पक्का बीघा</b></div>'
          '<div class="fr k1"><span>हेक्टेयर</span><i>&divide; 0.162</i><b>कच्चा बीघा</b></div>'
          '<div class="fr k3"><span>दशमलव</span><i>&times; 20</i><b>बिस्वा</b></div></div>')
-inn("#fm", S(3) - .1, "opacity:0, y:50", "power3.out", .3); out("#fm", S(4))
+inn("#fm", S(4) - .1, "opacity:0, y:50", "power3.out", .3); out("#fm", S(5))
 for j, kw in [(0, "pakke"), (1, "kacche"), (3, "Dashamlav")]:
-    J.append(f'tl.set("#fm .k{j}", {{opacity:0}}, 0); tl.fromTo("#fm .k{j}", {{opacity:0, x:-60, scale:.9}}, {{opacity:1, x:0, scale:1, duration:.3, ease:"back.out(1.8)", immediateRender:false}}, {wt(3, kw) - .1:.2f}); tl.fromTo("#fm .k{j} b", {{backgroundColor:"#ffffff"}}, {{backgroundColor:"#2FA8FF", duration:.5, immediateRender:false}}, {wt(3, kw) + .2:.2f});'); sfx("click-soft", wt(3, kw), .28)
+    J.append(f'tl.set("#fm .k{j}", {{opacity:0}}, 0); tl.fromTo("#fm .k{j}", {{opacity:0, x:-60, scale:.9}}, {{opacity:1, x:0, scale:1, duration:.3, ease:"back.out(1.8)", immediateRender:false}}, {wt(4, kw) - .1:.2f}); tl.fromTo("#fm .k{j} b", {{backgroundColor:"#ffffff"}}, {{backgroundColor:"#2FA8FF", duration:.5, immediateRender:false}}, {wt(4, kw) + .2:.2f});'); sfx("click-soft", wt(4, kw), .28)
 
 # ---------- 4 example split ----------
-bgp("b4", "bg_plots", S(4) - .3, S(5) + .1, op=.4, z0=1.0, z1=1.15)
+bgp("b4", "bg_plots", S(5) - .3, S(6) + .1, op=.4, z0=1.0, z1=1.15)
 H.append('<div id="cmp"><small>उदाहरण &middot; 2 हेक्टेयर</small><div class="cc"><div class="pk"><b class="n1">0</b><span>बीघा <u class="n2">0</u> बिस्वा</span><em>पक्का</em></div><i>vs</i><div class="kc"><b class="n3">0</b><span>बीघा <u class="n4">0</u> बिस्वा</span><em>कच्चा</em></div></div></div>')
-inn("#cmp", S(4) - .1, "opacity:0, y:50", "power3.out", .3); out("#cmp", S(5) + .1)
+inn("#cmp", S(5) - .1, "opacity:0, y:50", "power3.out", .3); out("#cmp", S(6) + .1)
 J.append('tl.set("#cmp .pk, #cmp .kc", {opacity:0}, 0);')
 for sel, kw in [("#cmp .pk", "pakka"), ("#cmp .kc", "kaccha")]:
-    J.append(f'tl.fromTo("{sel}", {{opacity:0, y:40, scale:.85}}, {{opacity:1, y:0, scale:1, duration:.3, ease:"back.out(2)", immediateRender:false}}, {wt(4, kw) - .1:.2f});')
+    J.append(f'tl.fromTo("{sel}", {{opacity:0, y:40, scale:.85}}, {{opacity:1, y:0, scale:1, duration:.3, ease:"back.out(2)", immediateRender:false}}, {wt(5, kw) - .1:.2f});')
 for cls, v, kw in [("n1", 7, "pakka"), ("n2", 18, "18"), ("n3", 12, "kaccha"), ("n4", 7, "7 biswa")]:
-    J.append(f'(function(){{ const el = document.querySelector("#cmp .{cls}"); const o = {{v:0}}; tl.to(o, {{v:{v}, duration:.6, ease:"power2.out", onUpdate:()=>{{ el.textContent = Math.round(o.v); }}}}, {wt(4, kw):.2f}); }})();')
-    sfx("click-soft", wt(4, kw), .25)
+    J.append(f'(function(){{ const el = document.querySelector("#cmp .{cls}"); const o = {{v:0}}; tl.to(o, {{v:{v}, duration:.6, ease:"power2.out", onUpdate:()=>{{ el.textContent = Math.round(o.v); }}}}, {wt(5, kw):.2f}); }})();')
+    sfx("click-soft", wt(5, kw), .25)
 
 # ---------- 5 close + save ----------
-bgp("b5", "bg_fields", S(5) - .3, END, op=.45, z0=1.0, z1=1.12)
+bgp("b5", "bg_fields", S(6) - .3, END, op=.45, z0=1.0, z1=1.12)
 H.append('<div id="save"><small>सौदे से पहले पूछिए</small><b>कौनसा बीघा?</b><div class="ch"><span>हेक्टेयर</span><i>&divide; 0.253 =</i><span class="g">पक्का</span></div><div class="ch"><span>हेक्टेयर</span><i>&divide; 0.162 =</i><span class="y">कच्चा</span></div><div class="ch"><span>दशमलव</span><i>&times; 20 =</i><span class="g">बिस्वा</span></div><div class="cta">&#128278; सेव कर लो</div></div>')
-inn("#save", S(5) - .1, "opacity:0, y:40", "power3.out", .35)
-J.append(f'tl.fromTo("#save .ch", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.25, stagger:.15, immediateRender:false}}, {S(5) + .2:.2f}); tl.to("#save .cta", {{scale:1.08, duration:.3, yoyo:true, repeat:5}}, {wt(5, "Save"):.2f});')
-sfx("sparkle", wt(5, "Save"), .3)
+inn("#save", S(6) - .1, "opacity:0, y:40", "power3.out", .35)
+J.append(f'tl.fromTo("#save .ch", {{opacity:0, x:-40}}, {{opacity:1, x:0, duration:.25, stagger:.15, immediateRender:false}}, {S(6) + .2:.2f}); tl.to("#save .cta", {{scale:1.08, duration:.3, yoyo:true, repeat:5}}, {wt(6, "Save"):.2f});')
+sfx("sparkle", wt(6, "Save"), .3)
 
 # ---------- captions ----------
 HI = ["Kyun?", "7 bigha", "12 bigha", "hectare", "bigha", "pakka", "kaccha", "biswa", "165 foot", "132 foot", "3,025 gaj", "1,936 gaj", "0.253", "0.162", "7 bigha 18 biswa", "12 bigha 7 biswa", "Comment", "kaunsa bigha"]
@@ -164,7 +168,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 .two b{display:block;font:900 84px/1 DevaH;color:#fff}.two span{display:block;margin-top:8px;font:800 34px Deva;color:#cfd8e6}.two i{font:400 64px Anton;font-style:normal;color:#2FA8FF}
 #sq{position:absolute;left:160px;top:380px;width:760px;height:760px;z-index:7}#sq .pq,#sq .kq{position:absolute;left:0;bottom:0}#sq .pq{border:6px solid #2FA8FF;background:rgba(47,168,255,.14);box-shadow:0 0 30px rgba(47,168,255,.45)}#sq .kq{border:6px solid #fff;background:rgba(255,255,255,.18);box-shadow:0 0 30px rgba(255,255,255,.45)}
 #sq em{position:absolute;font:900 38px Mont;font-style:normal;color:#fff;text-shadow:0 2px 8px #000}#sq .pq em.w{left:50%;top:-58px;translate:-50% 0}#sq .pq em.h{right:-150px;top:50%;translate:0 -50%}#sq .kq em.w{left:50%;bottom:16px;translate:-50% 0;color:#111;text-shadow:none}#sq .kq em.h{right:16px;top:50%;translate:0 -50%;color:#111;text-shadow:none}
-#sq .lab{position:absolute;left:-100px;right:-100px;top:calc(100% + 26px);text-align:center}#sq .kq .lab{top:auto;bottom:calc(100% + 30px)}#sq .lab b{display:block;font:900 64px DevaH;color:#fff}#sq .lab span{display:inline-block;margin-top:8px;padding:6px 18px;border-radius:8px;background:rgba(7,10,18,.9);font:800 36px Deva;color:#9fd4ff}
+#sq .lab{position:absolute;left:-100px;right:-100px;top:calc(100% + 26px);text-align:center}#sq .lab b{display:block;font:900 64px DevaH;color:#fff}#sq .lab span{display:inline-block;margin-top:8px;padding:6px 18px;border-radius:8px;background:rgba(7,10,18,.9);font:800 36px Deva;color:#9fd4ff}
 #ask{position:absolute;left:50px;right:50px;top:150px;z-index:15;text-align:center;padding:26px 20px;border-radius:18px;background:rgba(7,10,18,.94);border:3px solid #2FA8FF;box-shadow:0 0 40px rgba(47,168,255,.4)}#ask b{display:block;font:900 70px/1.1 DevaH;color:#fff}#ask span{display:block;margin-top:12px;font:800 42px Deva;color:#cfd8e6}#ask u{text-decoration:none;padding:2px 14px;border-radius:8px;background:#2FA8FF;color:#fff}
 #g2{position:absolute;left:0;right:0;top:600px;margin:0 auto;width:max-content;z-index:15;text-align:center;padding:40px 60px;border-radius:20px;background:rgba(7,10,18,.94);border:3px solid #2FA8FF}#g2 small{display:block;font:800 40px Deva;color:#9fd4ff}#g2 b{display:block;margin-top:10px;font:900 150px/1 DevaH;color:#fff}
 .calc{position:absolute;left:60px;right:60px;top:260px;z-index:15;padding:40px 40px;border-radius:20px;background:rgba(7,10,18,.95)}.calc.pk{border:3px solid #2FA8FF;box-shadow:0 0 40px rgba(47,168,255,.3)}.calc.kc{border:3px solid #9fd4ff;box-shadow:0 0 40px rgba(47,168,255,.3)}
@@ -185,6 +189,7 @@ CSS = """@font-face{font-family:Deva;font-weight:100 900;src:url(assets/fonts/no
 .hn{position:absolute;top:720px;width:400px;z-index:16;text-align:center;padding:30px 0;border-radius:20px;background:rgba(7,10,18,.95);border:3px solid #2FA8FF}.hn b{display:block;font:400 220px/1 Anton;color:#fff}.hn span{display:block;font:900 60px DevaH;color:#9fd4ff}#h7{left:70px}#h12{right:70px}
 #hky{position:absolute;left:0;right:0;top:1130px;margin:0 auto;width:max-content;z-index:17;padding:14px 46px;border-radius:16px;background:#2FA8FF;color:#fff;font:900 110px/1 DevaH;box-shadow:0 20px 60px rgba(0,0,0,.6)}
 #cmp .cc u{text-decoration:none}
+#x15{position:absolute;left:0;right:0;top:1250px;margin:0 auto;width:max-content;z-index:17;text-align:center;padding:16px 40px;border-radius:16px;background:#2FA8FF;box-shadow:0 20px 60px rgba(0,0,0,.6)}#x15 b{display:block;font:900 64px DevaH;color:#fff}#x15 span{display:block;font:800 36px Deva;color:#e8f4ff}
 .cp{position:absolute;left:40px;right:40px;top:1480px;text-align:center;opacity:0;z-index:35}
 .cp div{display:inline-block;padding:4px 20px 8px;border-radius:10px;background:#fff;font:900 60px/1.12 Mont;color:#111;box-shadow:0 8px 24px rgba(0,0,0,.45)}"""
 audio = (f'<audio id="voice" class="clip" src="assets/voice.wav" data-start="0" data-duration="{END}" data-track-index="1" data-volume="1"></audio><audio id="music" class="clip" src="assets/music.mp3" data-start="0" data-duration="{END}" data-track-index="10" data-volume="0.14" data-fade-out="1.5"></audio>' if VOICE
