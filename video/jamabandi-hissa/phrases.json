@@ -1,0 +1,191 @@
+[
+ {
+  "s": 0.0,
+  "e": 8.2,
+  "t": "Jamabandi ke andar 1/2, 1/3, 1/6, is tarah se hisse likhe rehte hain. Lekin bigha mein hamein kaise pata lage ki hamari kitni zameen hai?",
+  "parts": [
+   {
+    "s": 0.0,
+    "e": 5.18,
+    "t": "Jamabandi ke andar 1/2, 1/3, 1/6, is tarah se hisse likhe rehte hain."
+   },
+   {
+    "s": 5.32,
+    "e": 8.2,
+    "t": "Lekin bigha mein hamein kaise pata lage ki hamari kitni zameen hai?"
+   }
+  ],
+  "hl": [
+   0.98,
+   1.78,
+   2.63
+  ]
+ },
+ {
+  "s": 8.34,
+  "e": 16.82,
+  "t": "Sabse pehle apne naam ke aage apna hissa dekhiye, jaise yahan par 1/6 hai. Uske neeche kul area dekhiye, jaise yahan par 1.03 hectare.",
+  "parts": [
+   {
+    "s": 8.34,
+    "e": 12.5,
+    "t": "Sabse pehle apne naam ke aage apna hissa dekhiye, jaise yahan par 1/6 hai."
+   },
+   {
+    "s": 12.64,
+    "e": 16.82,
+    "t": "Uske neeche kul area dekhiye, jaise yahan par 1.03 hectare."
+   }
+  ]
+ },
+ {
+  "s": 16.96,
+  "e": 24.96,
+  "t": "Ab hisse ko kul area se guna kijiye, jaise 1/6 guna 1.03 hectare. Yahan answer aata hai 0.1717 hectare.",
+  "parts": [
+   {
+    "s": 16.96,
+    "e": 24.96,
+    "t": "Ab hisse ko kul area se guna kijiye, jaise 1/6 guna 1.03 hectare. Yahan answer aata hai 0.1717 hectare."
+   }
+  ]
+ },
+ {
+  "s": 25.1,
+  "e": 40.08,
+  "t": "Isko 11,960 se guna karenge to hamara area bhi gaj mein aa jaayega. Yahan par 2,053 gaj. Ab hamara answer gaj mein aa gaya hai. Isko bigha mein nikaalne ke liye 3,025 se bhaag denge. Yahan par aata hai 0.68 bigha. Ab hamare paas bigha mein answer aa chuka hai.",
+  "parts": [
+   {
+    "s": 25.1,
+    "e": 30.86,
+    "t": "Isko 11,960 se guna karenge to hamara area bhi gaj mein aa jaayega. Yahan par 2,053 gaj."
+   },
+   {
+    "s": 31.0,
+    "e": 32.9,
+    "t": "Ab hamara answer gaj mein aa gaya hai."
+   },
+   {
+    "s": 33.04,
+    "e": 36.2,
+    "t": "Isko bigha mein nikaalne ke liye 3,025 se bhaag denge."
+   },
+   {
+    "s": 36.34,
+    "e": 38.22,
+    "t": "Yahan par aata hai 0.68 bigha."
+   },
+   {
+    "s": 38.36,
+    "e": 40.08,
+    "t": "Ab hamare paas bigha mein answer aa chuka hai."
+   }
+  ]
+ },
+ {
+  "s": 40.22,
+  "e": 46.52,
+  "t": "Agar aapko bhi apna area hectare se gaj mein convert karna hai, aur gaj se bigha mein convert karna hai, to ye formula dekh lijiye.",
+  "parts": [
+   {
+    "s": 40.22,
+    "e": 46.52,
+    "t": "Agar aapko bhi apna area hectare se gaj mein convert karna hai, aur gaj se bigha mein convert karna hai, to ye formula dekh lijiye."
+   }
+  ]
+ },
+ {
+  "s": 46.66,
+  "e": 51.22,
+  "t": "Saath hi saath, agar aapko Jamabandi ki PDF nikaalni seekhni hai, to video aage bhi dekhiye.",
+  "parts": [
+   {
+    "s": 46.66,
+    "e": 51.22,
+    "t": "Saath hi saath, agar aapko Jamabandi ki PDF nikaalni seekhni hai, to video aage bhi dekhiye."
+   }
+  ]
+ },
+ {
+  "s": 51.36,
+  "e": 54.78,
+  "t": "Google par Apna Khata search kariye, aur apni website kholiye.",
+  "parts": [
+   {
+    "s": 51.36,
+    "e": 54.78,
+    "t": "Google par Apna Khata search kariye, aur apni website kholiye."
+   }
+  ]
+ },
+ {
+  "s": 54.92,
+  "e": 58.1,
+  "t": "Neeche scroll karne ke baad Bhu Naksha par click kijiye.",
+  "parts": [
+   {
+    "s": 54.92,
+    "e": 58.1,
+    "t": "Neeche scroll karne ke baad Bhu Naksha par click kijiye."
+   }
+  ]
+ },
+ {
+  "s": 58.24,
+  "e": 61.58,
+  "t": "Viewmap kholiye, aur zila, tehsil, gaon aur baaki details daaliye.",
+  "parts": [
+   {
+    "s": 58.24,
+    "e": 61.58,
+    "t": "Viewmap kholiye, aur zila, tehsil, gaon aur baaki details daaliye."
+   }
+  ]
+ },
+ {
+  "s": 61.72,
+  "e": 67.8,
+  "t": "Map par apna khasra dabaiye, ya to upar diye gaye numbers mein search kariye. Aur Plot Info mein Nakal par click kijiye.",
+  "parts": [
+   {
+    "s": 61.72,
+    "e": 65.6,
+    "t": "Map par apna khasra dabaiye, ya to upar diye gaye numbers mein search kariye."
+   },
+   {
+    "s": 65.74,
+    "e": 67.8,
+    "t": "Aur Plot Info mein Nakal par click kijiye."
+   }
+  ]
+ },
+ {
+  "s": 67.94,
+  "e": 71.44,
+  "t": "Show Report PDF dabaiye, aur aapki Jamabandi ki PDF taiyaar.",
+  "parts": [
+   {
+    "s": 67.94,
+    "e": 71.44,
+    "t": "Show Report PDF dabaiye, aur aapki Jamabandi ki PDF taiyaar."
+   }
+  ]
+ },
+ {
+  "s": 71.58,
+  "e": 79.06,
+  "t": "Is Jamabandi mein aap apna hissa bigha mein dekh sakte hain. Ye reel apne us friend ko share kijiye, jo apni Jamabandi mein apna hissa dekhna chahta hai.",
+  "parts": [
+   {
+    "s": 71.58,
+    "e": 74.58,
+    "t": "Is Jamabandi mein aap apna hissa bigha mein dekh sakte hain."
+   },
+   {
+    "s": 74.72,
+    "e": 79.06,
+    "t": "Ye reel apne us friend ko share kijiye, jo apni Jamabandi mein apna hissa dekhna chahta hai."
+   }
+  ]
+ }
+]

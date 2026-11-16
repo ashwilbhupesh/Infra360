@@ -1,0 +1,6126 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-30T19:23:41Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 1423633156,
+  "bounds": {
+    "minlat": 26.9153433,
+    "minlon": 76.0185870,
+    "maxlat": 26.9356586,
+    "maxlon": 76.0810652
+  },
+  "nodes": [
+    13084921426,
+    11599380905,
+    11599380907,
+    11599380908,
+    11599380909,
+    11599380910,
+    11599380911,
+    11599380912,
+    11599380913,
+    11599380914,
+    11599380915,
+    11599380916,
+    11599380917,
+    11599380918,
+    11599380919,
+    11599380920,
+    11599380921,
+    11599380922,
+    11599380923,
+    11599380924,
+    11599380925,
+    11599380926,
+    11599380927,
+    11599380928,
+    11599380929,
+    11599380930,
+    11599380931,
+    11599380932,
+    12880264937
+  ],
+  "geometry": [
+    { "lat": 26.9356586, "lon": 76.0810652 },
+    { "lat": 26.9350761, "lon": 76.0801600 },
+    { "lat": 26.9344176, "lon": 76.0791603 },
+    { "lat": 26.9336558, "lon": 76.0783453 },
+    { "lat": 26.9322377, "lon": 76.0772542 },
+    { "lat": 26.9275730, "lon": 76.0739546 },
+    { "lat": 26.9254633, "lon": 76.0724560 },
+    { "lat": 26.9239865, "lon": 76.0713649 },
+    { "lat": 26.9227909, "lon": 76.0702212 },
+    { "lat": 26.9218540, "lon": 76.0692367 },
+    { "lat": 26.9211741, "lon": 76.0683954 },
+    { "lat": 26.9201895, "lon": 76.0670939 },
+    { "lat": 26.9192284, "lon": 76.0655164 },
+    { "lat": 26.9180797, "lon": 76.0630845 },
+    { "lat": 26.9174702, "lon": 76.0604290 },
+    { "lat": 26.9171068, "lon": 76.0583520 },
+    { "lat": 26.9167669, "lon": 76.0549078 },
+    { "lat": 26.9164504, "lon": 76.0520420 },
+    { "lat": 26.9163801, "lon": 76.0492419 },
+    { "lat": 26.9163332, "lon": 76.0460606 },
+    { "lat": 26.9164601, "lon": 76.0441340 },
+    { "lat": 26.9165187, "lon": 76.0425302 },
+    { "lat": 26.9165304, "lon": 76.0413471 },
+    { "lat": 26.9164132, "lon": 76.0385996 },
+    { "lat": 26.9161319, "lon": 76.0348662 },
+    { "lat": 26.9158740, "lon": 76.0311065 },
+    { "lat": 26.9155341, "lon": 76.0236397 },
+    { "lat": 26.9154286, "lon": 76.0208134 },
+    { "lat": 26.9153433, "lon": 76.0185870 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423633158,
+  "bounds": {
+    "minlat": 26.9155169,
+    "minlon": 76.0185317,
+    "maxlat": 26.9357985,
+    "maxlon": 76.0809073
+  },
+  "nodes": [
+    12880264938,
+    11599381039,
+    11599381038,
+    11599381037,
+    11599381036,
+    11599381035,
+    11599381034,
+    11599381033,
+    11599381032,
+    11599381031,
+    11599381030,
+    11599381029,
+    11599381028,
+    11599381027,
+    11599381026,
+    11599381025,
+    11599381024,
+    11599381023,
+    11599381022,
+    11599381021,
+    11599381020,
+    11599381019,
+    11599381018,
+    11599381017,
+    11599381016,
+    13084921430
+  ],
+  "geometry": [
+    { "lat": 26.9155169, "lon": 76.0185317 },
+    { "lat": 26.9156368, "lon": 76.0234621 },
+    { "lat": 26.9160558, "lon": 76.0309145 },
+    { "lat": 26.9162799, "lon": 76.0344659 },
+    { "lat": 26.9165917, "lon": 76.0383123 },
+    { "lat": 26.9167281, "lon": 76.0410550 },
+    { "lat": 26.9166989, "lon": 76.0423444 },
+    { "lat": 26.9166209, "lon": 76.0444534 },
+    { "lat": 26.9165235, "lon": 76.0461253 },
+    { "lat": 26.9165332, "lon": 76.0480922 },
+    { "lat": 26.9166697, "lon": 76.0516764 },
+    { "lat": 26.9171763, "lon": 76.0571946 },
+    { "lat": 26.9176440, "lon": 76.0603417 },
+    { "lat": 26.9180825, "lon": 76.0624179 },
+    { "lat": 26.9185599, "lon": 76.0635543 },
+    { "lat": 26.9197291, "lon": 76.0658709 },
+    { "lat": 26.9209665, "lon": 76.0677504 },
+    { "lat": 26.9224377, "lon": 76.0695534 },
+    { "lat": 26.9236458, "lon": 76.0707773 },
+    { "lat": 26.9246688, "lon": 76.0715859 },
+    { "lat": 26.9274260, "lon": 76.0736184 },
+    { "lat": 26.9321510, "lon": 76.0768856 },
+    { "lat": 26.9336026, "lon": 76.0779893 },
+    { "lat": 26.9344209, "lon": 76.0788962 },
+    { "lat": 26.9351223, "lon": 76.0798688 },
+    { "lat": 26.9357985, "lon": 76.0809073 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1247791292,
+  "bounds": {
+    "minlat": 26.8850138,
+    "minlon": 75.9280209,
+    "maxlat": 26.8976129,
+    "maxlon": 75.9339452
+  },
+  "nodes": [
+    11599380962,
+    13108470269,
+    11599380964,
+    13108470271,
+    11599380965,
+    13108470273,
+    11599380966,
+    13108470276,
+    11599380967,
+    13108470277,
+    11599380968,
+    13108470279,
+    11599380969,
+    13108470281,
+    11599380970,
+    11599380971,
+    11599380972,
+    12678229974
+  ],
+  "geometry": [
+    { "lat": 26.8976129, "lon": 75.9339452 },
+    { "lat": 26.8970518, "lon": 75.9328490 },
+    { "lat": 26.8964919, "lon": 75.9319257 },
+    { "lat": 26.8961716, "lon": 75.9314731 },
+    { "lat": 26.8958229, "lon": 75.9310766 },
+    { "lat": 26.8952494, "lon": 75.9304699 },
+    { "lat": 26.8946505, "lon": 75.9299332 },
+    { "lat": 26.8942627, "lon": 75.9296331 },
+    { "lat": 26.8938767, "lon": 75.9293856 },
+    { "lat": 26.8933537, "lon": 75.9290510 },
+    { "lat": 26.8928052, "lon": 75.9287723 },
+    { "lat": 26.8921887, "lon": 75.9285280 },
+    { "lat": 26.8915686, "lon": 75.9283211 },
+    { "lat": 26.8907989, "lon": 75.9281364 },
+    { "lat": 26.8899780, "lon": 75.9280316 },
+    { "lat": 26.8894494, "lon": 75.9280209 },
+    { "lat": 26.8870743, "lon": 75.9280750 },
+    { "lat": 26.8850138, "lon": 75.9281323 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1368962053,
+  "bounds": {
+    "minlat": 26.8785056,
+    "minlon": 75.9274607,
+    "maxlat": 26.8820982,
+    "maxlon": 75.9279809
+  },
+  "nodes": [
+    12679112143,
+    12282501053,
+    12282501070,
+    11599381083,
+    13108476508
+  ],
+  "geometry": [
+    { "lat": 26.8785056, "lon": 75.9274607 },
+    { "lat": 26.8790787, "lon": 75.9275806 },
+    { "lat": 26.8806274, "lon": 75.9278372 },
+    { "lat": 26.8815300, "lon": 75.9279336 },
+    { "lat": 26.8820982, "lon": 75.9279809 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1368962054,
+  "bounds": {
+    "minlat": 26.8845911,
+    "minlon": 75.9279462,
+    "maxlat": 26.8870790,
+    "maxlon": 75.9280147
+  },
+  "nodes": [
+    12679156658,
+    11599381081
+  ],
+  "geometry": [
+    { "lat": 26.8845911, "lon": 75.9280147 },
+    { "lat": 26.8870790, "lon": 75.9279462 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1426006724,
+  "bounds": {
+    "minlat": 26.8784779,
+    "minlon": 75.9276830,
+    "maxlat": 26.8820671,
+    "maxlon": 75.9281310
+  },
+  "nodes": [
+    13108470248,
+    11599380974,
+    12282501036,
+    12678229972
+  ],
+  "geometry": [
+    { "lat": 26.8820671, "lon": 75.9281310 },
+    { "lat": 26.8811899, "lon": 75.9280737 },
+    { "lat": 26.8789858, "lon": 75.9277827 },
+    { "lat": 26.8784779, "lon": 75.9276830 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "3",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C"
+  }
+},
+{
+  "type": "way",
+  "id": 1368962050,
+  "bounds": {
+    "minlat": 26.8820671,
+    "minlon": 75.9281310,
+    "maxlat": 26.8846181,
+    "maxlon": 75.9281657
+  },
+  "nodes": [
+    12678229973,
+    11599380973,
+    13108476527,
+    13108476530,
+    13108470248
+  ],
+  "geometry": [
+    { "lat": 26.8846181, "lon": 75.9281457 },
+    { "lat": 26.8839756, "lon": 75.9281548 },
+    { "lat": 26.8827348, "lon": 75.9281657 },
+    { "lat": 26.8824307, "lon": 75.9281552 },
+    { "lat": 26.8820671, "lon": 75.9281310 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1368962051,
+  "bounds": {
+    "minlat": 26.8846181,
+    "minlon": 75.9281323,
+    "maxlat": 26.8850138,
+    "maxlon": 75.9281457
+  },
+  "nodes": [
+    12678229974,
+    12678229973
+  ],
+  "geometry": [
+    { "lat": 26.8850138, "lon": 75.9281323 },
+    { "lat": 26.8846181, "lon": 75.9281457 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1426006733,
+  "bounds": {
+    "minlat": 26.8820982,
+    "minlon": 75.9279809,
+    "maxlat": 26.8845911,
+    "maxlon": 75.9280398
+  },
+  "nodes": [
+    13108476508,
+    13108476507,
+    13108476504,
+    11599381082,
+    12679156658
+  ],
+  "geometry": [
+    { "lat": 26.8820982, "lon": 75.9279809 },
+    { "lat": 26.8828781, "lon": 75.9280398 },
+    { "lat": 26.8830408, "lon": 75.9280392 },
+    { "lat": 26.8839536, "lon": 75.9280355 },
+    { "lat": 26.8845911, "lon": 75.9280147 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1247791294,
+  "bounds": {
+    "minlat": 26.8870790,
+    "minlon": 75.9278933,
+    "maxlat": 26.8977245,
+    "maxlon": 75.9338776
+  },
+  "nodes": [
+    11599381081,
+    11599381080,
+    11599381079,
+    13108470282,
+    11599381078,
+    13108470280,
+    11599381077,
+    13108470278,
+    11599381076,
+    13108470275,
+    11599381075,
+    13108470274,
+    11599381074,
+    13108470272,
+    11599381073,
+    13108470270,
+    11599381072
+  ],
+  "geometry": [
+    { "lat": 26.8870790, "lon": 75.9279462 },
+    { "lat": 26.8894382, "lon": 75.9278933 },
+    { "lat": 26.8899904, "lon": 75.9279186 },
+    { "lat": 26.8908156, "lon": 75.9280211 },
+    { "lat": 26.8915969, "lon": 75.9281979 },
+    { "lat": 26.8922222, "lon": 75.9284046 },
+    { "lat": 26.8928260, "lon": 75.9286539 },
+    { "lat": 26.8933848, "lon": 75.9289330 },
+    { "lat": 26.8939147, "lon": 75.9292581 },
+    { "lat": 26.8943321, "lon": 75.9295419 },
+    { "lat": 26.8947139, "lon": 75.9298329 },
+    { "lat": 26.8953092, "lon": 75.9303707 },
+    { "lat": 26.8958798, "lon": 75.9309633 },
+    { "lat": 26.8962481, "lon": 75.9313980 },
+    { "lat": 26.8966017, "lon": 75.9318747 },
+    { "lat": 26.8971356, "lon": 75.9327471 },
+    { "lat": 26.8977245, "lon": 75.9338776 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1247791291,
+  "bounds": {
+    "minlat": 26.8976129,
+    "minlon": 75.9339452,
+    "maxlat": 26.8991433,
+    "maxlon": 75.9367245
+  },
+  "nodes": [
+    11599380963,
+    11599380962
+  ],
+  "geometry": [
+    { "lat": 26.8991433, "lon": 75.9367245 },
+    { "lat": 26.8976129, "lon": 75.9339452 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1247791295,
+  "bounds": {
+    "minlat": 26.8977245,
+    "minlon": 75.9338776,
+    "maxlat": 26.8992666,
+    "maxlon": 75.9366785
+  },
+  "nodes": [
+    11599381072,
+    11599381071
+  ],
+  "geometry": [
+    { "lat": 26.8977245, "lon": 75.9338776 },
+    { "lat": 26.8992666, "lon": 75.9366785 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506720,
+  "bounds": {
+    "minlat": 26.8991433,
+    "minlon": 75.9367245,
+    "maxlat": 26.9014640,
+    "maxlon": 75.9429476
+  },
+  "nodes": [
+    12880262583,
+    11599380959,
+    11599380960,
+    11599380961,
+    11599380963
+  ],
+  "geometry": [
+    { "lat": 26.9014640, "lon": 75.9429476 },
+    { "lat": 26.9012820, "lon": 75.9422841 },
+    { "lat": 26.9004282, "lon": 75.9396209 },
+    { "lat": 26.8993024, "lon": 75.9370056 },
+    { "lat": 26.8991433, "lon": 75.9367245 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506718,
+  "bounds": {
+    "minlat": 26.8992666,
+    "minlon": 75.9366785,
+    "maxlat": 26.9016261,
+    "maxlon": 75.9429357
+  },
+  "nodes": [
+    11599381071,
+    11599381070,
+    11599381069,
+    11599381068,
+    12880262582
+  ],
+  "geometry": [
+    { "lat": 26.8992666, "lon": 75.9366785 },
+    { "lat": 26.8994017, "lon": 75.9369405 },
+    { "lat": 26.9005776, "lon": 75.9395283 },
+    { "lat": 26.9014129, "lon": 75.9422080 },
+    { "lat": 26.9016261, "lon": 75.9429357 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506719,
+  "bounds": {
+    "minlat": 26.9016261,
+    "minlon": 75.9429357,
+    "maxlat": 26.9017091,
+    "maxlon": 75.9432015
+  },
+  "nodes": [
+    12880262582,
+    12880262581
+  ],
+  "geometry": [
+    { "lat": 26.9016261, "lon": 75.9429357 },
+    { "lat": 26.9017091, "lon": 75.9432015 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506721,
+  "bounds": {
+    "minlat": 26.9014640,
+    "minlon": 75.9429476,
+    "maxlat": 26.9015423,
+    "maxlon": 75.9432109
+  },
+  "nodes": [
+    12880262584,
+    12880262583
+  ],
+  "geometry": [
+    { "lat": 26.9015423, "lon": 75.9432109 },
+    { "lat": 26.9014640, "lon": 75.9429476 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506726,
+  "bounds": {
+    "minlat": 26.9017091,
+    "minlon": 75.9432015,
+    "maxlat": 26.9035620,
+    "maxlon": 75.9494308
+  },
+  "nodes": [
+    12880262581,
+    11599381067,
+    12880262587,
+    12880262590
+  ],
+  "geometry": [
+    { "lat": 26.9017091, "lon": 75.9432015 },
+    { "lat": 26.9023228, "lon": 75.9452210 },
+    { "lat": 26.9030571, "lon": 75.9477652 },
+    { "lat": 26.9035620, "lon": 75.9494308 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506727,
+  "bounds": {
+    "minlat": 26.9035620,
+    "minlon": 75.9494308,
+    "maxlat": 26.9036085,
+    "maxlon": 75.9495949
+  },
+  "nodes": [
+    12880262590,
+    12880262589
+  ],
+  "geometry": [
+    { "lat": 26.9035620, "lon": 75.9494308 },
+    { "lat": 26.9036085, "lon": 75.9495949 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506732,
+  "bounds": {
+    "minlat": 26.9015423,
+    "minlon": 75.9432109,
+    "maxlat": 26.9034297,
+    "maxlon": 75.9494680
+  },
+  "nodes": [
+    12880262595,
+    11599380957,
+    11599380958,
+    12880262584
+  ],
+  "geometry": [
+    { "lat": 26.9034297, "lon": 75.9494680 },
+    { "lat": 26.9029395, "lon": 75.9478107 },
+    { "lat": 26.9021883, "lon": 75.9452534 },
+    { "lat": 26.9015423, "lon": 75.9432109 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506736,
+  "bounds": {
+    "minlat": 26.9034297,
+    "minlon": 75.9494680,
+    "maxlat": 26.9034796,
+    "maxlon": 75.9496348
+  },
+  "nodes": [
+    12880262599,
+    12880262595
+  ],
+  "geometry": [
+    { "lat": 26.9034796, "lon": 75.9496348 },
+    { "lat": 26.9034297, "lon": 75.9494680 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506741,
+  "bounds": {
+    "minlat": 26.9036085,
+    "minlon": 75.9495949,
+    "maxlat": 26.9052241,
+    "maxlon": 75.9566059
+  },
+  "nodes": [
+    12880262589,
+    12880262593,
+    11599381064,
+    12880262600,
+    12880264803,
+    11599381063,
+    12880264805
+  ],
+  "geometry": [
+    { "lat": 26.9036085, "lon": 75.9495949 },
+    { "lat": 26.9042357, "lon": 75.9519493 },
+    { "lat": 26.9043911, "lon": 75.9526043 },
+    { "lat": 26.9046203, "lon": 75.9536988 },
+    { "lat": 26.9049394, "lon": 75.9552280 },
+    { "lat": 26.9051523, "lon": 75.9562483 },
+    { "lat": 26.9052241, "lon": 75.9566059 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506761,
+  "bounds": {
+    "minlat": 26.9034796,
+    "minlon": 75.9496348,
+    "maxlat": 26.9050493,
+    "maxlon": 75.9566364
+  },
+  "nodes": [
+    12880264827,
+    11599380954,
+    12880264826,
+    12880264814,
+    13930997206,
+    11599380955,
+    12880264811,
+    12880262599
+  ],
+  "geometry": [
+    { "lat": 26.9050493, "lon": 75.9566364 },
+    { "lat": 26.9049845, "lon": 75.9563473 },
+    { "lat": 26.9049143, "lon": 75.9560040 },
+    { "lat": 26.9044920, "lon": 75.9538926 },
+    { "lat": 26.9044470, "lon": 75.9536804 },
+    { "lat": 26.9042169, "lon": 75.9525963 },
+    { "lat": 26.9040546, "lon": 75.9520045 },
+    { "lat": 26.9034796, "lon": 75.9496348 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506742,
+  "bounds": {
+    "minlat": 26.9052241,
+    "minlon": 75.9566059,
+    "maxlat": 26.9052742,
+    "maxlon": 75.9568643
+  },
+  "nodes": [
+    12880264805,
+    12880264804
+  ],
+  "geometry": [
+    { "lat": 26.9052241, "lon": 75.9566059 },
+    { "lat": 26.9052742, "lon": 75.9568643 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506743,
+  "bounds": {
+    "minlat": 26.9052742,
+    "minlon": 75.9568643,
+    "maxlat": 26.9055969,
+    "maxlon": 75.9584961
+  },
+  "nodes": [
+    12880264804,
+    12880264807
+  ],
+  "geometry": [
+    { "lat": 26.9052742, "lon": 75.9568643 },
+    { "lat": 26.9055969, "lon": 75.9584961 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506744,
+  "bounds": {
+    "minlat": 26.9055969,
+    "minlon": 75.9584961,
+    "maxlat": 26.9056197,
+    "maxlon": 75.9586115
+  },
+  "nodes": [
+    12880264807,
+    12880264806
+  ],
+  "geometry": [
+    { "lat": 26.9055969, "lon": 75.9584961 },
+    { "lat": 26.9056197, "lon": 75.9586115 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506762,
+  "bounds": {
+    "minlat": 26.9050493,
+    "minlon": 75.9566364,
+    "maxlat": 26.9051050,
+    "maxlon": 75.9569201
+  },
+  "nodes": [
+    12880264828,
+    12880264827
+  ],
+  "geometry": [
+    { "lat": 26.9051050, "lon": 75.9569201 },
+    { "lat": 26.9050493, "lon": 75.9566364 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506763,
+  "bounds": {
+    "minlat": 26.9051050,
+    "minlon": 75.9569201,
+    "maxlat": 26.9054129,
+    "maxlon": 75.9584343
+  },
+  "nodes": [
+    12880264829,
+    12880264828
+  ],
+  "geometry": [
+    { "lat": 26.9054129, "lon": 75.9584343 },
+    { "lat": 26.9051050, "lon": 75.9569201 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506764,
+  "bounds": {
+    "minlat": 26.9054129,
+    "minlon": 75.9584343,
+    "maxlat": 26.9054366,
+    "maxlon": 75.9585495
+  },
+  "nodes": [
+    12880264830,
+    12880264829
+  ],
+  "geometry": [
+    { "lat": 26.9054366, "lon": 75.9585495 },
+    { "lat": 26.9054129, "lon": 75.9584343 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506745,
+  "bounds": {
+    "minlat": 26.9056197,
+    "minlon": 75.9586115,
+    "maxlat": 26.9066988,
+    "maxlon": 75.9639681
+  },
+  "nodes": [
+    12880264806,
+    12880264882,
+    11599381062,
+    12880264808,
+    11599381061,
+    12880264816
+  ],
+  "geometry": [
+    { "lat": 26.9056197, "lon": 75.9586115 },
+    { "lat": 26.9056511, "lon": 75.9587699 },
+    { "lat": 26.9057467, "lon": 75.9592533 },
+    { "lat": 26.9061720, "lon": 75.9613503 },
+    { "lat": 26.9065105, "lon": 75.9631549 },
+    { "lat": 26.9066988, "lon": 75.9639681 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506767,
+  "bounds": {
+    "minlat": 26.9054366,
+    "minlon": 75.9585495,
+    "maxlat": 26.9065554,
+    "maxlon": 75.9640135
+  },
+  "nodes": [
+    12880264833,
+    11599380952,
+    12880264832,
+    11599380953,
+    12880264890,
+    12880264830
+  ],
+  "geometry": [
+    { "lat": 26.9065554, "lon": 75.9640135 },
+    { "lat": 26.9063792, "lon": 75.9631804 },
+    { "lat": 26.9060208, "lon": 75.9613876 },
+    { "lat": 26.9056996, "lon": 75.9598309 },
+    { "lat": 26.9054762, "lon": 75.9587426 },
+    { "lat": 26.9054366, "lon": 75.9585495 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506769,
+  "bounds": {
+    "minlat": 26.9067697,
+    "minlon": 75.9649024,
+    "maxlat": 26.9085476,
+    "maxlon": 75.9712962
+  },
+  "nodes": [
+    12880264835,
+    12880264896,
+    11599380949,
+    11599380950,
+    11599380951,
+    12880264834
+  ],
+  "geometry": [
+    { "lat": 26.9085476, "lon": 75.9712962 },
+    { "lat": 26.9084268, "lon": 75.9708550 },
+    { "lat": 26.9081339, "lon": 75.9697859 },
+    { "lat": 26.9078408, "lon": 75.9687079 },
+    { "lat": 26.9069635, "lon": 75.9656311 },
+    { "lat": 26.9067697, "lon": 75.9649024 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506771,
+  "bounds": {
+    "minlat": 26.9069103,
+    "minlon": 75.9648810,
+    "maxlat": 26.9086937,
+    "maxlon": 75.9711505
+  },
+  "nodes": [
+    12880264815,
+    11599381060,
+    11599381058,
+    12880264889,
+    12880264838
+  ],
+  "geometry": [
+    { "lat": 26.9069103, "lon": 75.9648810 },
+    { "lat": 26.9070982, "lon": 75.9655916 },
+    { "lat": 26.9080950, "lon": 75.9690332 },
+    { "lat": 26.9085905, "lon": 75.9707855 },
+    { "lat": 26.9086937, "lon": 75.9711505 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506752,
+  "bounds": {
+    "minlat": 26.9066988,
+    "minlon": 75.9639681,
+    "maxlat": 26.9069103,
+    "maxlon": 75.9648810
+  },
+  "nodes": [
+    12880264816,
+    12880264815
+  ],
+  "geometry": [
+    { "lat": 26.9066988, "lon": 75.9639681 },
+    { "lat": 26.9069103, "lon": 75.9648810 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506768,
+  "bounds": {
+    "minlat": 26.9065554,
+    "minlon": 75.9640135,
+    "maxlat": 26.9067697,
+    "maxlon": 75.9649024
+  },
+  "nodes": [
+    12880264834,
+    12880264833
+  ],
+  "geometry": [
+    { "lat": 26.9067697, "lon": 75.9649024 },
+    { "lat": 26.9065554, "lon": 75.9640135 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506830,
+  "bounds": {
+    "minlat": 26.9119227,
+    "minlon": 75.9899208,
+    "maxlat": 26.9153386,
+    "maxlon": 76.0184639
+  },
+  "nodes": [
+    12880264936,
+    11599380933,
+    11599380934,
+    11599380935,
+    11599380936,
+    11599380937,
+    11599380938,
+    11599380939,
+    11599380940,
+    11599380941,
+    11599380942,
+    11599380943,
+    12880264927
+  ],
+  "geometry": [
+    { "lat": 26.9153386, "lon": 76.0184639 },
+    { "lat": 26.9153113, "lon": 76.0177504 },
+    { "lat": 26.9152610, "lon": 76.0157305 },
+    { "lat": 26.9150031, "lon": 76.0124966 },
+    { "lat": 26.9147804, "lon": 76.0086449 },
+    { "lat": 26.9146749, "lon": 76.0062524 },
+    { "lat": 26.9146046, "lon": 76.0054899 },
+    { "lat": 26.9142177, "lon": 76.0023612 },
+    { "lat": 26.9136785, "lon": 75.9986672 },
+    { "lat": 26.9130924, "lon": 75.9957883 },
+    { "lat": 26.9128111, "lon": 75.9943160 },
+    { "lat": 26.9121898, "lon": 75.9914239 },
+    { "lat": 26.9119227, "lon": 75.9899208 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506832,
+  "bounds": {
+    "minlat": 26.9120045,
+    "minlon": 75.9897799,
+    "maxlat": 26.9155139,
+    "maxlon": 76.0184084
+  },
+  "nodes": [
+    12880264934,
+    11599381050,
+    11599381049,
+    11599381048,
+    11599381047,
+    11599381046,
+    11599381045,
+    11599381044,
+    11599381043,
+    11599381042,
+    11599381041,
+    11599381040,
+    12880264939
+  ],
+  "geometry": [
+    { "lat": 26.9120045, "lon": 75.9897799 },
+    { "lat": 26.9122919, "lon": 75.9914038 },
+    { "lat": 26.9130548, "lon": 75.9947233 },
+    { "lat": 26.9135419, "lon": 75.9970727 },
+    { "lat": 26.9139122, "lon": 75.9987882 },
+    { "lat": 26.9143020, "lon": 76.0017058 },
+    { "lat": 26.9145748, "lon": 76.0037929 },
+    { "lat": 26.9147891, "lon": 76.0055413 },
+    { "lat": 26.9148768, "lon": 76.0073006 },
+    { "lat": 26.9151302, "lon": 76.0114967 },
+    { "lat": 26.9152374, "lon": 76.0135947 },
+    { "lat": 26.9154907, "lon": 76.0174521 },
+    { "lat": 26.9155139, "lon": 76.0184084 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506818,
+  "bounds": {
+    "minlat": 26.9085785,
+    "minlon": 75.9714089,
+    "maxlat": 26.9105398,
+    "maxlon": 75.9809795
+  },
+  "nodes": [
+    12880264924,
+    11599380946,
+    11599380947,
+    11599380948,
+    12880264836
+  ],
+  "geometry": [
+    { "lat": 26.9105398, "lon": 75.9809795 },
+    { "lat": 26.9101150, "lon": 75.9783438 },
+    { "lat": 26.9096461, "lon": 75.9760696 },
+    { "lat": 26.9087317, "lon": 75.9719681 },
+    { "lat": 26.9085785, "lon": 75.9714089 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506824,
+  "bounds": {
+    "minlat": 26.9087254,
+    "minlon": 75.9712626,
+    "maxlat": 26.9107199,
+    "maxlon": 75.9810189
+  },
+  "nodes": [
+    12880264837,
+    11599381057,
+    11599381056,
+    11599381055,
+    11599381054,
+    11599381053,
+    12880264931
+  ],
+  "geometry": [
+    { "lat": 26.9087254, "lon": 75.9712626 },
+    { "lat": 26.9088551, "lon": 75.9717213 },
+    { "lat": 26.9093715, "lon": 75.9737647 },
+    { "lat": 26.9098490, "lon": 75.9758628 },
+    { "lat": 26.9101900, "lon": 75.9775674 },
+    { "lat": 26.9105408, "lon": 75.9799714 },
+    { "lat": 26.9107199, "lon": 75.9810189 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506770,
+  "bounds": {
+    "minlat": 26.9085476,
+    "minlon": 75.9712962,
+    "maxlat": 26.9085785,
+    "maxlon": 75.9714089
+  },
+  "nodes": [
+    12880264836,
+    12880264835
+  ],
+  "geometry": [
+    { "lat": 26.9085785, "lon": 75.9714089 },
+    { "lat": 26.9085476, "lon": 75.9712962 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506772,
+  "bounds": {
+    "minlat": 26.9086937,
+    "minlon": 75.9711505,
+    "maxlat": 26.9087254,
+    "maxlon": 75.9712626
+  },
+  "nodes": [
+    12880264838,
+    12880264837
+  ],
+  "geometry": [
+    { "lat": 26.9086937, "lon": 75.9711505 },
+    { "lat": 26.9087254, "lon": 75.9712626 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506822,
+  "bounds": {
+    "minlat": 26.9116208,
+    "minlon": 75.9882216,
+    "maxlat": 26.9118980,
+    "maxlon": 75.9897817
+  },
+  "nodes": [
+    12880264926,
+    12880264929
+  ],
+  "geometry": [
+    { "lat": 26.9118980, "lon": 75.9897817 },
+    { "lat": 26.9116208, "lon": 75.9882216 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506828,
+  "bounds": {
+    "minlat": 26.9117462,
+    "minlon": 75.9882058,
+    "maxlat": 26.9119831,
+    "maxlon": 75.9896432
+  },
+  "nodes": [
+    12880264932,
+    12880264935
+  ],
+  "geometry": [
+    { "lat": 26.9117462, "lon": 75.9882058 },
+    { "lat": 26.9119831, "lon": 75.9896432 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506823,
+  "bounds": {
+    "minlat": 26.9116014,
+    "minlon": 75.9881127,
+    "maxlat": 26.9116208,
+    "maxlon": 75.9882216
+  },
+  "nodes": [
+    12880264929,
+    12880264928
+  ],
+  "geometry": [
+    { "lat": 26.9116208, "lon": 75.9882216 },
+    { "lat": 26.9116014, "lon": 75.9881127 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506827,
+  "bounds": {
+    "minlat": 26.9117291,
+    "minlon": 75.9880965,
+    "maxlat": 26.9117462,
+    "maxlon": 75.9882058
+  },
+  "nodes": [
+    12880264933,
+    12880264932
+  ],
+  "geometry": [
+    { "lat": 26.9117291, "lon": 75.9880965 },
+    { "lat": 26.9117462, "lon": 75.9882058 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506821,
+  "bounds": {
+    "minlat": 26.9118980,
+    "minlon": 75.9897817,
+    "maxlat": 26.9119227,
+    "maxlon": 75.9899208
+  },
+  "nodes": [
+    12880264927,
+    12880264926
+  ],
+  "geometry": [
+    { "lat": 26.9119227, "lon": 75.9899208 },
+    { "lat": 26.9118980, "lon": 75.9897817 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506829,
+  "bounds": {
+    "minlat": 26.9119831,
+    "minlon": 75.9896432,
+    "maxlat": 26.9120045,
+    "maxlon": 75.9897799
+  },
+  "nodes": [
+    12880264935,
+    12880264934
+  ],
+  "geometry": [
+    { "lat": 26.9119831, "lon": 75.9896432 },
+    { "lat": 26.9120045, "lon": 75.9897799 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506831,
+  "bounds": {
+    "minlat": 26.9153386,
+    "minlon": 76.0184639,
+    "maxlat": 26.9153433,
+    "maxlon": 76.0185870
+  },
+  "nodes": [
+    12880264937,
+    12880264936
+  ],
+  "geometry": [
+    { "lat": 26.9153433, "lon": 76.0185870 },
+    { "lat": 26.9153386, "lon": 76.0184639 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506833,
+  "bounds": {
+    "minlat": 26.9155139,
+    "minlon": 76.0184084,
+    "maxlat": 26.9155169,
+    "maxlon": 76.0185317
+  },
+  "nodes": [
+    12880264939,
+    12880264938
+  ],
+  "geometry": [
+    { "lat": 26.9155139, "lon": 76.0184084 },
+    { "lat": 26.9155169, "lon": 76.0185317 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423633160,
+  "bounds": {
+    "minlat": 26.9358403,
+    "minlon": 76.0809719,
+    "maxlat": 26.9570124,
+    "maxlon": 76.1245408
+  },
+  "nodes": [
+    13084921429,
+    13540173901,
+    13540173905,
+    13540173902,
+    13540173916,
+    13540173908,
+    13540173906,
+    13540173914,
+    13540173910,
+    13540173912,
+    13540173918,
+    13540173920,
+    13540173922,
+    13540173926,
+    13540173925,
+    11599381015,
+    11599381014,
+    11599381013,
+    11599381012,
+    11599381011,
+    11599381010,
+    11599381009,
+    11599381008,
+    13084921432
+  ],
+  "geometry": [
+    { "lat": 26.9358403, "lon": 76.0809719 },
+    { "lat": 26.9362914, "lon": 76.0819960 },
+    { "lat": 26.9367170, "lon": 76.0833478 },
+    { "lat": 26.9371259, "lon": 76.0847211 },
+    { "lat": 26.9375082, "lon": 76.0860134 },
+    { "lat": 26.9381350, "lon": 76.0878003 },
+    { "lat": 26.9385798, "lon": 76.0887766 },
+    { "lat": 26.9390963, "lon": 76.0897851 },
+    { "lat": 26.9396343, "lon": 76.0906702 },
+    { "lat": 26.9402560, "lon": 76.0914963 },
+    { "lat": 26.9416503, "lon": 76.0931828 },
+    { "lat": 26.9450314, "lon": 76.0972221 },
+    { "lat": 26.9473327, "lon": 76.0999992 },
+    { "lat": 26.9497903, "lon": 76.1028781 },
+    { "lat": 26.9508123, "lon": 76.1041886 },
+    { "lat": 26.9520233, "lon": 76.1059413 },
+    { "lat": 26.9527148, "lon": 76.1071979 },
+    { "lat": 26.9534746, "lon": 76.1087933 },
+    { "lat": 26.9539713, "lon": 76.1101592 },
+    { "lat": 26.9543415, "lon": 76.1114814 },
+    { "lat": 26.9547603, "lon": 76.1135904 },
+    { "lat": 26.9556564, "lon": 76.1181252 },
+    { "lat": 26.9564551, "lon": 76.1222885 },
+    { "lat": 26.9570124, "lon": 76.1245408 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423633162,
+  "bounds": {
+    "minlat": 26.9357028,
+    "minlon": 76.0811296,
+    "maxlat": 26.9568082,
+    "maxlon": 76.1244416
+  },
+  "nodes": [
+    13084921433,
+    11599380898,
+    11599380899,
+    11599380900,
+    11599380901,
+    11599380902,
+    11599380903,
+    11599380904,
+    11599380906,
+    13540173924,
+    13540173927,
+    13540173923,
+    13540173921,
+    13540173919,
+    13540173913,
+    13540173911,
+    13540173915,
+    13540173907,
+    13540173909,
+    13540173917,
+    13540173903,
+    13540173904,
+    13540153400,
+    13084921427
+  ],
+  "geometry": [
+    { "lat": 26.9568082, "lon": 76.1244416 },
+    { "lat": 26.9562129, "lon": 76.1221017 },
+    { "lat": 26.9550880, "lon": 76.1161335 },
+    { "lat": 26.9545841, "lon": 76.1134780 },
+    { "lat": 26.9541740, "lon": 76.1117165 },
+    { "lat": 26.9537053, "lon": 76.1100733 },
+    { "lat": 26.9531428, "lon": 76.1086535 },
+    { "lat": 26.9521856, "lon": 76.1067539 },
+    { "lat": 26.9513164, "lon": 76.1053754 },
+    { "lat": 26.9506211, "lon": 76.1043066 },
+    { "lat": 26.9495854, "lon": 76.1030709 },
+    { "lat": 26.9472009, "lon": 76.1001364 },
+    { "lat": 26.9449041, "lon": 76.0974177 },
+    { "lat": 26.9414495, "lon": 76.0932480 },
+    { "lat": 26.9401053, "lon": 76.0915795 },
+    { "lat": 26.9395458, "lon": 76.0908312 },
+    { "lat": 26.9389145, "lon": 76.0898682 },
+    { "lat": 26.9383741, "lon": 76.0888356 },
+    { "lat": 26.9379437, "lon": 76.0878646 },
+    { "lat": 26.9373978, "lon": 76.0862427 },
+    { "lat": 26.9369394, "lon": 76.0847694 },
+    { "lat": 26.9365425, "lon": 76.0833934 },
+    { "lat": 26.9361216, "lon": 76.0820898 },
+    { "lat": 26.9357028, "lon": 76.0811296 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634177,
+  "bounds": {
+    "minlat": 26.9570430,
+    "minlon": 76.1246581,
+    "maxlat": 26.9626265,
+    "maxlon": 76.1455342
+  },
+  "nodes": [
+    13084921431,
+    11599381007,
+    11599381006,
+    11599381005,
+    13084924595
+  ],
+  "geometry": [
+    { "lat": 26.9570430, "lon": 76.1246581 },
+    { "lat": 26.9572635, "lon": 76.1255558 },
+    { "lat": 26.9601757, "lon": 76.1363083 },
+    { "lat": 26.9624743, "lon": 76.1448971 },
+    { "lat": 26.9626265, "lon": 76.1455342 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634179,
+  "bounds": {
+    "minlat": 26.9568296,
+    "minlon": 76.1245484,
+    "maxlat": 26.9622834,
+    "maxlon": 76.1452792
+  },
+  "nodes": [
+    13084924596,
+    11599380894,
+    11599380895,
+    11599380896,
+    11599380897,
+    13084921434
+  ],
+  "geometry": [
+    { "lat": 26.9622834, "lon": 76.1452792 },
+    { "lat": 26.9610123, "lon": 76.1403063 },
+    { "lat": 26.9593953, "lon": 76.1339963 },
+    { "lat": 26.9578838, "lon": 76.1284751 },
+    { "lat": 26.9569347, "lon": 76.1249652 },
+    { "lat": 26.9568296, "lon": 76.1245484 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423633157,
+  "bounds": {
+    "minlat": 26.9356586,
+    "minlon": 76.0810652,
+    "maxlat": 26.9357028,
+    "maxlon": 76.0811296
+  },
+  "nodes": [
+    13084921427,
+    13084921426
+  ],
+  "geometry": [
+    { "lat": 26.9357028, "lon": 76.0811296 },
+    { "lat": 26.9356586, "lon": 76.0810652 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423633159,
+  "bounds": {
+    "minlat": 26.9357985,
+    "minlon": 76.0809073,
+    "maxlat": 26.9358403,
+    "maxlon": 76.0809719
+  },
+  "nodes": [
+    13084921430,
+    13084921429
+  ],
+  "geometry": [
+    { "lat": 26.9357985, "lon": 76.0809073 },
+    { "lat": 26.9358403, "lon": 76.0809719 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423633161,
+  "bounds": {
+    "minlat": 26.9570124,
+    "minlon": 76.1245408,
+    "maxlat": 26.9570430,
+    "maxlon": 76.1246581
+  },
+  "nodes": [
+    13084921432,
+    13084921431
+  ],
+  "geometry": [
+    { "lat": 26.9570124, "lon": 76.1245408 },
+    { "lat": 26.9570430, "lon": 76.1246581 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423633163,
+  "bounds": {
+    "minlat": 26.9568082,
+    "minlon": 76.1244416,
+    "maxlat": 26.9568296,
+    "maxlon": 76.1245484
+  },
+  "nodes": [
+    13084921434,
+    13084921433
+  ],
+  "geometry": [
+    { "lat": 26.9568296, "lon": 76.1245484 },
+    { "lat": 26.9568082, "lon": 76.1244416 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634181,
+  "bounds": {
+    "minlat": 26.9623075,
+    "minlon": 76.1453778,
+    "maxlat": 26.9646159,
+    "maxlon": 76.1562165
+  },
+  "nodes": [
+    13084924599,
+    11599380892,
+    13383413694,
+    11599380893,
+    13084924597
+  ],
+  "geometry": [
+    { "lat": 26.9646159, "lon": 76.1562165 },
+    { "lat": 26.9641993, "lon": 76.1533601 },
+    { "lat": 26.9634662, "lon": 76.1502040 },
+    { "lat": 26.9626878, "lon": 76.1468529 },
+    { "lat": 26.9623075, "lon": 76.1453778 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634183,
+  "bounds": {
+    "minlat": 26.9626512,
+    "minlon": 76.1456252,
+    "maxlat": 26.9647544,
+    "maxlon": 76.1558424
+  },
+  "nodes": [
+    13084924594,
+    11599381004,
+    13383468809,
+    11599381003,
+    13084932702
+  ],
+  "geometry": [
+    { "lat": 26.9626512, "lon": 76.1456252 },
+    { "lat": 26.9632437, "lon": 76.1481097 },
+    { "lat": 26.9636316, "lon": 76.1498670 },
+    { "lat": 26.9642761, "lon": 76.1527866 },
+    { "lat": 26.9647544, "lon": 76.1558424 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634178,
+  "bounds": {
+    "minlat": 26.9626265,
+    "minlon": 76.1455342,
+    "maxlat": 26.9626512,
+    "maxlon": 76.1456252
+  },
+  "nodes": [
+    13084924595,
+    13084924594
+  ],
+  "geometry": [
+    { "lat": 26.9626265, "lon": 76.1455342 },
+    { "lat": 26.9626512, "lon": 76.1456252 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634180,
+  "bounds": {
+    "minlat": 26.9622834,
+    "minlon": 76.1452792,
+    "maxlat": 26.9623075,
+    "maxlon": 76.1453778
+  },
+  "nodes": [
+    13084924597,
+    13084924596
+  ],
+  "geometry": [
+    { "lat": 26.9623075, "lon": 76.1453778 },
+    { "lat": 26.9622834, "lon": 76.1452792 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634297,
+  "bounds": {
+    "minlat": 26.9646313,
+    "minlon": 76.1563115,
+    "maxlat": 26.9655320,
+    "maxlon": 76.1638932
+  },
+  "nodes": [
+    13084886447,
+    11599380890,
+    13383413680,
+    11599380891,
+    13084924600
+  ],
+  "geometry": [
+    { "lat": 26.9655320, "lon": 76.1638932 },
+    { "lat": 26.9654530, "lon": 76.1626279 },
+    { "lat": 26.9651601, "lon": 76.1602473 },
+    { "lat": 26.9649257, "lon": 76.1583424 },
+    { "lat": 26.9646313, "lon": 76.1563115 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634299,
+  "bounds": {
+    "minlat": 26.9647695,
+    "minlon": 76.1559383,
+    "maxlat": 26.9657004,
+    "maxlon": 76.1638981
+  },
+  "nodes": [
+    13084932701,
+    11599381002,
+    11599381001,
+    13383413696,
+    11599381000,
+    13084886450
+  ],
+  "geometry": [
+    { "lat": 26.9647695, "lon": 76.1559383 },
+    { "lat": 26.9648994, "lon": 76.1567751 },
+    { "lat": 26.9652890, "lon": 76.1594195 },
+    { "lat": 26.9653410, "lon": 76.1599250 },
+    { "lat": 26.9656006, "lon": 76.1624464 },
+    { "lat": 26.9657004, "lon": 76.1638981 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634182,
+  "bounds": {
+    "minlat": 26.9646159,
+    "minlon": 76.1562165,
+    "maxlat": 26.9646313,
+    "maxlon": 76.1563115
+  },
+  "nodes": [
+    13084924600,
+    13084924599
+  ],
+  "geometry": [
+    { "lat": 26.9646313, "lon": 76.1563115 },
+    { "lat": 26.9646159, "lon": 76.1562165 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634184,
+  "bounds": {
+    "minlat": 26.9647544,
+    "minlon": 76.1558424,
+    "maxlat": 26.9647695,
+    "maxlon": 76.1559383
+  },
+  "nodes": [
+    13084932702,
+    13084932701
+  ],
+  "geometry": [
+    { "lat": 26.9647544, "lon": 76.1558424 },
+    { "lat": 26.9647695, "lon": 76.1559383 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423629295,
+  "bounds": {
+    "minlat": 26.9577699,
+    "minlon": 76.2157815,
+    "maxlat": 26.9612531,
+    "maxlon": 76.2529750
+  },
+  "nodes": [
+    13084886457,
+    11599380868,
+    11599380869,
+    11599380870,
+    11599380871,
+    11599380872,
+    11599380873,
+    11599380874,
+    11599380875,
+    11599380876,
+    13084945708
+  ],
+  "geometry": [
+    { "lat": 26.9579029, "lon": 76.2529750 },
+    { "lat": 26.9578051, "lon": 76.2512277 },
+    { "lat": 26.9577699, "lon": 76.2491244 },
+    { "lat": 26.9578285, "lon": 76.2452595 },
+    { "lat": 26.9579223, "lon": 76.2427092 },
+    { "lat": 26.9580629, "lon": 76.2401326 },
+    { "lat": 26.9582738, "lon": 76.2372668 },
+    { "lat": 26.9585081, "lon": 76.2348875 },
+    { "lat": 26.9591409, "lon": 76.2306414 },
+    { "lat": 26.9604649, "lon": 76.2214919 },
+    { "lat": 26.9612531, "lon": 76.2157815 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423629297,
+  "bounds": {
+    "minlat": 26.9578966,
+    "minlon": 76.2158417,
+    "maxlat": 26.9613992,
+    "maxlon": 76.2527614
+  },
+  "nodes": [
+    13084945709,
+    11599380988,
+    11599380987,
+    11599380986,
+    11599380985,
+    11599380984,
+    11599380983,
+    11599380982,
+    11599380981,
+    11599380980,
+    13084886456
+  ],
+  "geometry": [
+    { "lat": 26.9613992, "lon": 76.2158417 },
+    { "lat": 26.9613445, "lon": 76.2162414 },
+    { "lat": 26.9603510, "lon": 76.2235190 },
+    { "lat": 26.9594063, "lon": 76.2299989 },
+    { "lat": 26.9590069, "lon": 76.2328291 },
+    { "lat": 26.9585979, "lon": 76.2359543 },
+    { "lat": 26.9583641, "lon": 76.2383036 },
+    { "lat": 26.9581693, "lon": 76.2406967 },
+    { "lat": 26.9579550, "lon": 76.2455375 },
+    { "lat": 26.9578966, "lon": 76.2501598 },
+    { "lat": 26.9580500, "lon": 76.2527614 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635517,
+  "bounds": {
+    "minlat": 26.9632809,
+    "minlon": 76.1850429,
+    "maxlat": 26.9652242,
+    "maxlon": 76.2019713
+  },
+  "nodes": [
+    13084852189,
+    11599380992,
+    11599380991,
+    11599380990,
+    13084934353
+  ],
+  "geometry": [
+    { "lat": 26.9652242, "lon": 76.1850429 },
+    { "lat": 26.9652110, "lon": 76.1851751 },
+    { "lat": 26.9644222, "lon": 76.1922888 },
+    { "lat": 26.9635164, "lon": 76.2002548 },
+    { "lat": 26.9632809, "lon": 76.2019713 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635519,
+  "bounds": {
+    "minlat": 26.9631345,
+    "minlon": 76.1850511,
+    "maxlat": 26.9650284,
+    "maxlon": 76.2019386
+  },
+  "nodes": [
+    13084934354,
+    11599380880,
+    11599380881,
+    11599380882,
+    11599380883,
+    13084852186
+  ],
+  "geometry": [
+    { "lat": 26.9631345, "lon": 76.2019386 },
+    { "lat": 26.9635666, "lon": 76.1981873 },
+    { "lat": 26.9640587, "lon": 76.1942041 },
+    { "lat": 26.9642813, "lon": 76.1921008 },
+    { "lat": 26.9648789, "lon": 76.1864744 },
+    { "lat": 26.9650284, "lon": 76.1850511 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635840,
+  "bounds": {
+    "minlat": 26.9612639,
+    "minlon": 76.2020033,
+    "maxlat": 26.9631262,
+    "maxlon": 76.2157113
+  },
+  "nodes": [
+    13084945707,
+    11599380877,
+    11599380878,
+    11599380879,
+    13084934355
+  ],
+  "geometry": [
+    { "lat": 26.9612639, "lon": 76.2157113 },
+    { "lat": 26.9614609, "lon": 76.2142748 },
+    { "lat": 26.9623865, "lon": 76.2074916 },
+    { "lat": 26.9628870, "lon": 76.2041029 },
+    { "lat": 26.9631262, "lon": 76.2020033 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635842,
+  "bounds": {
+    "minlat": 26.9614074,
+    "minlon": 76.2020371,
+    "maxlat": 26.9632743,
+    "maxlon": 76.2157701
+  },
+  "nodes": [
+    13084934352,
+    11599380989,
+    13084945710
+  ],
+  "geometry": [
+    { "lat": 26.9632743, "lon": 76.2020371 },
+    { "lat": 26.9625230, "lon": 76.2075979 },
+    { "lat": 26.9614074, "lon": 76.2157701 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635518,
+  "bounds": {
+    "minlat": 26.9632743,
+    "minlon": 76.2019713,
+    "maxlat": 26.9632809,
+    "maxlon": 76.2020371
+  },
+  "nodes": [
+    13084934353,
+    13084934352
+  ],
+  "geometry": [
+    { "lat": 26.9632809, "lon": 76.2019713 },
+    { "lat": 26.9632743, "lon": 76.2020371 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635520,
+  "bounds": {
+    "minlat": 26.9631262,
+    "minlon": 76.2019386,
+    "maxlat": 26.9631345,
+    "maxlon": 76.2020033
+  },
+  "nodes": [
+    13084934355,
+    13084934354
+  ],
+  "geometry": [
+    { "lat": 26.9631262, "lon": 76.2020033 },
+    { "lat": 26.9631345, "lon": 76.2019386 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635841,
+  "bounds": {
+    "minlat": 26.9612531,
+    "minlon": 76.2157113,
+    "maxlat": 26.9612639,
+    "maxlon": 76.2157815
+  },
+  "nodes": [
+    13084945708,
+    13084945707
+  ],
+  "geometry": [
+    { "lat": 26.9612531, "lon": 76.2157815 },
+    { "lat": 26.9612639, "lon": 76.2157113 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423635843,
+  "bounds": {
+    "minlat": 26.9613992,
+    "minlon": 76.2157701,
+    "maxlat": 26.9614074,
+    "maxlon": 76.2158417
+  },
+  "nodes": [
+    13084945710,
+    13084945709
+  ],
+  "geometry": [
+    { "lat": 26.9614074, "lon": 76.2157701 },
+    { "lat": 26.9613992, "lon": 76.2158417 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634660,
+  "bounds": {
+    "minlat": 26.9581813,
+    "minlon": 76.2548807,
+    "maxlat": 26.9616920,
+    "maxlon": 76.2771278
+  },
+  "nodes": [
+    13084886461,
+    11599380978,
+    11599380977,
+    11599380976,
+    11599380975,
+    11599380838,
+    12880264941
+  ],
+  "geometry": [
+    { "lat": 26.9581813, "lon": 76.2548807 },
+    { "lat": 26.9584420, "lon": 76.2589562 },
+    { "lat": 26.9587829, "lon": 76.2619503 },
+    { "lat": 26.9592797, "lon": 76.2654361 },
+    { "lat": 26.9597472, "lon": 76.2682554 },
+    { "lat": 26.9601730, "lon": 76.2704545 },
+    { "lat": 26.9616920, "lon": 76.2771278 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634662,
+  "bounds": {
+    "minlat": 26.9579991,
+    "minlon": 76.2547856,
+    "maxlat": 26.9616069,
+    "maxlon": 76.2774251
+  },
+  "nodes": [
+    12880264942,
+    11599380751,
+    11599380752,
+    11599380753,
+    11599380862,
+    11599380863,
+    11599380864,
+    11599380865,
+    11599380866,
+    11599380867,
+    13084886464
+  ],
+  "geometry": [
+    { "lat": 26.9616069, "lon": 76.2774251 },
+    { "lat": 26.9611072, "lon": 76.2753344 },
+    { "lat": 26.9602814, "lon": 76.2717374 },
+    { "lat": 26.9600061, "lon": 76.2704839 },
+    { "lat": 26.9596330, "lon": 76.2685013 },
+    { "lat": 26.9592229, "lon": 76.2659247 },
+    { "lat": 26.9586370, "lon": 76.2621124 },
+    { "lat": 26.9583910, "lon": 76.2596147 },
+    { "lat": 26.9582504, "lon": 76.2581818 },
+    { "lat": 26.9580160, "lon": 76.2550663 },
+    { "lat": 26.9579991, "lon": 76.2547856 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634661,
+  "bounds": {
+    "minlat": 26.9580500,
+    "minlon": 76.2527614,
+    "maxlat": 26.9580568,
+    "maxlon": 76.2528386
+  },
+  "nodes": [
+    13084886456,
+    13084886455
+  ],
+  "geometry": [
+    { "lat": 26.9580500, "lon": 76.2527614 },
+    { "lat": 26.9580568, "lon": 76.2528386 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634663,
+  "bounds": {
+    "minlat": 26.9579029,
+    "minlon": 76.2529750,
+    "maxlat": 26.9579057,
+    "maxlon": 76.2530613
+  },
+  "nodes": [
+    13084886458,
+    13084886457
+  ],
+  "geometry": [
+    { "lat": 26.9579057, "lon": 76.2530613 },
+    { "lat": 26.9579029, "lon": 76.2529750 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634664,
+  "bounds": {
+    "minlat": 26.9580568,
+    "minlon": 76.2528386,
+    "maxlat": 26.9581790,
+    "maxlon": 76.2548287
+  },
+  "nodes": [
+    13084886455,
+    11599380979,
+    13084886462
+  ],
+  "geometry": [
+    { "lat": 26.9580568, "lon": 76.2528386 },
+    { "lat": 26.9581011, "lon": 76.2536128 },
+    { "lat": 26.9581790, "lon": 76.2548287 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634665,
+  "bounds": {
+    "minlat": 26.9581790,
+    "minlon": 76.2548287,
+    "maxlat": 26.9581813,
+    "maxlon": 76.2548807
+  },
+  "nodes": [
+    13084886462,
+    13084886461
+  ],
+  "geometry": [
+    { "lat": 26.9581790, "lon": 76.2548287 },
+    { "lat": 26.9581813, "lon": 76.2548807 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634666,
+  "bounds": {
+    "minlat": 26.9579057,
+    "minlon": 76.2530613,
+    "maxlat": 26.9579975,
+    "maxlon": 76.2547280
+  },
+  "nodes": [
+    13084886463,
+    13084886458
+  ],
+  "geometry": [
+    { "lat": 26.9579975, "lon": 76.2547280 },
+    { "lat": 26.9579057, "lon": 76.2530613 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634667,
+  "bounds": {
+    "minlat": 26.9579975,
+    "minlon": 76.2547280,
+    "maxlat": 26.9579991,
+    "maxlon": 76.2547856
+  },
+  "nodes": [
+    13084886464,
+    13084886463
+  ],
+  "geometry": [
+    { "lat": 26.9579991, "lon": 76.2547856 },
+    { "lat": 26.9579975, "lon": 76.2547280 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506838,
+  "bounds": {
+    "minlat": 26.9617397,
+    "minlon": 76.2773374,
+    "maxlat": 26.9644628,
+    "maxlon": 76.2902198
+  },
+  "nodes": [
+    12880264940,
+    11599380837,
+    11599380836,
+    11599380835,
+    11599380854,
+    11599380834,
+    13204581332,
+    13204581333,
+    12880264945
+  ],
+  "geometry": [
+    { "lat": 26.9617397, "lon": 76.2773374 },
+    { "lat": 26.9618084, "lon": 76.2776393 },
+    { "lat": 26.9623832, "lon": 76.2799646 },
+    { "lat": 26.9632090, "lon": 76.2836342 },
+    { "lat": 26.9637271, "lon": 76.2857483 },
+    { "lat": 26.9640086, "lon": 76.2870700 },
+    { "lat": 26.9642866, "lon": 76.2891972 },
+    { "lat": 26.9643007, "lon": 76.2893044 },
+    { "lat": 26.9644628, "lon": 76.2902198 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506840,
+  "bounds": {
+    "minlat": 26.9616465,
+    "minlon": 76.2775909,
+    "maxlat": 26.9642536,
+    "maxlon": 76.2902993
+  },
+  "nodes": [
+    12880264946,
+    12282504902,
+    11599380747,
+    11599380853,
+    11599380748,
+    11599380749,
+    11599380750,
+    12880264943
+  ],
+  "geometry": [
+    { "lat": 26.9642536, "lon": 76.2902993 },
+    { "lat": 26.9641066, "lon": 76.2894049 },
+    { "lat": 26.9639812, "lon": 76.2886321 },
+    { "lat": 26.9636900, "lon": 76.2870151 },
+    { "lat": 26.9633012, "lon": 76.2851079 },
+    { "lat": 26.9626616, "lon": 76.2821104 },
+    { "lat": 26.9620059, "lon": 76.2790948 },
+    { "lat": 26.9616465, "lon": 76.2775909 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506835,
+  "bounds": {
+    "minlat": 26.9616920,
+    "minlon": 76.2771278,
+    "maxlat": 26.9617397,
+    "maxlon": 76.2773374
+  },
+  "nodes": [
+    12880264941,
+    12880264940
+  ],
+  "geometry": [
+    { "lat": 26.9616920, "lon": 76.2771278 },
+    { "lat": 26.9617397, "lon": 76.2773374 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506837,
+  "bounds": {
+    "minlat": 26.9616069,
+    "minlon": 76.2774251,
+    "maxlat": 26.9616465,
+    "maxlon": 76.2775909
+  },
+  "nodes": [
+    12880264943,
+    12880264942
+  ],
+  "geometry": [
+    { "lat": 26.9616465, "lon": 76.2775909 },
+    { "lat": 26.9616069, "lon": 76.2774251 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506842,
+  "bounds": {
+    "minlat": 26.9644915,
+    "minlon": 76.2903757,
+    "maxlat": 26.9734624,
+    "maxlon": 76.3268434
+  },
+  "nodes": [
+    12880264944,
+    12282504912,
+    11599380833,
+    11599380832,
+    12282501076,
+    11599380831,
+    11599380830,
+    11599380829,
+    11599380828,
+    11599380827,
+    11599380826,
+    11599380825,
+    11599380824,
+    11599380823,
+    13084947177
+  ],
+  "geometry": [
+    { "lat": 26.9644915, "lon": 76.2903757 },
+    { "lat": 26.9646073, "lon": 76.2911247 },
+    { "lat": 26.9646581, "lon": 76.2915184 },
+    { "lat": 26.9650380, "lon": 76.2934834 },
+    { "lat": 26.9653588, "lon": 76.2948981 },
+    { "lat": 26.9655328, "lon": 76.2956434 },
+    { "lat": 26.9660506, "lon": 76.2978403 },
+    { "lat": 26.9669492, "lon": 76.3006834 },
+    { "lat": 26.9675887, "lon": 76.3026362 },
+    { "lat": 26.9683092, "lon": 76.3054066 },
+    { "lat": 26.9689649, "lon": 76.3080952 },
+    { "lat": 26.9700821, "lon": 76.3129820 },
+    { "lat": 26.9710131, "lon": 76.3171693 },
+    { "lat": 26.9722840, "lon": 76.3224557 },
+    { "lat": 26.9734624, "lon": 76.3268434 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506844,
+  "bounds": {
+    "minlat": 26.9642749,
+    "minlon": 76.2904289,
+    "maxlat": 26.9732869,
+    "maxlon": 76.3268242
+  },
+  "nodes": [
+    13084947178,
+    11599380740,
+    11599380741,
+    11599380742,
+    11599380743,
+    11599380744,
+    11599380840,
+    12282501081,
+    12880264947
+  ],
+  "geometry": [
+    { "lat": 26.9732869, "lon": 76.3268242 },
+    { "lat": 26.9721591, "lon": 76.3226398 },
+    { "lat": 26.9704591, "lon": 76.3153370 },
+    { "lat": 26.9682395, "lon": 76.3057448 },
+    { "lat": 26.9674786, "lon": 76.3027656 },
+    { "lat": 26.9657218, "lon": 76.2973520 },
+    { "lat": 26.9650311, "lon": 76.2945157 },
+    { "lat": 26.9644747, "lon": 76.2914832 },
+    { "lat": 26.9642749, "lon": 76.2904289 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506839,
+  "bounds": {
+    "minlat": 26.9644628,
+    "minlon": 76.2902198,
+    "maxlat": 26.9644915,
+    "maxlon": 76.2903757
+  },
+  "nodes": [
+    12880264945,
+    12880264944
+  ],
+  "geometry": [
+    { "lat": 26.9644628, "lon": 76.2902198 },
+    { "lat": 26.9644915, "lon": 76.2903757 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506841,
+  "bounds": {
+    "minlat": 26.9642536,
+    "minlon": 76.2902993,
+    "maxlat": 26.9642749,
+    "maxlon": 76.2904289
+  },
+  "nodes": [
+    12880264947,
+    12880264946
+  ],
+  "geometry": [
+    { "lat": 26.9642749, "lon": 76.2904289 },
+    { "lat": 26.9642536, "lon": 76.2902993 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1247791286,
+  "bounds": {
+    "minlat": 26.9650336,
+    "minlon": 76.1639666,
+    "maxlat": 26.9658865,
+    "maxlon": 76.1849805
+  },
+  "nodes": [
+    13084852185,
+    11599380884,
+    11599380885,
+    11599380886,
+    11599380887,
+    11599380888,
+    11599380889,
+    13084886448
+  ],
+  "geometry": [
+    { "lat": 26.9650336, "lon": 76.1849805 },
+    { "lat": 26.9654413, "lon": 76.1811503 },
+    { "lat": 26.9657108, "lon": 76.1774038 },
+    { "lat": 26.9658748, "lon": 76.1741699 },
+    { "lat": 26.9658865, "lon": 76.1722112 },
+    { "lat": 26.9658045, "lon": 76.1692797 },
+    { "lat": 26.9656639, "lon": 76.1660590 },
+    { "lat": 26.9655364, "lon": 76.1639666 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1247791287,
+  "bounds": {
+    "minlat": 26.9652284,
+    "minlon": 76.1639660,
+    "maxlat": 26.9660584,
+    "maxlon": 76.1849707
+  },
+  "nodes": [
+    13084886449,
+    11599380999,
+    11599380998,
+    11599380997,
+    11599380996,
+    11599380995,
+    11599380994,
+    11599380993,
+    13084852190
+  ],
+  "geometry": [
+    { "lat": 26.9657031, "lon": 76.1639660 },
+    { "lat": 26.9657759, "lon": 76.1650361 },
+    { "lat": 26.9659512, "lon": 76.1687295 },
+    { "lat": 26.9660584, "lon": 76.1712538 },
+    { "lat": 26.9660584, "lon": 76.1734283 },
+    { "lat": 26.9659610, "lon": 76.1759853 },
+    { "lat": 26.9658441, "lon": 76.1785532 },
+    { "lat": 26.9656104, "lon": 76.1809353 },
+    { "lat": 26.9652284, "lon": 76.1849707 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634298,
+  "bounds": {
+    "minlat": 26.9655320,
+    "minlon": 76.1638932,
+    "maxlat": 26.9655364,
+    "maxlon": 76.1639666
+  },
+  "nodes": [
+    13084886448,
+    13084886447
+  ],
+  "geometry": [
+    { "lat": 26.9655364, "lon": 76.1639666 },
+    { "lat": 26.9655320, "lon": 76.1638932 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423634300,
+  "bounds": {
+    "minlat": 26.9657004,
+    "minlon": 76.1638981,
+    "maxlat": 26.9657031,
+    "maxlon": 76.1639660
+  },
+  "nodes": [
+    13084886450,
+    13084886449
+  ],
+  "geometry": [
+    { "lat": 26.9657004, "lon": 76.1638981 },
+    { "lat": 26.9657031, "lon": 76.1639660 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423629296,
+  "bounds": {
+    "minlat": 26.9650284,
+    "minlon": 76.1849805,
+    "maxlat": 26.9650336,
+    "maxlon": 76.1850511
+  },
+  "nodes": [
+    13084852186,
+    13084852185
+  ],
+  "geometry": [
+    { "lat": 26.9650284, "lon": 76.1850511 },
+    { "lat": 26.9650336, "lon": 76.1849805 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423629298,
+  "bounds": {
+    "minlat": 26.9652242,
+    "minlon": 76.1849707,
+    "maxlat": 26.9652284,
+    "maxlon": 76.1850429
+  },
+  "nodes": [
+    13084852190,
+    13084852189
+  ],
+  "geometry": [
+    { "lat": 26.9652284, "lon": 76.1849707 },
+    { "lat": 26.9652242, "lon": 76.1850429 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423636315,
+  "bounds": {
+    "minlat": 26.9735201,
+    "minlon": 76.3270705,
+    "maxlat": 26.9795673,
+    "maxlon": 76.3447394
+  },
+  "nodes": [
+    13084947179,
+    11599380821,
+    11599380820,
+    11599380819,
+    11599380818,
+    11599380817,
+    11599380816
+  ],
+  "geometry": [
+    { "lat": 26.9735201, "lon": 76.3270705 },
+    { "lat": 26.9752306, "lon": 76.3329559 },
+    { "lat": 26.9761858, "lon": 76.3361895 },
+    { "lat": 26.9768415, "lon": 76.3383513 },
+    { "lat": 26.9773515, "lon": 76.3396411 },
+    { "lat": 26.9779343, "lon": 76.3411943 },
+    { "lat": 26.9795673, "lon": 76.3447394 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423636317,
+  "bounds": {
+    "minlat": 26.9733500,
+    "minlon": 76.3270411,
+    "maxlat": 26.9794078,
+    "maxlon": 76.3447868
+  },
+  "nodes": [
+    12880264950,
+    11599380735,
+    11599380736,
+    11599380737,
+    11599380738,
+    11599380739,
+    13084947180
+  ],
+  "geometry": [
+    { "lat": 26.9794078, "lon": 76.3447868 },
+    { "lat": 26.9787950, "lon": 76.3434308 },
+    { "lat": 26.9777447, "lon": 76.3411514 },
+    { "lat": 26.9767247, "lon": 76.3384446 },
+    { "lat": 26.9751786, "lon": 76.3334307 },
+    { "lat": 26.9735434, "lon": 76.3277900 },
+    { "lat": 26.9733500, "lon": 76.3270411 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423636316,
+  "bounds": {
+    "minlat": 26.9734624,
+    "minlon": 76.3268434,
+    "maxlat": 26.9735201,
+    "maxlon": 76.3270705
+  },
+  "nodes": [
+    13084947177,
+    13084947179
+  ],
+  "geometry": [
+    { "lat": 26.9734624, "lon": 76.3268434 },
+    { "lat": 26.9735201, "lon": 76.3270705 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423636318,
+  "bounds": {
+    "minlat": 26.9732869,
+    "minlon": 76.3268242,
+    "maxlat": 26.9733500,
+    "maxlon": 76.3270411
+  },
+  "nodes": [
+    13084947180,
+    13084947178
+  ],
+  "geometry": [
+    { "lat": 26.9733500, "lon": 76.3270411 },
+    { "lat": 26.9732869, "lon": 76.3268242 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506843,
+  "bounds": {
+    "minlat": 26.9795673,
+    "minlon": 76.3447394,
+    "maxlat": 26.9818761,
+    "maxlon": 76.3497369
+  },
+  "nodes": [
+    11599380816,
+    11599380815
+  ],
+  "geometry": [
+    { "lat": 26.9795673, "lon": 76.3447394 },
+    { "lat": 26.9818761, "lon": 76.3497369 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506845,
+  "bounds": {
+    "minlat": 26.9794078,
+    "minlon": 76.3447868,
+    "maxlat": 26.9816458,
+    "maxlon": 76.3497625
+  },
+  "nodes": [
+    11599380733,
+    12880264950
+  ],
+  "geometry": [
+    { "lat": 26.9816458, "lon": 76.3497625 },
+    { "lat": 26.9794078, "lon": 76.3447868 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506846,
+  "bounds": {
+    "minlat": 26.9818761,
+    "minlon": 76.3497369,
+    "maxlat": 26.9873281,
+    "maxlon": 76.3721855
+  },
+  "nodes": [
+    11599380815,
+    11599380813,
+    11599380812,
+    11599380811,
+    11599380810,
+    11599380809,
+    11599380808,
+    11599380807,
+    13082151463
+  ],
+  "geometry": [
+    { "lat": 26.9818761, "lon": 76.3497369 },
+    { "lat": 26.9830501, "lon": 76.3531206 },
+    { "lat": 26.9835114, "lon": 76.3550008 },
+    { "lat": 26.9849441, "lon": 76.3604689 },
+    { "lat": 26.9859073, "lon": 76.3640567 },
+    { "lat": 26.9864011, "lon": 76.3657008 },
+    { "lat": 26.9867977, "lon": 76.3676355 },
+    { "lat": 26.9872429, "lon": 76.3711598 },
+    { "lat": 26.9873281, "lon": 76.3721855 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506848,
+  "bounds": {
+    "minlat": 26.9816458,
+    "minlon": 76.3497625,
+    "maxlat": 26.9871606,
+    "maxlon": 76.3723666
+  },
+  "nodes": [
+    13082151464,
+    11599380727,
+    11599380728,
+    11599380729,
+    11599380730,
+    11599380731,
+    11599380732,
+    11599380733
+  ],
+  "geometry": [
+    { "lat": 26.9871606, "lon": 76.3723666 },
+    { "lat": 26.9870656, "lon": 76.3712750 },
+    { "lat": 26.9866182, "lon": 76.3676662 },
+    { "lat": 26.9862435, "lon": 76.3658964 },
+    { "lat": 26.9857737, "lon": 76.3642332 },
+    { "lat": 26.9848173, "lon": 76.3605868 },
+    { "lat": 26.9828710, "lon": 76.3531873 },
+    { "lat": 26.9816458, "lon": 76.3497625 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350555,
+  "bounds": {
+    "minlat": 26.9871704,
+    "minlon": 76.3724475,
+    "maxlat": 26.9875389,
+    "maxlon": 76.3764337
+  },
+  "nodes": [
+    13082151471,
+    11599380726,
+    13082151465
+  ],
+  "geometry": [
+    { "lat": 26.9875389, "lon": 76.3764337 },
+    { "lat": 26.9874235, "lon": 76.3753858 },
+    { "lat": 26.9871704, "lon": 76.3724475 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350557,
+  "bounds": {
+    "minlat": 26.9873354,
+    "minlon": 76.3722852,
+    "maxlat": 26.9877177,
+    "maxlon": 76.3763703
+  },
+  "nodes": [
+    13082151462,
+    11599380806,
+    13082151474
+  ],
+  "geometry": [
+    { "lat": 26.9873354, "lon": 76.3722852 },
+    { "lat": 26.9875100, "lon": 76.3743752 },
+    { "lat": 26.9877177, "lon": 76.3763703 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350552,
+  "bounds": {
+    "minlat": 26.9873281,
+    "minlon": 76.3721855,
+    "maxlat": 26.9873354,
+    "maxlon": 76.3722852
+  },
+  "nodes": [
+    13082151463,
+    13082151462
+  ],
+  "geometry": [
+    { "lat": 26.9873281, "lon": 76.3721855 },
+    { "lat": 26.9873354, "lon": 76.3722852 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350554,
+  "bounds": {
+    "minlat": 26.9871606,
+    "minlon": 76.3723666,
+    "maxlat": 26.9871704,
+    "maxlon": 76.3724475
+  },
+  "nodes": [
+    13082151465,
+    13082151464
+  ],
+  "geometry": [
+    { "lat": 26.9871704, "lon": 76.3724475 },
+    { "lat": 26.9871606, "lon": 76.3723666 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350551,
+  "bounds": {
+    "minlat": 26.9882980,
+    "minlon": 76.3820388,
+    "maxlat": 26.9904895,
+    "maxlon": 76.3977168
+  },
+  "nodes": [
+    13082151475,
+    11599380804,
+    11599380803,
+    11599380802,
+    11599380801,
+    12880264953
+  ],
+  "geometry": [
+    { "lat": 26.9882980, "lon": 76.3820388 },
+    { "lat": 26.9886270, "lon": 76.3854476 },
+    { "lat": 26.9891126, "lon": 76.3897167 },
+    { "lat": 26.9895011, "lon": 76.3927232 },
+    { "lat": 26.9903672, "lon": 76.3970650 },
+    { "lat": 26.9904895, "lon": 76.3977168 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350553,
+  "bounds": {
+    "minlat": 26.9881504,
+    "minlon": 76.3819987,
+    "maxlat": 26.9903231,
+    "maxlon": 76.3978919
+  },
+  "nodes": [
+    12880264954,
+    11599380720,
+    11599380721,
+    11599380722,
+    11599380723,
+    11599380724,
+    13082151478
+  ],
+  "geometry": [
+    { "lat": 26.9903231, "lon": 76.3978919 },
+    { "lat": 26.9899240, "lon": 76.3957290 },
+    { "lat": 26.9893500, "lon": 76.3929683 },
+    { "lat": 26.9888580, "lon": 76.3892744 },
+    { "lat": 26.9886237, "lon": 76.3870922 },
+    { "lat": 26.9884832, "lon": 76.3857907 },
+    { "lat": 26.9881504, "lon": 76.3819987 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350556,
+  "bounds": {
+    "minlat": 26.9875389,
+    "minlon": 76.3764337,
+    "maxlat": 26.9875438,
+    "maxlon": 76.3764780
+  },
+  "nodes": [
+    13082151472,
+    13082151471
+  ],
+  "geometry": [
+    { "lat": 26.9875438, "lon": 76.3764780 },
+    { "lat": 26.9875389, "lon": 76.3764337 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350558,
+  "bounds": {
+    "minlat": 26.9877177,
+    "minlon": 76.3763703,
+    "maxlat": 26.9877259,
+    "maxlon": 76.3764337
+  },
+  "nodes": [
+    13082151474,
+    13082151473
+  ],
+  "geometry": [
+    { "lat": 26.9877177, "lon": 76.3763703 },
+    { "lat": 26.9877259, "lon": 76.3764337 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350559,
+  "bounds": {
+    "minlat": 26.9877259,
+    "minlon": 76.3764337,
+    "maxlat": 26.9882922,
+    "maxlon": 76.3819799
+  },
+  "nodes": [
+    13082151473,
+    11599380805,
+    13082151476
+  ],
+  "geometry": [
+    { "lat": 26.9877259, "lon": 76.3764337 },
+    { "lat": 26.9881251, "lon": 76.3802429 },
+    { "lat": 26.9882922, "lon": 76.3819799 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350560,
+  "bounds": {
+    "minlat": 26.9882922,
+    "minlon": 76.3819799,
+    "maxlat": 26.9882980,
+    "maxlon": 76.3820388
+  },
+  "nodes": [
+    13082151476,
+    13082151475
+  ],
+  "geometry": [
+    { "lat": 26.9882922, "lon": 76.3819799 },
+    { "lat": 26.9882980, "lon": 76.3820388 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350561,
+  "bounds": {
+    "minlat": 26.9875438,
+    "minlon": 76.3764780,
+    "maxlat": 26.9881460,
+    "maxlon": 76.3819440
+  },
+  "nodes": [
+    13082151477,
+    11599380725,
+    13082151472
+  ],
+  "geometry": [
+    { "lat": 26.9881460, "lon": 76.3819440 },
+    { "lat": 26.9881170, "lon": 76.3816180 },
+    { "lat": 26.9875438, "lon": 76.3764780 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1423350562,
+  "bounds": {
+    "minlat": 26.9881460,
+    "minlon": 76.3819440,
+    "maxlat": 26.9881504,
+    "maxlon": 76.3819987
+  },
+  "nodes": [
+    13082151478,
+    13082151477
+  ],
+  "geometry": [
+    { "lat": 26.9881504, "lon": 76.3819987 },
+    { "lat": 26.9881460, "lon": 76.3819440 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506834,
+  "bounds": {
+    "minlat": 26.9937733,
+    "minlon": 76.4353398,
+    "maxlat": 26.9946208,
+    "maxlon": 76.4602633
+  },
+  "nodes": [
+    12880264964,
+    11599380784,
+    13734096853,
+    13734096870,
+    13734096854,
+    13734096871,
+    11599380783,
+    13734096855,
+    11599380782,
+    11599380781,
+    13734096856,
+    11599380780,
+    11599380779,
+    11599380778,
+    13734096859,
+    12880264824
+  ],
+  "geometry": [
+    { "lat": 26.9943458, "lon": 76.4353398 },
+    { "lat": 26.9944458, "lon": 76.4365477 },
+    { "lat": 26.9945191, "lon": 76.4374986 },
+    { "lat": 26.9945594, "lon": 76.4382470 },
+    { "lat": 26.9945926, "lon": 76.4390083 },
+    { "lat": 26.9946149, "lon": 76.4396749 },
+    { "lat": 26.9946208, "lon": 76.4405682 },
+    { "lat": 26.9946088, "lon": 76.4429881 },
+    { "lat": 26.9945997, "lon": 76.4454480 },
+    { "lat": 26.9945645, "lon": 76.4482590 },
+    { "lat": 26.9945132, "lon": 76.4494210 },
+    { "lat": 26.9944466, "lon": 76.4505708 },
+    { "lat": 26.9943007, "lon": 76.4526541 },
+    { "lat": 26.9941065, "lon": 76.4558604 },
+    { "lat": 26.9939525, "lon": 76.4580614 },
+    { "lat": 26.9937733, "lon": 76.4602633 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506836,
+  "bounds": {
+    "minlat": 26.9936768,
+    "minlon": 76.4353484,
+    "maxlat": 26.9945070,
+    "maxlon": 76.4603597
+  },
+  "nodes": [
+    12880264839,
+    13734096861,
+    11599380698,
+    13734096860,
+    13734096858,
+    11599380699,
+    13734096857,
+    11599380700,
+    13734096862,
+    13734096863,
+    11599380702,
+    13734096865,
+    13734096864,
+    11599380703,
+    13734096866,
+    13734096869,
+    13734096868,
+    13734096867,
+    12880264967
+  ],
+  "geometry": [
+    { "lat": 26.9936768, "lon": 76.4603597 },
+    { "lat": 26.9937266, "lon": 76.4596416 },
+    { "lat": 26.9937792, "lon": 76.4589034 },
+    { "lat": 26.9938431, "lon": 76.4580410 },
+    { "lat": 26.9938980, "lon": 76.4571763 },
+    { "lat": 26.9940073, "lon": 76.4554519 },
+    { "lat": 26.9941043, "lon": 76.4536975 },
+    { "lat": 26.9942261, "lon": 76.4519380 },
+    { "lat": 26.9942712, "lon": 76.4513597 },
+    { "lat": 26.9943605, "lon": 76.4501614 },
+    { "lat": 26.9944234, "lon": 76.4489551 },
+    { "lat": 26.9944507, "lon": 76.4479742 },
+    { "lat": 26.9944675, "lon": 76.4469936 },
+    { "lat": 26.9944894, "lon": 76.4450875 },
+    { "lat": 26.9945070, "lon": 76.4402012 },
+    { "lat": 26.9945026, "lon": 76.4395866 },
+    { "lat": 26.9944835, "lon": 76.4389831 },
+    { "lat": 26.9944207, "lon": 76.4377749 },
+    { "lat": 26.9942211, "lon": 76.4353484 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506850,
+  "bounds": {
+    "minlat": 26.9905142,
+    "minlon": 76.3978486,
+    "maxlat": 26.9915924,
+    "maxlon": 76.4045997
+  },
+  "nodes": [
+    12880264952,
+    11599380800,
+    11599380799,
+    12880264957
+  ],
+  "geometry": [
+    { "lat": 26.9905142, "lon": 76.3978486 },
+    { "lat": 26.9910147, "lon": 76.4005166 },
+    { "lat": 26.9915489, "lon": 76.4043134 },
+    { "lat": 26.9915924, "lon": 76.4045997 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506852,
+  "bounds": {
+    "minlat": 26.9903474,
+    "minlon": 76.3980240,
+    "maxlat": 26.9914249,
+    "maxlon": 76.4045960
+  },
+  "nodes": [
+    12880264958,
+    11599380718,
+    11599380719,
+    12880264955
+  ],
+  "geometry": [
+    { "lat": 26.9914249, "lon": 76.4045960 },
+    { "lat": 26.9912477, "lon": 76.4033141 },
+    { "lat": 26.9909548, "lon": 76.4013159 },
+    { "lat": 26.9903474, "lon": 76.3980240 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506847,
+  "bounds": {
+    "minlat": 26.9904895,
+    "minlon": 76.3977168,
+    "maxlat": 26.9905142,
+    "maxlon": 76.3978486
+  },
+  "nodes": [
+    12880264953,
+    12880264952
+  ],
+  "geometry": [
+    { "lat": 26.9904895, "lon": 76.3977168 },
+    { "lat": 26.9905142, "lon": 76.3978486 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506849,
+  "bounds": {
+    "minlat": 26.9903231,
+    "minlon": 76.3978919,
+    "maxlat": 26.9903474,
+    "maxlon": 76.3980240
+  },
+  "nodes": [
+    12880264955,
+    12880264954
+  ],
+  "geometry": [
+    { "lat": 26.9903474, "lon": 76.3980240 },
+    { "lat": 26.9903231, "lon": 76.3978919 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506851,
+  "bounds": {
+    "minlat": 26.9915924,
+    "minlon": 76.4045997,
+    "maxlat": 26.9916107,
+    "maxlon": 76.4047200
+  },
+  "nodes": [
+    12880264957,
+    12880264956
+  ],
+  "geometry": [
+    { "lat": 26.9915924, "lon": 76.4045997 },
+    { "lat": 26.9916107, "lon": 76.4047200 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506853,
+  "bounds": {
+    "minlat": 26.9914249,
+    "minlon": 76.4045960,
+    "maxlat": 26.9914416,
+    "maxlon": 76.4047169
+  },
+  "nodes": [
+    12880264959,
+    12880264958
+  ],
+  "geometry": [
+    { "lat": 26.9914416, "lon": 76.4047169 },
+    { "lat": 26.9914249, "lon": 76.4045960 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506854,
+  "bounds": {
+    "minlat": 26.9916107,
+    "minlon": 76.4047200,
+    "maxlat": 26.9938207,
+    "maxlon": 76.4135917
+  },
+  "nodes": [
+    12880264956,
+    11599380798,
+    11599380797,
+    11599380796,
+    12880264912,
+    12880264961
+  ],
+  "geometry": [
+    { "lat": 26.9916107, "lon": 76.4047200 },
+    { "lat": 26.9918483, "lon": 76.4062844 },
+    { "lat": 26.9921073, "lon": 76.4075924 },
+    { "lat": 26.9927386, "lon": 76.4100176 },
+    { "lat": 26.9934732, "lon": 76.4123073 },
+    { "lat": 26.9938207, "lon": 76.4135917 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506855,
+  "bounds": {
+    "minlat": 26.9938207,
+    "minlon": 76.4135917,
+    "maxlat": 26.9946776,
+    "maxlon": 76.4227461
+  },
+  "nodes": [
+    12880264961,
+    13266429930,
+    13266429924,
+    13266429929,
+    13266429928,
+    12880264960,
+    11599380792,
+    11599380791,
+    11599380790
+  ],
+  "geometry": [
+    { "lat": 26.9938207, "lon": 76.4135917 },
+    { "lat": 26.9939908, "lon": 76.4143096 },
+    { "lat": 26.9942072, "lon": 76.4153053 },
+    { "lat": 26.9943812, "lon": 76.4163162 },
+    { "lat": 26.9945181, "lon": 76.4173441 },
+    { "lat": 26.9946042, "lon": 76.4183764 },
+    { "lat": 26.9946776, "lon": 76.4199054 },
+    { "lat": 26.9946760, "lon": 76.4212075 },
+    { "lat": 26.9946017, "lon": 76.4227461 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506857,
+  "bounds": {
+    "minlat": 26.9937077,
+    "minlon": 76.4136353,
+    "maxlat": 26.9945516,
+    "maxlon": 76.4227138
+  },
+  "nodes": [
+    11599380708,
+    11599380709,
+    11599380710,
+    13266429919,
+    12880264963,
+    12880264962,
+    11599380711,
+    13266429926,
+    13266429927,
+    11599380712,
+    13266429925,
+    13266429918,
+    13266429923
+  ],
+  "geometry": [
+    { "lat": 26.9944628, "lon": 76.4227138 },
+    { "lat": 26.9945516, "lon": 76.4212337 },
+    { "lat": 26.9945437, "lon": 76.4199172 },
+    { "lat": 26.9945147, "lon": 76.4191231 },
+    { "lat": 26.9944717, "lon": 76.4183440 },
+    { "lat": 26.9944619, "lon": 76.4182210 },
+    { "lat": 26.9943970, "lon": 76.4174308 },
+    { "lat": 26.9943322, "lon": 76.4169136 },
+    { "lat": 26.9942511, "lon": 76.4163958 },
+    { "lat": 26.9940660, "lon": 76.4153650 },
+    { "lat": 26.9938945, "lon": 76.4144347 },
+    { "lat": 26.9937897, "lon": 76.4139833 },
+    { "lat": 26.9937077, "lon": 76.4136353 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1445926868,
+  "bounds": {
+    "minlat": 26.9914416,
+    "minlon": 76.4047169,
+    "maxlat": 26.9937077,
+    "maxlon": 76.4136353
+  },
+  "nodes": [
+    13266429923,
+    13266429917,
+    12880264911,
+    11599380714,
+    11599380715,
+    11599380716,
+    11599380717,
+    12880264959
+  ],
+  "geometry": [
+    { "lat": 26.9937077, "lon": 76.4136353 },
+    { "lat": 26.9935312, "lon": 76.4129649 },
+    { "lat": 26.9933332, "lon": 76.4123068 },
+    { "lat": 26.9926416, "lon": 76.4102288 },
+    { "lat": 26.9919740, "lon": 76.4078100 },
+    { "lat": 26.9917748, "lon": 76.4067320 },
+    { "lat": 26.9914585, "lon": 76.4048390 },
+    { "lat": 26.9914416, "lon": 76.4047169 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506858,
+  "bounds": {
+    "minlat": 26.9939507,
+    "minlon": 76.4227461,
+    "maxlat": 26.9946017,
+    "maxlon": 76.4351373
+  },
+  "nodes": [
+    11599380790,
+    12880264923,
+    11599380789,
+    13734096873,
+    11599380788,
+    13734096874,
+    11599380787,
+    11599380786,
+    13734096877,
+    11599380785,
+    13734096851,
+    12880264965
+  ],
+  "geometry": [
+    { "lat": 26.9946017, "lon": 76.4227461 },
+    { "lat": 26.9945709, "lon": 76.4231657 },
+    { "lat": 26.9943412, "lon": 76.4252138 },
+    { "lat": 26.9942240, "lon": 76.4260418 },
+    { "lat": 26.9941250, "lon": 76.4268817 },
+    { "lat": 26.9940339, "lon": 76.4276187 },
+    { "lat": 26.9939743, "lon": 76.4282923 },
+    { "lat": 26.9939507, "lon": 76.4295419 },
+    { "lat": 26.9939593, "lon": 76.4302724 },
+    { "lat": 26.9940093, "lon": 76.4310089 },
+    { "lat": 26.9941343, "lon": 76.4329413 },
+    { "lat": 26.9943289, "lon": 76.4351373 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506860,
+  "bounds": {
+    "minlat": 26.9938130,
+    "minlon": 76.4227138,
+    "maxlat": 26.9944628,
+    "maxlon": 76.4351426
+  },
+  "nodes": [
+    12880264966,
+    13734096852,
+    11599380701,
+    11599380704,
+    13734096876,
+    11599380705,
+    13734096875,
+    11599380706,
+    11599380707,
+    13734096872,
+    12880264897,
+    11599380708
+  ],
+  "geometry": [
+    { "lat": 26.9942016, "lon": 76.4351426 },
+    { "lat": 26.9940671, "lon": 76.4335724 },
+    { "lat": 26.9938633, "lon": 76.4314482 },
+    { "lat": 26.9938130, "lon": 76.4301578 },
+    { "lat": 26.9938181, "lon": 76.4293503 },
+    { "lat": 26.9938388, "lon": 76.4285473 },
+    { "lat": 26.9938961, "lon": 76.4277938 },
+    { "lat": 26.9939982, "lon": 76.4269940 },
+    { "lat": 26.9941338, "lon": 76.4257753 },
+    { "lat": 26.9942795, "lon": 76.4244821 },
+    { "lat": 26.9944211, "lon": 76.4231990 },
+    { "lat": 26.9944628, "lon": 76.4227138 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506859,
+  "bounds": {
+    "minlat": 26.9943289,
+    "minlon": 76.4351373,
+    "maxlat": 26.9943458,
+    "maxlon": 76.4353398
+  },
+  "nodes": [
+    12880264965,
+    12880264964
+  ],
+  "geometry": [
+    { "lat": 26.9943289, "lon": 76.4351373 },
+    { "lat": 26.9943458, "lon": 76.4353398 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506861,
+  "bounds": {
+    "minlat": 26.9942016,
+    "minlon": 76.4351426,
+    "maxlat": 26.9942211,
+    "maxlon": 76.4353484
+  },
+  "nodes": [
+    12880264967,
+    12880264966
+  ],
+  "geometry": [
+    { "lat": 26.9942211, "lon": 76.4353484 },
+    { "lat": 26.9942016, "lon": 76.4351426 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506795,
+  "bounds": {
+    "minlat": 26.9918402,
+    "minlon": 76.4790129,
+    "maxlat": 26.9933804,
+    "maxlon": 76.5011279
+  },
+  "nodes": [
+    12880264857,
+    11599380775,
+    11599380774,
+    11599380773,
+    11599380772,
+    11599380771,
+    11599380770,
+    11599380769,
+    11599380768,
+    12880264862
+  ],
+  "geometry": [
+    { "lat": 26.9923722, "lon": 76.4790129 },
+    { "lat": 26.9923582, "lon": 76.4792133 },
+    { "lat": 26.9919859, "lon": 76.4848449 },
+    { "lat": 26.9918402, "lon": 76.4879422 },
+    { "lat": 26.9918402, "lon": 76.4890050 },
+    { "lat": 26.9919778, "lon": 76.4911213 },
+    { "lat": 26.9921559, "lon": 76.4928926 },
+    { "lat": 26.9926982, "lon": 76.4970163 },
+    { "lat": 26.9931433, "lon": 76.5000320 },
+    { "lat": 26.9933804, "lon": 76.5011279 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506797,
+  "bounds": {
+    "minlat": 26.9916741,
+    "minlon": 76.4789715,
+    "maxlat": 26.9932220,
+    "maxlon": 76.5010947
+  },
+  "nodes": [
+    12880264863,
+    11599380686,
+    11599380687,
+    11599380688,
+    11599380689,
+    11599380690,
+    11599380691,
+    11599380692,
+    11599380693,
+    11599380694,
+    12880264860
+  ],
+  "geometry": [
+    { "lat": 26.9932220, "lon": 76.5010947 },
+    { "lat": 26.9930094, "lon": 76.5001462 },
+    { "lat": 26.9925643, "lon": 76.4970963 },
+    { "lat": 26.9922480, "lon": 76.4948484 },
+    { "lat": 26.9919201, "lon": 76.4922850 },
+    { "lat": 26.9916858, "lon": 76.4899845 },
+    { "lat": 26.9916741, "lon": 76.4889065 },
+    { "lat": 26.9917092, "lon": 76.4873027 },
+    { "lat": 26.9917912, "lon": 76.4847130 },
+    { "lat": 26.9920723, "lon": 76.4805852 },
+    { "lat": 26.9921878, "lon": 76.4789715 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506756,
+  "bounds": {
+    "minlat": 26.9937354,
+    "minlon": 76.4602633,
+    "maxlat": 26.9937733,
+    "maxlon": 76.4607642
+  },
+  "nodes": [
+    12880264824,
+    12880264823,
+    12880264822,
+    12880264821
+  ],
+  "geometry": [
+    { "lat": 26.9937733, "lon": 76.4602633 },
+    { "lat": 26.9937635, "lon": 76.4603925 },
+    { "lat": 26.9937571, "lon": 76.4604774 },
+    { "lat": 26.9937354, "lon": 76.4607642 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506777,
+  "bounds": {
+    "minlat": 26.9931027,
+    "minlon": 76.4610544,
+    "maxlat": 26.9936204,
+    "maxlon": 76.4669042
+  },
+  "nodes": [
+    12880264843,
+    11599380697,
+    12880264842
+  ],
+  "geometry": [
+    { "lat": 26.9931027, "lon": 76.4669042 },
+    { "lat": 26.9933089, "lon": 76.4645278 },
+    { "lat": 26.9936204, "lon": 76.4610544 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506778,
+  "bounds": {
+    "minlat": 26.9930918,
+    "minlon": 76.4669042,
+    "maxlat": 26.9931027,
+    "maxlon": 76.4670289
+  },
+  "nodes": [
+    12880264844,
+    12880264843
+  ],
+  "geometry": [
+    { "lat": 26.9930918, "lon": 76.4670289 },
+    { "lat": 26.9931027, "lon": 76.4669042 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506780,
+  "bounds": {
+    "minlat": 26.9932414,
+    "minlon": 76.4669624,
+    "maxlat": 26.9932514,
+    "maxlon": 76.4670861
+  },
+  "nodes": [
+    12880264846,
+    12880264845
+  ],
+  "geometry": [
+    { "lat": 26.9932514, "lon": 76.4669624 },
+    { "lat": 26.9932414, "lon": 76.4670861 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506775,
+  "bounds": {
+    "minlat": 26.9936204,
+    "minlon": 76.4603597,
+    "maxlat": 26.9936768,
+    "maxlon": 76.4610544
+  },
+  "nodes": [
+    12880264842,
+    12880264841,
+    12880264840,
+    12880264839
+  ],
+  "geometry": [
+    { "lat": 26.9936204, "lon": 76.4610544 },
+    { "lat": 26.9936464, "lon": 76.4607553 },
+    { "lat": 26.9936698, "lon": 76.4604759 },
+    { "lat": 26.9936768, "lon": 76.4603597 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506779,
+  "bounds": {
+    "minlat": 26.9932514,
+    "minlon": 76.4607642,
+    "maxlat": 26.9937354,
+    "maxlon": 76.4669624
+  },
+  "nodes": [
+    12880264821,
+    11599380777,
+    12880264846
+  ],
+  "geometry": [
+    { "lat": 26.9937354, "lon": 76.4607642 },
+    { "lat": 26.9934913, "lon": 76.4639899 },
+    { "lat": 26.9932514, "lon": 76.4669624 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506781,
+  "bounds": {
+    "minlat": 26.9930413,
+    "minlon": 76.4670861,
+    "maxlat": 26.9932414,
+    "maxlon": 76.4695653
+  },
+  "nodes": [
+    12880264845,
+    12880264848
+  ],
+  "geometry": [
+    { "lat": 26.9932414, "lon": 76.4670861 },
+    { "lat": 26.9930413, "lon": 76.4695653 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506785,
+  "bounds": {
+    "minlat": 26.9928590,
+    "minlon": 76.4670289,
+    "maxlat": 26.9930918,
+    "maxlon": 76.4698324
+  },
+  "nodes": [
+    12880264851,
+    11599380696,
+    12880264844
+  ],
+  "geometry": [
+    { "lat": 26.9928590, "lon": 76.4698324 },
+    { "lat": 26.9929575, "lon": 76.4685767 },
+    { "lat": 26.9930918, "lon": 76.4670289 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506782,
+  "bounds": {
+    "minlat": 26.9930252,
+    "minlon": 76.4695653,
+    "maxlat": 26.9930413,
+    "maxlon": 76.4697650
+  },
+  "nodes": [
+    12880264848,
+    12880264847
+  ],
+  "geometry": [
+    { "lat": 26.9930413, "lon": 76.4695653 },
+    { "lat": 26.9930252, "lon": 76.4697650 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506783,
+  "bounds": {
+    "minlat": 26.9929539,
+    "minlon": 76.4697650,
+    "maxlat": 26.9930252,
+    "maxlon": 76.4706484
+  },
+  "nodes": [
+    12880264847,
+    12880264850
+  ],
+  "geometry": [
+    { "lat": 26.9930252, "lon": 76.4697650 },
+    { "lat": 26.9929539, "lon": 76.4706484 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506784,
+  "bounds": {
+    "minlat": 26.9929434,
+    "minlon": 76.4706484,
+    "maxlat": 26.9929539,
+    "maxlon": 76.4707785
+  },
+  "nodes": [
+    12880264850,
+    12880264849
+  ],
+  "geometry": [
+    { "lat": 26.9929539, "lon": 76.4706484 },
+    { "lat": 26.9929434, "lon": 76.4707785 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506786,
+  "bounds": {
+    "minlat": 26.9928453,
+    "minlon": 76.4698324,
+    "maxlat": 26.9928590,
+    "maxlon": 76.4700059
+  },
+  "nodes": [
+    12880264852,
+    12880264851
+  ],
+  "geometry": [
+    { "lat": 26.9928453, "lon": 76.4700059 },
+    { "lat": 26.9928590, "lon": 76.4698324 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506787,
+  "bounds": {
+    "minlat": 26.9928027,
+    "minlon": 76.4700059,
+    "maxlat": 26.9928453,
+    "maxlon": 76.4705496
+  },
+  "nodes": [
+    12880264853,
+    12880264852
+  ],
+  "geometry": [
+    { "lat": 26.9928027, "lon": 76.4705496 },
+    { "lat": 26.9928453, "lon": 76.4700059 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506788,
+  "bounds": {
+    "minlat": 26.9927927,
+    "minlon": 76.4705496,
+    "maxlat": 26.9928027,
+    "maxlon": 76.4706771
+  },
+  "nodes": [
+    12880264854,
+    12880264853
+  ],
+  "geometry": [
+    { "lat": 26.9927927, "lon": 76.4706771 },
+    { "lat": 26.9928027, "lon": 76.4705496 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506754,
+  "bounds": {
+    "minlat": 26.9926164,
+    "minlon": 76.4751418,
+    "maxlat": 26.9926424,
+    "maxlon": 76.4755216
+  },
+  "nodes": [
+    12880264820,
+    12880264819
+  ],
+  "geometry": [
+    { "lat": 26.9926424, "lon": 76.4751418 },
+    { "lat": 26.9926164, "lon": 76.4755216 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506790,
+  "bounds": {
+    "minlat": 26.9924574,
+    "minlon": 76.4748164,
+    "maxlat": 26.9924835,
+    "maxlon": 76.4752040
+  },
+  "nodes": [
+    12880264856,
+    12880264855
+  ],
+  "geometry": [
+    { "lat": 26.9924574, "lon": 76.4752040 },
+    { "lat": 26.9924835, "lon": 76.4748164 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506791,
+  "bounds": {
+    "minlat": 26.9923807,
+    "minlon": 76.4755216,
+    "maxlat": 26.9926164,
+    "maxlon": 76.4788916
+  },
+  "nodes": [
+    12880264819,
+    12880264858
+  ],
+  "geometry": [
+    { "lat": 26.9926164, "lon": 76.4755216 },
+    { "lat": 26.9923807, "lon": 76.4788916 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506792,
+  "bounds": {
+    "minlat": 26.9923722,
+    "minlon": 76.4788916,
+    "maxlat": 26.9923807,
+    "maxlon": 76.4790129
+  },
+  "nodes": [
+    12880264858,
+    12880264857
+  ],
+  "geometry": [
+    { "lat": 26.9923807, "lon": 76.4788916 },
+    { "lat": 26.9923722, "lon": 76.4790129 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506793,
+  "bounds": {
+    "minlat": 26.9921964,
+    "minlon": 76.4752040,
+    "maxlat": 26.9924574,
+    "maxlon": 76.4788505
+  },
+  "nodes": [
+    12880264859,
+    12880264856
+  ],
+  "geometry": [
+    { "lat": 26.9921964, "lon": 76.4788505 },
+    { "lat": 26.9924574, "lon": 76.4752040 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506794,
+  "bounds": {
+    "minlat": 26.9921878,
+    "minlon": 76.4788505,
+    "maxlat": 26.9921964,
+    "maxlon": 76.4789715
+  },
+  "nodes": [
+    12880264860,
+    12880264859
+  ],
+  "geometry": [
+    { "lat": 26.9921878, "lon": 76.4789715 },
+    { "lat": 26.9921964, "lon": 76.4788505 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506755,
+  "bounds": {
+    "minlat": 26.9926424,
+    "minlon": 76.4707785,
+    "maxlat": 26.9929434,
+    "maxlon": 76.4751418
+  },
+  "nodes": [
+    12880264849,
+    11599380776,
+    12880264820
+  ],
+  "geometry": [
+    { "lat": 26.9929434, "lon": 76.4707785 },
+    { "lat": 26.9928843, "lon": 76.4715108 },
+    { "lat": 26.9926424, "lon": 76.4751418 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506789,
+  "bounds": {
+    "minlat": 26.9924835,
+    "minlon": 76.4706771,
+    "maxlat": 26.9927927,
+    "maxlon": 76.4748164
+  },
+  "nodes": [
+    12880264855,
+    11599380695,
+    12880264854
+  ],
+  "geometry": [
+    { "lat": 26.9924835, "lon": 76.4748164 },
+    { "lat": 26.9925175, "lon": 76.4741832 },
+    { "lat": 26.9927927, "lon": 76.4706771 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506807,
+  "bounds": {
+    "minlat": 26.9883957,
+    "minlon": 76.5190731,
+    "maxlat": 26.9927921,
+    "maxlon": 76.5268264
+  },
+  "nodes": [
+    12880264873,
+    11599380671,
+    11599380672,
+    11599380673,
+    11599380674,
+    11599380675,
+    11599380676,
+    12880264872
+  ],
+  "geometry": [
+    { "lat": 26.9883957, "lon": 76.5268264 },
+    { "lat": 26.9886260, "lon": 76.5266003 },
+    { "lat": 26.9897154, "lon": 76.5253515 },
+    { "lat": 26.9906056, "lon": 76.5239974 },
+    { "lat": 26.9912851, "lon": 76.5229195 },
+    { "lat": 26.9922456, "lon": 76.5208819 },
+    { "lat": 26.9925736, "lon": 76.5198828 },
+    { "lat": 26.9927921, "lon": 76.5190731 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506809,
+  "bounds": {
+    "minlat": 26.9884975,
+    "minlon": 76.5192081,
+    "maxlat": 26.9929732,
+    "maxlon": 76.5270000
+  },
+  "nodes": [
+    12880264869,
+    11599380758,
+    11599380757,
+    11599380756,
+    11599380755,
+    12880264876
+  ],
+  "geometry": [
+    { "lat": 26.9929732, "lon": 76.5192081 },
+    { "lat": 26.9924796, "lon": 76.5208324 },
+    { "lat": 26.9914113, "lon": 76.5230578 },
+    { "lat": 26.9899058, "lon": 76.5254649 },
+    { "lat": 26.9887808, "lon": 76.5267183 },
+    { "lat": 26.9884975, "lon": 76.5270000 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1426006729,
+  "bounds": {
+    "minlat": 26.9841255,
+    "minlon": 76.5270809,
+    "maxlat": 26.9884161,
+    "maxlon": 76.5306883
+  },
+  "nodes": [
+    12880264875,
+    11599380754,
+    11599380669,
+    12282504938
+  ],
+  "geometry": [
+    { "lat": 26.9884161, "lon": 76.5270809 },
+    { "lat": 26.9875019, "lon": 76.5279900 },
+    { "lat": 26.9855479, "lon": 76.5295373 },
+    { "lat": 26.9841255, "lon": 76.5306883 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506808,
+  "bounds": {
+    "minlat": 26.9883139,
+    "minlon": 76.5268264,
+    "maxlat": 26.9883957,
+    "maxlon": 76.5269067
+  },
+  "nodes": [
+    12880264874,
+    12880264873
+  ],
+  "geometry": [
+    { "lat": 26.9883139, "lon": 76.5269067 },
+    { "lat": 26.9883957, "lon": 76.5268264 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506810,
+  "bounds": {
+    "minlat": 26.9884161,
+    "minlon": 76.5270000,
+    "maxlat": 26.9884975,
+    "maxlon": 76.5270809
+  },
+  "nodes": [
+    12880264876,
+    12880264875
+  ],
+  "geometry": [
+    { "lat": 26.9884975, "lon": 76.5270000 },
+    { "lat": 26.9884161, "lon": 76.5270809 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1426006728,
+  "bounds": {
+    "minlat": 26.9846185,
+    "minlon": 76.5269067,
+    "maxlat": 26.9883139,
+    "maxlon": 76.5300238
+  },
+  "nodes": [
+    12282504943,
+    11599366467,
+    11599380670,
+    12880264874
+  ],
+  "geometry": [
+    { "lat": 26.9846185, "lon": 76.5300238 },
+    { "lat": 26.9854776, "lon": 76.5293533 },
+    { "lat": 26.9873140, "lon": 76.5278886 },
+    { "lat": 26.9883139, "lon": 76.5269067 }
+  ],
+  "tags": {
+    "embankment": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506796,
+  "bounds": {
+    "minlat": 26.9933804,
+    "minlon": 76.5011279,
+    "maxlat": 26.9934080,
+    "maxlon": 76.5012556
+  },
+  "nodes": [
+    12880264862,
+    12880264861
+  ],
+  "geometry": [
+    { "lat": 26.9933804, "lon": 76.5011279 },
+    { "lat": 26.9934080, "lon": 76.5012556 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506798,
+  "bounds": {
+    "minlat": 26.9932220,
+    "minlon": 76.5010947,
+    "maxlat": 26.9932497,
+    "maxlon": 76.5012185
+  },
+  "nodes": [
+    12880264864,
+    12880264863
+  ],
+  "geometry": [
+    { "lat": 26.9932497, "lon": 76.5012185 },
+    { "lat": 26.9932220, "lon": 76.5010947 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506799,
+  "bounds": {
+    "minlat": 26.9934080,
+    "minlon": 76.5012556,
+    "maxlat": 26.9937424,
+    "maxlon": 76.5029509
+  },
+  "nodes": [
+    12880264861,
+    11599380767,
+    12880264866
+  ],
+  "geometry": [
+    { "lat": 26.9934080, "lon": 76.5012556 },
+    { "lat": 26.9936208, "lon": 76.5022392 },
+    { "lat": 26.9937424, "lon": 76.5029509 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506800,
+  "bounds": {
+    "minlat": 26.9937424,
+    "minlon": 76.5029509,
+    "maxlat": 26.9937732,
+    "maxlon": 76.5031315
+  },
+  "nodes": [
+    12880264866,
+    12880264865
+  ],
+  "geometry": [
+    { "lat": 26.9937424, "lon": 76.5029509 },
+    { "lat": 26.9937732, "lon": 76.5031315 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506801,
+  "bounds": {
+    "minlat": 26.9932497,
+    "minlon": 76.5012185,
+    "maxlat": 26.9936399,
+    "maxlon": 76.5032097
+  },
+  "nodes": [
+    12880264867,
+    11599380685,
+    12880264864
+  ],
+  "geometry": [
+    { "lat": 26.9936399, "lon": 76.5032097 },
+    { "lat": 26.9935014, "lon": 76.5023415 },
+    { "lat": 26.9932497, "lon": 76.5012185 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506802,
+  "bounds": {
+    "minlat": 26.9936399,
+    "minlon": 76.5032097,
+    "maxlat": 26.9936684,
+    "maxlon": 76.5033880
+  },
+  "nodes": [
+    12880264868,
+    12880264867
+  ],
+  "geometry": [
+    { "lat": 26.9936684, "lon": 76.5033880 },
+    { "lat": 26.9936399, "lon": 76.5032097 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506803,
+  "bounds": {
+    "minlat": 26.9930088,
+    "minlon": 76.5031315,
+    "maxlat": 26.9941227,
+    "maxlon": 76.5190910
+  },
+  "nodes": [
+    12880264865,
+    11599380766,
+    11599380765,
+    11599380764,
+    11599380763,
+    11599380762,
+    11599380761,
+    11599380760,
+    11599380759,
+    12880264870
+  ],
+  "geometry": [
+    { "lat": 26.9937732, "lon": 76.5031315 },
+    { "lat": 26.9939203, "lon": 76.5039922 },
+    { "lat": 26.9941065, "lon": 76.5059814 },
+    { "lat": 26.9941227, "lon": 76.5090334 },
+    { "lat": 26.9940336, "lon": 76.5120490 },
+    { "lat": 26.9939689, "lon": 76.5132571 },
+    { "lat": 26.9938070, "lon": 76.5152644 },
+    { "lat": 26.9935723, "lon": 76.5168177 },
+    { "lat": 26.9930786, "lon": 76.5188614 },
+    { "lat": 26.9930088, "lon": 76.5190910 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506805,
+  "bounds": {
+    "minlat": 26.9928243,
+    "minlon": 76.5033880,
+    "maxlat": 26.9939114,
+    "maxlon": 76.5189539
+  },
+  "nodes": [
+    12880264871,
+    11599380677,
+    11599380678,
+    11599380679,
+    11599380680,
+    11599380681,
+    11599380682,
+    11599380683,
+    11599380684,
+    12880264868
+  ],
+  "geometry": [
+    { "lat": 26.9928243, "lon": 76.5189539 },
+    { "lat": 26.9931944, "lon": 76.5175823 },
+    { "lat": 26.9935341, "lon": 76.5157156 },
+    { "lat": 26.9936747, "lon": 76.5145850 },
+    { "lat": 26.9938152, "lon": 76.5129024 },
+    { "lat": 26.9939114, "lon": 76.5105445 },
+    { "lat": 26.9938997, "lon": 76.5078365 },
+    { "lat": 26.9939114, "lon": 76.5060618 },
+    { "lat": 26.9937825, "lon": 76.5041031 },
+    { "lat": 26.9936684, "lon": 76.5033880 }
+  ],
+  "tags": {
+    "highway": "motorway",
+    "lanes": "2",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506804,
+  "bounds": {
+    "minlat": 26.9929732,
+    "minlon": 76.5190910,
+    "maxlat": 26.9930088,
+    "maxlon": 76.5192081
+  },
+  "nodes": [
+    12880264870,
+    12880264869
+  ],
+  "geometry": [
+    { "lat": 26.9930088, "lon": 76.5190910 },
+    { "lat": 26.9929732, "lon": 76.5192081 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1391506806,
+  "bounds": {
+    "minlat": 26.9927921,
+    "minlon": 76.5189539,
+    "maxlat": 26.9928243,
+    "maxlon": 76.5190731
+  },
+  "nodes": [
+    12880264872,
+    12880264871
+  ],
+  "geometry": [
+    { "lat": 26.9927921, "lon": 76.5190731 },
+    { "lat": 26.9928243, "lon": 76.5189539 }
+  ],
+  "tags": {
+    "bridge": "yes",
+    "highway": "motorway",
+    "lanes": "2",
+    "layer": "1",
+    "maxspeed": "120",
+    "maxspeed:type": "sign",
+    "name": "Jaipur - Bandikui Expressway",
+    "name:en": "Jaipur - Bandikui Expressway",
+    "name:hi": "जयपुर-बांदीकुई एक्सप्रेसवे",
+    "oneway": "yes",
+    "ref": "NE4C",
+    "surface": "asphalt"
+  }
+},
+{
+  "type": "way",
+  "id": 1146423104,
+  "bounds": {
+    "minlat": 28.1583522,
+    "minlon": 77.1504354,
+    "maxlat": 28.1649492,
+    "maxlon": 77.1519090
+  },
+  "nodes": [
+    10669168339,
+    8901678313,
+    8901678348,
+    11191481522,
+    8901678349,
+    8901678350
+  ],
+  "geometry": [
+    { "lat": 28.1649492, "lon": 77.1504354 },
+    { "lat": 28.1633814, "lon": 77.1508327 },
+    { "lat": 28.1604175, "lon": 77.1516364 },
+    { "lat": 28.1596342, "lon": 77.1517521 },
+    { "lat": 28.1589666, "lon": 77.1518704 },
+    { "lat": 28.1583522, "lon": 77.1519090 }
+  ],
+  "tags": {
+    "bus:lanes": "no|yes|no|no",
+    "hgv:lanes": "yes|no|no|no",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "120",
+    "maxspeed:bus": "100",
+    "maxspeed:hgv": "80",
+    "maxspeed:lanes": "80|100|120|120",
+    "motorcycle": "no",
+    "name": "Delhi - Vadodara Expressway",
+    "name:gu": "દિલ્હી - વડોદરા એક્સપ્રેસ વે",
+    "name:hi": "दिल्ली - वडोदरा एक्सप्रेसवे",
+    "name:ks": "دہلی - وڈودرا ایکسپریس وے",
+    "name:pa": "ਦਿੱਲੀ - ਵਡੋਦਰਾ ਐਕਸਪ੍ਰੈਸਵੇਅ",
+    "name:ur": "دہلی - وڈودرا ایکسپریس وے",
+    "oneway": "yes",
+    "ref": "NE4",
+    "toll": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1146423106,
+  "bounds": {
+    "minlat": 28.1583627,
+    "minlon": 77.1500312,
+    "maxlat": 28.1649806,
+    "maxlon": 77.1515241
+  },
+  "nodes": [
+    10669159780,
+    8299059702,
+    8299059703,
+    8901678314,
+    14295942316,
+    10660969698
+  ],
+  "geometry": [
+    { "lat": 28.1583627, "lon": 77.1515241 },
+    { "lat": 28.1589579, "lon": 77.1514946 },
+    { "lat": 28.1595869, "lon": 77.1514087 },
+    { "lat": 28.1614619, "lon": 77.1509572 },
+    { "lat": 28.1640819, "lon": 77.1502652 },
+    { "lat": 28.1649806, "lon": 77.1500312 }
+  ],
+  "tags": {
+    "bus:lanes": "no|yes|no|no",
+    "hgv:lanes": "yes|no|no|no",
+    "highway": "motorway",
+    "lanes": "4",
+    "maxspeed": "120",
+    "maxspeed:bus": "100",
+    "maxspeed:hgv": "80",
+    "maxspeed:lanes": "80|100|120|120",
+    "motorcycle": "no",
+    "name": "Delhi - Vadodara Expressway",
+    "name:gu": "દિલ્હી - વડોદરા એક્સપ્રેસ વે",
+    "name:hi": "दिल्ली - वडोदरा एक्सप्रेसवे",
+    "name:ks": "دہلی - وڈودرا ایکسپریس وے",
+    "name:pa": "ਦਿੱਲੀ - ਵਡੋਦਰਾ ਐਕਸਪ੍ਰੈਸਵੇਅ",
+    "name:ur": "دہلی - وڈودرا ایکسپریس وے",
+    "oneway": "yes",
+    "ref": "NE4",
+    "toll": "yes"
+  }
+}
+
+  ]
+}

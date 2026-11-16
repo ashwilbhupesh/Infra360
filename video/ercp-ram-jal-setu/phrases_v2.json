@@ -1,0 +1,141 @@
+[
+ {
+  "s": 0.0,
+  "e": 2.14,
+  "t": "Kya aapke zile mein bhi paani aane wala hai?",
+  "parts": [
+   {
+    "s": 0.0,
+    "e": 2.14,
+    "t": "Kya aapke zile mein bhi paani aane wala hai?"
+   }
+  ]
+ },
+ {
+  "s": 2.14,
+  "e": 4.62,
+  "t": "17 zile! Dekhiye list mein aapka hai ya nahi.",
+  "parts": [
+   {
+    "s": 2.14,
+    "e": 2.9,
+    "t": "17 zile!"
+   },
+   {
+    "s": 2.9,
+    "e": 4.62,
+    "t": "Dekhiye list mein aapka hai ya nahi."
+   }
+  ]
+ },
+ {
+  "s": 4.62,
+  "e": 9.22,
+  "t": "Rajasthan sarkar ka Ram Jal Setu Link, jise pehle ERCP kehte the.",
+  "parts": [
+   {
+    "s": 4.62,
+    "e": 7.28,
+    "t": "Rajasthan sarkar ka Ram Jal Setu Link,"
+   },
+   {
+    "s": 7.28,
+    "e": 9.22,
+    "t": "jise pehle ERCP kehte the."
+   }
+  ]
+ },
+ {
+  "s": 9.22,
+  "e": 14.64,
+  "t": "Chambal, Parbati aur Kalisindh ka extra paani, barrage aur nahar se poorvi Rajasthan tak.",
+  "parts": [
+   {
+    "s": 9.22,
+    "e": 12.12,
+    "t": "Chambal, Parbati aur Kalisindh ka extra paani,"
+   },
+   {
+    "s": 12.12,
+    "e": 14.64,
+    "t": "barrage aur nahar se poorvi Rajasthan tak."
+   }
+  ]
+ },
+ {
+  "s": 14.64,
+  "e": 19.42,
+  "t": "Jaipur, Ajmer, Tonk, Kota, Alwar, Bharatpur samet 17 zile.",
+  "parts": [
+   {
+    "s": 14.64,
+    "e": 15.78,
+    "t": "Jaipur, Ajmer,"
+   },
+   {
+    "s": 15.78,
+    "e": 19.42,
+    "t": "Tonk, Kota, Alwar, Bharatpur samet 17 zile."
+   }
+  ]
+ },
+ {
+  "s": 19.42,
+  "e": 24.84,
+  "t": "Karib 3.25 crore logon ko peene ka paani, aur 2.8 lakh hectare mein sinchai.",
+  "parts": [
+   {
+    "s": 19.42,
+    "e": 22.18,
+    "t": "Karib 3.25 crore logon ko peene ka paani,"
+   },
+   {
+    "s": 22.18,
+    "e": 24.84,
+    "t": "aur 2.8 lakh hectare mein sinchai."
+   }
+  ]
+ },
+ {
+  "s": 24.84,
+  "e": 27.94,
+  "t": "Aur real estate ka seedha funda hai, jahan paani, wahan growth.",
+  "parts": [
+   {
+    "s": 24.84,
+    "e": 27.94,
+    "t": "Aur real estate ka seedha funda hai, jahan paani, wahan growth."
+   }
+  ]
+ },
+ {
+  "s": 27.94,
+  "e": 27.94,
+  "t": "Is project ka 90% paisa Kendra de raha hai, aur project 91,000 crore ka hai.",
+  "parts": []
+ },
+ {
+  "s": 27.94,
+  "e": 29.8,
+  "t": "Lekin kaam abhi shuruaati daur mein hai.",
+  "parts": [
+   {
+    "s": 27.94,
+    "e": 29.8,
+    "t": "Lekin kaam abhi shuruaati daur mein hai."
+   }
+  ]
+ },
+ {
+  "s": 29.8,
+  "e": 31.484,
+  "t": "Apne zile ka naam comment karein.",
+  "parts": [
+   {
+    "s": 29.8,
+    "e": 31.484,
+    "t": "Apne zile ka naam comment karein."
+   }
+  ]
+ }
+]

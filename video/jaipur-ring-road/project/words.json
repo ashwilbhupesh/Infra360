@@ -1,0 +1,1772 @@
+[
+{
+"text": "Let",
+"start": 0.8,
+"end": 1.2
+},
+{
+"text": "us",
+"start": 1.2,
+"end": 1.44
+},
+{
+"text": "talk",
+"start": 1.44,
+"end": 1.6
+},
+{
+"text": "about",
+"start": 1.6,
+"end": 1.84
+},
+{
+"text": "the",
+"start": 1.84,
+"end": 2.0
+},
+{
+"text": "Jappus",
+"start": 2.0,
+"end": 2.8
+},
+{
+"text": "Ring",
+"start": 2.8,
+"end": 3.04
+},
+{
+"text": "Road",
+"start": 3.04,
+"end": 3.36
+},
+{
+"text": "project.",
+"start": 3.36,
+"end": 4.0
+},
+{
+"text": "The",
+"start": 4.0,
+"end": 4.16
+},
+{
+"text": "idea",
+"start": 4.16,
+"end": 4.48
+},
+{
+"text": "was",
+"start": 4.48,
+"end": 4.64
+},
+{
+"text": "very",
+"start": 4.64,
+"end": 4.88
+},
+{
+"text": "simple.",
+"start": 4.88,
+"end": 5.44
+},
+{
+"text": "A",
+"start": 5.44,
+"end": 5.6
+},
+{
+"text": "truck",
+"start": 5.6,
+"end": 6.0
+},
+{
+"text": "traveling",
+"start": 6.0,
+"end": 6.32
+},
+{
+"text": "between",
+"start": 6.32,
+"end": 6.56
+},
+{
+"text": "Ajmeer,",
+"start": 6.56,
+"end": 7.44
+},
+{
+"text": "Torque",
+"start": 7.44,
+"end": 8.08
+},
+{
+"text": "and",
+"start": 8.08,
+"end": 8.16
+},
+{
+"text": "Agra",
+"start": 8.16,
+"end": 8.96
+},
+{
+"text": "should",
+"start": 8.96,
+"end": 9.12
+},
+{
+"text": "not",
+"start": 9.12,
+"end": 9.36
+},
+{
+"text": "have",
+"start": 9.36,
+"end": 9.52
+},
+{
+"text": "to",
+"start": 9.52,
+"end": 9.68
+},
+{
+"text": "go",
+"start": 9.68,
+"end": 9.84
+},
+{
+"text": "through",
+"start": 9.84,
+"end": 10.0
+},
+{
+"text": "the",
+"start": 10.0,
+"end": 10.08
+},
+{
+"text": "Jepu's",
+"start": 10.08,
+"end": 10.72
+},
+{
+"text": "crowded",
+"start": 10.72,
+"end": 11.12
+},
+{
+"text": "city",
+"start": 11.12,
+"end": 11.36
+},
+{
+"text": "roads.",
+"start": 11.36,
+"end": 12.16
+},
+{
+"text": "A",
+"start": 12.16,
+"end": 12.32
+},
+{
+"text": "ring",
+"start": 12.32,
+"end": 12.72
+},
+{
+"text": "road",
+"start": 12.72,
+"end": 12.96
+},
+{
+"text": "takes",
+"start": 12.96,
+"end": 13.2
+},
+{
+"text": "the",
+"start": 13.2,
+"end": 13.36
+},
+{
+"text": "traffic",
+"start": 13.36,
+"end": 13.92
+},
+{
+"text": "around",
+"start": 13.92,
+"end": 14.16
+},
+{
+"text": "the",
+"start": 14.16,
+"end": 14.4
+},
+{
+"text": "city,",
+"start": 14.4,
+"end": 14.96
+},
+{
+"text": "reducing",
+"start": 14.96,
+"end": 15.52
+},
+{
+"text": "pressure",
+"start": 15.52,
+"end": 16.0
+},
+{
+"text": "on",
+"start": 16.0,
+"end": 16.16
+},
+{
+"text": "urban",
+"start": 16.16,
+"end": 16.64
+},
+{
+"text": "roads",
+"start": 16.64,
+"end": 17.12
+},
+{
+"text": "and",
+"start": 17.12,
+"end": 17.36
+},
+{
+"text": "improving",
+"start": 17.36,
+"end": 17.92
+},
+{
+"text": "connections",
+"start": 17.92,
+"end": 18.48
+},
+{
+"text": "between",
+"start": 18.48,
+"end": 18.8
+},
+{
+"text": "the",
+"start": 18.8,
+"end": 18.96
+},
+{
+"text": "highways.",
+"start": 18.96,
+"end": 19.86
+},
+{
+"text": "The",
+"start": 19.9,
+"end": 20.14
+},
+{
+"text": "existing",
+"start": 20.14,
+"end": 20.62
+},
+{
+"text": "South",
+"start": 20.62,
+"end": 21.02
+},
+{
+"text": "Ring",
+"start": 21.02,
+"end": 21.34
+},
+{
+"text": "Road",
+"start": 21.34,
+"end": 21.74
+},
+{
+"text": "runs",
+"start": 21.74,
+"end": 22.06
+},
+{
+"text": "approximately",
+"start": 22.06,
+"end": 22.7
+},
+{
+"text": "47",
+"start": 22.7,
+"end": 23.42
+},
+{
+"text": "km",
+"start": 23.42,
+"end": 24.22
+},
+{
+"text": "from",
+"start": 24.22,
+"end": 24.38
+},
+{
+"text": "the",
+"start": 24.38,
+"end": 24.54
+},
+{
+"text": "Ajmir",
+"start": 24.54,
+"end": 25.18
+},
+{
+"text": "Road",
+"start": 25.18,
+"end": 25.42
+},
+{
+"text": "Junction",
+"start": 25.42,
+"end": 25.66
+},
+{
+"text": "near",
+"start": 25.66,
+"end": 25.82
+},
+{
+"text": "the",
+"start": 25.82,
+"end": 25.98
+},
+{
+"text": "Bhakrata",
+"start": 25.98,
+"end": 26.62
+},
+{
+"text": "Mahapura",
+"start": 26.62,
+"end": 27.18
+},
+{
+"text": "Belt",
+"start": 27.18,
+"end": 27.58
+},
+{
+"text": "across",
+"start": 27.58,
+"end": 27.98
+},
+{
+"text": "Tonk",
+"start": 27.98,
+"end": 28.46
+},
+{
+"text": "Road",
+"start": 28.46,
+"end": 28.78
+},
+{
+"text": "near",
+"start": 28.78,
+"end": 28.94
+},
+{
+"text": "Shabdaspura",
+"start": 28.94,
+"end": 29.84
+},
+{
+"text": "to",
+"start": 30.06,
+"end": 30.14
+},
+{
+"text": "Bagrana",
+"start": 30.14,
+"end": 30.94
+},
+{
+"text": "on",
+"start": 30.94,
+"end": 31.02
+},
+{
+"text": "the",
+"start": 31.02,
+"end": 31.1
+},
+{
+"text": "Agra",
+"start": 31.1,
+"end": 31.66
+},
+{
+"text": "Road.",
+"start": 31.66,
+"end": 32.22
+},
+{
+"text": "It",
+"start": 32.22,
+"end": 32.38
+},
+{
+"text": "really",
+"start": 32.38,
+"end": 32.7
+},
+{
+"text": "helps",
+"start": 32.7,
+"end": 33.02
+},
+{
+"text": "good",
+"start": 33.02,
+"end": 33.42
+},
+{
+"text": "vehicles",
+"start": 33.42,
+"end": 33.98
+},
+{
+"text": "bypass",
+"start": 33.98,
+"end": 34.62
+},
+{
+"text": "the",
+"start": 34.62,
+"end": 34.78
+},
+{
+"text": "city",
+"start": 34.78,
+"end": 35.1
+},
+{
+"text": "and",
+"start": 35.1,
+"end": 35.34
+},
+{
+"text": "improve",
+"start": 35.34,
+"end": 35.82
+},
+{
+"text": "access",
+"start": 35.82,
+"end": 36.14
+},
+{
+"text": "to",
+"start": 36.14,
+"end": 36.3
+},
+{
+"text": "the",
+"start": 36.3,
+"end": 36.46
+},
+{
+"text": "Jaipur's",
+"start": 36.46,
+"end": 37.18
+},
+{
+"text": "outer",
+"start": 37.18,
+"end": 37.5
+},
+{
+"text": "areas.",
+"start": 37.5,
+"end": 38.4
+},
+{
+"text": "Now",
+"start": 38.4,
+"end": 38.72
+},
+{
+"text": "comes",
+"start": 38.72,
+"end": 38.96
+},
+{
+"text": "the",
+"start": 38.96,
+"end": 39.12
+},
+{
+"text": "next",
+"start": 39.12,
+"end": 39.44
+},
+{
+"text": "phase,",
+"start": 39.44,
+"end": 40.08
+},
+{
+"text": "the",
+"start": 40.08,
+"end": 40.24
+},
+{
+"text": "proposed",
+"start": 40.24,
+"end": 40.96
+},
+{
+"text": "Nadan",
+"start": 40.96,
+"end": 41.6
+},
+{
+"text": "Ring",
+"start": 41.6,
+"end": 41.92
+},
+{
+"text": "Road.",
+"start": 41.92,
+"end": 42.48
+},
+{
+"text": "The",
+"start": 42.48,
+"end": 42.64
+},
+{
+"text": "latest",
+"start": 42.64,
+"end": 43.04
+},
+{
+"text": "official",
+"start": 43.04,
+"end": 43.52
+},
+{
+"text": "project",
+"start": 43.52,
+"end": 43.92
+},
+{
+"text": "notice",
+"start": 43.92,
+"end": 44.56
+},
+{
+"text": "describes",
+"start": 44.56,
+"end": 45.2
+},
+{
+"text": "it",
+"start": 45.2,
+"end": 45.36
+},
+{
+"text": "as",
+"start": 45.36,
+"end": 45.6
+},
+{
+"text": "a",
+"start": 45.6,
+"end": 45.76
+},
+{
+"text": "99km",
+"start": 45.76,
+"end": 46.66
+},
+{
+"text": "road,",
+"start": 46.72,
+"end": 47.2
+},
+{
+"text": "starting",
+"start": 47.2,
+"end": 47.52
+},
+{
+"text": "near",
+"start": 47.52,
+"end": 47.76
+},
+{
+"text": "Bagru",
+"start": 47.76,
+"end": 48.32
+},
+{
+"text": "on",
+"start": 48.32,
+"end": 48.4
+},
+{
+"text": "the",
+"start": 48.4,
+"end": 48.48
+},
+{
+"text": "Jaipur",
+"start": 48.48,
+"end": 48.96
+},
+{
+"text": "Kishangar",
+"start": 48.96,
+"end": 49.6
+},
+{
+"text": "Highway",
+"start": 49.6,
+"end": 50.0
+},
+{
+"text": "or",
+"start": 50.0,
+"end": 50.16
+},
+{
+"text": "Dhyajme",
+"start": 50.16,
+"end": 50.8
+},
+{
+"text": "Road",
+"start": 50.8,
+"end": 51.2
+},
+{
+"text": "and",
+"start": 51.2,
+"end": 51.36
+},
+{
+"text": "ending",
+"start": 51.36,
+"end": 51.68
+},
+{
+"text": "at",
+"start": 51.68,
+"end": 51.84
+},
+{
+"text": "the",
+"start": 51.84,
+"end": 52.0
+},
+{
+"text": "Jaipur",
+"start": 52.0,
+"end": 52.56
+},
+{
+"text": "Bandikui",
+"start": 52.56,
+"end": 53.36
+},
+{
+"text": "Expressway",
+"start": 53.36,
+"end": 54.0
+},
+{
+"text": "near",
+"start": 54.0,
+"end": 54.24
+},
+{
+"text": "Bagrana",
+"start": 54.24,
+"end": 54.96
+},
+{
+"text": "Agra",
+"start": 54.96,
+"end": 55.6
+},
+{
+"text": "Road.",
+"start": 55.6,
+"end": 56.4
+},
+{
+"text": "It",
+"start": 56.4,
+"end": 56.56
+},
+{
+"text": "is",
+"start": 56.56,
+"end": 56.8
+},
+{
+"text": "intended",
+"start": 56.8,
+"end": 57.2
+},
+{
+"text": "to",
+"start": 57.2,
+"end": 57.36
+},
+{
+"text": "connect",
+"start": 57.36,
+"end": 57.76
+},
+{
+"text": "the",
+"start": 57.76,
+"end": 57.92
+},
+{
+"text": "western",
+"start": 57.92,
+"end": 58.56
+},
+{
+"text": "and",
+"start": 58.56,
+"end": 58.8
+},
+{
+"text": "the",
+"start": 58.8,
+"end": 58.96
+},
+{
+"text": "northern",
+"start": 58.96,
+"end": 59.36
+},
+{
+"text": "highway",
+"start": 59.36,
+"end": 59.76
+},
+{
+"text": "corridors",
+"start": 59.76,
+"end": 60.24
+},
+{
+"text": "around",
+"start": 60.24,
+"end": 60.48
+},
+{
+"text": "Jaipur.",
+"start": 60.48,
+"end": 61.38
+},
+{
+"text": "So",
+"start": 61.44,
+"end": 61.68
+},
+{
+"text": "which",
+"start": 61.68,
+"end": 61.84
+},
+{
+"text": "area",
+"start": 61.84,
+"end": 62.16
+},
+{
+"text": "should",
+"start": 62.16,
+"end": 62.32
+},
+{
+"text": "property",
+"start": 62.32,
+"end": 62.64
+},
+{
+"text": "buyers",
+"start": 62.64,
+"end": 63.12
+},
+{
+"text": "study?",
+"start": 63.12,
+"end": 63.84
+},
+{
+"text": "According",
+"start": 63.84,
+"end": 64.24
+},
+{
+"text": "to",
+"start": 64.24,
+"end": 64.4
+},
+{
+"text": "the",
+"start": 64.4,
+"end": 64.56
+},
+{
+"text": "existing",
+"start": 64.56,
+"end": 65.04
+},
+{
+"text": "southern",
+"start": 65.04,
+"end": 65.44
+},
+{
+"text": "corridor,",
+"start": 65.44,
+"end": 66.08
+},
+{
+"text": "watch",
+"start": 66.08,
+"end": 66.32
+},
+{
+"text": "the",
+"start": 66.32,
+"end": 66.48
+},
+{
+"text": "Mahapura",
+"start": 66.48,
+"end": 67.04
+},
+{
+"text": "Mahindra",
+"start": 67.04,
+"end": 67.76
+},
+{
+"text": "Says",
+"start": 67.76,
+"end": 68.32
+},
+{
+"text": "site,",
+"start": 68.32,
+"end": 68.72
+},
+{
+"text": "the",
+"start": 68.72,
+"end": 68.88
+},
+{
+"text": "Shepdaspura",
+"start": 68.88,
+"end": 69.76
+},
+{
+"text": "Sitapura",
+"start": 69.76,
+"end": 70.4
+},
+{
+"text": "Belt",
+"start": 70.4,
+"end": 70.72
+},
+{
+"text": "and",
+"start": 70.72,
+"end": 70.88
+},
+{
+"text": "the",
+"start": 70.88,
+"end": 70.96
+},
+{
+"text": "Bagrana",
+"start": 70.96,
+"end": 71.68
+},
+{
+"text": "on",
+"start": 71.68,
+"end": 71.76
+},
+{
+"text": "the",
+"start": 71.76,
+"end": 71.84
+},
+{
+"text": "Agra",
+"start": 71.84,
+"end": 72.4
+},
+{
+"text": "Road.",
+"start": 72.4,
+"end": 72.88
+},
+{
+"text": "For",
+"start": 72.88,
+"end": 73.04
+},
+{
+"text": "the",
+"start": 73.04,
+"end": 73.2
+},
+{
+"text": "Nadin",
+"start": 73.2,
+"end": 73.76
+},
+{
+"text": "proposal,",
+"start": 73.76,
+"end": 74.6
+},
+{
+"text": "Research",
+"start": 74.6,
+"end": 75.0
+},
+{
+"text": "the",
+"start": 75.0,
+"end": 75.08
+},
+{
+"text": "Bagru",
+"start": 75.08,
+"end": 75.56
+},
+{
+"text": "Chitroli",
+"start": 75.56,
+"end": 76.2
+},
+{
+"text": "side",
+"start": 76.2,
+"end": 76.52
+},
+{
+"text": "and",
+"start": 76.52,
+"end": 76.68
+},
+{
+"text": "the",
+"start": 76.68,
+"end": 76.84
+},
+{
+"text": "wider",
+"start": 76.84,
+"end": 77.32
+},
+{
+"text": "Kalwa",
+"start": 77.32,
+"end": 77.96
+},
+{
+"text": "Jobny",
+"start": 77.96,
+"end": 78.68
+},
+{
+"text": "side.",
+"start": 78.68,
+"end": 79.16
+},
+{
+"text": "Next,",
+"start": 79.16,
+"end": 79.56
+},
+{
+"text": "Rampura",
+"start": 79.56,
+"end": 80.2
+},
+{
+"text": "Dhabri",
+"start": 80.2,
+"end": 80.84
+},
+{
+"text": "and",
+"start": 80.84,
+"end": 80.92
+},
+{
+"text": "Chomu",
+"start": 80.92,
+"end": 81.4
+},
+{
+"text": "belts.",
+"start": 81.4,
+"end": 81.88
+},
+{
+"text": "Especially",
+"start": 81.88,
+"end": 82.44
+},
+{
+"text": "look",
+"start": 82.44,
+"end": 82.6
+},
+{
+"text": "for",
+"start": 82.6,
+"end": 82.76
+},
+{
+"text": "exits",
+"start": 82.76,
+"end": 83.16
+},
+{
+"text": "in",
+"start": 83.16,
+"end": 83.32
+},
+{
+"text": "these",
+"start": 83.32,
+"end": 83.48
+},
+{
+"text": "roads.",
+"start": 83.48,
+"end": 84.12
+},
+{
+"text": "That",
+"start": 84.12,
+"end": 84.28
+},
+{
+"text": "is",
+"start": 84.28,
+"end": 84.44
+},
+{
+"text": "where",
+"start": 84.44,
+"end": 84.68
+},
+{
+"text": "the",
+"start": 84.68,
+"end": 84.76
+},
+{
+"text": "local",
+"start": 84.76,
+"end": 85.16
+},
+{
+"text": "connectivity",
+"start": 85.16,
+"end": 85.8
+},
+{
+"text": "will",
+"start": 85.8,
+"end": 85.96
+},
+{
+"text": "hike",
+"start": 85.96,
+"end": 86.28
+},
+{
+"text": "the",
+"start": 86.28,
+"end": 86.44
+},
+{
+"text": "prices",
+"start": 86.44,
+"end": 86.84
+},
+{
+"text": "in",
+"start": 86.84,
+"end": 86.92
+},
+{
+"text": "the",
+"start": 86.92,
+"end": 87.0
+},
+{
+"text": "future.",
+"start": 87.0,
+"end": 87.8
+},
+{
+"text": "This",
+"start": 87.8,
+"end": 88.04
+},
+{
+"text": "connectivity",
+"start": 88.04,
+"end": 88.84
+},
+{
+"text": "brings",
+"start": 88.84,
+"end": 89.16
+},
+{
+"text": "jobs,",
+"start": 89.16,
+"end": 89.8
+},
+{
+"text": "demands,",
+"start": 89.8,
+"end": 90.6
+},
+{
+"text": "industries,",
+"start": 90.6,
+"end": 91.4
+},
+{
+"text": "housing",
+"start": 91.4,
+"end": 91.8
+},
+{
+"text": "and",
+"start": 91.8,
+"end": 91.96
+},
+{
+"text": "logistics",
+"start": 91.96,
+"end": 92.68
+},
+{
+"text": "near",
+"start": 92.68,
+"end": 93.0
+},
+{
+"text": "these",
+"start": 93.0,
+"end": 93.16
+},
+{
+"text": "roads.",
+"start": 93.16,
+"end": 93.9
+},
+{
+"text": "After",
+"start": 93.9,
+"end": 94.3
+},
+{
+"text": "ten",
+"start": 94.3,
+"end": 94.62
+},
+{
+"text": "twenty",
+"start": 94.62,
+"end": 95.02
+},
+{
+"text": "years",
+"start": 95.02,
+"end": 95.26
+},
+{
+"text": "from",
+"start": 95.26,
+"end": 95.42
+},
+{
+"text": "now,",
+"start": 95.42,
+"end": 95.82
+},
+{
+"text": "the",
+"start": 95.82,
+"end": 95.98
+},
+{
+"text": "entire",
+"start": 95.98,
+"end": 96.3
+},
+{
+"text": "Jaipur",
+"start": 96.3,
+"end": 97.02
+},
+{
+"text": "is",
+"start": 97.02,
+"end": 97.1
+},
+{
+"text": "going",
+"start": 97.1,
+"end": 97.18
+},
+{
+"text": "to",
+"start": 97.18,
+"end": 97.26
+},
+{
+"text": "live",
+"start": 97.26,
+"end": 97.42
+},
+{
+"text": "within",
+"start": 97.42,
+"end": 97.66
+},
+{
+"text": "this",
+"start": 97.66,
+"end": 97.82
+},
+{
+"text": "ring",
+"start": 97.82,
+"end": 98.14
+},
+{
+"text": "road",
+"start": 98.14,
+"end": 98.62
+},
+{
+"text": "and",
+"start": 98.62,
+"end": 98.78
+},
+{
+"text": "the",
+"start": 98.78,
+"end": 98.86
+},
+{
+"text": "prices",
+"start": 98.86,
+"end": 99.34
+},
+{
+"text": "of",
+"start": 99.34,
+"end": 99.5
+},
+{
+"text": "the",
+"start": 99.5,
+"end": 99.58
+},
+{
+"text": "land",
+"start": 99.58,
+"end": 99.98
+},
+{
+"text": "that's",
+"start": 99.98,
+"end": 100.3
+},
+{
+"text": "going",
+"start": 100.3,
+"end": 100.46
+},
+{
+"text": "to",
+"start": 100.46,
+"end": 100.54
+},
+{
+"text": "be",
+"start": 100.54,
+"end": 100.7
+},
+{
+"text": "within",
+"start": 100.7,
+"end": 100.94
+},
+{
+"text": "this",
+"start": 100.94,
+"end": 101.1
+},
+{
+"text": "ring",
+"start": 101.1,
+"end": 101.42
+},
+{
+"text": "road",
+"start": 101.42,
+"end": 101.74
+},
+{
+"text": "region",
+"start": 101.74,
+"end": 101.98
+},
+{
+"text": "is",
+"start": 101.98,
+"end": 102.14
+},
+{
+"text": "going",
+"start": 102.14,
+"end": 102.3
+},
+{
+"text": "to",
+"start": 102.3,
+"end": 102.38
+},
+{
+"text": "boom",
+"start": 102.38,
+"end": 102.7
+},
+{
+"text": "in",
+"start": 102.7,
+"end": 102.86
+},
+{
+"text": "the",
+"start": 102.86,
+"end": 102.94
+},
+{
+"text": "future.",
+"start": 102.94,
+"end": 103.5
+},
+{
+"text": "So",
+"start": 103.5,
+"end": 103.74
+},
+{
+"text": "if",
+"start": 103.74,
+"end": 103.9
+},
+{
+"text": "you",
+"start": 103.9,
+"end": 104.06
+},
+{
+"text": "can",
+"start": 104.06,
+"end": 104.38
+},
+{
+"text": "get",
+"start": 104.38,
+"end": 104.54
+},
+{
+"text": "your",
+"start": 104.54,
+"end": 104.78
+},
+{
+"text": "hand",
+"start": 104.78,
+"end": 105.1
+},
+{
+"text": "to",
+"start": 105.1,
+"end": 105.34
+},
+{
+"text": "any",
+"start": 105.34,
+"end": 105.66
+},
+{
+"text": "kind",
+"start": 105.66,
+"end": 105.82
+},
+{
+"text": "of",
+"start": 105.82,
+"end": 105.98
+},
+{
+"text": "land",
+"start": 105.98,
+"end": 106.54
+},
+{
+"text": "within",
+"start": 106.54,
+"end": 106.94
+},
+{
+"text": "this",
+"start": 106.94,
+"end": 107.18
+},
+{
+"text": "ring",
+"start": 107.18,
+"end": 107.42
+},
+{
+"text": "road",
+"start": 107.42,
+"end": 107.74
+},
+{
+"text": "region",
+"start": 107.74,
+"end": 108.06
+},
+{
+"text": "today,",
+"start": 108.06,
+"end": 108.96
+},
+{
+"text": "it's",
+"start": 109.02,
+"end": 109.34
+},
+{
+"text": "going",
+"start": 109.34,
+"end": 109.5
+},
+{
+"text": "to",
+"start": 109.5,
+"end": 109.58
+},
+{
+"text": "be",
+"start": 109.58,
+"end": 109.74
+},
+{
+"text": "a",
+"start": 109.74,
+"end": 109.9
+},
+{
+"text": "big",
+"start": 109.9,
+"end": 110.14
+},
+{
+"text": "opportunity",
+"start": 110.14,
+"end": 110.62
+},
+{
+"text": "for",
+"start": 110.62,
+"end": 110.78
+},
+{
+"text": "the",
+"start": 110.78,
+"end": 110.94
+},
+{
+"text": "future.",
+"start": 110.94,
+"end": 111.7
+},
+{
+"text": "And",
+"start": 111.7,
+"end": 111.94
+},
+{
+"text": "if",
+"start": 111.94,
+"end": 112.02
+},
+{
+"text": "you",
+"start": 112.02,
+"end": 112.18
+},
+{
+"text": "can",
+"start": 112.18,
+"end": 112.34
+},
+{
+"text": "get",
+"start": 112.34,
+"end": 112.58
+},
+{
+"text": "access",
+"start": 112.58,
+"end": 113.06
+},
+{
+"text": "to",
+"start": 113.06,
+"end": 113.22
+},
+{
+"text": "any",
+"start": 113.22,
+"end": 113.46
+},
+{
+"text": "land",
+"start": 113.46,
+"end": 113.78
+},
+{
+"text": "which",
+"start": 113.78,
+"end": 114.02
+},
+{
+"text": "is",
+"start": 114.02,
+"end": 114.18
+},
+{
+"text": "going",
+"start": 114.18,
+"end": 114.26
+},
+{
+"text": "to",
+"start": 114.26,
+"end": 114.42
+},
+{
+"text": "be",
+"start": 114.42,
+"end": 114.58
+},
+{
+"text": "near",
+"start": 114.58,
+"end": 114.82
+},
+{
+"text": "the",
+"start": 114.82,
+"end": 114.98
+},
+{
+"text": "proposed",
+"start": 114.98,
+"end": 115.38
+},
+{
+"text": "exits",
+"start": 115.38,
+"end": 115.94
+},
+{
+"text": "of",
+"start": 115.94,
+"end": 116.1
+},
+{
+"text": "these",
+"start": 116.1,
+"end": 116.26
+},
+{
+"text": "ring",
+"start": 116.26,
+"end": 116.58
+},
+{
+"text": "roads,",
+"start": 116.58,
+"end": 117.14
+},
+{
+"text": "that",
+"start": 117.14,
+"end": 117.3
+},
+{
+"text": "is",
+"start": 117.3,
+"end": 117.46
+},
+{
+"text": "an",
+"start": 117.46,
+"end": 117.7
+},
+{
+"text": "even",
+"start": 117.7,
+"end": 117.94
+},
+{
+"text": "bigger",
+"start": 117.94,
+"end": 118.26
+},
+{
+"text": "opportunity",
+"start": 118.26,
+"end": 119.14
+},
+{
+"text": "because",
+"start": 119.14,
+"end": 119.46
+},
+{
+"text": "at",
+"start": 119.46,
+"end": 119.62
+},
+{
+"text": "these",
+"start": 119.62,
+"end": 119.86
+},
+{
+"text": "exits",
+"start": 119.86,
+"end": 120.42
+},
+{
+"text": "the",
+"start": 120.42,
+"end": 120.58
+},
+{
+"text": "price",
+"start": 120.58,
+"end": 120.98
+},
+{
+"text": "hike.",
+"start": 120.98,
+"end": 121.78
+},
+{
+"text": "If",
+"start": 121.78,
+"end": 121.86
+},
+{
+"text": "you",
+"start": 121.86,
+"end": 122.02
+},
+{
+"text": "want",
+"start": 122.02,
+"end": 122.1
+},
+{
+"text": "to",
+"start": 122.1,
+"end": 122.26
+},
+{
+"text": "evaluate",
+"start": 122.26,
+"end": 122.82
+},
+{
+"text": "any",
+"start": 122.82,
+"end": 123.06
+},
+{
+"text": "property",
+"start": 123.06,
+"end": 123.62
+},
+{
+"text": "or",
+"start": 123.62,
+"end": 123.94
+},
+{
+"text": "land",
+"start": 123.94,
+"end": 124.18
+},
+{
+"text": "near",
+"start": 124.18,
+"end": 124.42
+},
+{
+"text": "Jaipur,",
+"start": 124.42,
+"end": 125.22
+},
+{
+"text": "contact",
+"start": 125.22,
+"end": 125.54
+},
+{
+"text": "me.",
+"start": 125.54,
+"end": 126.131
+}
+]

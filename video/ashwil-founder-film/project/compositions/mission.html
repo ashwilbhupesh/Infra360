@@ -1,0 +1,50 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; font-weight: 400; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; font-weight: 400; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .serif { font-family: "Instrument Serif", serif; font-weight: 400; color: #f2ede4; line-height: 0.92; letter-spacing: -0.01em; }
+    .it { font-style: italic; }
+    .gold { color: #c9a86a; }
+    .sans { font-family: "Inter", sans-serif; color: #f2ede4; }
+    .lbl { white-space: nowrap; font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 30px; letter-spacing: 0.22em; text-transform: uppercase; color: #a8a194; }
+    .lbl b { color: #c9a86a; font-weight: 400; }
+    .panel { position: absolute; top: 0; bottom: 0; background: radial-gradient(130% 70% at 30% 25%, #1a1a1f 0%, #0c0c0e 65%); overflow: hidden; }
+    .panel.full { left: 0; width: 1080px; }
+    .panel.left { left: 0; width: 560px; border-right: 2px solid rgba(201,168,106,0.55); }
+    .panel.right { left: 520px; width: 560px; border-left: 2px solid rgba(201,168,106,0.55); }
+    .grain { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px); background-size: 7px 7px; }
+    .col { position: absolute; left: 56px; right: 48px; }
+    .rule { height: 2px; background: linear-gradient(90deg, #c9a86a, rgba(201,168,106,0)); transform-origin: 0 50%; }
+    .scrim { position: absolute; left: 0; right: 0; top: 0; height: 760px; background: linear-gradient(180deg, rgba(12,12,14,0.86) 0%, rgba(12,12,14,0.55) 55%, rgba(12,12,14,0) 100%); }
+
+    #ms-a { position: absolute; left: 0; right: 0; top: 230px; text-align: center; font-size: 170px; }
+    #ms-b { position: absolute; left: 0; right: 0; top: 410px; text-align: center; font-family: "Inter", sans-serif; font-weight: 800; font-size: 64px; letter-spacing: 0.02em; color: #f2ede4; }
+    #ms-c { position: absolute; left: 0; right: 0; top: 410px; text-align: center; font-size: 110px; }
+
+  </style>
+  <div id="root" data-composition-id="mission" data-width="1080" data-height="1920">
+    <div id="mission-host" class="host clip" data-start="0" data-duration="3.85">
+      <div class="scrim" id="ms-scrim"></div>
+      <div id="ms-a" class="serif it">Build</div>
+      <div id="ms-b">A COMPANY. NOW.</div>
+      <div id="ms-c" class="serif it gold">for employment.</div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const MOVE = { duration: 0.62, ease: "power3.inOut" };
+      const IN = (sel, t, extra) => tl.fromTo(sel, Object.assign({ opacity: 0, filter: "blur(10px)" }, (extra||{}).from || {}), Object.assign({ opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, (extra||{}).to || {}), t);
+
+      tl.fromTo("#ms-scrim", { opacity: 0 }, { opacity: 1, duration: 0.25 }, 0);
+      IN("#ms-a", 0.37, { from: { y: 26 }, to: { y: 0 } });
+      tl.fromTo("#ms-b", { opacity: 0, clipPath: "inset(0 100% 0 0)" }, { opacity: 1, clipPath: "inset(0 0% 0 0)", duration: 0.5, ease: "expo.out" }, 0.7);
+      tl.to("#ms-b", { opacity: 0, y: -20, duration: 0.2, ease: "power2.in" }, 2.6);
+      IN("#ms-c", 2.85, { from: { y: 26 }, to: { y: 0 } });
+      tl.to("#ms-a, #ms-c, #ms-scrim", { opacity: 0, filter: "blur(8px)", duration: 0.18 }, 3.62);
+      window.__timelines["mission"] = tl;
+    })();
+  </script>
+</template>

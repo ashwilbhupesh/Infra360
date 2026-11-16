@@ -1,0 +1,47 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .lbl { font-family: "JetBrains Mono", monospace; font-size: 30px; letter-spacing: 0.18em; text-transform: uppercase; color: #C9B79C; white-space: nowrap; }
+    .ins { position: absolute; inset: 0; background: radial-gradient(110% 70% at 50% 28%, #33261C 0%, #1B140F 62%, #120D0A 100%); }
+    .ins-grain { position: absolute; inset: 0; opacity: 0.05; background-image: radial-gradient(rgba(255,240,220,0.9) 1px, transparent 1px); background-size: 6px 6px; }
+    .bug { position: absolute; left: 60px; top: 178px; font-family: "JetBrains Mono", monospace; font-size: 28px; letter-spacing: 0.24em; color: rgba(243,231,211,0.55); }
+    .note { position: absolute; left: 60px; right: 200px; top: 905px; font-family: "JetBrains Mono", monospace; font-size: 28px; color: rgba(201,183,156,0.75); white-space: nowrap; }
+    .stage { position: absolute; left: 60px; right: 60px; top: 250px; height: 640px; }
+    .ln { fill: none; stroke: #F3E7D3; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .ln-a { fill: none; stroke: #E3A23B; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+    .draw { stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .tag { position: absolute; display: inline-flex; align-items: center; gap: 14px; padding: 14px 24px; border-radius: 16px; background: rgba(243,231,211,0.07); border: 1.5px solid rgba(243,231,211,0.22); font-family: "Inter", sans-serif; font-weight: 700; font-size: 40px; color: #F3E7D3; white-space: nowrap; }
+    .tag.amb { border-color: #E3A23B; background: rgba(227,162,59,0.14); }
+    .tag i { font-style: normal; display: inline-flex; width: 46px; height: 46px; border-radius: 50%; background: #E3A23B; color: #1B140F; align-items: center; justify-content: center; font-size: 30px; font-weight: 900; }
+    .serif { font-family: "Instrument Serif", serif; color: #F3E7D3; }
+
+  </style>
+  <div id="root" data-composition-id="i10" data-width="1080" data-height="1920">
+    <div id="i10-host" class="host clip" data-start="0" data-duration="2.4">
+      <div id="i10-bg" class="ins"><div class="ins-grain"></div><div class="bug">ASHWILLPOWER</div>
+        <svg class="stage" viewBox="0 0 960 640">
+          <g id="i10-tw"><path class="ln" d="M180 560 L240 120 L300 560 M200 420 H280 M215 300 H265 M140 180 H340 M160 240 H320"/><path class="ln" d="M660 560 L720 120 L780 560 M680 420 H760 M695 300 H745 M620 180 H820 M640 240 H800"/></g>
+          <path id="i10-w" class="ln-a draw" pathLength="1" d="M0 200 C120 230 140 230 160 182 C400 260 560 260 640 182 C760 230 860 240 960 210"/>
+          <g id="i10-f"><path class="ln" style="opacity:.7" d="M420 560 L460 470 L500 560 Z M480 560 L530 450 L580 560 Z M550 560 L590 480 L630 560 Z"/></g>
+        </svg>
+        <div class="tag amb" style="left:60px;top:845px;font-size:36px" id="i10-t1">High-tension line</div>
+        <div class="tag" style="left:520px;top:845px;font-size:36px" id="i10-t2">Forest restriction</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const IN = (sel, t, f, to) => tl.fromTo(sel, Object.assign({ opacity: 0, y: 18 }, f || {}), Object.assign({ opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, to || {}), t);
+      const DRAW = (sel, t, d) => tl.fromTo(sel, { strokeDashoffset: 1 }, { strokeDashoffset: 0, duration: d || 0.8, ease: "power2.inOut" }, t);
+      tl.fromTo("#i10-bg", { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.35, ease: "power2.out" }, 0);
+      IN("#i10-f", 0.05); IN("#i10-t2", 0.1);
+      IN("#i10-tw", 1.05); DRAW("#i10-w", 1.15, 0.7); IN("#i10-t1", 1.15);
+      tl.to("#i10-bg", { opacity: 0, duration: 0.3, ease: "power2.in" }, 2.1);
+      window.__timelines["i10"] = tl;
+    })();
+  </script>
+</template>

@@ -1,0 +1,66 @@
+<template>
+  <style>
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-normal.woff2") format("woff2"); font-style: normal; font-weight: 400; }
+    @font-face { font-family: "Instrument Serif"; src: url("assets/fonts/instrument-serif-latin-400-italic.woff2") format("woff2"); font-style: italic; font-weight: 400; }
+    #root { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .host { position: absolute; inset: 0; }
+    .serif { font-family: "Instrument Serif", serif; font-weight: 400; color: #f2ede4; line-height: 0.92; letter-spacing: -0.01em; }
+    .it { font-style: italic; }
+    .gold { color: #c9a86a; }
+    .sans { font-family: "Inter", sans-serif; color: #f2ede4; }
+    .lbl { white-space: nowrap; font-family: "JetBrains Mono", monospace; font-weight: 400; font-size: 30px; letter-spacing: 0.22em; text-transform: uppercase; color: #a8a194; }
+    .lbl b { color: #c9a86a; font-weight: 400; }
+    .panel { position: absolute; top: 0; bottom: 0; background: radial-gradient(130% 70% at 30% 25%, #1a1a1f 0%, #0c0c0e 65%); overflow: hidden; }
+    .panel.full { left: 0; width: 1080px; }
+    .panel.left { left: 0; width: 560px; border-right: 2px solid rgba(201,168,106,0.55); }
+    .panel.right { left: 520px; width: 560px; border-left: 2px solid rgba(201,168,106,0.55); }
+    .grain { position: absolute; inset: 0; opacity: 0.06; background-image: radial-gradient(rgba(255,255,255,0.9) 1px, transparent 1px); background-size: 7px 7px; }
+    .col { position: absolute; left: 56px; right: 48px; }
+    .rule { height: 2px; background: linear-gradient(90deg, #c9a86a, rgba(201,168,106,0)); transform-origin: 0 50%; }
+    .scrim { position: absolute; left: 0; right: 0; top: 0; height: 760px; background: linear-gradient(180deg, rgba(12,12,14,0.86) 0%, rgba(12,12,14,0.55) 55%, rgba(12,12,14,0) 100%); }
+
+
+    #gr-l1 { top: 250px; }
+    #gr-ten { top: 300px; display: flex; align-items: baseline; }
+    #gr-ten .a { font-size: 300px; }
+    #gr-ten .b { font-size: 130px; margin-left: 10px; }
+    #gr-cgpa { top: 610px; font-family: "Inter", sans-serif; font-weight: 800; font-size: 46px; letter-spacing: 0.32em; color: #f2ede4; }
+    #gr-rule { top: 720px; }
+    #gr-l2 { top: 770px; }
+    #gr-ntse { top: 820px; font-family: "Inter", sans-serif; font-weight: 900; font-size: 150px; letter-spacing: -0.02em; color: #f2ede4; line-height: 0.95; }
+    #gr-sch { top: 965px; font-size: 120px; }
+
+  </style>
+  <div id="root" data-composition-id="grades" data-width="1080" data-height="1920">
+    <div id="grades-host" class="host clip" data-start="0" data-duration="5.2">
+      <div id="gr-panel" class="panel left"><div class="grain"></div>
+        <div id="gr-l1" class="col lbl">Class X &middot; <b>Board</b></div>
+        <div id="gr-ten" class="col serif"><span class="a">10</span><span class="b it gold">/10</span></div>
+        <div id="gr-cgpa" class="col">CGPA</div>
+        <div id="gr-rule" class="col rule"></div>
+        <div id="gr-l2" class="col lbl">Class X &middot; <b>National</b></div>
+        <div id="gr-ntse" class="col">NTSE</div>
+        <div id="gr-sch" class="col serif it gold">Scholar</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const MOVE = { duration: 0.62, ease: "power3.inOut" };
+      const IN = (sel, t, extra) => tl.fromTo(sel, Object.assign({ opacity: 0, filter: "blur(10px)" }, (extra||{}).from || {}), Object.assign({ opacity: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" }, (extra||{}).to || {}), t);
+
+      tl.fromTo("#gr-panel", { x: -560 }, { x: 0, ...MOVE }, 0);
+      IN("#gr-l1", 0.5);
+      IN("#gr-ten .a", 0.56, { from: { y: 40 }, to: { y: 0 } });
+      IN("#gr-ten .b", 0.74, { from: { x: -20 }, to: { x: 0 } });
+      IN("#gr-cgpa", 1.2, { from: { scaleX: 1.15 }, to: { scaleX: 1, duration: 0.6 } });
+      tl.fromTo("#gr-rule", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "expo.out" }, 2.3);
+      IN("#gr-l2", 2.45);
+      IN("#gr-ntse", 2.8, { from: { y: 40 }, to: { y: 0 } });
+      IN("#gr-sch", 3.45, { from: { x: -20 }, to: { x: 0 } });
+      tl.to("#gr-panel", { x: 1080, ...MOVE }, 4.55);
+      window.__timelines["grades"] = tl;
+    })();
+  </script>
+</template>

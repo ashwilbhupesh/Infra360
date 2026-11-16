@@ -1,0 +1,366 @@
+{
+ "hawa": [
+  26.92393,
+  75.82687,
+  "attraction",
+  "Hawa Mahal, Amer Road, Ramganj, Jaipur, Jaipur Municipal Corporation, "
+ ],
+ "citypalace": [
+  26.92621,
+  75.82383,
+  "attraction",
+  "City Palace, Chauhattar Pol, Ramganj, Jaipur, Jaipur Municipal Corpora"
+ ],
+ "albert": [
+  26.91169,
+  75.8195,
+  "museum",
+  "Albert Hall Museum, Motidungri Marg, Adarsh Nagar, Jaipur, Jaipur Muni"
+ ],
+ "nahargarh": [
+  26.94003,
+  75.81653,
+  "attraction",
+  "Nahargarh Fort, New Rambah Road, Bani Park, Jaipur, Jaipur Municipal C"
+ ],
+ "amer": [
+  26.98547,
+  75.85397,
+  "bus_stop",
+  "Amer Fort, Amer Road, Saraswat Ka Mohalla, Amer Chak No. 1, Jaipur Mun"
+ ],
+ "jalmahal": [
+  26.95347,
+  75.84613,
+  "attraction",
+  "Jal Mahal, jal mahal, Amer Road, Brahmapuri , Jaipur, Jaipur, Jaipur M"
+ ],
+ "birla": [
+  26.89216,
+  75.81549,
+  "place_of_worship",
+  "Birla Mandir, Shanti Path, Sindhi Colony, Talvandi, Adarsh Nagar, Jaip"
+ ],
+ "airport": [
+  26.82811,
+  75.80799,
+  "aerodrome",
+  "Jaipur International Airport, Tonk Road Flyover Ramp, Jaipur Municipal"
+ ],
+ "sms": [
+  26.89399,
+  75.80323,
+  "stadium",
+  "Sawai Mansingh Stadium, Pankaj Singhvi Marg, Lalkothi, Bapu Nagar, Jai"
+ ],
+ "statue": [
+  26.90756,
+  75.80552,
+  "tertiary",
+  "statue circle, Adarsh Nagar, Jaipur, Jaipur Municipal Corporation, Jai"
+ ],
+ "centralpark": [
+  26.90439,
+  75.80993,
+  "park",
+  "Central Park, Adarsh Nagar, Jaipur, Jaipur Municipal Corporation, Jaip"
+ ],
+ "wtp": [
+  26.85398,
+  75.80527,
+  "yes",
+  "World Trade Park, JLN Marg Flyover, Jaipur Municipal Corporation, Sang"
+ ],
+ "akshardham": "HTTP Error 429: Too many requests",
+ "malviya": [
+  26.85937,
+  75.80981,
+  "industrial",
+  "Malviya Nagar Power Grid, Jaipur Municipal Corporation, Sanganer Tehsi"
+ ],
+ "vaishali": [
+  26.90957,
+  75.73917,
+  "suburb",
+  "Vaishali Nagar, Jaipur, Jaipur Municipal Corporation, Jaipur Tehsil, J"
+ ],
+ "vaishaliext": [
+  26.91164,
+  75.73109,
+  "hospital",
+  "Vaishali Hospital, Shiv Path, Nemi Nagar Extension, Rajendra Nagar, Va"
+ ],
+ "cscheme": [
+  26.97207,
+  75.76298,
+  "neighbourhood",
+  "Murlipura Scheme, Vidyadhar Nagar, Jaipur, Jaipur Municipal Corporatio"
+ ],
+ "mwc": [
+  26.80668,
+  75.62954,
+  "suburb",
+  "Mahindra World City, Kalwara, Sanganer Tehsil, Jaipur, Rajasthan, 3020"
+ ],
+ "bagru": [
+  26.8088,
+  75.54231,
+  "town",
+  "Bagru, Sanganer Tehsil, Jaipur, Rajasthan, 303007, India"
+ ],
+ "bhankrota": null,
+ "sodala": [
+  26.90204,
+  75.77359,
+  "suburb",
+  "Sodala, Jaipur, Jaipur Municipal Corporation, Jaipur Tehsil, Jaipur, R"
+ ],
+ "sanganer": [
+  26.81462,
+  75.77319,
+  "station",
+  "Sanganer, Diggi Malpura Rd, Jaipur Municipal Corporation, Sanganer Teh"
+ ],
+ "sitapura": [
+  26.7765,
+  75.83547,
+  "industrial",
+  "Sitapura Industrial Area, Sitapura, Sanganer Tehsil, Jaipur, Rajasthan"
+ ],
+ "chaksu": [
+  26.60598,
+  75.94303,
+  "town",
+  "Chaksu, Chaksu Tehsil, Jaipur, Rajasthan, 303900, India"
+ ],
+ "niwai": [
+  26.35932,
+  75.9251,
+  "town",
+  "Niwai, Niwai Tehsil, Tonk, Rajasthan, 304021, India"
+ ],
+ "shivdaspura": [
+  26.71025,
+  75.89624,
+  "village",
+  "Shivdaspura, Chaksu Tehsil, Jaipur, Rajasthan, 303903, India"
+ ],
+ "durgapura": [
+  26.85509,
+  75.78702,
+  "station",
+  "Durgapura, Ajrun Nagar Road, Durgapura, Gopalpura, Jaipur Municipal Co"
+ ],
+ "rambagh": [
+  26.8948,
+  75.80866,
+  "locality",
+  "Rambagh Circle, Adarsh Nagar, Jaipur, Jaipur Municipal Corporation, Ja"
+ ],
+ "muhana": [
+  26.80238,
+  75.71732,
+  "scrub",
+  "Beed Muhana Conservation Reserve A, Sanganer Tehsil, Jaipur, Rajasthan"
+ ],
+ "phagi": [
+  26.57698,
+  75.5587,
+  "town",
+  "Phagi, Phagi Tehsil, Jaipur, Rajasthan, 303005, India"
+ ],
+ "diggi": [
+  26.37726,
+  75.43663,
+  "town",
+  "Diggi, Malpura Tehsil, Tonk, Rajasthan, 304504, India"
+ ],
+ "malpura": [
+  26.2888,
+  75.37298,
+  "town",
+  "Malpura, Malpura Tehsil, Tonk, Rajasthan, 304502, India"
+ ],
+ "chomu": [
+  27.17266,
+  75.72036,
+  "town",
+  "Chomu, Chomu Tehsil, Jaipur, Rajasthan, 303702, India"
+ ],
+ "vki": [
+  26.9922,
+  75.78406,
+  "suburb",
+  "Vishwakarma Industrial Area, Jaipur, Jaipur Municipal Corporation, Jai"
+ ],
+ "kanota": [
+  26.87442,
+  75.94922,
+  "bus_stop",
+  "Kanota, Agra Jaipur Bikaner Road, Kanauta, Bassi Tehsil, Jaipur, Rajas"
+ ],
+ "transportnagar": [
+  26.9126,
+  75.84062,
+  "neighbourhood",
+  "Transport Nagar, Ramganj, Jaipur, Jaipur Municipal Corporation, Jaipur"
+ ],
+ "kunda": [
+  26.98851,
+  75.85948,
+  "bus_stop",
+  "Amer, Amer Road, Saraswat Ka Mohalla, Amer Chak No. 1, Jaipur Municipa"
+ ],
+ "chandpole": [
+  26.9266,
+  75.80789,
+  "station",
+  "Chandpole, Station Road, Bani Park, Jaipur, Jaipur Municipal Corporati"
+ ],
+ "ajmerigate": [
+  26.9176,
+  75.81664,
+  "city_gate",
+  "Ajmeri Gate, Kishanpole Bazar Road, Ramganj, Jaipur, Jaipur Municipal "
+ ],
+ "sanganerigate": [
+  26.91531,
+  75.82426,
+  "bus_stop",
+  "Sanganeri Gate, Mirza Ismail Road, Ramganj, Jaipur, Jaipur Municipal C"
+ ],
+ "ghatgate": null,
+ "zorawar": null,
+ "gangapole": null,
+ "surajpole": [
+  26.91533,
+  75.84619,
+  "industrial",
+  "Surajpole Anaj Mandi, Ramganj, Jaipur, Jaipur Municipal Corporation, J"
+ ],
+ "samod": null,
+ "chitrakoot": [
+  26.90141,
+  75.73778,
+  "quarter",
+  "Chitrakoot, Vaishali Nagar, Jaipur, Jaipur Municipal Corporation, Jaip"
+ ],
+ "mansarovar": [
+  26.87561,
+  75.75091,
+  "neighbourhood",
+  "Mansarovar Sector 4, New Aatish Market, Nirman Nagar, Jaipur Municipal"
+ ],
+ "jagatpura": [
+  26.83358,
+  75.8273,
+  "suburb",
+  "Jagatpura, Jaipur Municipal Corporation, Sanganer Tehsil, Jaipur, Raja"
+ ],
+ "dahmi": [
+  26.83506,
+  75.56309,
+  "village",
+  "Dahmi Kalan, Sanganer Tehsil, Jaipur, Rajasthan, 303007, India"
+ ],
+ "civillines": "HTTP Error 429: Too many requests",
+ "ringroad": [
+  26.80745,
+  75.70004,
+  "motorway",
+  "Jaipur Outer Ring Road, Sanganer Tehsil, Jaipur, Rajasthan, India"
+ ],
+ "gaurav": [
+  26.85552,
+  75.80724,
+  "mall",
+  "Gaurav Tower II, Pradhan Marg, Jagatpura, Jaipur Municipal Corporation"
+ ],
+ "mnit": null,
+ "amrapali": [
+  26.91151,
+  75.74383,
+  "locality",
+  "Amrapali circle, Comso Colony, C Block, Vaishali Nagar, Jaipur, Jaipur"
+ ],
+ "muhanamandi": [
+  26.84138,
+  75.7613,
+  "secondary",
+  "Muhana Mandi Road, Jaipur Municipal Corporation, Sanganer Tehsil, Jaip"
+ ],
+ "khatipura": [
+  26.8359,
+  75.89113,
+  "stop",
+  "Khatipura, chambal marg, Jaipur Municipal Corporation, Sanganer Tehsil"
+ ],
+ "goner": [
+  26.7787,
+  75.91186,
+  "village",
+  "Goner, Sanganer Tehsil, Jaipur, Rajasthan, 302025, India"
+ ],
+ "chandlai": [
+  26.68696,
+  75.8772,
+  "village",
+  "Chandlai, Chaksu Tehsil, Jaipur, Rajasthan, 303903, India"
+ ],
+ "chitroli": null,
+ "mahapura": [
+  26.84577,
+  75.66841,
+  "village",
+  "Mahapura, Sanganer Tehsil, Jaipur, Rajasthan, 302026, India"
+ ],
+ "bagrana": null,
+ "kalwar": [
+  26.98637,
+  75.58562,
+  "village",
+  "Kalwar, Jaipur Tehsil, Jaipur, Rajasthan, 303706, India"
+ ],
+ "jobner": [
+  26.97303,
+  75.38699,
+  "town",
+  "Jobner, Jobner Tehsil, Jaipur, Rajasthan, 303328, India"
+ ],
+ "rampuradabri": [
+  27.09944,
+  75.73411,
+  "centre",
+  "PHC Rampura Dabri, NH52, Tatiyawas, Rampura, Jalsoo Tehsil, Jaipur, Ra"
+ ],
+ "jalsu": [
+  27.11386,
+  75.62872,
+  "bus_stop",
+  "Jalsu, Rajasthan, Rampura-Raithal Road, Bas Baori, Mori, Jalsoo Tehsil"
+ ],
+ "bassi": [
+  26.83492,
+  76.04997,
+  "town",
+  "Bassi, Bassi Tehsil, Jaipur, Rajasthan, 303301, India"
+ ],
+ "chandwaji": [
+  27.22231,
+  75.94819,
+  "village",
+  "Chandwaji, Amber Tehsil, Jaipur, Rajasthan, 303121, India"
+ ],
+ "achrol": [
+  27.13321,
+  75.95663,
+  "town",
+  "Achrol, Amber Tehsil, Jaipur, Rajasthan, 303002, India"
+ ],
+ "bhankrota2": [
+  26.57437,
+  75.71616,
+  "village",
+  "Bhankrota, Phagi Tehsil, Jaipur, Rajasthan, 303006, India"
+ ]
+}

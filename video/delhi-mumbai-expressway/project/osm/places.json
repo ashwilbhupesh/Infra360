@@ -1,0 +1,1243 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.4 2390de5a",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-30T18:26:51Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "node",
+  "id": 82799646,
+  "lat": 26.4876472,
+  "lon": 74.5578484,
+  "tags": {
+    "name": "Pushkar",
+    "name:en": "Pushkar",
+    "name:he": "פושקר",
+    "name:hi": "पुष्कर",
+    "name:ja": "プシュカル",
+    "name:kn": "ಪುಷ್ಕರ್",
+    "name:ml": "പുഷ്കർ",
+    "name:mr": "पुष्कर",
+    "name:ru": "Пушкар",
+    "name:ta": "புஷ்கர்",
+    "place": "town",
+    "population": "21600",
+    "wikidata": "Q749170",
+    "wikipedia": "en:Pushkar"
+  }
+},
+{
+  "type": "node",
+  "id": 245746201,
+  "lat": 26.3303779,
+  "lon": 76.2270358,
+  "tags": {
+    "name": "Kasba Bonli",
+    "name:hi": "बोंली",
+    "place": "town",
+    "population": "15300",
+    "postal_code": "322023"
+  }
+},
+{
+  "type": "node",
+  "id": 245748597,
+  "lat": 26.4691000,
+  "lon": 74.6390000,
+  "tags": {
+    "is_in:country": "India",
+    "is_in:country_code": "IN",
+    "is_in:state": "Rajasthan",
+    "name": "Ajmer",
+    "name:ar": "أجمير",
+    "name:bg": "Аджмер",
+    "name:bn": "আজমীর",
+    "name:fa": "اجمیر",
+    "name:gu": "અજમેર",
+    "name:he": "אג'מר",
+    "name:hi": "अजमेर",
+    "name:ja": "アジュメール",
+    "name:kn": "ಅಜ್ಮೇರ್",
+    "name:ml": "അജ്മീർ",
+    "name:mr": "अजमेर",
+    "name:ne": "अजमेर",
+    "name:ru": "Аджмер",
+    "name:sat": "ᱟᱡᱽᱢᱮᱨ",
+    "name:ta": "அஜ்மீர்",
+    "name:te": "అజ్మీర్",
+    "name:ur": "اجمير",
+    "name:zh": "阿杰梅尔",
+    "place": "city",
+    "population": "542600",
+    "postal_code": "305001",
+    "wikidata": "Q200049"
+  }
+},
+{
+  "type": "node",
+  "id": 245754111,
+  "lat": 26.8750866,
+  "lon": 75.2455501,
+  "tags": {
+    "name": "Phulera",
+    "name:en": "Phulera",
+    "name:hi": "फुलेरा",
+    "place": "town",
+    "population": "23200",
+    "postal_code": "303338",
+    "wikidata": "Q2718672",
+    "wikipedia": "en:Phulera"
+  }
+},
+{
+  "type": "node",
+  "id": 245755594,
+  "lat": 27.0214531,
+  "lon": 75.0027941,
+  "tags": {
+    "name": "Nawa",
+    "name:hi": "नावां",
+    "place": "town",
+    "population": "22100",
+    "wikidata": "Q3873467",
+    "wikipedia": "en:Nawa, Rajasthan"
+  }
+},
+{
+  "type": "node",
+  "id": 245756480,
+  "lat": 27.1519000,
+  "lon": 74.8621000,
+  "tags": {
+    "name": "Kuchaman",
+    "name:hi": "कुचामन",
+    "place": "town",
+    "population": "62000",
+    "postal_code": "341508",
+    "wikidata": "Q2241376",
+    "wikipedia": "en:Kuchaman City"
+  }
+},
+{
+  "type": "node",
+  "id": 245756663,
+  "lat": 27.1726642,
+  "lon": 75.7203590,
+  "tags": {
+    "name": "Chomu",
+    "name:hi": "चौमू",
+    "name:ml": "ചോമൂ",
+    "place": "town",
+    "population": "64400",
+    "postal_code": "303702",
+    "wikidata": "Q1194555",
+    "wikipedia": "en:Chomu"
+  }
+},
+{
+  "type": "node",
+  "id": 245757786,
+  "lat": 27.2585224,
+  "lon": 75.1798734,
+  "tags": {
+    "name": "Ramgarh",
+    "name:hi": "रामगढ",
+    "name:ja": "ラームガル",
+    "place": "town",
+    "population": "28500",
+    "postal_code": "303510",
+    "wikidata": "Q2119813",
+    "wikipedia": "en:Ramgarh, Sikar"
+  }
+},
+{
+  "type": "node",
+  "id": 245760901,
+  "lat": 27.5889822,
+  "lon": 75.6989924,
+  "tags": {
+    "name": "Kanwat",
+    "name:hi": "कांवट",
+    "place": "town",
+    "population": "7900",
+    "postal_code": "332708"
+  }
+},
+{
+  "type": "node",
+  "id": 245761558,
+  "lat": 27.7309897,
+  "lon": 75.4743975,
+  "tags": {
+    "name": "Udaipurwati",
+    "name:hi": "उदयपुरवाटी",
+    "place": "town",
+    "population": "29200",
+    "wikidata": "Q2718797",
+    "wikipedia": "en:Udaipurwati"
+  }
+},
+{
+  "type": "node",
+  "id": 245762187,
+  "lat": 27.8214382,
+  "lon": 75.0250652,
+  "tags": {
+    "name": "Laxmangarh",
+    "name:hi": "लछमनगढ़",
+    "place": "town",
+    "population": "47300",
+    "postal_code": "332311",
+    "source": "AND",
+    "wikidata": "Q2237414",
+    "wikipedia": "en:Laxmangarh"
+  }
+},
+{
+  "type": "node",
+  "id": 245762524,
+  "lat": 27.8503000,
+  "lon": 75.2741000,
+  "tags": {
+    "name": "Nawalgarh",
+    "name:hi": "नवलगढ़",
+    "name:ja": "ナワルガル",
+    "place": "town",
+    "population": "63900",
+    "postal_code": "333042",
+    "wikidata": "Q2233964",
+    "wikipedia": "en:Nawalgarh, Rajasthan"
+  }
+},
+{
+  "type": "node",
+  "id": 315734346,
+  "lat": 26.9154576,
+  "lon": 75.8189817,
+  "tags": {
+    "alt_name:ur": "جئے پور",
+    "capital": "4",
+    "ele": "431",
+    "heritage:operator": "whc",
+    "heritage:website": "https://whc.unesco.org/en/list/1605",
+    "is_capital": "state",
+    "name": "Jaipur",
+    "name:ar": "جايبور",
+    "name:az": "Caypur",
+    "name:be": "Джайпур",
+    "name:bg": "Джайпур",
+    "name:bn": "জয়পুর",
+    "name:cs": "Džajpur",
+    "name:de": "Jaipur",
+    "name:el": "Τζαϊπούρ",
+    "name:en": "Jaipur",
+    "name:eo": "Ĝajpuro",
+    "name:fa": "جایپور",
+    "name:fr": "Jaipur",
+    "name:gu": "જયપુર",
+    "name:he": "ג'איפור",
+    "name:hi": "जयपुर",
+    "name:hr": "Jaipur",
+    "name:hy": "Ջայպուր",
+    "name:ja": "ジャイプル",
+    "name:ka": "ჯაიპური",
+    "name:kn": "ಜಯಪುರ್",
+    "name:ko": "자이푸르",
+    "name:ml": "ജയ്പൂർ",
+    "name:mr": "जयपुर",
+    "name:ne": "जयपुर",
+    "name:oc": "Jaipur",
+    "name:pa": "ਜੈਪੁਰ",
+    "name:ru": "Джайпур",
+    "name:sat": "ᱡᱚᱭᱯᱩᱨ",
+    "name:sl": "Džaipur",
+    "name:sr": "Џајпур",
+    "name:ta": "செய்ப்பூர்",
+    "name:uk": "Джайпур",
+    "name:ur": "جے پور",
+    "name:zh": "斋浦尔",
+    "place": "city",
+    "place:cca": "a",
+    "population": "3073400",
+    "postal_code": "302001",
+    "ref:whc": "1605",
+    "source:name:oc": "Lo Congrès",
+    "whc:criteria": "(ii)(iv)(vi)",
+    "whc:inscription_date": "2019",
+    "wikidata": "Q66485",
+    "wikipedia": "en:Jaipur"
+  }
+},
+{
+  "type": "node",
+  "id": 316419766,
+  "lat": 27.1332143,
+  "lon": 75.9566333,
+  "tags": {
+    "name": "Achrol",
+    "name:en": "Achrol",
+    "name:hi": "अचरोल",
+    "place": "town",
+    "population": "15100",
+    "postal_code": "303002"
+  }
+},
+{
+  "type": "node",
+  "id": 364119845,
+  "lat": 27.0388103,
+  "lon": 74.7271171,
+  "tags": {
+    "name": "Makrana",
+    "name:hi": "मकराना",
+    "name:ru": "Макрана",
+    "place": "town",
+    "population": "93100",
+    "wikidata": "Q2650203",
+    "wikipedia": "en:Makrana"
+  }
+},
+{
+  "type": "node",
+  "id": 567268784,
+  "lat": 27.3835175,
+  "lon": 75.9624195,
+  "tags": {
+    "name": "Shahpur",
+    "name:hi": "शाहपुर",
+    "place": "town",
+    "population": "33900",
+    "postal_code": "301706",
+    "wikidata": "Q3823232"
+  }
+},
+{
+  "type": "node",
+  "id": 567268785,
+  "lat": 27.7071720,
+  "lon": 76.1996447,
+  "tags": {
+    "name": "Kotputli",
+    "name:hi": "कोटपुतली",
+    "name:kn": "ಕೋಟ್ಪುತ್ಲಿ",
+    "place": "town",
+    "population": "49200",
+    "postal_code": "303108",
+    "wikidata": "Q2241196",
+    "wikipedia": "en:Kotputli"
+  }
+},
+{
+  "type": "node",
+  "id": 567268786,
+  "lat": 27.6846426,
+  "lon": 76.3552224,
+  "tags": {
+    "name": "Bansur",
+    "name:hi": "बान्सुर",
+    "place": "town",
+    "population": "11700",
+    "postal_code": "301402"
+  }
+},
+{
+  "type": "node",
+  "id": 567268787,
+  "lat": 27.8900657,
+  "lon": 76.2858227,
+  "tags": {
+    "name": "Behror",
+    "name:hi": "भेरोद",
+    "place": "town",
+    "population": "29500",
+    "postal_code": "301700",
+    "wikidata": "Q760169",
+    "wikipedia": "en:Behror"
+  }
+},
+{
+  "type": "node",
+  "id": 646819437,
+  "lat": 26.6811224,
+  "lon": 75.2320764,
+  "tags": {
+    "name": "Dudu",
+    "name:en": "Dudu",
+    "name:hi": "दुदु",
+    "place": "town",
+    "population": "14900",
+    "postal_code": "303008",
+    "source": "AND"
+  }
+},
+{
+  "type": "node",
+  "id": 877257867,
+  "lat": 27.6091864,
+  "lon": 75.1395503,
+  "tags": {
+    "capital": "5",
+    "name": "Sikar",
+    "name:ar": "سيكار",
+    "name:fa": "سیکر",
+    "name:hi": "सीकर",
+    "name:ja": "スィーカル",
+    "name:kn": "ಸಿಕರ್",
+    "name:ml": "സീക്കർ",
+    "name:mr": "सीकर",
+    "name:pa": "ਸੀਕਰ",
+    "name:ru": "Сикар",
+    "place": "city",
+    "population": "237500",
+    "postal_code": "332001",
+    "wikidata": "Q33334",
+    "wikipedia": "en:Sikar"
+  }
+},
+{
+  "type": "node",
+  "id": 1005792528,
+  "lat": 26.9472867,
+  "lon": 76.5777700,
+  "tags": {
+    "ele": "273.86",
+    "name": "Sikandra",
+    "name:hi": "सिकन्दरा",
+    "place": "town",
+    "population": "13100",
+    "source": "GPS",
+    "wpt_symbol": "Flag, Red"
+  }
+},
+{
+  "type": "node",
+  "id": 1005825825,
+  "lat": 26.8349177,
+  "lon": 76.0499664,
+  "tags": {
+    "ele": "353",
+    "name": "Bassi",
+    "name:hi": "बस्सी",
+    "place": "town",
+    "population": "26000",
+    "postal_code": "303301"
+  }
+},
+{
+  "type": "node",
+  "id": 1006944202,
+  "lat": 26.8933420,
+  "lon": 76.3376514,
+  "tags": {
+    "name": "Dausa",
+    "name:hi": "दौसा",
+    "place": "town",
+    "population": "86000",
+    "postal_code": "303300",
+    "wikidata": "Q1949356",
+    "wikipedia": "en:Dausa"
+  }
+},
+{
+  "type": "node",
+  "id": 1315878538,
+  "lat": 27.2984347,
+  "lon": 75.9517562,
+  "tags": {
+    "name": "Manoharpur",
+    "name:hi": "मनोहरपुर",
+    "place": "town",
+    "population": "20200"
+  }
+},
+{
+  "type": "node",
+  "id": 1418669523,
+  "lat": 27.3662100,
+  "lon": 75.5676292,
+  "tags": {
+    "alt_name": "Reegus",
+    "name": "Ringas",
+    "name:hi": "रिंगस",
+    "place": "town",
+    "population": "22900",
+    "postal_code": "332404",
+    "wikidata": "Q2718839",
+    "wikipedia": "en:Reengus"
+  }
+},
+{
+  "type": "node",
+  "id": 1418669525,
+  "lat": 27.4652463,
+  "lon": 75.5974065,
+  "tags": {
+    "name": "Shri Madhopur",
+    "name:hi": "श्री माधोपुर",
+    "place": "town",
+    "population": "31300",
+    "postal_code": "332700",
+    "wikidata": "Q967961"
+  }
+},
+{
+  "type": "node",
+  "id": 1419304924,
+  "lat": 27.7360104,
+  "lon": 75.7854205,
+  "tags": {
+    "name": "Neem Ka Thana",
+    "name:hi": "नीम का थाना",
+    "place": "town",
+    "population": "29600",
+    "postal_code": "332713",
+    "wikidata": "Q2544374",
+    "wikipedia": "en:Neem-Ka-Thana"
+  }
+},
+{
+  "type": "node",
+  "id": 1419305493,
+  "lat": 27.6050040,
+  "lon": 75.5015868,
+  "tags": {
+    "name": "Khandela",
+    "name:hi": "खण्डेला (ग्रामीण)",
+    "place": "town",
+    "population": "26000",
+    "postal_code": "332709",
+    "wikidata": "Q2120436"
+  }
+},
+{
+  "type": "node",
+  "id": 1448134739,
+  "lat": 27.3999312,
+  "lon": 76.3164873,
+  "tags": {
+    "name": "Thanagazi",
+    "name:hi": "थानागाजी",
+    "place": "town",
+    "population": "13500"
+  }
+},
+{
+  "type": "node",
+  "id": 1494011692,
+  "lat": 27.5645949,
+  "lon": 76.6132248,
+  "tags": {
+    "capital": "5",
+    "name": "Alwar",
+    "name:ar": "ألور",
+    "name:az-Arab": "الوار",
+    "name:azb": "الوار",
+    "name:de": "Alwar",
+    "name:es": "Алвар",
+    "name:fa": "الوار",
+    "name:hi": "अल्वार",
+    "name:ja": "アルワル",
+    "name:kn": "ಅಲ್ವಾರ್",
+    "name:ks": "الور",
+    "name:ml": "അൽവാർ",
+    "name:mr": "अल्वार",
+    "name:pa": "ਅਲਵਰ",
+    "name:pnb": "الڡر",
+    "name:ru": "Алвар",
+    "name:sr": "Алвар",
+    "name:te": "అల్వార్",
+    "name:uk": "Алвар",
+    "name:ur": "الور",
+    "name:zh": "阿尔瓦尔",
+    "place": "city",
+    "population": "315300",
+    "postal_code": "301001",
+    "source": "AND",
+    "wikidata": "Q2722762"
+  }
+},
+{
+  "type": "node",
+  "id": 1524492247,
+  "lat": 26.4063103,
+  "lon": 75.8600789,
+  "tags": {
+    "alt_name": "Banasthali",
+    "name": "Vanasthali",
+    "name:hi": "बनस्थली",
+    "place": "town",
+    "population": "12800",
+    "wikidata": "Q1112298"
+  }
+},
+{
+  "type": "node",
+  "id": 1685928362,
+  "lat": 27.8178069,
+  "lon": 74.4427888,
+  "tags": {
+    "name": "Chhapar",
+    "name:hi": "छापर",
+    "place": "town",
+    "population": "19700",
+    "postal_code": "331502",
+    "wikidata": "Q888928",
+    "wikipedia": "en:Chhapar"
+  }
+},
+{
+  "type": "node",
+  "id": 1710160200,
+  "lat": 27.7018278,
+  "lon": 74.4687070,
+  "tags": {
+    "name": "Sujangarh",
+    "name:hi": "सुजानगढ़",
+    "name:ml": "സുജാൻഗഢ്",
+    "name:ru": "Суджангарх",
+    "name:ta": "ஸுஜான்கர்ஹ்",
+    "place": "town",
+    "population": "101500",
+    "postal_code": "331507",
+    "wikidata": "Q2248468"
+  }
+},
+{
+  "type": "node",
+  "id": 1713347305,
+  "lat": 27.4029944,
+  "lon": 74.5778450,
+  "tags": {
+    "name": "Didwana",
+    "name:hi": "डीडवाना",
+    "name:ru": "Дидвана",
+    "place": "town",
+    "population": "53300",
+    "postal_code": "341300",
+    "wikidata": "Q1264589",
+    "wikipedia": "en:Didwana"
+  }
+},
+{
+  "type": "node",
+  "id": 1719350334,
+  "lat": 26.5769773,
+  "lon": 75.5586964,
+  "tags": {
+    "name": "Phagi",
+    "name:hi": "फागी",
+    "place": "town",
+    "population": "12700",
+    "postal_code": "303005"
+  }
+},
+{
+  "type": "node",
+  "id": 1719463763,
+  "lat": 26.9110014,
+  "lon": 75.1848367,
+  "tags": {
+    "name": "Sambhar",
+    "name:en": "Sambhar",
+    "name:hi": "सांभर",
+    "place": "town",
+    "population": "22300",
+    "postal_code": "303600",
+    "wikidata": "Q1925370"
+  }
+},
+{
+  "type": "node",
+  "id": 1719591496,
+  "lat": 26.6059831,
+  "lon": 75.9430338,
+  "tags": {
+    "name": "Chaksu",
+    "name:hi": "चाकसू",
+    "place": "town",
+    "population": "33400",
+    "postal_code": "303900",
+    "wikidata": "Q861891",
+    "wikipedia": "en:Chaksu"
+  }
+},
+{
+  "type": "node",
+  "id": 1739310613,
+  "lat": 27.8905800,
+  "lon": 76.1107826,
+  "tags": {
+    "name": "Nangal Chaudhri",
+    "place": "town",
+    "population": "7368",
+    "postal_code": "123001",
+    "wikidata": "Q17077319"
+  }
+},
+{
+  "type": "node",
+  "id": 1776763465,
+  "lat": 27.8177405,
+  "lon": 76.7279416,
+  "tags": {
+    "name": "Kishangarh Bas",
+    "name:hi": "किशनगढ़ बास",
+    "place": "town",
+    "population": "12400",
+    "postal_code": "301405",
+    "wikidata": "Q2238961"
+  }
+},
+{
+  "type": "node",
+  "id": 1777208087,
+  "lat": 27.1500097,
+  "lon": 76.5828235,
+  "tags": {
+    "name": "Baswa",
+    "name:hi": "बसवा",
+    "place": "town",
+    "population": "15500",
+    "postal_code": "303327"
+  }
+},
+{
+  "type": "node",
+  "id": 1777208753,
+  "lat": 27.2368043,
+  "lon": 76.6226801,
+  "tags": {
+    "name": "Rajgarh",
+    "name:en": "Rajgarh",
+    "name:hi": "राजगढ़",
+    "place": "town",
+    "population": "26600",
+    "postal_code": "301408",
+    "wikidata": "Q3813222"
+  }
+},
+{
+  "type": "node",
+  "id": 1784372136,
+  "lat": 26.4766906,
+  "lon": 76.7232749,
+  "tags": {
+    "name": "Gangapur City",
+    "name:ar": "غنغابور",
+    "name:bn": "গঙ্গাপুর",
+    "name:fa": "گنگاپور",
+    "name:hi": "गंगापुर",
+    "name:ml": "ഗംഗാപൂർ",
+    "name:uk": "Ґанґапур",
+    "name:zh": "甘嘎普尔",
+    "place": "city",
+    "population": "119000",
+    "postal_code": "322200",
+    "wikidata": "Q12422879"
+  }
+},
+{
+  "type": "node",
+  "id": 1791135171,
+  "lat": 26.5582151,
+  "lon": 76.5595336,
+  "tags": {
+    "name": "Bamanwas",
+    "name:hi": "बामनवास",
+    "place": "town",
+    "population": "7600",
+    "postal_code": "322211"
+  }
+},
+{
+  "type": "node",
+  "id": 1838127707,
+  "lat": 27.8616166,
+  "lon": 76.5498876,
+  "tags": {
+    "name": "Mandawar",
+    "name:hi": "मण्डावर",
+    "place": "town",
+    "population": "6500",
+    "postal_code": "301407",
+    "wikidata": "Q6935754",
+    "wikipedia": "en:Mundawar"
+  }
+},
+{
+  "type": "node",
+  "id": 1886582781,
+  "lat": 26.9730310,
+  "lon": 75.3869944,
+  "tags": {
+    "name": "Jobner",
+    "name:hi": "जोबनेर",
+    "place": "town",
+    "population": "11400",
+    "postal_code": "303328",
+    "wikidata": "Q2442024"
+  }
+},
+{
+  "type": "node",
+  "id": 1886582782,
+  "lat": 27.1597154,
+  "lon": 75.3593637,
+  "tags": {
+    "alt_name": "Kishangarh Renwal",
+    "name": "Renwal",
+    "name:hi": "रेनवाल",
+    "place": "town",
+    "population": "29200",
+    "postal_code": "303603"
+  }
+},
+{
+  "type": "node",
+  "id": 1891611846,
+  "lat": 26.3593233,
+  "lon": 75.9251042,
+  "tags": {
+    "name": "Niwai",
+    "name:hi": "निवाई",
+    "place": "town",
+    "population": "37700",
+    "postal_code": "304021",
+    "wikidata": "Q2544247"
+  }
+},
+{
+  "type": "node",
+  "id": 1896942074,
+  "lat": 26.7082706,
+  "lon": 76.7174223,
+  "tags": {
+    "name": "Nadoti",
+    "name:hi": "नादोती",
+    "place": "town",
+    "population": "5300",
+    "postal_code": "322215"
+  }
+},
+{
+  "type": "node",
+  "id": 1898670537,
+  "lat": 26.7906107,
+  "lon": 75.2058747,
+  "tags": {
+    "alt_name": "Naraina",
+    "name": "Narayana",
+    "name:en": "Narayana",
+    "name:hi": "नरायना",
+    "place": "town",
+    "population": "13200"
+  }
+},
+{
+  "type": "node",
+  "id": 1898670737,
+  "lat": 26.7965008,
+  "lon": 74.8522452,
+  "tags": {
+    "name": "Roopangarh",
+    "name:hi": "रूपनगढ",
+    "place": "town",
+    "population": "12500"
+  }
+},
+{
+  "type": "node",
+  "id": 2024870770,
+  "lat": 27.0457102,
+  "lon": 76.5752695,
+  "tags": {
+    "name": "Bandikui",
+    "name:hi": "बांदीकुई",
+    "place": "town",
+    "population": "44600",
+    "postal_code": "303313",
+    "wikidata": "Q629203"
+  }
+},
+{
+  "type": "node",
+  "id": 2291360678,
+  "lat": 26.8870975,
+  "lon": 74.7653124,
+  "tags": {
+    "name": "Parbatsar",
+    "name:hi": "परबतसर",
+    "place": "town",
+    "population": "15200",
+    "postal_code": "341512",
+    "wikidata": "Q2718760",
+    "wikipedia": "en:Parbatsar"
+  }
+},
+{
+  "type": "node",
+  "id": 2409936302,
+  "lat": 26.8087953,
+  "lon": 75.5423119,
+  "tags": {
+    "name": "Bagru",
+    "name:en": "Bagru",
+    "name:hi": "बगरू",
+    "place": "town",
+    "population": "31200",
+    "wikidata": "Q625695",
+    "wikipedia": "en:Bagru"
+  }
+},
+{
+  "type": "node",
+  "id": 2410354746,
+  "lat": 27.7988498,
+  "lon": 76.6433325,
+  "tags": {
+    "name": "Khairthal",
+    "name:hi": "खैरथल",
+    "place": "town",
+    "population": "38300",
+    "wikidata": "Q2120063"
+  }
+},
+{
+  "type": "node",
+  "id": 2410909133,
+  "lat": 26.5630662,
+  "lon": 76.3281328,
+  "tags": {
+    "name": "Lalsot",
+    "name:hi": "लालसोट",
+    "name:ta": "லால்சோட்",
+    "place": "town",
+    "population": "34300",
+    "postal_code": "303503",
+    "wikidata": "Q2229760",
+    "wikipedia": "en:Lalsot"
+  }
+},
+{
+  "type": "node",
+  "id": 2410910344,
+  "lat": 27.4004329,
+  "lon": 74.9182758,
+  "tags": {
+    "name": "Losal",
+    "name:hi": "लोसल",
+    "place": "town",
+    "population": "28500",
+    "wikidata": "Q2233448",
+    "wikipedia": "en:Losal"
+  }
+},
+{
+  "type": "node",
+  "id": 2412135852,
+  "lat": 27.4344941,
+  "lon": 76.1823431,
+  "tags": {
+    "alt_name": "Bairat",
+    "name": "Viratnagar",
+    "name:hi": "विराटनगर",
+    "place": "town",
+    "population": "20600",
+    "wikidata": "Q2544533",
+    "wikipedia": "en:Viratnagar"
+  }
+},
+{
+  "type": "node",
+  "id": 5283018881,
+  "lat": 27.8868948,
+  "lon": 75.7623196,
+  "tags": {
+    "name": "Babai",
+    "name:hi": "बबाई",
+    "place": "town",
+    "population": "10600"
+  }
+},
+{
+  "type": "node",
+  "id": 5412716304,
+  "lat": 27.2936702,
+  "lon": 75.1908374,
+  "tags": {
+    "name": "Danta",
+    "name:hi": "दांता",
+    "place": "town",
+    "population": "15500",
+    "wikidata": "Q15212768"
+  }
+},
+{
+  "type": "node",
+  "id": 5422540556,
+  "lat": 26.3772606,
+  "lon": 75.4366350,
+  "tags": {
+    "addr:city": "Tonk",
+    "addr:postcode": "304504",
+    "district": "tonk",
+    "name": "Diggi",
+    "name:hi": "डिग्गी",
+    "place": "town",
+    "population": "10000"
+  }
+},
+{
+  "type": "node",
+  "id": 6174815382,
+  "lat": 26.8829570,
+  "lon": 76.4261770,
+  "tags": {
+    "name": "Bhandrej",
+    "name:hi": "भंडरेज",
+    "place": "town",
+    "population": "16800"
+  }
+},
+{
+  "type": "node",
+  "id": 6183316641,
+  "lat": 26.4847094,
+  "lon": 76.4371848,
+  "tags": {
+    "name": "Mandawari",
+    "name:hi": "मण्डावरी",
+    "place": "town",
+    "population": "10800"
+  }
+},
+{
+  "type": "node",
+  "id": 6184808489,
+  "lat": 26.7699052,
+  "lon": 76.2133598,
+  "tags": {
+    "name": "Lawan",
+    "name:hi": "लंवा",
+    "place": "town",
+    "population": "11000"
+  }
+},
+{
+  "type": "node",
+  "id": 6196762583,
+  "lat": 27.5864832,
+  "lon": 76.0735631,
+  "tags": {
+    "name": "Paota",
+    "name:hi": "पावटा",
+    "place": "town",
+    "population": "15500"
+  }
+},
+{
+  "type": "node",
+  "id": 6203699560,
+  "lat": 27.8181455,
+  "lon": 76.1667323,
+  "tags": {
+    "place": "town"
+  }
+},
+{
+  "type": "node",
+  "id": 6204386611,
+  "lat": 27.8968846,
+  "lon": 76.3684022,
+  "tags": {
+    "name": "Bardod",
+    "name:hi": "बरडोद",
+    "place": "town",
+    "population": "16400"
+  }
+},
+{
+  "type": "node",
+  "id": 6345925539,
+  "lat": 27.1657789,
+  "lon": 76.7381715,
+  "tags": {
+    "name": "Reni",
+    "name:hi": "रैणी",
+    "place": "town",
+    "population": "8900"
+  }
+},
+{
+  "type": "node",
+  "id": 6345926859,
+  "lat": 26.9162727,
+  "lon": 76.6896450,
+  "tags": {
+    "alt_name": "Sikari",
+    "name": "Sakrai",
+    "name:hi": "सिकराय",
+    "place": "town",
+    "population": "7800"
+  }
+},
+{
+  "type": "node",
+  "id": 6515040185,
+  "lat": 26.6720429,
+  "lon": 75.3615760,
+  "tags": {
+    "name": "Mauzamabad",
+    "name:en": "Mauzamabad",
+    "name:hi": "मौज़माबाद",
+    "place": "town",
+    "population": "8600"
+  }
+},
+{
+  "type": "node",
+  "id": 7090652629,
+  "lat": 27.0228991,
+  "lon": 76.0100376,
+  "tags": {
+    "name": "Jamwa Ramgarh",
+    "name:hi": "जमवा रामगढ़",
+    "place": "town",
+    "population": "7700",
+    "wikidata": "Q6148345"
+  }
+},
+{
+  "type": "node",
+  "id": 7090677361,
+  "lat": 27.4944345,
+  "lon": 74.9866247,
+  "tags": {
+    "name": "Dhod",
+    "name:hi": "धोद",
+    "place": "town",
+    "population": "8100"
+  }
+},
+{
+  "type": "node",
+  "id": 7183940289,
+  "lat": 27.2477622,
+  "lon": 75.6513941,
+  "tags": {
+    "name": "Govindgarh",
+    "name:hi": "गोविन्दगढ",
+    "name:uk": "Ґовіндрарг",
+    "place": "town",
+    "population": "7700"
+  }
+},
+{
+  "type": "node",
+  "id": 7183940290,
+  "lat": 27.3326875,
+  "lon": 75.6970668,
+  "tags": {
+    "name": "Khejroli",
+    "name:hi": "खेजरोली",
+    "place": "town",
+    "population": "16500"
+  }
+},
+{
+  "type": "node",
+  "id": 7183940291,
+  "lat": 27.2559362,
+  "lon": 75.4382121,
+  "tags": {
+    "name": "Badhal",
+    "name:hi": "बधाल",
+    "place": "town",
+    "population": "9500"
+  }
+},
+{
+  "type": "node",
+  "id": 7184239584,
+  "lat": 27.4195097,
+  "lon": 75.8224010,
+  "tags": {
+    "name": "Ajeetgarh",
+    "name:hi": "अजीतगढ",
+    "place": "town",
+    "population": "15400"
+  }
+},
+{
+  "type": "node",
+  "id": 7184636053,
+  "lat": 27.7396627,
+  "lon": 75.5527639,
+  "tags": {
+    "name": "Chhapoli",
+    "name:hi": "छापोली",
+    "place": "town",
+    "population": "10000"
+  }
+},
+{
+  "type": "node",
+  "id": 7197217200,
+  "lat": 27.6911664,
+  "lon": 75.6359982,
+  "tags": {
+    "name": "Guhala",
+    "name:hi": "गुहला",
+    "place": "town",
+    "population": "6300"
+  }
+},
+{
+  "type": "node",
+  "id": 7369038404,
+  "lat": 27.7992609,
+  "lon": 75.9753084,
+  "tags": {
+    "name": "Patan",
+    "name:hi": "पाटन",
+    "place": "town"
+  }
+},
+{
+  "type": "node",
+  "id": 8059854816,
+  "lat": 26.6971777,
+  "lon": 75.6750083,
+  "tags": {
+    "name": "Renwal Manji",
+    "name:hi": "रेनवाल मॅांजी",
+    "place": "town"
+  }
+},
+{
+  "type": "node",
+  "id": 11691796252,
+  "lat": 27.6264466,
+  "lon": 75.1733242,
+  "tags": {
+    "name": "Milan Marriage Garden And Party Lawn",
+    "place": "town"
+  }
+},
+{
+  "type": "node",
+  "id": 12852213066,
+  "lat": 27.6282681,
+  "lon": 75.1630200,
+  "tags": {
+    "name": "Jat Colony",
+    "name:hi": "जाट कॉलोनी",
+    "place": "city"
+  }
+}
+
+  ]
+}

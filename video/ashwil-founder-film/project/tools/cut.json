@@ -1,0 +1,1633 @@
+{
+ "segments": [
+  {
+   "src": [
+    0.45,
+    3.85
+   ],
+   "out": [
+    0.0,
+    3.178
+   ]
+  },
+  {
+   "src": [
+    4.4,
+    8.7
+   ],
+   "out": [
+    3.178,
+    7.196
+   ]
+  },
+  {
+   "src": [
+    8.8,
+    12.3
+   ],
+   "out": [
+    7.196,
+    10.467
+   ]
+  },
+  {
+   "src": [
+    12.45,
+    15.05
+   ],
+   "out": [
+    10.467,
+    12.897
+   ]
+  },
+  {
+   "src": [
+    15.25,
+    17.3
+   ],
+   "out": [
+    12.897,
+    14.813
+   ]
+  },
+  {
+   "src": [
+    17.35,
+    19.55
+   ],
+   "out": [
+    14.813,
+    16.869
+   ]
+  },
+  {
+   "src": [
+    20.33,
+    23.95
+   ],
+   "out": [
+    16.869,
+    20.252
+   ]
+  },
+  {
+   "src": [
+    25.45,
+    26.05
+   ],
+   "out": [
+    20.252,
+    20.813
+   ]
+  },
+  {
+   "src": [
+    26.72,
+    31.05
+   ],
+   "out": [
+    20.813,
+    24.86
+   ]
+  },
+  {
+   "src": [
+    31.48,
+    33.15
+   ],
+   "out": [
+    24.86,
+    26.421
+   ]
+  },
+  {
+   "src": [
+    35.25,
+    38.7
+   ],
+   "out": [
+    26.421,
+    29.645
+   ]
+  },
+  {
+   "src": [
+    39.05,
+    43.3
+   ],
+   "out": [
+    29.645,
+    33.617
+   ]
+  },
+  {
+   "src": [
+    43.82,
+    45.8
+   ],
+   "out": [
+    33.617,
+    35.467
+   ]
+  },
+  {
+   "src": [
+    46.3,
+    50.92
+   ],
+   "out": [
+    35.467,
+    39.785
+   ]
+  },
+  {
+   "src": [
+    51.2,
+    62.05
+   ],
+   "out": [
+    39.785,
+    49.925
+   ]
+  },
+  {
+   "src": [
+    66.85,
+    72.42
+   ],
+   "out": [
+    49.925,
+    55.131
+   ]
+  },
+  {
+   "src": [
+    72.75,
+    75.3
+   ],
+   "out": [
+    55.131,
+    57.514
+   ]
+  },
+  {
+   "src": [
+    75.35,
+    79.4
+   ],
+   "out": [
+    57.514,
+    61.299
+   ]
+  }
+ ],
+ "words": [
+  {
+   "text": "Hello,",
+   "start": 0.103,
+   "end": 0.551,
+   "src": 0.56
+  },
+  {
+   "text": "my",
+   "start": 0.551,
+   "end": 0.626,
+   "src": 1.04
+  },
+  {
+   "text": "name",
+   "start": 0.626,
+   "end": 0.776,
+   "src": 1.12
+  },
+  {
+   "text": "is",
+   "start": 0.776,
+   "end": 0.85,
+   "src": 1.28
+  },
+  {
+   "text": "Ashwil",
+   "start": 0.85,
+   "end": 1.449,
+   "src": 1.36
+  },
+  {
+   "text": "and",
+   "start": 1.449,
+   "end": 1.598,
+   "src": 2.0
+  },
+  {
+   "text": "I",
+   "start": 1.598,
+   "end": 1.673,
+   "src": 2.16
+  },
+  {
+   "text": "come",
+   "start": 1.673,
+   "end": 1.748,
+   "src": 2.24
+  },
+  {
+   "text": "from",
+   "start": 1.748,
+   "end": 1.897,
+   "src": 2.32
+  },
+  {
+   "text": "the",
+   "start": 1.897,
+   "end": 1.972,
+   "src": 2.48
+  },
+  {
+   "text": "city",
+   "start": 1.972,
+   "end": 2.121,
+   "src": 2.56
+  },
+  {
+   "text": "of",
+   "start": 2.121,
+   "end": 2.196,
+   "src": 2.72
+  },
+  {
+   "text": "Jaipur",
+   "start": 2.196,
+   "end": 2.72,
+   "src": 2.8
+  },
+  {
+   "text": "Rajasthan.",
+   "start": 2.72,
+   "end": 3.178,
+   "src": 3.36
+  },
+  {
+   "text": "As",
+   "start": 3.252,
+   "end": 3.477,
+   "src": 4.48
+  },
+  {
+   "text": "a",
+   "start": 3.477,
+   "end": 3.701,
+   "src": 4.72
+  },
+  {
+   "text": "child",
+   "start": 3.701,
+   "end": 4.224,
+   "src": 4.96
+  },
+  {
+   "text": "who",
+   "start": 4.224,
+   "end": 4.449,
+   "src": 5.52
+  },
+  {
+   "text": "was",
+   "start": 4.449,
+   "end": 4.598,
+   "src": 5.76
+  },
+  {
+   "text": "born",
+   "start": 4.598,
+   "end": 4.897,
+   "src": 5.92
+  },
+  {
+   "text": "in",
+   "start": 4.897,
+   "end": 5.047,
+   "src": 6.24
+  },
+  {
+   "text": "a",
+   "start": 5.047,
+   "end": 5.121,
+   "src": 6.4
+  },
+  {
+   "text": "country",
+   "start": 5.121,
+   "end": 5.421,
+   "src": 6.48
+  },
+  {
+   "text": "with",
+   "start": 5.421,
+   "end": 5.57,
+   "src": 6.8
+  },
+  {
+   "text": "more",
+   "start": 5.57,
+   "end": 5.72,
+   "src": 6.96
+  },
+  {
+   "text": "than",
+   "start": 5.72,
+   "end": 5.944,
+   "src": 7.12
+  },
+  {
+   "text": "100",
+   "start": 5.944,
+   "end": 6.243,
+   "src": 7.36
+  },
+  {
+   "text": "crore",
+   "start": 6.243,
+   "end": 6.766,
+   "src": 7.68
+  },
+  {
+   "text": "people,",
+   "start": 6.766,
+   "end": 7.196,
+   "src": 8.24
+  },
+  {
+   "text": "it",
+   "start": 7.271,
+   "end": 7.421,
+   "src": 8.88
+  },
+  {
+   "text": "was",
+   "start": 7.421,
+   "end": 7.57,
+   "src": 9.04
+  },
+  {
+   "text": "always",
+   "start": 7.57,
+   "end": 7.869,
+   "src": 9.2
+  },
+  {
+   "text": "difficult",
+   "start": 7.869,
+   "end": 8.318,
+   "src": 9.52
+  },
+  {
+   "text": "to",
+   "start": 8.318,
+   "end": 8.542,
+   "src": 10.0
+  },
+  {
+   "text": "get",
+   "start": 8.542,
+   "end": 8.766,
+   "src": 10.24
+  },
+  {
+   "text": "into",
+   "start": 8.766,
+   "end": 9.065,
+   "src": 10.48
+  },
+  {
+   "text": "something",
+   "start": 9.065,
+   "end": 9.364,
+   "src": 10.8
+  },
+  {
+   "text": "that",
+   "start": 9.364,
+   "end": 9.589,
+   "src": 11.12
+  },
+  {
+   "text": "was",
+   "start": 9.589,
+   "end": 9.738,
+   "src": 11.36
+  },
+  {
+   "text": "prestigious.",
+   "start": 9.738,
+   "end": 10.467,
+   "src": 11.52
+  },
+  {
+   "text": "I",
+   "start": 10.57,
+   "end": 10.72,
+   "src": 12.56
+  },
+  {
+   "text": "am",
+   "start": 10.72,
+   "end": 10.869,
+   "src": 12.72
+  },
+  {
+   "text": "very",
+   "start": 10.869,
+   "end": 11.019,
+   "src": 12.88
+  },
+  {
+   "text": "proud",
+   "start": 11.019,
+   "end": 11.318,
+   "src": 13.04
+  },
+  {
+   "text": "of",
+   "start": 11.318,
+   "end": 11.467,
+   "src": 13.36
+  },
+  {
+   "text": "the",
+   "start": 11.467,
+   "end": 11.617,
+   "src": 13.52
+  },
+  {
+   "text": "fact",
+   "start": 11.617,
+   "end": 11.841,
+   "src": 13.68
+  },
+  {
+   "text": "that",
+   "start": 11.841,
+   "end": 12.065,
+   "src": 13.92
+  },
+  {
+   "text": "I",
+   "start": 12.065,
+   "end": 12.215,
+   "src": 14.16
+  },
+  {
+   "text": "got",
+   "start": 12.215,
+   "end": 12.439,
+   "src": 14.32
+  },
+  {
+   "text": "myself",
+   "start": 12.439,
+   "end": 12.897,
+   "src": 14.56
+  },
+  {
+   "text": "a",
+   "start": 12.925,
+   "end": 13.075,
+   "src": 15.28
+  },
+  {
+   "text": "ten",
+   "start": 13.075,
+   "end": 13.299,
+   "src": 15.44
+  },
+  {
+   "text": "on",
+   "start": 13.299,
+   "end": 13.449,
+   "src": 15.68
+  },
+  {
+   "text": "ten",
+   "start": 13.449,
+   "end": 13.598,
+   "src": 15.84
+  },
+  {
+   "text": "C",
+   "start": 13.598,
+   "end": 13.748,
+   "src": 16.0
+  },
+  {
+   "text": "G",
+   "start": 13.748,
+   "end": 13.822,
+   "src": 16.16
+  },
+  {
+   "text": "P",
+   "start": 13.822,
+   "end": 13.972,
+   "src": 16.24
+  },
+  {
+   "text": "in",
+   "start": 13.972,
+   "end": 14.121,
+   "src": 16.4
+  },
+  {
+   "text": "class",
+   "start": 14.121,
+   "end": 14.346,
+   "src": 16.56
+  },
+  {
+   "text": "tenth,",
+   "start": 14.346,
+   "end": 14.813,
+   "src": 16.8
+  },
+  {
+   "text": "an",
+   "start": 14.897,
+   "end": 15.121,
+   "src": 17.44
+  },
+  {
+   "text": "N",
+   "start": 15.121,
+   "end": 15.271,
+   "src": 17.68
+  },
+  {
+   "text": "T",
+   "start": 15.271,
+   "end": 15.421,
+   "src": 17.84
+  },
+  {
+   "text": "S",
+   "start": 15.421,
+   "end": 15.495,
+   "src": 18.0
+  },
+  {
+   "text": "C",
+   "start": 15.495,
+   "end": 15.72,
+   "src": 18.08
+  },
+  {
+   "text": "Scholar",
+   "start": 15.72,
+   "end": 16.093,
+   "src": 18.32
+  },
+  {
+   "text": "in",
+   "start": 16.093,
+   "end": 16.243,
+   "src": 18.72
+  },
+  {
+   "text": "class",
+   "start": 16.243,
+   "end": 16.467,
+   "src": 18.88
+  },
+  {
+   "text": "tenth,",
+   "start": 16.467,
+   "end": 16.869,
+   "src": 19.12
+  },
+  {
+   "text": "got",
+   "start": 16.935,
+   "end": 17.084,
+   "src": 20.4
+  },
+  {
+   "text": "into",
+   "start": 17.084,
+   "end": 17.308,
+   "src": 20.56
+  },
+  {
+   "text": "I",
+   "start": 17.308,
+   "end": 17.458,
+   "src": 20.8
+  },
+  {
+   "text": "D",
+   "start": 17.458,
+   "end": 17.607,
+   "src": 20.96
+  },
+  {
+   "text": "Delhi",
+   "start": 17.607,
+   "end": 18.131,
+   "src": 21.12
+  },
+  {
+   "text": "with",
+   "start": 18.131,
+   "end": 18.28,
+   "src": 21.68
+  },
+  {
+   "text": "the",
+   "start": 18.28,
+   "end": 18.43,
+   "src": 21.84
+  },
+  {
+   "text": "national",
+   "start": 18.43,
+   "end": 18.804,
+   "src": 22.0
+  },
+  {
+   "text": "category",
+   "start": 18.804,
+   "end": 19.327,
+   "src": 22.4
+  },
+  {
+   "text": "rank",
+   "start": 19.327,
+   "end": 19.477,
+   "src": 22.96
+  },
+  {
+   "text": "of",
+   "start": 19.477,
+   "end": 19.701,
+   "src": 23.12
+  },
+  {
+   "text": "ninety",
+   "start": 19.701,
+   "end": 20.0,
+   "src": 23.36
+  },
+  {
+   "text": "eight,",
+   "start": 20.0,
+   "end": 20.252,
+   "src": 23.68
+  },
+  {
+   "text": "became",
+   "start": 20.318,
+   "end": 20.813,
+   "src": 25.52
+  },
+  {
+   "text": "the",
+   "start": 20.888,
+   "end": 21.112,
+   "src": 26.8
+  },
+  {
+   "text": "first",
+   "start": 21.112,
+   "end": 21.336,
+   "src": 27.04
+  },
+  {
+   "text": "in",
+   "start": 21.336,
+   "end": 21.486,
+   "src": 27.28
+  },
+  {
+   "text": "my",
+   "start": 21.486,
+   "end": 21.636,
+   "src": 27.44
+  },
+  {
+   "text": "family",
+   "start": 21.636,
+   "end": 21.935,
+   "src": 27.6
+  },
+  {
+   "text": "to",
+   "start": 21.935,
+   "end": 22.084,
+   "src": 27.92
+  },
+  {
+   "text": "prepare",
+   "start": 22.084,
+   "end": 22.308,
+   "src": 28.08
+  },
+  {
+   "text": "for",
+   "start": 22.308,
+   "end": 22.458,
+   "src": 28.32
+  },
+  {
+   "text": "civ",
+   "start": 22.458,
+   "end": 22.832,
+   "src": 28.48
+  },
+  {
+   "text": "services",
+   "start": 22.832,
+   "end": 23.505,
+   "src": 28.88
+  },
+  {
+   "text": "and",
+   "start": 23.505,
+   "end": 23.729,
+   "src": 29.6
+  },
+  {
+   "text": "reached",
+   "start": 23.729,
+   "end": 24.028,
+   "src": 29.84
+  },
+  {
+   "text": "this",
+   "start": 24.028,
+   "end": 24.252,
+   "src": 30.16
+  },
+  {
+   "text": "second",
+   "start": 24.252,
+   "end": 24.551,
+   "src": 30.4
+  },
+  {
+   "text": "stage",
+   "start": 24.551,
+   "end": 24.86,
+   "src": 30.72
+  },
+  {
+   "text": "which",
+   "start": 24.916,
+   "end": 25.14,
+   "src": 31.54
+  },
+  {
+   "text": "only",
+   "start": 25.14,
+   "end": 25.364,
+   "src": 31.78
+  },
+  {
+   "text": "one",
+   "start": 25.364,
+   "end": 25.589,
+   "src": 32.02
+  },
+  {
+   "text": "percent",
+   "start": 25.589,
+   "end": 25.813,
+   "src": 32.26
+  },
+  {
+   "text": "of",
+   "start": 25.813,
+   "end": 25.888,
+   "src": 32.5
+  },
+  {
+   "text": "the",
+   "start": 25.888,
+   "end": 25.963,
+   "src": 32.58
+  },
+  {
+   "text": "people",
+   "start": 25.963,
+   "end": 26.187,
+   "src": 32.66
+  },
+  {
+   "text": "do.",
+   "start": 26.187,
+   "end": 26.421,
+   "src": 32.9
+  },
+  {
+   "text": "I",
+   "start": 26.467,
+   "end": 26.617,
+   "src": 35.3
+  },
+  {
+   "text": "have",
+   "start": 26.617,
+   "end": 26.692,
+   "src": 35.46
+  },
+  {
+   "text": "proven",
+   "start": 26.692,
+   "end": 27.065,
+   "src": 35.54
+  },
+  {
+   "text": "time",
+   "start": 27.065,
+   "end": 27.215,
+   "src": 35.94
+  },
+  {
+   "text": "and",
+   "start": 27.215,
+   "end": 27.364,
+   "src": 36.1
+  },
+  {
+   "text": "often",
+   "start": 27.364,
+   "end": 27.888,
+   "src": 36.26
+  },
+  {
+   "text": "that",
+   "start": 27.888,
+   "end": 28.112,
+   "src": 36.82
+  },
+  {
+   "text": "I",
+   "start": 28.112,
+   "end": 28.336,
+   "src": 37.06
+  },
+  {
+   "text": "can",
+   "start": 28.336,
+   "end": 28.486,
+   "src": 37.3
+  },
+  {
+   "text": "reach",
+   "start": 28.486,
+   "end": 28.785,
+   "src": 37.46
+  },
+  {
+   "text": "the",
+   "start": 28.785,
+   "end": 28.86,
+   "src": 37.78
+  },
+  {
+   "text": "top",
+   "start": 28.86,
+   "end": 29.159,
+   "src": 37.86
+  },
+  {
+   "text": "one",
+   "start": 29.159,
+   "end": 29.383,
+   "src": 38.18
+  },
+  {
+   "text": "percent.",
+   "start": 29.383,
+   "end": 29.645,
+   "src": 38.42
+  },
+  {
+   "text": "I",
+   "start": 29.729,
+   "end": 29.879,
+   "src": 39.14
+  },
+  {
+   "text": "want",
+   "start": 29.879,
+   "end": 29.953,
+   "src": 39.3
+  },
+  {
+   "text": "to",
+   "start": 29.953,
+   "end": 30.103,
+   "src": 39.38
+  },
+  {
+   "text": "create",
+   "start": 30.103,
+   "end": 30.327,
+   "src": 39.54
+  },
+  {
+   "text": "a",
+   "start": 30.327,
+   "end": 30.402,
+   "src": 39.78
+  },
+  {
+   "text": "company",
+   "start": 30.402,
+   "end": 30.701,
+   "src": 39.86
+  },
+  {
+   "text": "now",
+   "start": 30.701,
+   "end": 30.925,
+   "src": 40.18
+  },
+  {
+   "text": "because",
+   "start": 30.925,
+   "end": 31.075,
+   "src": 40.42
+  },
+  {
+   "text": "I'm",
+   "start": 31.075,
+   "end": 31.374,
+   "src": 40.58
+  },
+  {
+   "text": "really",
+   "start": 31.374,
+   "end": 31.523,
+   "src": 40.9
+  },
+  {
+   "text": "passionate",
+   "start": 31.523,
+   "end": 31.897,
+   "src": 41.06
+  },
+  {
+   "text": "about",
+   "start": 31.897,
+   "end": 32.047,
+   "src": 41.46
+  },
+  {
+   "text": "bringing",
+   "start": 32.047,
+   "end": 32.346,
+   "src": 41.62
+  },
+  {
+   "text": "more",
+   "start": 32.346,
+   "end": 32.57,
+   "src": 41.94
+  },
+  {
+   "text": "employment",
+   "start": 32.57,
+   "end": 33.019,
+   "src": 42.18
+  },
+  {
+   "text": "opportunities.",
+   "start": 33.019,
+   "end": 33.617,
+   "src": 42.66
+  },
+  {
+   "text": "currently",
+   "start": 33.654,
+   "end": 33.953,
+   "src": 43.86
+  },
+  {
+   "text": "I'm",
+   "start": 33.953,
+   "end": 34.178,
+   "src": 44.18
+  },
+  {
+   "text": "working",
+   "start": 34.178,
+   "end": 34.327,
+   "src": 44.42
+  },
+  {
+   "text": "in",
+   "start": 34.327,
+   "end": 34.402,
+   "src": 44.58
+  },
+  {
+   "text": "the",
+   "start": 34.402,
+   "end": 34.477,
+   "src": 44.66
+  },
+  {
+   "text": "real",
+   "start": 34.477,
+   "end": 34.701,
+   "src": 44.74
+  },
+  {
+   "text": "estate",
+   "start": 34.701,
+   "end": 35.075,
+   "src": 44.98
+  },
+  {
+   "text": "sector",
+   "start": 35.075,
+   "end": 35.467,
+   "src": 45.38
+  },
+  {
+   "text": "I",
+   "start": 35.505,
+   "end": 35.654,
+   "src": 46.34
+  },
+  {
+   "text": "have",
+   "start": 35.654,
+   "end": 35.804,
+   "src": 46.5
+  },
+  {
+   "text": "seen",
+   "start": 35.804,
+   "end": 36.028,
+   "src": 46.66
+  },
+  {
+   "text": "a",
+   "start": 36.028,
+   "end": 36.178,
+   "src": 46.9
+  },
+  {
+   "text": "lot",
+   "start": 36.178,
+   "end": 36.327,
+   "src": 47.06
+  },
+  {
+   "text": "of",
+   "start": 36.327,
+   "end": 36.477,
+   "src": 47.22
+  },
+  {
+   "text": "problems",
+   "start": 36.477,
+   "end": 36.776,
+   "src": 47.38
+  },
+  {
+   "text": "and",
+   "start": 36.776,
+   "end": 36.925,
+   "src": 47.7
+  },
+  {
+   "text": "I",
+   "start": 36.925,
+   "end": 37.075,
+   "src": 47.86
+  },
+  {
+   "text": "want",
+   "start": 37.075,
+   "end": 37.224,
+   "src": 48.02
+  },
+  {
+   "text": "to",
+   "start": 37.224,
+   "end": 37.299,
+   "src": 48.18
+  },
+  {
+   "text": "solve",
+   "start": 37.299,
+   "end": 37.673,
+   "src": 48.26
+  },
+  {
+   "text": "all",
+   "start": 37.673,
+   "end": 37.748,
+   "src": 48.66
+  },
+  {
+   "text": "of",
+   "start": 37.748,
+   "end": 37.897,
+   "src": 48.74
+  },
+  {
+   "text": "those",
+   "start": 37.897,
+   "end": 38.121,
+   "src": 48.9
+  },
+  {
+   "text": "problems",
+   "start": 38.121,
+   "end": 38.645,
+   "src": 49.14
+  },
+  {
+   "text": "with",
+   "start": 38.645,
+   "end": 38.869,
+   "src": 49.7
+  },
+  {
+   "text": "the",
+   "start": 38.869,
+   "end": 39.019,
+   "src": 49.94
+  },
+  {
+   "text": "help",
+   "start": 39.019,
+   "end": 39.168,
+   "src": 50.1
+  },
+  {
+   "text": "of",
+   "start": 39.168,
+   "end": 39.243,
+   "src": 50.26
+  },
+  {
+   "text": "technology.",
+   "start": 39.243,
+   "end": 39.785,
+   "src": 50.34
+  },
+  {
+   "text": "In",
+   "start": 39.841,
+   "end": 39.991,
+   "src": 51.26
+  },
+  {
+   "text": "the",
+   "start": 39.991,
+   "end": 40.065,
+   "src": 51.42
+  },
+  {
+   "text": "next",
+   "start": 40.065,
+   "end": 40.29,
+   "src": 51.5
+  },
+  {
+   "text": "five",
+   "start": 40.29,
+   "end": 40.514,
+   "src": 51.74
+  },
+  {
+   "text": "years,",
+   "start": 40.514,
+   "end": 40.813,
+   "src": 51.98
+  },
+  {
+   "text": "I",
+   "start": 40.813,
+   "end": 40.963,
+   "src": 52.3
+  },
+  {
+   "text": "want",
+   "start": 40.963,
+   "end": 41.112,
+   "src": 52.46
+  },
+  {
+   "text": "to",
+   "start": 41.112,
+   "end": 41.262,
+   "src": 52.62
+  },
+  {
+   "text": "spend",
+   "start": 41.262,
+   "end": 41.561,
+   "src": 52.78
+  },
+  {
+   "text": "my",
+   "start": 41.561,
+   "end": 41.785,
+   "src": 53.1
+  },
+  {
+   "text": "time",
+   "start": 41.785,
+   "end": 42.009,
+   "src": 53.34
+  },
+  {
+   "text": "solving",
+   "start": 42.009,
+   "end": 42.533,
+   "src": 53.58
+  },
+  {
+   "text": "the",
+   "start": 42.533,
+   "end": 42.682,
+   "src": 54.14
+  },
+  {
+   "text": "real",
+   "start": 42.682,
+   "end": 42.907,
+   "src": 54.3
+  },
+  {
+   "text": "estate",
+   "start": 42.907,
+   "end": 43.28,
+   "src": 54.54
+  },
+  {
+   "text": "market",
+   "start": 43.28,
+   "end": 43.579,
+   "src": 54.94
+  },
+  {
+   "text": "of",
+   "start": 43.579,
+   "end": 43.804,
+   "src": 55.26
+  },
+  {
+   "text": "India",
+   "start": 43.804,
+   "end": 44.327,
+   "src": 55.5
+  },
+  {
+   "text": "and",
+   "start": 44.327,
+   "end": 44.551,
+   "src": 56.06
+  },
+  {
+   "text": "make",
+   "start": 44.551,
+   "end": 44.776,
+   "src": 56.3
+  },
+  {
+   "text": "more",
+   "start": 44.776,
+   "end": 45.0,
+   "src": 56.54
+  },
+  {
+   "text": "employment",
+   "start": 45.0,
+   "end": 45.598,
+   "src": 56.78
+  },
+  {
+   "text": "opportunities",
+   "start": 45.598,
+   "end": 46.196,
+   "src": 57.42
+  },
+  {
+   "text": "for",
+   "start": 46.196,
+   "end": 46.346,
+   "src": 58.06
+  },
+  {
+   "text": "not",
+   "start": 46.346,
+   "end": 46.495,
+   "src": 58.22
+  },
+  {
+   "text": "just",
+   "start": 46.495,
+   "end": 46.645,
+   "src": 58.38
+  },
+  {
+   "text": "my",
+   "start": 46.645,
+   "end": 46.794,
+   "src": 58.54
+  },
+  {
+   "text": "employees",
+   "start": 46.794,
+   "end": 47.393,
+   "src": 58.7
+  },
+  {
+   "text": "but",
+   "start": 47.393,
+   "end": 47.542,
+   "src": 59.34
+  },
+  {
+   "text": "also",
+   "start": 47.542,
+   "end": 47.766,
+   "src": 59.5
+  },
+  {
+   "text": "for",
+   "start": 47.766,
+   "end": 47.991,
+   "src": 59.74
+  },
+  {
+   "text": "my",
+   "start": 47.991,
+   "end": 48.14,
+   "src": 59.98
+  },
+  {
+   "text": "stakeholders",
+   "start": 48.14,
+   "end": 48.738,
+   "src": 60.14
+  },
+  {
+   "text": "which",
+   "start": 48.738,
+   "end": 48.888,
+   "src": 60.78
+  },
+  {
+   "text": "will",
+   "start": 48.888,
+   "end": 49.037,
+   "src": 60.94
+  },
+  {
+   "text": "be",
+   "start": 49.037,
+   "end": 49.187,
+   "src": 61.1
+  },
+  {
+   "text": "using",
+   "start": 49.187,
+   "end": 49.411,
+   "src": 61.26
+  },
+  {
+   "text": "my",
+   "start": 49.411,
+   "end": 49.636,
+   "src": 61.5
+  },
+  {
+   "text": "platform.",
+   "start": 49.636,
+   "end": 49.925,
+   "src": 61.74
+  },
+  {
+   "text": "make",
+   "start": 49.972,
+   "end": 50.121,
+   "src": 66.9
+  },
+  {
+   "text": "the",
+   "start": 50.121,
+   "end": 50.196,
+   "src": 67.06
+  },
+  {
+   "text": "market",
+   "start": 50.196,
+   "end": 50.495,
+   "src": 67.14
+  },
+  {
+   "text": "more",
+   "start": 50.495,
+   "end": 50.645,
+   "src": 67.46
+  },
+  {
+   "text": "transparent,",
+   "start": 50.645,
+   "end": 51.168,
+   "src": 67.62
+  },
+  {
+   "text": "fair,",
+   "start": 51.168,
+   "end": 51.542,
+   "src": 68.18
+  },
+  {
+   "text": "justifiable",
+   "start": 51.542,
+   "end": 52.383,
+   "src": 68.58
+  },
+  {
+   "text": "and",
+   "start": 52.664,
+   "end": 53.262,
+   "src": 69.78
+  },
+  {
+   "text": "make",
+   "start": 53.262,
+   "end": 53.785,
+   "src": 70.42
+  },
+  {
+   "text": "the",
+   "start": 53.785,
+   "end": 54.308,
+   "src": 70.98
+  },
+  {
+   "text": "last",
+   "start": 54.308,
+   "end": 54.832,
+   "src": 71.54
+  },
+  {
+   "text": "person",
+   "start": 54.832,
+   "end": 55.131,
+   "src": 72.1
+  },
+  {
+   "text": "also",
+   "start": 55.196,
+   "end": 55.57,
+   "src": 72.82
+  },
+  {
+   "text": "have",
+   "start": 55.57,
+   "end": 55.794,
+   "src": 73.22
+  },
+  {
+   "text": "access",
+   "start": 55.794,
+   "end": 56.243,
+   "src": 73.46
+  },
+  {
+   "text": "to",
+   "start": 56.243,
+   "end": 56.467,
+   "src": 73.94
+  },
+  {
+   "text": "the",
+   "start": 56.467,
+   "end": 56.692,
+   "src": 74.18
+  },
+  {
+   "text": "market",
+   "start": 56.692,
+   "end": 57.14,
+   "src": 74.42
+  },
+  {
+   "text": "around",
+   "start": 57.14,
+   "end": 57.364,
+   "src": 74.9
+  },
+  {
+   "text": "them",
+   "start": 57.364,
+   "end": 57.514,
+   "src": 75.14
+  },
+  {
+   "text": "so",
+   "start": 57.542,
+   "end": 57.692,
+   "src": 75.38
+  },
+  {
+   "text": "that",
+   "start": 57.692,
+   "end": 57.841,
+   "src": 75.54
+  },
+  {
+   "text": "they",
+   "start": 57.841,
+   "end": 57.991,
+   "src": 75.7
+  },
+  {
+   "text": "can",
+   "start": 57.991,
+   "end": 58.14,
+   "src": 75.86
+  },
+  {
+   "text": "also",
+   "start": 58.14,
+   "end": 58.364,
+   "src": 76.02
+  },
+  {
+   "text": "earn",
+   "start": 58.364,
+   "end": 58.664,
+   "src": 76.26
+  },
+  {
+   "text": "and",
+   "start": 58.664,
+   "end": 58.813,
+   "src": 76.58
+  },
+  {
+   "text": "increase",
+   "start": 58.813,
+   "end": 59.112,
+   "src": 76.74
+  },
+  {
+   "text": "my",
+   "start": 59.112,
+   "end": 59.336,
+   "src": 77.06
+  },
+  {
+   "text": "per",
+   "start": 59.336,
+   "end": 59.561,
+   "src": 77.3
+  },
+  {
+   "text": "capita",
+   "start": 59.561,
+   "end": 59.86,
+   "src": 77.54
+  },
+  {
+   "text": "income",
+   "start": 59.86,
+   "end": 60.159,
+   "src": 77.86
+  },
+  {
+   "text": "of",
+   "start": 60.159,
+   "end": 60.308,
+   "src": 78.18
+  },
+  {
+   "text": "my",
+   "start": 60.308,
+   "end": 60.458,
+   "src": 78.34
+  },
+  {
+   "text": "country's",
+   "start": 60.458,
+   "end": 60.832,
+   "src": 78.5
+  },
+  {
+   "text": "citizens.",
+   "start": 60.832,
+   "end": 61.299,
+   "src": 78.9
+  }
+ ],
+ "duration": 61.299
+}

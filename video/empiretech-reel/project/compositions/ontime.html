@@ -1,0 +1,51 @@
+<template>
+  <style>
+    @font-face { font-family: "Anton"; src: url("assets/fonts/anton-latin-400-normal.woff2") format("woff2"); font-weight: 400; }
+    @font-face { font-family: "MontX"; src: url("assets/fonts/montserrat-latin-800-normal.woff2") format("woff2"); font-weight: 800; }
+    #root { position: absolute; inset: 0; pointer-events: none; }
+    #ot-host { position: absolute; inset: 0; }
+    #ot-card {
+      position: absolute; left: 70px; right: 70px; top: 200px; padding: 26px 34px 30px; border-radius: 30px;
+      background: rgba(22, 26, 51, 0.9); border: 4px solid #d4af6a; box-shadow: 0 20px 50px rgba(0,0,0,0.45);
+    }
+    #ot-row { display: flex; align-items: center; gap: 22px; height: 70px; }
+    #ot-clock { width: 66px; height: 66px; flex: 0 0 auto; }
+    #ot-clock circle { fill: none; stroke: #f0cd85; stroke-width: 4; }
+    #ot-hand-m, #ot-hand-h { stroke: #f0cd85; stroke-width: 4; stroke-linecap: round; transform-origin: 33px 33px; }
+    #ot-label { position: relative; flex: 1; height: 70px; font-family: "MontX", sans-serif; font-weight: 800; font-size: 40px; letter-spacing: 0.08em; color: #fff; }
+    #ot-label span { position: absolute; left: 0; top: 50%; margin-top: -26px; white-space: nowrap; }
+    #ot-done { color: #f0cd85; opacity: 0; }
+    #ot-pct { font-family: "Anton", sans-serif; font-size: 64px; color: #f0cd85; width: 170px; text-align: right; }
+    #ot-bar { margin-top: 20px; height: 26px; border-radius: 13px; background: rgba(255,255,255,0.12); overflow: hidden; }
+    #ot-fill { height: 100%; width: 100%; border-radius: 13px; background: linear-gradient(90deg, #9c7a3c, #f0cd85); transform-origin: 0 50%; transform: scaleX(0); }
+  </style>
+  <div id="root" data-composition-id="ontime" data-width="1080" data-height="1920">
+    <div id="ot-host" class="clip" data-start="0" data-duration="2.1">
+      <div id="ot-card">
+        <div id="ot-row">
+          <svg id="ot-clock" viewBox="0 0 66 66"><circle cx="33" cy="33" r="29"/><line id="ot-hand-h" x1="33" y1="33" x2="33" y2="18"/><line id="ot-hand-m" x1="33" y1="33" x2="48" y2="33"/></svg>
+          <div id="ot-label"><span id="ot-work">PROJECT PROGRESS</span><span id="ot-done">DELIVERED ON TIME</span></div>
+          <div id="ot-pct">0%</div>
+        </div>
+        <div id="ot-bar"><div id="ot-fill"></div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      const tl = gsap.timeline({ paused: true });
+      const pct = document.getElementById("ot-pct");
+      const counter = { v: 0 };
+      tl.fromTo("#ot-card", { opacity: 0, y: -60, filter: "blur(10px)" }, { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.35, ease: "expo.out" }, 0.05);
+      tl.fromTo("#ot-fill", { scaleX: 0 }, { scaleX: 1, duration: 1.05, ease: "power2.inOut" }, 0.15);
+      tl.fromTo(counter, { v: 0 }, { v: 100, duration: 1.05, ease: "power2.inOut", onUpdate: () => { pct.textContent = Math.round(counter.v) + "%"; } }, 0.15);
+      tl.fromTo("#ot-hand-m", { rotation: 0 }, { rotation: 720, duration: 1.05, ease: "power2.inOut" }, 0.15);
+      tl.fromTo("#ot-hand-h", { rotation: 0 }, { rotation: 60, duration: 1.05, ease: "power2.inOut" }, 0.15);
+      tl.to("#ot-work", { opacity: 0, y: -20, duration: 0.12 }, 1.22);
+      tl.fromTo("#ot-done", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.18, ease: "back.out(2)" }, 1.25);
+      tl.fromTo("#ot-card", { borderColor: "#d4af6a" }, { borderColor: "#f3d9a0", duration: 0.1 }, 1.22);
+      tl.to("#ot-card", { opacity: 0, duration: 0.1 }, 1.98);
+      window.__timelines["ontime"] = tl;
+    })();
+  </script>
+</template>

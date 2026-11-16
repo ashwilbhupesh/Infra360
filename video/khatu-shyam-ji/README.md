@@ -1,0 +1,22 @@
+# Khatu Shyam Ji — connectivity & temple triangle reel (text-led, no voice yet)
+
+- `Khatu_Shyam_Ji.mp4` (69.3 s) and `Khatu_Shyam_Ji_1.1x.mp4` (63.0 s), 1080×1920.
+- Hook: "Khatu Shyam Ji jaate ho? Agle 5 saal mein yeh jagah pehchaan nahi paoge."
+- Facts on screen: ~50 lakh during Lakkhi mela (Rajasthan Tourism via ThePrint); Kotputli–Kishangarh greenfield expressway ~181 km 6-lane (route drawn indicative);
+  Jaipur–Ringas NH-52 4→6 lane + Khatu ring road (approved, DPR stage; ring drawn indicative); Ringas–Khatu rail 17.49 km ~₹254 Cr, Sundarpura station
+  construction next year (Indian Express); ₹87.87 Cr Swadesh Darshan 2.0, first installment ₹8.78 Cr (Bhaskar English).
+- Sundarpura station picture is labelled "Concept image · not official design" (AI render; fake train board blurred).
+- Satellite: Sentinel-2 cloudless 2016 by EOX (CC BY 4.0). Music composed in code (`project/compose_music.py`).
+- Rebuild: `python3 project/build.py` from the work dir, then `npx hyperframes@0.8.221 render`.
+- v2: big glowing highlight around every city as it is named; existing Jaipur–Sikar rail and new Ringas–Khatu rail drawn as track;
+  new "Opportunity map" section (Khatu, Ringas, Chomu, Renwal expressway belt, Kishangarh, Kotputli, Salasar + Jeen Mata), labelled
+  "Possibilities, not guaranteed returns · lines indicative".
+- v3: no counting meters (values appear instantly); copy reframed around ease of travel, investment and area hype;
+  proposed Ringas–Khatu rail now draws in as track with a moving train (rail section and opportunity map).
+- v4: dive from space (India → Rajasthan → Khatu Shyam Ji) after the crowd shot, using NASA Blue Marble (public domain)
+  for the India/Rajasthan layers, colour-matched and feathered into the Sentinel-2 imagery.
+- VOICE: `Khatu_Shyam_Ji_VOICE.mp4` (82.8 s) and `_VOICE_1.1x.mp4` — Ashwil's Hinglish recording (retakes removed, pauses tightened, `project/cut.py`),
+  face for 0.78 s from the first word, captions verbatim (`project/phrases.json`), scenes time-warped to the voice (`ANCH` in `project/build.py`);
+  new "Toh chukiyega mat" card for the ad-libbed line. `project/build_text.py` is the text-only build.
+- VOICE v2 opening: idol on "Khatu Shyam Ji", full highway + rail teaser map on "agle 5 saal…", animated streams of bhakts
+  converging on Khatu from 8 directions on "lakhon bhakt", then the crowd photo as a popup.

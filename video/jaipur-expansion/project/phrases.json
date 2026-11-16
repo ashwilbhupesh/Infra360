@@ -1,0 +1,240 @@
+[
+{
+"k": 0,
+"s": 0.12,
+"e": 3.56,
+"t": "Jaipur mein property lene se pehle, Jaipur ka structure samajh lo.",
+"src": 0.62
+},
+{
+"k": 1,
+"s": 3.83,
+"e": 6.43,
+"t": "Jaipur chaaron taraf se highways se ghira hai:",
+"src": 5.2
+},
+{
+"k": 2,
+"s": 6.7,
+"e": 8.3,
+"t": "Delhi Road, Sikar Road,",
+"src": 8.12
+},
+{
+"k": 3,
+"s": 8.57,
+"e": 13.93,
+"t": "Kalwar Road, Sirsi Road, Ajmer Road, Diggi Road, Tonk Road aur Agra Road.",
+"src": 10.02
+},
+{
+"k": 4,
+"s": 14.2,
+"e": 15.76,
+"t": "Aur inko jodti hai Ring Road.",
+"src": 15.78
+},
+{
+"k": 5,
+"s": 16.03,
+"e": 17.93,
+"t": "Inke beech mein hai Central Jaipur:",
+"src": 25.26
+},
+{
+"k": 6,
+"s": 18.2,
+"e": 21.48,
+"t": "Pink City, C-Scheme, Civil Lines, Bani Park,",
+"src": 27.58
+},
+{
+"k": 7,
+"s": 21.75,
+"e": 22.45,
+"t": "Raja Park,",
+"src": 31.18
+},
+{
+"k": 8,
+"s": 22.72,
+"e": 26.24,
+"t": "Jawahar Nagar, Lal Kothi. Aur aas-paas bade residential hubs:",
+"src": 32.18
+},
+{
+"k": 9,
+"s": 26.51,
+"e": 33.03,
+"t": "Vaishali Nagar, Shyam Nagar, Mansarovar, Vidhyadhar Nagar, Murlipura, Jagatpura",
+"src": 36.04
+},
+{
+"k": 10,
+"s": 33.3,
+"e": 38.0,
+"t": "Lekin Central Jaipur mein zameen ab 1 se 3 lakh rupaye per gaj tak hai.",
+"src": 43.18
+},
+{
+"k": 11,
+"s": 38.27,
+"e": 40.67,
+"t": "Naya middle class yahan ghar banane ka sochta bhi nahi.",
+"src": 52.06
+},
+{
+"k": 12,
+"s": 40.94,
+"e": 42.48,
+"t": "Isliye log bahar shift ho rahe hain,",
+"src": 54.94
+},
+{
+"k": 13,
+"s": 42.75,
+"e": 43.97,
+"t": "inhi roads ke saath-saath.",
+"src": 57.18
+},
+{
+"k": 14,
+"s": 44.24,
+"e": 47.76,
+"t": "Sabse zyada growth: Ajmer Road se Tonk Road ke beech,",
+"src": 58.92
+},
+{
+"k": 15,
+"s": 48.03,
+"e": 49.15,
+"t": "Diggi Road ke aas-paas.",
+"src": 62.88
+},
+{
+"k": 16,
+"s": 49.42,
+"e": 51.52,
+"t": "Yahi hai Jaipur ka naya expansion zone.",
+"src": 64.48
+},
+{
+"k": 17,
+"s": 51.79,
+"e": 53.43,
+"t": "Yahan nayi colonies bas rahi hain:",
+"src": 67.4
+},
+{
+"k": 18,
+"s": 53.7,
+"e": 55.24,
+"t": "Bhankrota, Mahapura,",
+"src": 69.56
+},
+{
+"k": 19,
+"s": 55.51,
+"e": 59.41,
+"t": "Patrakar Colony, Narayan Vihar, Muhana, Shivdaspura.",
+"src": 71.44
+},
+{
+"k": 20,
+"s": 59.68,
+"e": 59.92,
+"t": "Kyun?",
+"src": 76.02
+},
+{
+"k": 21,
+"s": 60.19,
+"e": 62.57,
+"t": "Kyunki yahan aa raha hai rozgaar, hospitals,",
+"src": 76.66
+},
+{
+"k": 22,
+"s": 62.84,
+"e": 66.88,
+"t": "schools, colleges, connectivity, shops aur commercial.",
+"src": 79.34
+},
+{
+"k": 23,
+"s": 67.15,
+"e": 69.47,
+"t": "Aur Jaipur ab sirf city tak simit nahi.",
+"src": 86.46
+},
+{
+"k": 24,
+"s": 69.74,
+"e": 72.3,
+"t": "October 2025 ki JDA notification ke baad",
+"src": 89.12
+},
+{
+"k": 25,
+"s": 72.57,
+"e": 76.49,
+"t": "Jaipur region lagbhag 3,000 se 7,000 sq km ho gaya hai,",
+"src": 92.06
+},
+{
+"k": 26,
+"s": 76.76,
+"e": 79.2,
+"t": "aur 693 naye gaon bhi jode ja chuke hain.",
+"src": 99.96
+},
+{
+"k": 27,
+"s": 79.47,
+"e": 81.39,
+"t": "Matlab growth bahar ki taraf aa rahi hai.",
+"src": 103.52
+},
+{
+"k": 28,
+"s": 81.66,
+"e": 84.26,
+"t": "Aaj ka mauka Jaipur ke bahar ke ilaakon mein hai,",
+"src": 105.82
+},
+{
+"k": 29,
+"s": 84.53,
+"e": 86.25,
+"t": "kyunki growth wahan pahunchegi.",
+"src": 108.72
+},
+{
+"k": 30,
+"s": 86.52,
+"e": 89.82,
+"t": "Bas plot lene se pehle approval aur patta zaroor check karein.",
+"src": 110.74
+},
+{
+"k": 31,
+"s": 90.09,
+"e": 92.51,
+"t": "Aapke hisaab se kaunsa road sabse tez badhega?",
+"src": 114.58
+},
+{
+"k": 32,
+"s": 92.78,
+"e": 93.52,
+"t": "Comment mein likhiye,",
+"src": 117.4
+},
+{
+"k": 33,
+"s": 93.79,
+"e": 97.47,
+"t": "aur Part 2 ke liye follow kijiye.",
+"src": 118.52
+}
+]

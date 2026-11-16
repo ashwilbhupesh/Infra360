@@ -1,0 +1,1352 @@
+[
+{
+"text": "Let",
+"start": 0.64,
+"end": 1.04
+},
+{
+"text": "us",
+"start": 1.04,
+"end": 1.2
+},
+{
+"text": "study",
+"start": 1.2,
+"end": 1.6
+},
+{
+"text": "the",
+"start": 1.6,
+"end": 1.76
+},
+{
+"text": "Delhi-Jaipur-Bombay",
+"start": 1.76,
+"end": 2.66
+},
+{
+"text": "Expressway.",
+"start": 3.2,
+"end": 4.1
+},
+{
+"text": "Jaipur",
+"start": 4.16,
+"end": 4.8
+},
+{
+"text": "and",
+"start": 4.8,
+"end": 4.96
+},
+{
+"text": "Delhi",
+"start": 4.96,
+"end": 5.28
+},
+{
+"text": "are",
+"start": 5.28,
+"end": 5.44
+},
+{
+"text": "close",
+"start": 5.44,
+"end": 5.76
+},
+{
+"text": "on",
+"start": 5.76,
+"end": 5.92
+},
+{
+"text": "the",
+"start": 5.92,
+"end": 6.0
+},
+{
+"text": "map,",
+"start": 6.0,
+"end": 6.56
+},
+{
+"text": "but",
+"start": 6.56,
+"end": 6.8
+},
+{
+"text": "crowded",
+"start": 6.8,
+"end": 7.28
+},
+{
+"text": "highways",
+"start": 7.28,
+"end": 7.84
+},
+{
+"text": "and",
+"start": 7.84,
+"end": 8.08
+},
+{
+"text": "unpredictable",
+"start": 8.08,
+"end": 8.98
+},
+{
+"text": "travel",
+"start": 9.04,
+"end": 9.6
+},
+{
+"text": "made",
+"start": 9.6,
+"end": 9.92
+},
+{
+"text": "them",
+"start": 9.92,
+"end": 10.08
+},
+{
+"text": "feel",
+"start": 10.08,
+"end": 10.32
+},
+{
+"text": "much",
+"start": 10.32,
+"end": 10.56
+},
+{
+"text": "further",
+"start": 10.56,
+"end": 10.96
+},
+{
+"text": "apart.",
+"start": 10.96,
+"end": 11.68
+},
+{
+"text": "The",
+"start": 11.68,
+"end": 11.84
+},
+{
+"text": "Delhi-Mumbai",
+"start": 11.84,
+"end": 12.74
+},
+{
+"text": "Expressway",
+"start": 12.8,
+"end": 13.44
+},
+{
+"text": "brought",
+"start": 13.44,
+"end": 13.76
+},
+{
+"text": "a",
+"start": 13.76,
+"end": 13.92
+},
+{
+"text": "faster",
+"start": 13.92,
+"end": 14.4
+},
+{
+"text": "alternative.",
+"start": 14.4,
+"end": 15.3
+},
+{
+"text": "But",
+"start": 15.36,
+"end": 15.52
+},
+{
+"text": "how",
+"start": 15.52,
+"end": 15.68
+},
+{
+"text": "does",
+"start": 15.68,
+"end": 15.92
+},
+{
+"text": "a",
+"start": 15.92,
+"end": 16.08
+},
+{
+"text": "road",
+"start": 16.08,
+"end": 16.48
+},
+{
+"text": "heading",
+"start": 16.48,
+"end": 16.8
+},
+{
+"text": "towards",
+"start": 16.8,
+"end": 17.12
+},
+{
+"text": "Mumbai",
+"start": 17.12,
+"end": 17.84
+},
+{
+"text": "help",
+"start": 17.84,
+"end": 18.08
+},
+{
+"text": "Jaipur?",
+"start": 18.08,
+"end": 18.96
+},
+{
+"text": "Look",
+"start": 18.96,
+"end": 19.12
+},
+{
+"text": "at",
+"start": 19.12,
+"end": 19.28
+},
+{
+"text": "this",
+"start": 19.28,
+"end": 19.44
+},
+{
+"text": "map.",
+"start": 19.44,
+"end": 20.2
+},
+{
+"text": "From",
+"start": 20.2,
+"end": 20.44
+},
+{
+"text": "Sona",
+"start": 20.44,
+"end": 21.24
+},
+{
+"text": "follow",
+"start": 21.24,
+"end": 21.56
+},
+{
+"text": "the",
+"start": 21.56,
+"end": 21.72
+},
+{
+"text": "expressway",
+"start": 21.72,
+"end": 22.44
+},
+{
+"text": "south",
+"start": 22.44,
+"end": 22.84
+},
+{
+"text": "through",
+"start": 22.84,
+"end": 23.08
+},
+{
+"text": "the",
+"start": 23.08,
+"end": 23.16
+},
+{
+"text": "Alvar",
+"start": 23.16,
+"end": 23.72
+},
+{
+"text": "region",
+"start": 23.72,
+"end": 23.96
+},
+{
+"text": "towards",
+"start": 23.96,
+"end": 24.2
+},
+{
+"text": "Bandikui.",
+"start": 24.2,
+"end": 25.1
+},
+{
+"text": "Here",
+"start": 25.4,
+"end": 25.88
+},
+{
+"text": "a",
+"start": 25.88,
+"end": 26.04
+},
+{
+"text": "roughly",
+"start": 26.04,
+"end": 26.52
+},
+{
+"text": "sixty",
+"start": 26.52,
+"end": 26.92
+},
+{
+"text": "seven",
+"start": 26.92,
+"end": 27.16
+},
+{
+"text": "kilometre",
+"start": 27.16,
+"end": 27.8
+},
+{
+"text": "expressway",
+"start": 27.8,
+"end": 28.52
+},
+{
+"text": "links",
+"start": 28.52,
+"end": 28.92
+},
+{
+"text": "branches",
+"start": 28.92,
+"end": 29.4
+},
+{
+"text": "towards",
+"start": 29.4,
+"end": 29.72
+},
+{
+"text": "Jaipur,",
+"start": 29.72,
+"end": 30.52
+},
+{
+"text": "reaching",
+"start": 30.52,
+"end": 30.84
+},
+{
+"text": "Balgana",
+"start": 30.84,
+"end": 31.64
+},
+{
+"text": "and",
+"start": 31.64,
+"end": 31.88
+},
+{
+"text": "connecting",
+"start": 31.88,
+"end": 32.28
+},
+{
+"text": "with",
+"start": 32.28,
+"end": 32.44
+},
+{
+"text": "Agra",
+"start": 32.44,
+"end": 33.0
+},
+{
+"text": "Road",
+"start": 33.0,
+"end": 33.24
+},
+{
+"text": "and",
+"start": 33.24,
+"end": 33.4
+},
+{
+"text": "Jaipur's",
+"start": 33.4,
+"end": 34.04
+},
+{
+"text": "ring",
+"start": 34.04,
+"end": 34.28
+},
+{
+"text": "road",
+"start": 34.28,
+"end": 34.68
+},
+{
+"text": "by",
+"start": 34.68,
+"end": 34.92
+},
+{
+"text": "passing",
+"start": 34.92,
+"end": 35.24
+},
+{
+"text": "the",
+"start": 35.24,
+"end": 35.4
+},
+{
+"text": "older",
+"start": 35.4,
+"end": 35.8
+},
+{
+"text": "approach",
+"start": 35.8,
+"end": 36.2
+},
+{
+"text": "through",
+"start": 36.2,
+"end": 36.44
+},
+{
+"text": "Dossa.",
+"start": 36.44,
+"end": 37.34
+},
+{
+"text": "Now",
+"start": 37.5,
+"end": 37.74
+},
+{
+"text": "these",
+"start": 37.74,
+"end": 37.9
+},
+{
+"text": "are",
+"start": 37.9,
+"end": 38.06
+},
+{
+"text": "the",
+"start": 38.06,
+"end": 38.14
+},
+{
+"text": "key",
+"start": 38.14,
+"end": 38.38
+},
+{
+"text": "exits",
+"start": 38.38,
+"end": 39.02
+},
+{
+"text": "and",
+"start": 39.02,
+"end": 39.18
+},
+{
+"text": "connections",
+"start": 39.18,
+"end": 39.74
+},
+{
+"text": "to",
+"start": 39.74,
+"end": 39.9
+},
+{
+"text": "remember.",
+"start": 39.9,
+"end": 40.78
+},
+{
+"text": "First,",
+"start": 40.78,
+"end": 41.26
+},
+{
+"text": "the",
+"start": 41.26,
+"end": 41.42
+},
+{
+"text": "Alwar",
+"start": 41.42,
+"end": 42.06
+},
+{
+"text": "interchange,",
+"start": 42.06,
+"end": 42.54
+},
+{
+"text": "near",
+"start": 42.54,
+"end": 42.78
+},
+{
+"text": "Baroda",
+"start": 42.78,
+"end": 43.42
+},
+{
+"text": "Maiv,",
+"start": 43.42,
+"end": 43.98
+},
+{
+"text": "on",
+"start": 43.98,
+"end": 44.22
+},
+{
+"text": "onwards",
+"start": 44.22,
+"end": 44.7
+},
+{
+"text": "travel",
+"start": 44.7,
+"end": 45.02
+},
+{
+"text": "towards",
+"start": 45.02,
+"end": 45.34
+},
+{
+"text": "Alwar",
+"start": 45.34,
+"end": 45.9
+},
+{
+"text": "and",
+"start": 45.9,
+"end": 45.98
+},
+{
+"text": "Sariska.",
+"start": 45.98,
+"end": 46.88
+},
+{
+"text": "Second,",
+"start": 47.06,
+"end": 47.62
+},
+{
+"text": "the",
+"start": 47.62,
+"end": 47.78
+},
+{
+"text": "Bandikwi",
+"start": 47.78,
+"end": 48.58
+},
+{
+"text": "connection,",
+"start": 48.58,
+"end": 49.22
+},
+{
+"text": "where",
+"start": 49.22,
+"end": 49.38
+},
+{
+"text": "you",
+"start": 49.38,
+"end": 49.54
+},
+{
+"text": "turn",
+"start": 49.54,
+"end": 49.78
+},
+{
+"text": "towards",
+"start": 49.78,
+"end": 50.02
+},
+{
+"text": "Jaipur",
+"start": 50.02,
+"end": 50.74
+},
+{
+"text": "with",
+"start": 50.74,
+"end": 50.98
+},
+{
+"text": "Abhaneri's",
+"start": 50.98,
+"end": 51.78
+},
+{
+"text": "famous",
+"start": 51.78,
+"end": 52.1
+},
+{
+"text": "Chan",
+"start": 52.1,
+"end": 52.5
+},
+{
+"text": "Bowdy",
+"start": 52.5,
+"end": 52.98
+},
+{
+"text": "nearby.",
+"start": 52.98,
+"end": 53.62
+},
+{
+"text": "Third,",
+"start": 53.62,
+"end": 54.18
+},
+{
+"text": "the",
+"start": 54.18,
+"end": 54.34
+},
+{
+"text": "Dosa",
+"start": 54.34,
+"end": 54.98
+},
+{
+"text": "Interchange",
+"start": 54.98,
+"end": 55.54
+},
+{
+"text": "at",
+"start": 55.54,
+"end": 55.78
+},
+{
+"text": "Bandarage",
+"start": 55.78,
+"end": 56.68
+},
+{
+"text": "connecting",
+"start": 56.74,
+"end": 57.14
+},
+{
+"text": "to",
+"start": 57.14,
+"end": 57.22
+},
+{
+"text": "the",
+"start": 57.22,
+"end": 57.3
+},
+{
+"text": "Jaipur",
+"start": 57.3,
+"end": 57.78
+},
+{
+"text": "Agra",
+"start": 57.78,
+"end": 58.26
+},
+{
+"text": "Highway.",
+"start": 58.26,
+"end": 58.9
+},
+{
+"text": "Further",
+"start": 58.9,
+"end": 59.38
+},
+{
+"text": "south,",
+"start": 59.38,
+"end": 59.78
+},
+{
+"text": "the",
+"start": 59.78,
+"end": 59.94
+},
+{
+"text": "Lal",
+"start": 59.94,
+"end": 60.42
+},
+{
+"text": "Soot",
+"start": 60.42,
+"end": 60.74
+},
+{
+"text": "Swaimadhipur",
+"start": 60.74,
+"end": 61.62
+},
+{
+"text": "exits.",
+"start": 61.62,
+"end": 62.32
+},
+{
+"text": "Serve",
+"start": 62.32,
+"end": 62.64
+},
+{
+"text": "their",
+"start": 62.64,
+"end": 62.88
+},
+{
+"text": "surrounding",
+"start": 62.88,
+"end": 63.28
+},
+{
+"text": "regions",
+"start": 63.28,
+"end": 63.84
+},
+{
+"text": "with",
+"start": 63.84,
+"end": 64.08
+},
+{
+"text": "Savai",
+"start": 64.08,
+"end": 64.56
+},
+{
+"text": "Madafur",
+"start": 64.56,
+"end": 65.36
+},
+{
+"text": "providing",
+"start": 65.36,
+"end": 65.76
+},
+{
+"text": "access",
+"start": 65.76,
+"end": 66.16
+},
+{
+"text": "towards",
+"start": 66.16,
+"end": 66.48
+},
+{
+"text": "Ranthampore",
+"start": 66.48,
+"end": 67.38
+},
+{
+"text": "and",
+"start": 67.6,
+"end": 67.76
+},
+{
+"text": "on",
+"start": 67.76,
+"end": 67.84
+},
+{
+"text": "the",
+"start": 67.84,
+"end": 67.92
+},
+{
+"text": "Jaipur",
+"start": 67.92,
+"end": 68.56
+},
+{
+"text": "Bandi",
+"start": 68.56,
+"end": 69.04
+},
+{
+"text": "Expressway",
+"start": 69.04,
+"end": 69.6
+},
+{
+"text": "itself,",
+"start": 69.6,
+"end": 70.16
+},
+{
+"text": "Mark",
+"start": 70.16,
+"end": 70.56
+},
+{
+"text": "Bedoli,",
+"start": 70.56,
+"end": 71.36
+},
+{
+"text": "Kurikot,",
+"start": 71.36,
+"end": 72.26
+},
+{
+"text": "Sundarpura,",
+"start": 72.48,
+"end": 73.38
+},
+{
+"text": "Gilaki",
+"start": 73.52,
+"end": 74.24
+},
+{
+"text": "Nangal",
+"start": 74.24,
+"end": 74.88
+},
+{
+"text": "before",
+"start": 74.88,
+"end": 75.12
+},
+{
+"text": "reaching",
+"start": 75.12,
+"end": 75.44
+},
+{
+"text": "Bergana.",
+"start": 75.44,
+"end": 76.34
+},
+{
+"text": "Why",
+"start": 76.48,
+"end": 76.8
+},
+{
+"text": "does",
+"start": 76.8,
+"end": 77.04
+},
+{
+"text": "these",
+"start": 77.04,
+"end": 77.36
+},
+{
+"text": "matter?",
+"start": 77.36,
+"end": 78.26
+},
+{
+"text": "Easier",
+"start": 78.94,
+"end": 79.5
+},
+{
+"text": "NCR",
+"start": 79.5,
+"end": 80.14
+},
+{
+"text": "access",
+"start": 80.14,
+"end": 80.54
+},
+{
+"text": "can",
+"start": 80.54,
+"end": 80.78
+},
+{
+"text": "support",
+"start": 80.78,
+"end": 81.26
+},
+{
+"text": "Jaipur",
+"start": 81.26,
+"end": 81.82
+},
+{
+"text": "weekend",
+"start": 81.82,
+"end": 82.22
+},
+{
+"text": "tourism,",
+"start": 82.22,
+"end": 82.94
+},
+{
+"text": "destination",
+"start": 82.94,
+"end": 83.66
+},
+{
+"text": "weddings,",
+"start": 83.66,
+"end": 84.14
+},
+{
+"text": "and",
+"start": 84.14,
+"end": 84.3
+},
+{
+"text": "business",
+"start": 84.3,
+"end": 84.7
+},
+{
+"text": "travel.",
+"start": 84.7,
+"end": 85.58
+},
+{
+"text": "Around",
+"start": 85.58,
+"end": 85.98
+},
+{
+"text": "well-connected",
+"start": 85.98,
+"end": 86.62
+},
+{
+"text": "exits,",
+"start": 86.62,
+"end": 87.26
+},
+{
+"text": "it",
+"start": 87.26,
+"end": 87.42
+},
+{
+"text": "can",
+"start": 87.42,
+"end": 87.58
+},
+{
+"text": "also",
+"start": 87.58,
+"end": 87.82
+},
+{
+"text": "support",
+"start": 87.82,
+"end": 88.22
+},
+{
+"text": "demands",
+"start": 88.22,
+"end": 88.7
+},
+{
+"text": "for",
+"start": 88.7,
+"end": 88.86
+},
+{
+"text": "hotels,",
+"start": 88.86,
+"end": 89.5
+},
+{
+"text": "warehouses,",
+"start": 89.5,
+"end": 90.38
+},
+{
+"text": "and",
+"start": 90.38,
+"end": 90.54
+},
+{
+"text": "local",
+"start": 90.54,
+"end": 90.94
+},
+{
+"text": "businesses.",
+"start": 90.94,
+"end": 91.84
+},
+{
+"text": "For",
+"start": 92.0,
+"end": 92.08
+},
+{
+"text": "Japur",
+"start": 92.08,
+"end": 92.48
+},
+{
+"text": "real",
+"start": 92.48,
+"end": 92.64
+},
+{
+"text": "estate,",
+"start": 92.64,
+"end": 93.12
+},
+{
+"text": "start",
+"start": 93.12,
+"end": 93.28
+},
+{
+"text": "by",
+"start": 93.28,
+"end": 93.44
+},
+{
+"text": "studying",
+"start": 93.44,
+"end": 93.76
+},
+{
+"text": "Bergana,",
+"start": 93.76,
+"end": 94.48
+},
+{
+"text": "the",
+"start": 94.48,
+"end": 94.64
+},
+{
+"text": "Agra",
+"start": 94.64,
+"end": 95.2
+},
+{
+"text": "Road,",
+"start": 95.2,
+"end": 95.52
+},
+{
+"text": "Ring",
+"start": 95.52,
+"end": 95.84
+},
+{
+"text": "Road",
+"start": 95.84,
+"end": 96.08
+},
+{
+"text": "Junction",
+"start": 96.08,
+"end": 96.64
+},
+{
+"text": "and",
+"start": 96.64,
+"end": 96.8
+},
+{
+"text": "approach",
+"start": 96.8,
+"end": 97.2
+},
+{
+"text": "towards",
+"start": 97.2,
+"end": 97.52
+},
+{
+"text": "serving",
+"start": 97.52,
+"end": 97.84
+},
+{
+"text": "these",
+"start": 97.84,
+"end": 98.0
+},
+{
+"text": "interchanges",
+"start": 98.0,
+"end": 98.88
+},
+{
+"text": "progressively",
+"start": 98.88,
+"end": 99.44
+},
+{
+"text": "towards",
+"start": 99.44,
+"end": 99.68
+},
+{
+"text": "the",
+"start": 99.68,
+"end": 99.76
+},
+{
+"text": "Delhi-Bombay",
+"start": 99.76,
+"end": 100.56
+},
+{
+"text": "Expressway",
+"start": 100.56,
+"end": 101.2
+},
+{
+"text": "and",
+"start": 101.2,
+"end": 101.36
+},
+{
+"text": "then",
+"start": 101.36,
+"end": 101.52
+},
+{
+"text": "towards",
+"start": 101.52,
+"end": 101.84
+},
+{
+"text": "the",
+"start": 101.84,
+"end": 101.92
+},
+{
+"text": "Delhi",
+"start": 101.92,
+"end": 102.32
+},
+{
+"text": "side",
+"start": 102.32,
+"end": 102.64
+},
+{
+"text": "and",
+"start": 102.64,
+"end": 102.8
+},
+{
+"text": "towards",
+"start": 102.8,
+"end": 103.12
+},
+{
+"text": "the",
+"start": 103.12,
+"end": 103.2
+},
+{
+"text": "Mumbai",
+"start": 103.2,
+"end": 103.68
+},
+{
+"text": "side.",
+"start": 103.68,
+"end": 104.54
+},
+{
+"text": "Because",
+"start": 104.54,
+"end": 104.78
+},
+{
+"text": "the",
+"start": 104.78,
+"end": 104.94
+},
+{
+"text": "opportunity",
+"start": 104.94,
+"end": 105.58
+},
+{
+"text": "isn't",
+"start": 105.58,
+"end": 105.98
+},
+{
+"text": "simply",
+"start": 105.98,
+"end": 106.38
+},
+{
+"text": "being",
+"start": 106.38,
+"end": 106.62
+},
+{
+"text": "beside",
+"start": 106.62,
+"end": 106.94
+},
+{
+"text": "the",
+"start": 106.94,
+"end": 107.1
+},
+{
+"text": "expressway,",
+"start": 107.1,
+"end": 107.9
+},
+{
+"text": "it's",
+"start": 107.9,
+"end": 108.22
+},
+{
+"text": "having",
+"start": 108.22,
+"end": 108.54
+},
+{
+"text": "convenient",
+"start": 108.54,
+"end": 109.18
+},
+{
+"text": "access",
+"start": 109.18,
+"end": 109.58
+},
+{
+"text": "to",
+"start": 109.58,
+"end": 109.74
+},
+{
+"text": "it,",
+"start": 109.74,
+"end": 110.14
+},
+{
+"text": "which",
+"start": 110.14,
+"end": 110.3
+},
+{
+"text": "comes",
+"start": 110.3,
+"end": 110.62
+},
+{
+"text": "from",
+"start": 110.62,
+"end": 110.78
+},
+{
+"text": "these",
+"start": 110.78,
+"end": 111.02
+},
+{
+"text": "exits.",
+"start": 111.02,
+"end": 111.92
+},
+{
+"text": "Save",
+"start": 112.06,
+"end": 112.46
+},
+{
+"text": "this",
+"start": 112.46,
+"end": 112.62
+},
+{
+"text": "map",
+"start": 112.62,
+"end": 112.86
+},
+{
+"text": "to",
+"start": 112.86,
+"end": 113.02
+},
+{
+"text": "understand",
+"start": 113.02,
+"end": 113.34
+},
+{
+"text": "where",
+"start": 113.34,
+"end": 113.58
+},
+{
+"text": "Jeepo's",
+"start": 113.58,
+"end": 114.14
+},
+{
+"text": "connectivity",
+"start": 114.14,
+"end": 114.54
+},
+{
+"text": "is",
+"start": 114.54,
+"end": 114.7
+},
+{
+"text": "changing.",
+"start": 114.7,
+"end": 115.6
+}
+]
